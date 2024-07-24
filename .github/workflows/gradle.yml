@@ -57,14 +57,16 @@ jobs:
     runs-on: self-hosted
 
     steps:
-      - name: Docker pull
-        run: sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/eataku:latest
-
-      - name: Docker stop container
-        run: sudo docker stop $(sudo docker ps -q) 2>/dev/null || true
-
-      - name: Docker run new container
-        run: sudo docker run --name eataku --rm -d -p 8080:8080 ${{ secrets.DOCKERHUB_USERNAME }}/eataku:latest
-
-      - name: Delete Docker image
-        run: sudo docker system prune -f
+      - name: execute remote ssh & docker stop and run
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.REMOTE_SSH_HOST }}
+          username: ${{ secrets.REMOTE_SSH_NAME }}
+          key: ${{ secrets.REMOTE_SSH_KEY }}
+          port: ${{ secrets.REMOTE_SSH_PORT }}
+          script: |
+            whoami
+            sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/eataku:latest
+            sudo docker stop $(sudo docker ps -q) 2>/dev/null || true
+            sudo docker run --name eataku --rm -d -p 8080:8080 ${{ secrets.DOCKERHUB_USERNAME }}/eataku:latest
+            sudo docker system prune -f
