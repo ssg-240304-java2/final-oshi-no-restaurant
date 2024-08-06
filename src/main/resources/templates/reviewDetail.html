@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review List</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding-top: 70px; /* 상단 여백 추가 */
+        }
+        .review-item {
+            border: 1px solid #e9ecef;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        .review-image {
+            max-width: 100%;
+            border-radius: 5px;
+        }
+        .badge-custom {
+            background-color: #dc3545;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            margin-right: 10px;
+            white-space: nowrap; /* 한 줄로 나오게 설정 */
+        }
+        .review-details {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .review-details span {
+            font-size: 1.2rem;
+        }
+        .review-details .fa-star {
+            color: #ff6f61;
+            margin-left: 5px;
+        }
+        .review-buttons {
+            display: flex;
+            justify-content: flex-end;
+        }
+        .btn-info-custom {
+            background-color: #dc3545;
+            border: none;
+        }
+        .btn-info-custom:hover {
+            background-color: #bb2d3b;
+        }
+        .content-text {
+            display: flex;
+            align-items: center;
+            padding-left: 10px;
+            flex: 1; /* 남은 공간을 차지하도록 설정 */
+        }
+        .badge-container {
+            display: flex;
+            align-items: center;
+            flex-shrink: 0; /* 크기 축소 안되게 설정 */
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2 class="mb-4" style="text-align:left; color: #dc3545;">리뷰 상세</h2>
+
+    <div class="review-item row">
+        <div class="col-md-3">
+            <img src="image1.jpg" alt="Review Image" class="review-image">
+        </div>
+        <div class="col-md-9">
+            <div class="review-details">
+                <div class="badge-container">
+                    <span class="badge-custom">가게명</span>
+                    <span>밍글스</span>
+                </div>
+                <div class="badge-container ml-auto">
+                    <span class="badge-custom">별점</span>
+                    <span class="star-rating">4.5<i class="fa fa-star"></i></span>
+                </div>
+            </div>
+            <div class="review-details">
+                <div class="badge-container">
+                    <span class="badge-custom">태그</span>
+                </div>
+                <div class="content-text">
+                    <span>친절해요, 맛있어요, 분위기가 좋아요, 다시 갈래요, 쾌적해요</span>
+                </div>
+            </div>
+            <div class="review-details">
+                <div class="badge-container">
+                    <span class="badge-custom">작성한 내용</span>
+                </div>
+                <div class="content-text">
+                    <span>음식도 맛있고 직원분들도 친절하고 분위기도 쾌적하네요 집 근처에 없는 게 너무 아쉽네요 ㅠㅠ 매일 가서 먹고싶어요.</span>
+                </div>
+            </div>
+            <div class="review-buttons">
+                <button class="btn btn-info btn-info-custom">식당 정보 보기</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="review-item row">
+        <div class="col-md-3">
+            <img src="image2.jpg" alt="Review Image" class="review-image">
+        </div>
+        <div class="col-md-9">
+            <div class="review-details">
+                <div class="badge-container">
+                    <span class="badge-custom">가게명</span>
+                    <span>밍글스 2</span>
+                </div>
+                <div class="badge-container ml-auto">
+                    <span class="badge-custom">별점</span>
+                    <span class="star-rating">1<i class="fa fa-star"></i></span>
+                </div>
+            </div>
+            <div class="review-details">
+                <div class="badge-container">
+                    <span class="badge-custom">태그</span>
+                </div>
+                <div class="content-text">
+                    <span>친절해요, 맛있어요, 분위기가 좋아요, 다시 갈래요, 쾌적해요</span>
+                </div>
+            </div>
+            <div class="review-details">
+                <div class="badge-container">
+                    <span class="badge-custom">작성한 내용</span>
+                </div>
+                <div class="content-text">
+                    <span>맛도 없고 직원들도 친절하지 않고 더럽네요 오지 마세요</span>
+                </div>
+            </div>
+            <div class="review-buttons">
+                <button class="btn btn-info btn-info-custom">식당 정보 보기</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
