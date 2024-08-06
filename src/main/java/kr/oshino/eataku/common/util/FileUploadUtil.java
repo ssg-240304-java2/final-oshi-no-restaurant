@@ -1,4 +1,4 @@
-package kr.oshino.eataku.global.util;
+package kr.oshino.eataku.common.util;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
