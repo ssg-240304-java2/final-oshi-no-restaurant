@@ -7,6 +7,9 @@
     <title>쩝쩝 친구</title>
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/fragment/navbar.css}">
+    <link rel="stylesheet" th:href="@{/css/fragment/footer.css}">
+
     <style>
         body {
             display: flex;
@@ -128,6 +131,9 @@
 </head>
 
 <body>
+
+<div th:replace="~{/fragment/navbar.html :: navbar}" class="navbar"></div>
+
 <div class="main-container">
     <h1 class="mb-4">쩝쩝 친구</h1>
     <!-- Search form -->
@@ -157,6 +163,8 @@
     </div>
 </div>
 
+<div th:replace="~{/fragment/footer.html :: footer}" class="footer"></div>
+
 <!-- Modal -->
 <!--<div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">-->
 <!--    <div class="modal-dialog modal-dialog-centered">-->
@@ -172,6 +180,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.2/js/bootstrap.min.js"></script>
+<script type="text/javascript" th:src="@{/js/fragment/navbar.js}"></script>
 </body>
 
 </html>
