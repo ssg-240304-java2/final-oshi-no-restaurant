@@ -6,6 +6,10 @@
     <title>Review List</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" th:href="@{/css/fragment/navbar.css}">
+    <link rel="stylesheet" th:href="@{/css/fragment/footer.css}">
+
     <style>
         body {
             padding-top: 70px; /* 상단 여백 추가 */
@@ -65,6 +69,8 @@
     </style>
 </head>
 <body>
+
+<div th:replace="~{/fragment/navbar.html :: navbar}" class="navbar"></div>
 <div class="container">
     <h2 class="mb-4" style="text-align:left; color: #dc3545;">리뷰 상세</h2>
 
@@ -142,6 +148,9 @@
         </div>
     </div>
 </div>
+<div th:replace="~{/fragment/footer.html :: footer}" class="footer"></div>
+
+<script type="text/javascript" th:src="@{/js/fragment/navbar.js}"></script>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>

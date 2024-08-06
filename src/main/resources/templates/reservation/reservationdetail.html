@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>식당 상세 페이지</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" th:href="@{/css/fragment/navbar.css}">
+    <link rel="stylesheet" th:href="@{/css/fragment/footer.css}">
+
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -262,6 +265,8 @@
 </head>
 <body>
 
+<div th:replace="~{/fragment/navbar.html :: navbar}" class="navbar"></div>
+
 <div class="container">
     <div class="section-content text-center">
         <div id="main-img" class="img-placeholder" style="background-color: #ddd; width: 100%; max-width: 900px; height: 400px; margin: auto;"></div>
@@ -382,9 +387,13 @@
     </div>
 </div>
 
+<div th:replace="~{/fragment/footer.html :: footer}" class="footer"></div>
+
+
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+<script type="text/javascript" th:src="@{/js/fragment/navbar.js}"></script>
 <script>
     document.getElementById('more-button').addEventListener('click', function() {
         this.classList.toggle('active');
