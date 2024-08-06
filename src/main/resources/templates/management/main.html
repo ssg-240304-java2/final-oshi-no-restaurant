@@ -5,6 +5,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <title>예약 관리</title>
         <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" th:href="@{/css/fragment/navbar.css}">
+        <link rel="stylesheet" th:href="@{/css/fragment/footer.css}">
         <style>
             body {
                 background-color: #e0e0e0;
@@ -65,16 +67,19 @@
         </style>
     </head>
     <body>
+    <div th:replace="~{/fragment/navbar.html :: navbar}" class="navbar"></div>
+
+
         <div class="container">
             <div class="nav-buttons">
-                <button type="button" class="btn btn-danger" onclick="window.location.href='management/main.html'">판매 내역</button>
+                <button type="button" class="btn btn-danger" onclick="window.location.href='/main.html'">판매 내역</button>
                 <button type="button" class="btn btn-danger" onclick="window.location.href='reservationCheck.html'">예약 확인</button>
                 <button type="button" class="btn btn-danger" onclick="window.location.href='reservationStatus.html'">예약 상태</button>
                 <button type="button" class="btn btn-danger" onclick="window.location.href='waitingStatus.html'">웨이팅 상태</button>
                 <button type="button" class="btn btn-danger" onclick="window.location.href='reviewList.html'">매장 리뷰</button>
                 <div class="btn-group float-right">
                     <button type="button" class="btn-setting btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <img src="images/setting.png" alt="설정" class="glyphicon glyphicon-cog" aria-hidden="true">
+                        <img src="../../static/images/setting.png" alt="설정" class="glyphicon glyphicon-cog" aria-hidden="true">
                     </button>
                     <div class="dropdown-menu dropdown-menu-right">
                         <button class="dropdown-item" type="button">매장 정보 수정</button>
@@ -147,9 +152,12 @@
                 </div>
             </div>
         </div>
+        <div th:replace="~{/fragment/footer.html :: footer}" class="footer"></div>
+
 
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script type="text/javascript" th:src="@{/js/fragment/navbar.js}"></script>
     </body>
 </html>

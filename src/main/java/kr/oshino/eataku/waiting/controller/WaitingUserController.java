@@ -20,22 +20,22 @@ public class WaitingUserController {
 
     @GetMapping("/waitingForm")
     public String waitingFormPage() {
-        return "pages/waitingFormPage";
+        return "waiting/waitingFormPage";
     }
 
     @GetMapping("/map")
     public String mapSearchPage() {
-        return "pages/mapSearchPage";
+        return "waiting/mapSearchPage";
     }
 
     @GetMapping("/jjFriends")
     public String jjFriendsPage() {
-        return "pages/jjFriendPage";
+        return "waiting/jjFriendPage";
     }
 
     @GetMapping("/card")
     public String cardSearchPage() {
-        return "pages/cardSearchPage";
+        return "waiting/cardSearchPage";
     }
     @GetMapping("/search")
     public String searchRestaurants(
@@ -78,7 +78,7 @@ public class WaitingUserController {
         // Add filtered restaurants to the model
         model.addAttribute("restaurants", filteredRestaurants);
 
-        return "pages/cardSearchPage";
+        return "waiting/cardSearchPage";
     }
 
     @GetMapping("/profile/{userNo}")
@@ -99,7 +99,7 @@ public class WaitingUserController {
         model.addAttribute("publicLists", userProfile.getPublicLists());
         model.addAttribute("privateLists", userProfile.getPrivateLists());
 
-        return "/pages/userProfilePage";
+        return "waiting/userProfilePage";
     }
 
     private UserProfile getUserProfile(int userNo) {
