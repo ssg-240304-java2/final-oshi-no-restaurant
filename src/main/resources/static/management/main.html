@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>예약 관리</title>
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+        <style>
+            body {
+                background-color: #e0e0e0;
+            }
+            .container {
+                margin-top: 100px;
+            }
+            .nav-buttons {
+                margin-bottom: 30px;
+            }
+            .nav-buttons .btn {
+                background-color: #FA4A54;
+                border: none;
+                color: white;
+                margin-right: 10px;
+                margin-bottom: 10px;
+            }
+            .btn-setting {
+                background-color: transparent;
+                border: none;
+                color: white;
+                margin-right: 10px;
+                margin-bottom: 5px;
+            }
+            .btn-setting:hover,
+            .btn-setting:focus,
+            .btn-setting:active {
+                background-color: transparent !important;
+                outline: none;
+                box-shadow: none;
+            }
+            .nav-buttons .btn:hover {
+                background-color: #d14045;
+            }
+            .nav-buttons .btn-secondary {
+                border: none;
+            }
+            .nav-buttons .btn-secondary:hover {
+                background-color: transparent;
+                border: none;
+            }
+            .btn-secondary img {
+                width: 25px;
+                height: 25px;
+            }
+            .card {
+                margin-bottom: 20px;
+            }
+            .table-responsive {
+                overflow-y: scroll;
+            }
+            .customer-info .card {
+                padding: 15px;
+            }
+            .card-title {
+                margin-bottom: 30px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="nav-buttons">
+                <button type="button" class="btn btn-danger" onclick="window.location.href='management/main.html'">판매 내역</button>
+                <button type="button" class="btn btn-danger" onclick="window.location.href='reservationCheck.html'">예약 확인</button>
+                <button type="button" class="btn btn-danger" onclick="window.location.href='reservationStatus.html'">예약 상태</button>
+                <button type="button" class="btn btn-danger" onclick="window.location.href='waitingStatus.html'">웨이팅 상태</button>
+                <button type="button" class="btn btn-danger" onclick="window.location.href='reviewList.html'">매장 리뷰</button>
+                <div class="btn-group float-right">
+                    <button type="button" class="btn-setting btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <img src="images/setting.png" alt="설정" class="glyphicon glyphicon-cog" aria-hidden="true">
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <button class="dropdown-item" type="button">매장 정보 수정</button>
+                        <button class="dropdown-item" type="button">메뉴 수정</button>
+                        <button class="dropdown-item" type="button">화면 보기</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card-date p-3">
+                <div class="form-row align-items-center">
+                    <div class="col-auto">
+                        <label for="startDate">일자</label>
+                    </div>
+                    <div class="col-auto">
+                        <input type="date" class="form-control mb-2" id="startDate">
+                    </div>
+                    <div class="col-auto">
+                        <label for="endDate">~</label>
+                    </div>
+                    <div class="col-auto">
+                        <input type="date" class="form-control mb-2" id="endDate">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table table-bordered m-0">
+                                    <thead class="thead-dark">
+                                        <tr>
+                                            <th>판매일</th>
+                                            <th>인원수</th>
+                                            <th>예약 시간</th>
+                                            <th>이용 방식</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>2024-06-01</td>
+                                            <td>4</td>
+                                            <td>18:00</td>
+                                            <td>웨이팅</td>
+                                        </tr>
+                                        <tr>
+                                            <td>2024-06-01</td>
+                                            <td>2</td>
+                                            <td>18:00</td>
+                                            <td>예약</td>
+                                        </tr>
+                                        <!-- Add more rows as needed -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="customer-info">
+                        <div class="card">
+                            <h5 class="card-title">고객 정보</h5>
+                            <p>고객명: 홍길동</p>
+                            <p>연락처: 010-0000-0000</p>
+                            <p>이용방식: 웨이팅</p>
+                            <p>인원수: 4</p>
+                            <p>이용횟수: 1</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    </body>
+</html>
