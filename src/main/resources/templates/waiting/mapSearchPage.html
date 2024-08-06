@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Finder</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=4iq0sfkqpd"></script>
+    <style>
+        /* 추가 스타일 */
+        .content {
+            height: 780px;
+            overflow: hidden;
+            display: flex;
+            position: relative;
+        }
+
+        .restaurant-info {
+            width: 50%;
+            overflow-y: auto;
+            border-right: 1px solid #ccc;
+            transition: width 0.3s;
+            position: relative;
+            z-index: 1; /* 버튼이 사라지는 문제 해결을 위해 z-index 조정 */
+        }
+
+        .map {
+            width: 50%;
+            transition: width 0.3s;
+            position: relative;
+            z-index: 1;
+        }
+
+        .restaurant-card {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .toggle-button {
+            position: absolute;
+            top: 50%;
+            left: 0px; /* 지도의 왼쪽 경계에 버튼을 표시 */
+            transform: translate(0, -50%);
+            z-index: 2; /* 버튼이 다른 요소 위에 표시되도록 */
+            padding: 5px 10px;
+            height: 50px;
+            width: 40px;
+            /*cursor: pointer;*/
+            background-color: #FA4A54;
+            color: #ffffff;
+            border: 1px solid #FA4A54;
+            border-radius: 10%;
+        }
+
+        .find-button {
+            display: none;
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 20px;
+            background-color: #FA4A54;
+            border-color: #FA4A54;
+            color: white;
+            cursor: pointer;
+            z-index: 3; /* 지도의 다른 요소보다 앞에 표시되도록 */
+            border-radius: 10%;
+        }
+
+        .selected {
+            background-color: #FA4A54;
+            border-color: #FA4A54;
+            color: white;
+            border-radius: 10%;
+        }
+
+        #searchButton {
+            background-color: #FA4A54;
+            color: #ffffff;
+            border-color: #FA4A54;
+        }
+    </style>
+</head>
+<body>
+
+<!-- 카테고리 선택 버튼들 -->
+<div class="category-buttons d-flex justify-content-start my-3 flex-wrap">
+    <button class="btn btn-outline-primary m-1">한식</button>
+    <button class="btn btn-outline-primary m-1">양식</button>
+    <button class="btn btn-outline-primary m-1">중식</button>
+    <button class="btn btn-outline-primary m-1">일식</button>
+    <button class="btn btn-outline-primary m-1">고깃집</button>
+    <button class="btn btn-outline-primary m-1">면요리</button>
+    <button class="btn btn-outline-primary m-1">분식</button>
+    <button class="btn btn-outline-primary m-1">이탈리안 음식</button>
+    <button class="btn btn-outline-primary m-1">태국 음식</button>
+    <button class="btn btn-outline-primary m-1">베트남 음식</button>
+</div>
+
+<!-- 검색 영역 -->
+<div class="search-area d-flex justify-content-start mb-3">
+    <input type="text" class="form-control w-50 me-2" placeholder="검색어를 입력하세요">
+    <button id="searchButton" class="btn btn-primary">검색</button>
+</div>
+
+<!-- 컨텐츠 영역 -->
+<div class="content">
+    <!-- 식당 정보 영역 -->
+    <div class="restaurant-info" id="restaurantInfo">
+        <div th:each="restaurant : ${restaurants}" class="restaurant-card">
+            <h3 th:text="${restaurant.name}">식당 이름</h3>
+            <p th:text="${restaurant.address}">식당 주소</p>
+            <p th:text="${#strings.arrayJoin(restaurant.categories, ', ')}">카테고리</p>
+            <p th:text="'별점: ' + ${restaurant.rating}">별점</p>
+            <button class="favorite-button btn btn-outline-secondary mt-2">관심 식당 등록</button>
+        </div>
+    </div>
+
+    <!-- 지도 영역 -->
+    <div class="map" id="mapArea">
+        <div id="map" style="width:100%;height:100%;">
+            <button class="find-button" id="findButton">현 지도에서 찾기</button>
+        </div>
+        <button type="button" class="toggle-button">◀</button>
+    </div>
+</div>
+
+<script>
+    var mapOptions = {
+        center: new naver.maps.LatLng(37.3595704, 127.105399),
+        zoom: 10
+    };
+    var map = new naver.maps.Map('map', mapOptions);
+
+    $(document).ready(function() {
+        // 지도와 식당 정보 토글 기능
+        $('.toggle-button').click(function() {
+            var info = $('#restaurantInfo');
+            var mapArea = $('#mapArea');
+            var button = $(this);
+
+            if (info.width() > 0) {
+                info.css('width', '0');
+                mapArea.css('width', '100%');
+                button.text('▶');
+            } else {
+                info.css('width', '50%');
+                mapArea.css('width', '50%');
+                button.text('◀');
+            }
+
+            // 지도가 새로 확장되거나 축소될 때 다시 렌더링되도록 강제 업데이트
+            setTimeout(function() {
+                naver.maps.Event.trigger(map, 'resize');
+            }, 300);
+        });
+
+        // 지도가 움직일 때 현 지도에서 찾기 버튼 표시
+        naver.maps.Event.addListener(map, 'dragend', onMapMove);
+
+        // 현 지도에서 찾기 버튼 클릭 시
+        $('#findButton').click(function() {
+            // 현재 지도 위치를 기반으로 서버에 요청
+            $.ajax({
+                url: '/find',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    // 지도 위치 정보를 담아 보낼 수 있도록
+                }),
+                success: function(data) {
+                    // 받아온 데이터를 처리
+                    console.log(data);
+                }
+            });
+        });
+
+        // 카테고리 버튼 클릭 시 선택 상태 토글
+        $('.category-buttons button').click(function() {
+            $(this).toggleClass('selected btn-primary text-white');
+        });
+
+        function onMapMove() {
+            $('#findButton').show();
+        }
+    });
+</script>
+</body>
+</html>

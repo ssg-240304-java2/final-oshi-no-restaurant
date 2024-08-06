@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>웨이팅 등록</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f8f9fa;
+        }
+        .counter {
+            display: flex;
+            align-items: center;
+        }
+        .counter button {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 1px solid #ddd;
+            background-color: #fff;
+            font-size: 1.2em;
+            outline: none;
+        }
+        .counter span {
+            width: 60px;
+            text-align: center;
+            font-size: 1.5em;
+            margin: 0 15px;
+        }
+        .register-button {
+            margin-top: 20px;
+            width: 200px;
+            font-size: 1.2em;
+            background-color: #FB3F4A;
+            border-color: #FB3F4A;
+        }
+    </style>
+    <!-- jQuery 추가 -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+</head>
+<body>
+<div class="text-center">
+    <div class="counter">
+        <button id="decrease" class="btn btn-outline-secondary">-</button>
+        <span id="peopleCount">0</span>
+        <button id="increase" class="btn btn-outline-secondary">+</button>
+    </div>
+    <button id="register" class="btn btn-secondary register-button">웨이팅 등록하기</button>
+</div>
+
+<script>
+    $(document).ready(function() {
+        let peopleCount = 0;
+
+        const $peopleCountSpan = $('#peopleCount');
+        const $decreaseButton = $('#decrease');
+        const $increaseButton = $('#increase');
+        const $registerButton = $('#register');
+
+        $decreaseButton.on('click', function() {
+            if (peopleCount > 0) {
+                peopleCount--;
+                updatePeopleCount();
+            }
+        });
+
+        $increaseButton.on('click', function() {
+            peopleCount++;
+            updatePeopleCount();
+        });
+
+        function updatePeopleCount() {
+            $peopleCountSpan.text(peopleCount);
+        }
+
+        // 이 부분은 등록 버튼을 눌렀을 떄의 로직인데 일단 주석처리 했습니다.
+
+        // $registerButton.on('click', function() {
+        //     if (peopleCount === 0) {
+        //         alert('0명은 등록할 수 없습니다!');
+        //         return;
+        //     }
+        //
+        //     // 서버로 데이터 전송
+        //     $.ajax({
+        //         url: '/api/register',
+        //         type: 'POST',
+        //         contentType: 'application/json',
+        //         data: JSON.stringify({ peopleCount: peopleCount }),
+        //         success: function(data) {
+        //             if (data.success) {
+        //                 alert(data.message);
+        //                 window.location.href = 'index.html'; // 인덱스 페이지로 이동
+        //             } else {
+        //                 alert(data.message);
+        //             }
+        //         },
+        //         error: function(xhr, status, error) {
+        //             console.error('Error:', error);
+        //         }
+        //     });
+        // });
+    });
+</script>
+</body>
+</html>
