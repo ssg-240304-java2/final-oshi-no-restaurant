@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>개인정보수정</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #F9F9F9;
+            margin: 0;
+        }
+
+        .sidebar {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 250px;
+        }
+
+        .sidebar h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .sidebar a {
+            display: block;
+            color: #333;
+            text-decoration: none;
+            margin: 10px 0;
+            font-size: 18px;
+        }
+
+        .sidebar a:hover {
+            color: #FF5258;
+        }
+
+        .sidebar-content {
+            top: 50%;
+            margin-top: 100px;
+        }
+
+        .content {
+            margin-left: 280px; /* 사이드바 너비 + 여백 */
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .profile-section {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 85%; /* 흰색 영역의 너비 조정 */
+            max-width: 780px; /* 전체 너비를 늘려서 버튼과 레이아웃에 여유 공간 추가 */
+        }
+
+        .profile-section h3 {
+            font-size: 28px;
+            margin-bottom: 40px; /* 제목과 아래 내용의 간격 조정 */
+            font-weight: bold;
+            color: #333;
+            text-align: center;
+        }
+
+        .profile-photo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .profile-photo img {
+            width: 150px; /* 이미지 크기 50% 증가 */
+            height: 150px;
+            border-radius: 50%;
+            background-color: #ddd;
+            margin-right: 20px;
+            object-fit: cover;
+        }
+
+        .btn-photo-change {
+            border: 1px solid #ccc;
+            color: #333;
+            background-color: white;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        .btn-photo-change:hover {
+            border-color: #FA4A54;
+            color: #FA4A54;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #666;
+            display: block;
+        }
+
+        .form-control {
+            margin-bottom: 5px;
+            width: 100%; /* 입력 칸의 폭을 100%로 설정 */
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .row > .col-md-6 {
+            padding-right: 10px; /* 간격 조정 */
+            padding-left: 10px;  /* 간격 조정 */
+        }
+
+        .btn-submit {
+            background-color: #FF5258;
+            border: none;
+            color: white;
+            padding: 15px 0;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            font-size: 16px;
+            width: 100%; /* 버튼을 중앙에 맞추기 위해서 설정 */
+            max-width: 200px; /* 최대 너비 설정 */
+            display: block;
+            margin: 0 auto; /* 중앙 정렬 */
+            margin-top: 20px;
+        }
+
+        .btn-duplicate-check,
+        .btn-mail-check {
+            background-color: #FF5258;
+            border: none;
+            color: white;
+            padding: 8px 10px; /* 버튼의 크기와 높이 조정 */
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            font-size: 14px; /* 버튼 폰트 크기 줄임 */
+            cursor: pointer;
+            display: inline-block;
+            vertical-align: middle;
+            height: 38px; /* 버튼 높이를 입력 칸과 동일하게 설정 */
+            width: 135px; /* 버튼의 좌우 크기를 늘려 텍스트가 잘리지 않도록 설정 */
+            text-align: center;
+        }
+
+        .btn-submit:hover,
+        .btn-duplicate-check:hover,
+        .btn-mail-check:hover {
+            background-color: #FA4A54;
+        }
+
+        .text-danger {
+            color: #FF5258;
+            font-size: 14px;
+        }
+
+        .text-success {
+            color: #28a745;
+            font-size: 14px;
+        }
+
+        .d-flex {
+            align-items: center;
+        }
+
+    </style>
+</head>
+<body>
+<div class="sidebar">
+    <div class="sidebar-content">
+        <h2>마이페이지</h2>
+        <a href="/myInfo/profile">개인정보수정</a>
+        <a href="#badge">내 뱃지 보기</a>
+        <a href="/myInfo/review">내 리뷰 보기</a>
+        <a href="/myInfo/history">이용내역조회</a>
+        <a href="/myInfo/list">내 리스트 관리</a>
+    </div>
+</div>
+<div class="content">
+    <div class="profile-section">
+        <h3>개인정보수정</h3>
+<!--        <div class="profile-photo">-->
+<!--            <img id="profileImage" src="path/to/profile.png" alt="프로필 사진">-->
+<!--            <input type="file" id="photoInput" accept="image/*" style="display: none;">-->
+<!--            <button class="btn-photo-change" onclick="$('#photoInput').click();">사진 변경</button>-->
+<!--        </div>-->
+        <form id="profileForm" enctype="multipart/form-data">
+            <div class="profile-photo">
+                <img id="profileImage" src="path/to/profile.png" alt="프로필 사진">
+                <input type="file" id="photoInput" name="profileImage" accept="image/*" style="display: none;">
+                <button class="btn-photo-change" onclick="$('#photoInput').click();">사진 변경</button>
+            </div>
+
+            <div class="form-group">
+                <label for="userId">아이디</label>
+                <div class="d-flex align-items-center">
+                    <input type="text" id="userId" class="form-control mr-2" placeholder="아이디" value="">
+                    <button type="button" class="btn-duplicate-check">중복 확인</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="password">비밀번호</label>
+                        <div class="d-flex align-items-center">
+                            <input type="password" id="password" class="form-control" placeholder="비밀번호">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="passwordConfirm">비밀번호 확인</label>
+                        <div class="d-flex align-items-center">
+                            <input type="password" id="passwordConfirm" class="form-control" placeholder="비밀번호 확인">
+                        </div>
+                        <span id="passwordFeedback" class="text-danger" style="display:none;">비밀번호가 일치하지 않습니다. 다시 입력해주세요.</span>
+                        <span id="passwordSuccess" class="text-success" style="display:none;">비밀번호가 일치합니다!</span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="name">이름(실명)</label>
+                        <div class="d-flex align-items-center">
+                            <input type="text" id="name" class="form-control" value="고길동">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="nickname">닉네임</label>
+                        <div class="d-flex align-items-center">
+                            <input type="text" id="nickname" class="form-control mr-2" placeholder="닉네임">
+                            <button type="button" class="btn-duplicate-check">중복 검사</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="birthdate">생년월일</label>
+                        <div class="d-flex align-items-center">
+                            <input type="text" id="birthdate" class="form-control" placeholder="생년월일(예시: 20010121)">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="gender">성별</label>
+                        <div class="d-flex align-items-center">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="gender" id="male" value="male" checked>
+                                <label class="form-check-label" for="male">남</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="gender" id="female" value="female">
+                                <label class="form-check-label" for="female">여</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="email">이메일</label>
+                <div class="d-flex align-items-center">
+                    <input type="email" id="email" class="form-control mr-2" placeholder="이메일">
+                    <button class="btn-mail-check" type="button">인증 메일 발송</button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="phone">전화번호</label>
+                <div class="d-flex align-items-center">
+                    <input type="text" id="phone" class="form-control" placeholder="전화번호 (01012341234)">
+                </div>
+                <span id="phoneFeedback" class="text-danger" style="display:none;">전화번호는 11자리 숫자여야 합니다.</span>
+            </div>
+            <div class="form-group">
+                <label for="bio">소개글</label>
+                <textarea id="bio" class="form-control" rows="3" placeholder="소개글을 입력하세요."></textarea>
+            </div>
+            <button type="submit" class="btn-submit">수정 완료</button>
+        </form>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function() {
+        // 프로필 사진 변경
+        $('#photoInput').on('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    $('#profileImage').attr('src', e.target.result);
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // 비밀번호 확인 검증
+        $('#passwordConfirm').on('input', function() {
+            const password = $('#password').val();
+            const confirmPassword = $(this).val();
+            const feedback = $('#passwordFeedback');
+            const success = $('#passwordSuccess');
+
+            if (confirmPassword !== '' && password !== '') {
+                if (confirmPassword === password) {
+                    $(this).addClass('is-valid').removeClass('is-invalid');
+                    feedback.hide();
+                    success.show();
+                } else {
+                    $(this).addClass('is-invalid').removeClass('is-valid');
+                    feedback.show();
+                    success.hide();
+                }
+            } else {
+                $(this).removeClass('is-valid is-invalid');
+                feedback.hide();
+                success.hide();
+            }
+        });
+
+        // 전화번호 유효성 검사
+        $('#phone').on('input', function() {
+            const phoneValue = $(this).val();
+            const phoneFeedback = $('#phoneFeedback');
+
+            // 전화번호가 11자리 숫자인지 확인
+            const phonePattern = /^010\d{8}$/;
+
+            if (phonePattern.test(phoneValue)) {
+                $(this).addClass('is-valid').removeClass('is-invalid');
+                phoneFeedback.hide();
+            } else {
+                $(this).addClass('is-invalid').removeClass('is-valid');
+                phoneFeedback.show();
+            }
+        });
+
+        // 아이디 중복 확인 (예제용)
+        $('#userId').next('.btn-duplicate-check').on('click', function() {
+            const userId = $('#userId').val();
+            if (userId === "") {
+                alert("아이디를 입력해주세요.");
+                return;
+            }
+
+            // 여기에 중복 검사 로직 추가 (예: AJAX 요청)
+            // 예제에서는 간단히 중복 검사 실패로 처리
+            const isDuplicate = false; // 중복 검사 결과 예제 (false로 설정)
+
+            if (isDuplicate) {
+                alert("아이디가 이미 사용 중입니다.");
+            } else {
+                alert("사용 가능한 아이디입니다.");
+            }
+        });
+
+        // 닉네임 중복 검사 (예제용)
+        $('#nickname').next('.btn-duplicate-check').on('click', function() {
+            const nickname = $('#nickname').val();
+            if (nickname === "") {
+                alert("닉네임을 입력해주세요.");
+                return;
+            }
+
+            // 여기에 중복 검사 로직 추가 (예: AJAX 요청)
+            // 예제에서는 간단히 중복 검사 실패로 처리
+            const isDuplicate = false; // 중복 검사 결과 예제 (false로 설정)
+
+            if (isDuplicate) {
+                alert("닉네임이 이미 사용 중입니다.");
+            } else {
+                alert("사용 가능한 닉네임입니다.");
+            }
+        });
+
+        $('#profileForm').on('submit', function(event) {
+            event.preventDefault();
+            var formData = new FormData(this); // FormData 객체 생성
+
+            // 이 부분에서 url에 회원 번호도 붙여야 하는지는 생각해봐야 한다.
+
+            $.ajax({
+                url: '/myInfo/profile', // 서버의 PATCH 요청을 받을 URL
+                type: 'PATCH',
+                data: formData,
+                processData: false, // jQuery가 데이터를 처리하지 않도록 설정
+                contentType: false, // Content-Type을 false로 설정하여 multipart/form-data로 전송
+                success: function (response) {
+                    alert('프로필이 성공적으로 업데이트되었습니다.');
+                },
+                error: function (error) {
+                    alert('프로필 업데이트에 실패했습니다.');
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>
