@@ -1,10 +1,27 @@
 package kr.oshino.eataku;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 
 @Controller
 public class TestController {
+
+    @GetMapping("/myInfo/review")
+    public String myReviewPage() {
+        return "user/review";
+    }
+
+    @GetMapping("/myInfo")
+    public String myPage() {
+        return "user/myPage";
+    }
+
+    @GetMapping("/myInfo/profile")
+    public String myProfilePage() {
+        return "user/profile";
+    }
 
     // List
     @GetMapping("/list")
