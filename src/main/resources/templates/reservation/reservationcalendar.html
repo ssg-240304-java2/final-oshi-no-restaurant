@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>예약 시스템</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pikaday/css/pikaday.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: white;
+        }
+        .container {
+            max-width: 1920px;
+            margin: auto;
+            padding: 40px;
+        }
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 30px;
+            color: #FA4A54;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .section-title span {
+            margin-right: 10px;
+        }
+        .btn-custom, .btn-outline-custom {
+            background-color: #FA4A54;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            margin: 5px;
+            padding: 10px 20px;
+            transition: all 0.3s ease;
+        }
+        .btn-custom:hover, .btn-outline-custom:hover {
+            background-color: #FA4A54;
+            color: white !important;
+        }
+
+        .btn-outline-custom {
+            background-color: #fff;
+            color: #FA4A54;
+            border: 1px solid #FA4A54;
+            border-radius: 20px;
+            margin: 5px;
+            padding: 10px 20px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-outline-custom.selected {
+            background-color: #FA4A54;
+            color: white !important;
+
+        }
+        .btn-outline-custom:focus {
+            outline: none;
+        }
+        .btn-group-toggle .btn,
+        .time-selection .btn {
+            border: 1px solid #FA4A54;
+            color: #FA4A54;
+            margin: 10px;
+            background-color: white;
+            font-size: 1.2rem;
+            padding: 10px 20px;
+            border-radius: 20px;
+        }
+        .btn-group-toggle .btn:hover,
+        .time-selection .btn:hover {
+            background-color: #FA4A54;
+            color: white !important;
+        }
+
+        .btn-group-toggle .btn.selected,
+        .time-selection .btn.selected,
+        #reserve-button.selected {
+            background-color: #FA4A54;
+            color: white !important;
+        }
+        .calendar {
+            width: 900px;
+            margin: 0 auto;
+            border-color:  #FA4A54;
+            border-radius: 10px;
+            padding: 30px;
+            color: #484848;
+        }
+
+        .pika-table th,
+        .pika-table td {
+            padding: 40px;
+            border: none;
+            color: #FA4A54;
+            font-size: 2rem;
+        }
+
+        .pika-table abbr {
+            text-decoration: none;
+        }
+
+        .pika-table button {
+            background:white;
+            font-size: 1.5rem;
+            text-decoration-color: #484848;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .section {
+            margin-bottom: 60px;
+        }
+
+        .people input[type="radio"] {
+            display: none;
+        }
+
+        .people label {
+            cursor: pointer;
+            margin: 5px;
+            padding: 10px 20px;
+            border: 1px solid #FA4A54;
+            border-radius: 20px;
+            color: #FA4A54;
+            background-color: #fff;
+            transition: background-color 0.3s, color 0.3s;
+            font-size: 1.2rem;
+            display: inline-block;
+            text-align: center;
+            width: 80px;
+        }
+
+        .people input[type="radio"]:checked + label {
+            background-color: #FA4A54;
+            color: white;
+        }
+
+        .pika-single .is-selected .pika-button {
+            background: #FA4A54;
+            color: white !important;
+            border-radius: 50px;
+        }
+
+        .pika-single .is-today .pika-button {
+            color: #FA4A54;
+        }
+
+        .pika-single .is-disabled .pika-button {
+            color: #888888 !important;
+            background: white;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="text-center section">
+        <h4 class="section-title"><img src="/picture/person.png"/>  인원을 선택해 주세요</h4>
+        <div class="people btn-group-toggle mb-4">
+            <button type="button" class="btn btn-custom" data-value="3명">3명</button>
+            <button type="button" class="btn btn-custom" data-value="4명">4명</button>
+            <button type="button" class="btn btn-custom" data-value="5명">5명</button>
+            <button type="button" class="btn btn-custom" data-value="6명">6명</button>
+            <button type="button" class="btn btn-custom" data-value="7명">7명</button>
+            <button type="button" class="btn btn-custom" data-value="8명">8명</button>
+            <button type="button" class="btn btn-custom" data-value="9명">9명</button>
+            <button type="button" class="btn btn-custom" data-value="10명">10명</button>
+            <button type="button" class="btn btn-custom" data-value="11명">11명</button>
+            <button type="button" class="btn btn-custom" data-value="12명">12명</button>
+        </div>
+    </div>
+
+    <div class="calendar section">
+        <div id="datepicker-container"></div>
+    </div>
+
+    <div class="text-center section">
+        <h4 class="section-title"><img src="/picture/Calendar.png"/> 시간을 선택해 주세요</h4>
+        <div class="time-selection mb-4">
+            <button type="button" class="btn btn-custom">4:00</button>
+            <button type="button" class="btn btn-custom">4:30</button>
+            <button type="button" class="btn btn-custom">5:00</button>
+            <button type="button" class="btn btn-custom">5:30</button>
+            <button type="button" class="btn btn-custom">6:00</button>
+            <button type="button" class="btn btn-custom">6:30</button>
+            <button type="button" class="btn btn-custom">7:00</button>
+            <button type="button" class="btn btn-custom">7:30</button>
+            <button type="button" class="btn btn-custom">8:00</button>
+            <button type="button" class="btn btn-custom">8:30</button>
+        </div>
+    </div>
+
+    <div class="text-center mb-4">
+        <button type="button" class="btn btn-outline-custom" id="reserve-button">예약하기</button>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/pikaday/pikaday.js"></script>
+<script>
+    $(document).ready(function() {
+        var today = new Date();
+
+        var picker = new Pikaday({
+            field: document.createElement('div'),
+            container: document.getElementById('datepicker-container'),
+            bound: false,
+            format: 'YYYY-MM-DD',
+            i18n: {
+                previousMonth: '이전달',
+                nextMonth: '다음달',
+                months: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+                weekdays: ['일', '월', '화', '수', '목', '금', '토'],
+                weekdaysShort: ['일', '월', '화', '수', '목', '금', '토']
+            },
+            onSelect: function() {
+                var selectedDate = this.getMoment().format('YYYY-MM-DD');
+                console.log(selectedDate);
+
+                // 선택된 날짜의 버튼에 is-selected 클래스를 추가합니다.
+                $('.pika-single .pika-button').removeClass('is-selected');
+                $('td[data-day="' + this.getDate().getDate() + '"] button').addClass('is-selected');
+            },
+            theme: 'calendar', // Add a custom class for additional styling
+            disableDayFn: function(date) {
+                return date < today.setHours(0, 0, 0, 0);
+            }
+        });
+
+        $('.people .btn').on('click', function(){
+            $('.people .btn').removeClass('selected');
+            $(this).addClass('selected');
+        });
+
+        $('.time-selection .btn').on('click', function(){
+            $('.time-selection .btn').removeClass('selected');
+            $(this).addClass('selected');
+        });
+
+        $('#reserve-button').on('click', function(){
+            $(this).toggleClass('selected');
+        });
+    });
+</script>
+</body>
+</html>

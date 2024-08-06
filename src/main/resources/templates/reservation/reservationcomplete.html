@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reservation Confirmation</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .reservation-confirm {
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 40px 20px;
+            border: 1px solid #FA4A54;
+            border-radius: 8px;
+            background-color: #fff;
+            text-align: center;
+            color: #FA4A54;
+        }
+        .reservation-confirm .icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+        }
+        .reservation-confirm h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        .reservation-confirm .details {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+        .reservation-confirm .details div {
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .reservation-confirm .details .label {
+            font-weight: bold;
+            flex-basis: 40%;
+        }
+        .reservation-confirm .details .value {
+            flex-basis: 60%;
+            text-align: right;
+        }
+        .reservation-confirm .footer {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="reservation-confirm">
+        <div class="icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#ff6f61" width="80" height="80">
+                <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm-1 17.93l-5-5 1.41-1.41L11 14.93l7.59-7.59L20 8.34l-9 9z"/>
+            </svg>
+        </div>
+        <h1>예약완료</h1>
+        <div class="details">
+            <div>
+                <span class="label">매장명</span>
+                <span class="value">음식점 이름</span>
+            </div>
+            <div>
+                <span class="label">인원</span>
+                <span class="value">성인 2명</span>
+            </div>
+            <div>
+                <span class="label">예약일시</span>
+                <span class="value">2021년 01월 19일 화요일 오후 4:00</span>
+            </div>
+        </div>
+        <div class="footer">
+            예약 취소는 예약 24시간 전까지 가능합니다.<br>
+            예약 취소는 홈페이지를 통해 예약조회를 하시면 됩니다.
+        </div>
+    </div>
+</div>
+</body>
+</html>
