@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>식당 상세 페이지</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: white;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            padding: 40px 20px;
+        }
+        .section-title {
+            font-size: 1.5rem;
+            color: #FA4A54;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .btn-custom, .btn-outline-custom {
+            background-color: #FA4A54;
+            color: white;
+            border: 2px solid transparent;
+            margin: 10px;
+            padding: 10px 20px;
+            transition: all 0.3s ease;
+        }
+        .btn-custom:hover, .btn-outline-custom:hover {
+            background-color: #FA4A54;
+            color: white !important;
+        }
+        .btn-outline-custom {
+            background-color: #fff;
+            color: #FA4A54;
+            border: 2px solid #FA4A54;
+            transition: all 0.3s ease;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 0;
+        }
+        .btn-outline-custom.selected {
+            background-color: #FA4A54;
+            color: white !important;
+            border: 2px solid transparent; /* 선택된 버튼의 테두리 제거 */
+        }
+        .info-section i {
+            margin-right: 10px;
+            color: #FA4A54;
+        }
+        .info-section{
+            margin-bottom: 100px;
+        }
+        .info-section p {
+            font-size: 1.1rem;
+            color: #484848;
+            margin: 5px 0;
+        }
+        .map-container {
+            margin-bottom: 100px; /* 지도 밑에 간격을 더 늘림 */
+        }
+        .map-container img {
+            width: 900px;
+            height: auto;
+        }
+        .rating-section {
+            text-align: left;
+            max-width: 900px;
+            margin: auto;
+            padding-bottom: 100px; /* 이용내역과 사진 섹션 사이 간격 추가 */
+        }
+        .rating-section h2 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #FA4A54;
+            display: inline;
+        }
+        .rating-section .rating {
+            display: inline;
+            font-size: 1.5rem;
+            color: #FA4A54;
+            margin-left: 10px;
+        }
+        .rating-details {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        .rating-details .detail {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            width: 45%;
+        }
+        .detail p {
+            margin: 0;
+            font-size: 1rem;
+            flex: 1;
+            text-align: left;
+        }
+        .detail .line {
+            flex: 2;
+            height: 2px;
+            background-color: #FA4A54;
+        }
+        .detail .score {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #FA4A54;
+            margin-left: 10px;
+        }
+        .card-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 50px; /* 사진과 리뷰 섹션 사이 간격 추가 */
+            flex-wrap: wrap;
+            position: relative;
+        }
+        .card {
+            width: 22%;
+            border: none;
+            transition: all 0.3s ease;
+            text-align: center;
+            margin-bottom: 20px;
+            background-color: transparent; /* 배경색 제거 */
+        }
+        .card .img-placeholder {
+            background-color: #ddd; /* 이미지 배경색 */
+            width: 100%;
+            height: 150px;
+            margin: 0 auto; /* 이미지 중앙 정렬 */
+        }
+        .card-body {
+            padding: 10px;
+        }
+        .review-section {
+            margin: 30px 0;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        .review {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .review img {
+            width: 50px;
+            height: 50px;
+            margin-bottom: 10px;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+        .review p {
+            margin: 5px 0;
+        }
+        .review strong {
+            color: #FA4A54;
+        }
+        .review .text-warning {
+            color: #FA4A54 !important;
+        }
+        .section-content {
+            text-align: center;
+            margin-bottom: 50px; /* 메인 이미지와 아래 섹션 간격 추가 */
+        }
+        .section-content img {
+            width: 100%;
+            max-width: 900px;
+            height: auto;
+            border: 1px solid #FA4A54;
+            border-radius: 10px;
+        }
+        .section-content h2 {
+            margin: 20px 0;
+        }
+        .button-group {
+            margin: 20px 0;
+        }
+        .circle-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        .star-rating {
+            color: #FA4A54;
+        }
+        .arrow-button {
+            position: absolute;
+            top: 70px;
+            right: 0px;
+            transform: translateY(-50%);
+            background-color: #FA4A54;
+            color: white;
+            border: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        .arrow-button i {
+            margin: auto;
+        }
+
+        .more-button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .more-button {
+            background-color: #fff;
+            color: #FA4A54;
+            border: 2px solid #FA4A54;
+            padding: 10px 20px;
+            font-size: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .more-button:hover {
+            background-color: #FA4A54;
+            color: white;
+        }
+        .custom-arrow-button {
+            background-color: #FA4A54;
+            color: white;
+            /*border: none;*/
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+
+        }
+        .custom-arrow-button img {
+            width: 50px;
+            height: 50px;
+        }
+        .btn-outline-custom.selected {
+            background-color: #FA4A54;
+            color: white !important;
+            border: 2px solid transparent; /* 선택된 버튼의 테두리 제거 */
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="section-content text-center">
+        <div id="main-img" class="img-placeholder" style="background-color: #ddd; width: 100%; max-width: 900px; height: 400px; margin: auto;"></div>
+        <h2 class="section-title">음식점 이름</h2>
+        <div class="circle-buttons">
+            <button class="btn btn-outline-custom">쩝쩝채팅</button>
+            <button class="btn btn-outline-custom">쩝쩝웨이팅</button>
+            <button class="btn btn-outline-custom">쩝쩝예약</button>
+        </div>
+    </div>
+
+    <div class="info-section text-center">
+        <p><i class="fas fa-globe"></i><img src="/picture/Globe.png"/>    www.example.com</p>
+        <p><i class="fas fa-map-marker-alt"></i><img src="/picture/Map%20pin.png"/> 서울 송파구 올림픽로 240 지하 1층</p>
+        <p><i class="fas fa-phone"></i><img src="/picture/Phone.png"/>    010-1234-1234</p>
+        <p><i class="fas fa-gift"></i><img src="/picture/Gift.png"/>  포장가능</p>
+        <p><i class="fas fa-car"></i><img src="/picture/Info.png"/>   주차가능</p>
+    </div>
+
+    <div class="map-container" id="map-container">
+        <div id="map" style="width:100%;height:400px;">
+            <div class="img-placeholder" style="background-color: #ddd; width: 100%; height: 400px; margin: auto;"></div>
+        </div>
+    </div>
+
+    <div class="rating-section">
+        <h2>이용내역   <img src="/picture/Vector.png"/></h2>
+        <div class="rating">
+            <i class="fas fa-star"></i>  5.0
+        </div>
+        <div class="rating-details">
+            <div class="detail">
+                <p>맛있어요</p>
+                <div class="line"></div>
+                <span class="score">5.0</span>
+            </div>
+            <div class="detail">
+                <p>친절해요</p>
+                <div class="line"></div>
+                <span class="score">5.0</span>
+            </div>
+            <div class="detail">
+                <p>쾌적해요</p>
+                <div class="line"></div>
+                <span class="score">5.0</span>
+            </div>
+            <div class="detail">
+                <p>다시 갈래요</p>
+                <div class="line"></div>
+                <span class="score">5.0</span>
+            </div>
+            <div class="detail">
+                <p>분위기가 좋아요</p>
+                <div class="line"></div>
+                <span class="score">5.0</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-container" id="card-container">
+        <div class="card" id="card-0">
+            <div class="img-placeholder" style="background-color: #ddd; width: 150px; height: 150px;"></div>
+            <div class="card-body">
+            </div>
+        </div>
+        <div class="card" id="card-1">
+            <div class="img-placeholder" style="background-color: #ddd; width: 150px; height: 150px;"></div>
+            <div class="card-body">
+            </div>
+        </div>
+        <div class="card" id="card-2">
+            <div class="img-placeholder" style="background-color: #ddd; width: 150px; height: 150px;"></div>
+            <div class="card-body">
+            </div>
+        </div>
+        <div class="card" id="card-3">
+            <div class="img-placeholder" style="background-color: #ddd; width: 150px; height: 150px;"></div>
+            <div class="card-body">
+            </div>
+        </div>
+
+        <div class="arrow-button" id="arrow-button">
+            <button class="custom-arrow-button">
+                <img src="/picture/next%20arrow.png" alt="Next">
+            </button>
+        </div>
+    </div>
+
+    <div class="review-section">
+        <div class="review">
+            <img src="https://via.placeholder.com/80" alt="Reviewer Image">
+            <p><strong>호시노 경호</strong> 2024.07.31</p>
+            <p class="star-rating"><span class="text-warning">&#9733;&#9733;&#9733;&#9733;&#9733;</span></p>
+            <p>아주 놀라운 음식이에요.</p>
+        </div>
+        <div class="review">
+            <img src="https://via.placeholder.com/80" alt="Reviewer Image">
+            <p><strong>홍길동</strong> 2024.07.31</p>
+            <p class="star-rating"><span class="text-warning">&#9733;&#9733;&#9733;&#9733;&#9733;</span></p>
+            <p>아주 맛있어요.</p>
+        </div>
+        <div class="review">
+            <img src="https://via.placeholder.com/80" alt="Reviewer Image">
+            <p><strong>김철수</strong> 2024.07.31</p>
+            <p class="star-rating"><span class="text-warning">&#9733;&#9733;&#9733;&#9733;&#9733;</span></p>
+            <p>서비스가 좋아요.</p>
+        </div>
+        <div class="review">
+            <img src="https://via.placeholder.com/80" alt="Reviewer Image">
+            <p><strong>이영희</strong> 2024.07.31</p>
+            <p class="star-rating"><span class="text-warning">&#9733;&#9733;&#9733;&#9733;&#9733;</span></p>
+            <p>가격이 적당해요.</p>
+        </div>
+    </div>
+
+    <div class="more-button-container">
+        <button class="more-button" id="more-button">더 보기</button>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://kit.fontawesome.com/a076d05399.js"></script>
+<script>
+    document.getElementById('more-button').addEventListener('click', function() {
+        this.classList.toggle('active');
+        if (this.classList.contains('active')) {
+            this.style.backgroundColor = '#FA4A54';
+            this.style.color = '#fff';
+        } else {
+            this.style.backgroundColor = '#fff';
+            this.style.color = '#FA4A54';
+        }
+    });
+
+    const images = [
+        'https://via.placeholder.com/150?text=Image+1',
+        'https://via.placeholder.com/150?text=Image+2',
+        'https://via.placeholder.com/150?text=Image+3',
+        'https://via.placeholder.com/150?text=Image+4',
+        'https://via.placeholder.com/150?text=Image+5',
+        'https://via.placeholder.com/150?text=Image+6',
+        'https://via.placeholder.com/150?text=Image+7',
+        'https://via.placeholder.com/150?text=Image+8'
+    ];
+    let currentIndexes = [0, 1, 2, 3];
+
+    document.getElementById('arrow-button').addEventListener('click', function() {
+        currentIndexes = currentIndexes.map(index => (index + 1) % images.length);
+        currentIndexes.forEach((index, i) => {
+            document.getElementById(`card-${i}`).querySelector('.img-placeholder').style.backgroundImage = `url(${images[index]})`;
+        });
+    });
+</script>
+</body>
+</html>
