@@ -1,0 +1,12 @@
+body {
+    margin-top: 120px;
+}
+.wrong_text {
+    font-size: 1rem;
+    color: #f44e38;
+    letter-spacing: -.2px;
+    font-weight: 300;
+    margin: 8px 0 2px;
+    line-height: 1em;
+    display: none
+}

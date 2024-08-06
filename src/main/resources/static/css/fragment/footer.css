@@ -1,9 +1,10 @@
 .footer-custom {
     background-color: #f8f9fa;
-    padding: 40px 0 0 0;
+    padding: 100px 0 0 0;
     color: #6c757d;
-    margin-top: 100px;
+    border-top: #DEE2E6 1px solid;
     min-width: 550px;
+    width: 100%;
 }
 .footer-custom .footer-title {
     font-size: 20px;
