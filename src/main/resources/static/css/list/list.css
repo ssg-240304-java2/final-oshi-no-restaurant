@@ -1,0 +1,206 @@
+.container-fluid {
+    margin-top: 60px;
+    height: 93.3vh;
+    padding: 0;
+    overflow: hidden;
+    position: relative;
+}
+
+.map-container {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.map {
+    height: 100%;
+    width: 100%;
+}
+
+#map {
+    width: 100%;
+    height: 100%;
+}
+
+.sidebar {
+    height: 100%;
+    width: 50%;
+    padding: 20px;
+    overflow-y: auto;
+    background-color: rgba(248, 249, 250, 1);
+    border-right: 1px solid #dee2e6;
+    transition: transform 0.3s ease;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.btn-custom {
+    width: 80%;
+    margin: 20px auto;
+    display: block;
+    border: 2px solid #fb3f4a;
+    color: black;
+    text-align: center;
+    padding: 10px;
+}
+
+.btn-custom:hover, .btn-custom:focus, .restaurant-item.active {
+    background-color: #fb3f4a;
+    color: white;
+}
+
+.header-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 100px;
+}
+
+.header-row .logo img {
+    width: 50px;
+    margin-right: 10px;
+}
+
+.header-row .menu-title,
+.header-row .list-title {
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.header-row .menu-title.active,
+.header-row .list-title.active {
+    color: #fb3f4a;
+}
+
+.separator {
+    width: 2px;
+    height: 24px;
+    background-color: #fb3f4a;
+    margin: 0 10px;
+}
+
+.list-count {
+    position: relative;
+    left:10%;
+    color: #fff;
+    background-color: #fb3f4a;
+    font-weight: bold;
+    border: 2px solid #fb3f4a;
+    padding: 2px 5px;
+    border-radius: 5px;
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 12px;
+    width: 25%;
+}
+
+.content-section {
+    display: none;
+}
+
+.content-section.active {
+    display: block;
+}
+
+.restaurant-list {
+    margin-top: 20px;
+}
+
+.restaurant-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    border: 1px solid #dee2e6;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.restaurant-item img {
+    width: 80px;
+    height: 80px;
+    margin-right: 10px;
+    border-radius: 5px;
+}
+
+.restaurant-info {
+    flex: 1;
+}
+
+.restaurant-info h5 {
+    margin: 0 0 10px;
+}
+
+.restaurant-info p {
+    margin: 0;
+}
+
+.restaurant-info .rating {
+    color: #ffc107; /* 노란색 별 */
+}
+
+.delete-btn-container {
+    text-align: right;
+    margin-bottom: 20px;
+}
+
+.delete-btn {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.delete-btn:hover, .delete-btn:focus {
+    background-color: #5a6268;
+}
+
+.toggle-btn {
+    cursor: pointer;
+    font-size: 24px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    background-color: #fb3f4a;
+    color: white;
+    padding: 5px;
+    border-radius: 5px;
+    transform: translateY(-100%);
+    transition: left 0.3s ease;
+    z-index: 2;
+}
+
+.collapsed .sidebar {
+    transform: translateX(-100%);
+}
+
+.collapsed .toggle-btn {
+    left: 0;
+    transform: translateY(-100%);
+    transition: left 0.3s ease;
+}
+
+.restaurant-item .delete-checkbox {
+    display: none;
+    margin-right: 10px;
+}
+
+.restaurant-item.show-checkbox .delete-checkbox {
+    display: inline-block;
+}
+
+.restaurant-info-window {
+    position: absolute;
+    z-index: 2;
+    background: white;
+    border: 1px solid #ccc;
+    padding: 10px;
+    display: none;
+    max-width: 250px;
+}

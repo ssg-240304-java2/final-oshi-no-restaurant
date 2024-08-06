@@ -5,192 +5,18 @@
     <meta charset="UTF-8">
     <title>사업자 등록 번호 인증</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            background-color: #f8f9fa;
-            font-family: Arial, sans-serif;
-            /* color: #343a40; */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-
-        th {
-            color: #343a40;
-        }
-
-        .container {
-            background: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-            padding: 60px;
-            max-width: 500px;
-            width: 100%;
-        }
-
-        .form-title {
-            font-size: 24px;
-            margin-bottom: 40px;
-            text-align: center;
-            color: #000;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group input[type="text"] {
-            /* width: calc(100% - 5rem); */
-            padding: 8px;
-            margin-right: 5px;
-            border: 1px solid #343a40;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-
-        /* .form-group span {
-            color: #23272b;
-            cursor: pointer;
-            font-weight: bold;
-        } */
-
-        .form-group table {
-            width: 100%;
-            margin-top: 70px;
-        }
-
-        /* .form-group th,
-        .form-group td {
-            padding: 10px;
-        } */
-
-        .form-group th {
-            text-align: left;
-            vertical-align: middle;
-            width: 150px;
-        }
-
-        .form-group td {
-            text-align: right;
-        }
-
-        .form-group input[type="hidden"] {
-            display: none;
-        }
-
-        .form-group .hyphen {
-            display: inline-block;
-            width: 20px;
-            text-align: center;
-        }
-
-        .btn-container {
-            text-align: center;
-            /* margin-top: 100px; */
-        }
-
-        .btn-danger {
-            background-color: #6c757d;
-            padding: 10px;
-            font-size: 13px;
-            color: #fff;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .btn-danger:hover {
-            background-color: #fff;
-            color: #343a40;
-            border: 1px solid #343a40
-        }
-
-        .btn-primary-custom {
-            background-color: #FA4A54;
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
-            color: white;
-            width: 90px;
-
-        }
-
-        .btn-primary-custom:hover {
-            background-color: #fff;
-            color: #FA4A54;
-            border: 1px solid #FA4A54;
-        }
-
-        .text-center {
-            text-align: center;
-            margin-top: 80px;
-        }
-
-    </style>
-
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script language="javascript">
-        function checkInput_null(formName, fieldNames) {
-            var form = document.forms[formName];
-            var fields = fieldNames.split(',');
-
-            for (var i = 0; i < fields.length; i++) {
-                var field = form[fields[i]];
-                if (field.value.trim() === '') {
-                    alert(fields[i] + ' 필드가 비어 있습니다.');
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        function code_check() {
-            if (!checkInput_null('frm1', 'code1,code2,code3')) {
-                frm1.overlap_code_ok.value = "";
-            } else {
-                document.frm1.code.value = frm1.code1.value + frm1.code2.value + frm1.code3.value;
-                var data = {
-                    "b_no": [document.frm1.code.value]
-                };
-
-                $.ajax({
-                    url: "https://api.odcloud.kr/api/nts-businessman/v1/status?serviceKey=i7ZpttAqrc65H8cxwcHUlIkdsWQ6vFivVGJsg8uAl2KsjkP3Tl%2BlfwCaquFViG%2B9e%2B0MIAZXSLpR2pTuLw8GZg%3D%3D",
-                    type: "POST",
-                    data: JSON.stringify(data),
-                    dataType: "json",
-                    traditional: true,
-                    contentType: "application/json; charset=UTF-8",
-                    accept: "application/json",
-                    success: function (result) {
-                        console.log(result);
-                        if (result.match_cnt == "1") {
-                            console.log("success");
-                            document.frm1.submit();
-                        } else {
-                            console.log("fail");
-                            alert(result.data[0]["tax_type"]);
-                        }
-                    },
-                    error: function (result) {
-                        console.log("error");
-                        console.log(result.responseText);
-                    }
-                });
-            }
-        }
-    </script>
 
     <!--       footer header 링크 스크립트 -->
     <link rel="stylesheet" th:href="@{/css/fragment/navbar.css}">
     <link rel="stylesheet" th:href="@{/css/fragment/footer.css}">
+    <link rel="stylesheet" th:href="@{/css/management/certification.css}">
 </head>
 
 <body>
-<div th:replace="~{/fragment/footer.html :: footer}" class="footer"></div>
-
-<div class="container">
-    <div class="form-title text-left">사업자 등록 인증</div>
+<div th:replace="~{/fragment/navbar.html :: navbar}" class="navbar"></div>
+<div class="card">
+    <div class="form-title text-center">사업자 등록 인증</div>
     <form name="frm1" method="post" action="../../..">
         <div class="form-group row">
             <input type="hidden" name="code" value="">
@@ -226,10 +52,10 @@
         </div>
     </div>
 </div>
-
 <div th:replace="~{/fragment/footer.html :: footer}" class="footer"></div>
 
 <script type="text/javascript" th:src="@{/js/fragment/navbar.js}"></script>
+<script type="text/javascript" th:src="@{/js/management/certification.js}"></script>
 </body>
 
 </html>
