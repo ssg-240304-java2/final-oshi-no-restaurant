@@ -1,4 +1,4 @@
-package kr.oshino.eataku.global.config;
+package kr.oshino.eataku.common.config;
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
