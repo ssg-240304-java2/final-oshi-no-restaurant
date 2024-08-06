@@ -1,0 +1,65 @@
+html, body {
+    height: 100%;
+    margin-top: 120px;
+    display: flex;
+    flex-direction: column;
+}
+.card-container {
+    min-height: 40vh;
+}
+.card-img-top {
+    height: 180px; /* 이미지 높이 조정 */
+    object-fit: cover;
+}
+.search-container {
+    padding: 20px 0;
+}
+.action-buttons {
+    display: none;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+}
+.show-actions .action-buttons {
+    display: block;
+}
+.btn-custom {
+    background-color: #FA4A54;
+    border-color: #FA4A54;
+    color: white;
+}
+.btn-custom:hover {
+    background-color: #c93541;
+    border-color: #c93541;
+}
+.form-check-inline {
+    width: 150px; /* 각 체크박스가 차지하는 폭을 조절 */
+    margin-bottom: 5px;
+}
+.card-deck-container {
+    justify-content: start; /* 카드 왼쪽 정렬 */
+}
+.row {
+    --bs-gutter-x: 1rem; /* 좌우 카드 간의 간격 조정 */
+    margin-left: auto;
+    margin-right: auto;
+}
+.card-container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    max-width: 1200px; /* 최대 폭을 설정하여 양쪽 여백을 동일하게 유지 */
+    margin: 0 auto; /* 가운데 정렬 */
+}
+@media (min-width: 992px) { /* lg 화면 이상에서 */
+    .row {
+        --bs-gutter-x: 2rem; /* 좌우 카드 간의 간격 조정 */
+    }
+}
+
+.footer {
+    width: 100%;
+    background-color: #f8f9fa;
+    padding: 10px 0;
+    text-align: center;
+    flex-shrink: 0; /* footer가 수축하지 않도록 설정 */
+}
