@@ -5,43 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>회원 가입</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-      body {
-        background-color: #f8f9fa;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-      }
-      .container {
-        background-color: white;
-        padding: 60px;
-        border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        max-width: 800px;
-        width: 100%;
-      }
-      .btn-check {
-        background-color: #6c757d;
-        border: none;
-        color: white;
-      }
-      .btn-check:hover {
-        background-color: #5a6268;
-      }
-      .btn-primary-custom {
-        background-color: #FA4A54;
-        border: none;
-        color: white;
-        font-size: 0.8rem; /* 텍스트 크기 줄이기 */
-      }
-      .btn-primary-custom:hover {
-        background-color: #d14045;
-      }
-      .form-group.row > .col-sm-2 .btn-primary-custom {
-        margin-left: -10px; /* 입력 필드와 버튼 사이 간격 줄이기 */
-      }
-    </style>
+    <link rel="stylesheet" th:href="@{/css/management/signUp.css}">
   </head>
   <body>
     <div class="container">

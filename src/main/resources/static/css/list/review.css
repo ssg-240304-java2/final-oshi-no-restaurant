@@ -1,0 +1,60 @@
+body, html {
+    /*display: flex;*/
+    /*align-items: flex-start; !* 상단에 더 가까워지도록 설정 *!*/
+    justify-content: center;
+    margin-top: 60px;
+    padding: 0;
+}
+
+.star-rating {
+    font-size: 2rem;
+    cursor: pointer;
+}
+
+.star-rating .fa-star {
+    color: #ccc;
+    margin-right: 5px;
+}
+
+.star-rating .fa-star.checked {
+    color: #ff6f61;
+}
+
+.tag-btn {
+    margin-right: 5px;
+}
+
+.tag-btn.active {
+    background-color: #dc3545;
+    color: white;
+}
+
+.review-box {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 5px;
+    border: 1px solid #ced4da;
+}
+
+.btn-register {
+    background-color: white;
+    color: #dc3545;
+    border: 1px solid #dc3545;
+}
+
+.btn-register:hover {
+    background-color: #dc3545;
+    color: white;
+}
+
+.review-form {
+    width: 100%;
+    max-width: 1344px;
+    margin-bottom: 50px;
+}
+
+.align-center {
+    display: flex;
+    align-items: center;
+}
