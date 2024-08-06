@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review Form</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <style>
+        body, html {
+            height: 100vh;
+            display: flex;
+            align-items: flex-start; /* 상단에 더 가까워지도록 설정 */
+            justify-content: center;
+            margin: 0;
+            padding: 0;
+        }
+        .scale-up {
+            transform: scale(1.2); /* 1.2배 확대 */
+            transform-origin: top center; /* 확대 기준점을 상단 중앙으로 설정 */
+        }
+        .star-rating {
+            font-size: 2rem;
+            cursor: pointer;
+        }
+        .star-rating .fa-star {
+            color: #ccc;
+            margin-right: 5px;
+        }
+        .star-rating .fa-star.checked {
+            color: #ff6f61;
+        }
+        .tag-btn {
+            margin-right: 5px;
+        }
+        .tag-btn.active {
+            background-color: #dc3545;
+            color: white;
+        }
+        .review-box {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+            border: 1px solid #ced4da;
+        }
+        .btn-register {
+            background-color: white;
+            color: #dc3545;
+            border: 1px solid #dc3545;
+        }
+        .btn-register:hover {
+            background-color: #dc3545;
+            color: white;
+        }
+        .review-form {
+            width: 100%;
+            max-width: 1344px;
+            margin-top: 7rem; /* 화면 상단에 더 가까워지도록 설정 */
+        }
+        .align-center {
+            display: flex;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+<div class="container review-form scale-up">
+    <h2 class="mb-4" style="font-size: 2rem;">용용선생 리뷰 작성하기</h2>
+    <div class="mb-4 align-center">
+        <label for="star-rating" class="mr-3 mb-0" style="font-size: 1.5rem;">별점</label>
+        <div id="star-rating" class="star-rating">
+            <span class="fa fa-star" data-value="1"></span>
+            <span class="fa fa-star" data-value="2"></span>
+            <span class="fa fa-star" data-value="3"></span>
+            <span class="fa fa-star" data-value="4"></span>
+            <span class="fa fa-star" data-value="5"></span>
+        </div>
+    </div>
+    <div class="mb-4 align-center">
+        <label for="tags" class="mr-3 mb-0" style="font-size: 1.5rem;">태그</label>
+        <div id="tags">
+            <button type="button" class="btn btn-outline-danger tag-btn">맛있어요</button>
+            <button type="button" class="btn btn-outline-danger tag-btn">친절해요</button>
+            <button type="button" class="btn btn-outline-danger tag-btn">쾌적해요</button>
+            <button type="button" class="btn btn-outline-danger tag-btn">다시갈래요</button>
+            <button type="button" class="btn btn-outline-danger tag-btn">분위기가 좋아요</button>
+        </div>
+    </div>
+    <div class="mb-4">
+        <label for="review-content" style="font-size: 1.5rem;">리뷰작성</label>
+        <textarea id="review-content" class="form-control review-box" rows="5" placeholder="리뷰를 작성해주세요..."></textarea>
+    </div>
+    <button type="submit" class="btn btn-register">등록하기</button>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $(".tag-btn").click(function() {
+            $(this).toggleClass("active");
+        });
+
+        $(".star-rating .fa-star").click(function() {
+            var rating = $(this).data("value");
+            $(".star-rating .fa-star").each(function() {
+                if ($(this).data("value") <= rating) {
+                    $(this).addClass("checked");
+                } else {
+                    $(this).removeClass("checked");
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>
