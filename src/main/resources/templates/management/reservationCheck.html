@@ -9,59 +9,7 @@
 
     <link rel="stylesheet" th:href="@{/css/fragment/navbar.css}">
     <link rel="stylesheet" th:href="@{/css/fragment/footer.css}">
-    <style>
-        body {
-            background-color: #e0e0e0;
-        }
-
-        .container {
-            margin-top: 100px;
-        }
-
-        .nav-buttons {
-            margin-bottom: 30px;
-        }
-
-        .nav-buttons .btn {
-            background-color: #FA4A54;
-            border: none;
-            color: white;
-            margin-right: 10px;
-            margin-bottom: 10px;
-        }
-
-        .btn-setting {
-            background-color: transparent;
-            border: none;
-            color: white;
-            margin-right: 10px;
-            margin-bottom: 5px;
-        }
-
-        .nav-buttons .btn:hover {
-            background-color: #d14045;
-        }
-
-        .btn-secondary {
-            border: none;
-        }
-
-        .btn-secondary:hover {
-            background-color: #d14045;
-        }
-
-        .btn-secondary img {
-            width: 25px;
-            height: 25px;
-        }
-
-        .calendar {
-            background-color: white;
-            padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-    </style>
+    <link rel="stylesheet" th:href="@{/css/management/reservationCheck.css}">
 </head>
 <body>
 
@@ -98,41 +46,6 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.9.0/main.min.js'></script>
 <script type="text/javascript" th:src="@{/js/fragment/navbar.js}"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var calendarEl = document.getElementById('calendar');
-        var calendar = new FullCalendar.Calendar(calendarEl, {
-            initialView: 'dayGridMonth',
-            initialDate: '2024-06-19',
-            headerToolbar: false,
-            events: [
-                {
-                    title: '예약 5건',
-                    start: '2024-06-03'
-                },
-                {
-                    title: '예약 5건',
-                    start: '2024-06-09'
-                },
-                {
-                    title: '예약 5건',
-                    start: '2024-06-12'
-                },
-                {
-                    title: '예약 5건',
-                    start: '2024-06-25'
-                }
-            ]
-        });
-        calendar.render();
-
-        // 날짜 선택 시 캘린더 이동
-        document.getElementById('datePicker').addEventListener('change', function () {
-            var selectedDate = this.value;
-            console.log('selectedDate', selectedDate);
-            calendar.gotoDate(selectedDate);
-        });
-    });
-</script>
+<script type="text/javascript" th:src="@{/js/management/reservationCheck.js}"></script>
 </body>
 </html>

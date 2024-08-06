@@ -113,31 +113,53 @@ public class TestController {
     // Reservation
     @GetMapping("/reservationCalendar")
     public String reservationCalendar() {
-        return "reservation/reservationcalendar";
+        return "reservation/reservationCalendar";
     }
 
     @GetMapping("/reservationComplete")
     public String reservationComplete() {
-        return "reservation/reservationcomplete";
+        return "reservation/reservationComplete";
     }
 
     @GetMapping("/reservationDetail")
     public String reservationDetail() {
-        return "reservation/reservationdetail";
+        return "reservation/reservationDetail";
     }
 
     @GetMapping("/reservationLogin")
     public String reservationLogin() {
-        return "reservation/reservationlogin";
+        return "reservation/reservationLogin";
     }
 
     @GetMapping("/reservationLoginEmail")
     public String reservationLoginEmail() {
-        return "reservation/reservationloginemail";
+        return "reservation/reservationLoginEmail";
     }
 
     @GetMapping("/updateReservation")
     public String updateReservation() {
-        return "reservation/updatereservation";
+        return "reservation/updateReservation";
     }
+
+    @GetMapping("/find")
+    public String find() { return "user/find"; }
+    @GetMapping("/userFindId")
+    public String findId2() { return "user/findId"; }
+    @GetMapping("/findPw")
+    public String findPw() { return "user/findPw"; }
+    @GetMapping("/userLogin")
+    public String userLogin() { return "user/login"; }
+    @GetMapping("/myPage")
+    public String myPage() { return "user/myPage"; }
+
+    @GetMapping("/cardSearchPage")
+    public String cardSearchPage() { return "waiting/cardSearchPage"; }
+    @GetMapping("/jjFriendPage")
+    public String jjFriendPage() { return "waiting/jjFriendPage"; }
+    @GetMapping("/mapSearchPage")
+    public String mapSearchPage() { return "waiting/mapSearchPage"; }
+    @GetMapping("/userProfilePage")
+    public String userProfilePage() { return "waiting/userProfilePage"; }
+    @GetMapping("/waitingCardSearchPage")
+    public String waitingCardSearchPage() { return "waiting/waitingCardSearchPage"; }
 }

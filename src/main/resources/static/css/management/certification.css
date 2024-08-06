@@ -1,0 +1,124 @@
+body {
+    background-color: #f8f9fa;
+    margin-top: 120px;
+    /*font-family: Arial, sans-serif;*/
+    /*!* color: #343a40; *!*/
+    /*display: flex;*/
+    /*justify-content: center;*/
+    /*align-items: center;*/
+    /*height: 100vh;*/
+    /*margin: 0;*/
+}
+
+th {
+    color: #343a40;
+}
+
+.card {
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    padding: 60px;
+    max-width: 500px;
+    width: 100%;
+    left: 30%;
+    box-sizing: unset;
+    margin-bottom: 50px;
+}
+
+.form-title {
+    font-size: 24px;
+    margin-bottom: 40px;
+    text-align: center;
+    color: #000;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group input[type="text"] {
+    /* width: calc(100% - 5rem); */
+    padding: 8px;
+    margin-right: 5px;
+    border: 1px solid #343a40;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+/* .form-group span {
+    color: #23272b;
+    cursor: pointer;
+    font-weight: bold;
+} */
+
+.form-group table {
+    width: 100%;
+    margin-top: 70px;
+}
+
+/* .form-group th,
+.form-group td {
+    padding: 10px;
+} */
+
+.form-group th {
+    text-align: left;
+    vertical-align: middle;
+    width: 150px;
+}
+
+.form-group td {
+    text-align: right;
+}
+
+.form-group input[type="hidden"] {
+    display: none;
+}
+
+.form-group .hyphen {
+    display: inline-block;
+    width: 20px;
+    text-align: center;
+}
+
+.btn-container {
+    text-align: center;
+    justify-content: center;
+    /* margin-top: 100px; */
+}
+
+.btn-danger {
+    /*background-color: #6c757d;*/
+    padding: 10px;
+    font-size: 13px;
+    background-color: white;
+    color: #6c757d;
+    border: #6c757d 1px solid;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-danger:hover {
+    background-color: #6c757d;
+    color: white;
+    border: #6c757d 1px solid;
+}
+
+.btn-primary-custom {
+    background-color: white;
+    padding: 10px;
+    border-radius: 5px;
+    color: #FA4A54;
+    border: #FA4A54 1px solid;
+    width: 90px;
+}
+
+.btn-primary-custom:hover {
+    background-color: #FA4A54;
+    color: white;
+}
+
+.text-center {
+    text-align: center;
+}

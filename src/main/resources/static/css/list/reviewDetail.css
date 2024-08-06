@@ -1,0 +1,66 @@
+body {
+    margin-top: 120px; /* 상단 여백 추가 */
+}
+.review-title {
+    margin-bottom: 100px;
+}
+.review-item {
+    border: 1px solid #e9ecef;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+}
+.review-image {
+    max-width: 100%;
+    border-radius: 5px;
+}
+.badge-custom {
+    /*background-color: #6c757d;*/
+    color: #FA4A54;
+    font-weight: bold;
+    padding: 0 5px;
+    font-size: 16px !important;
+    /*border-radius: 5px;*/
+    margin-right: 10px;
+    white-space: nowrap; /* 한 줄로 나오게 설정 */
+}
+.review-details {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.review-details span {
+    font-size: 14px;
+}
+.review-details .fa-star {
+    color: #FFD700;
+    margin-left: 5px;
+}
+.review-buttons {
+    display: flex;
+    justify-content: flex-end;
+}
+.btn-info-custom {
+    background-color: white;
+    padding: 5px;
+    border: #FA4A54 1px solid;
+    color: #FA4A54;
+}
+.btn-info-custom:hover {
+    background-color: #f46a6a;
+    color: white;
+}
+.btn-info-custom:hover {
+    background-color: #f46a6a;
+}
+.content-text {
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    flex: 1; /* 남은 공간을 차지하도록 설정 */
+}
+.badge-container {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0; /* 크기 축소 안되게 설정 */
+}

@@ -1,178 +1,69 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>마이페이지</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <style>
-        body {
-            background-color: #F9F9F9;
-            margin: 0;
-        }
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>마이페이지</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <link rel="stylesheet" th:href="@{/css/fragment/navbar.css}">
+        <link rel="stylesheet" th:href="@{/css/user/myPage.css}">
+        <style>
 
-        .sidebar {
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            height: 100vh;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 250px;
-        }
-
-        .sidebar h2 {
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
-
-        .sidebar a {
-            display: block;
-            color: #333;
-            text-decoration: none;
-            margin: 10px 0;
-            font-size: 18px;
-        }
-
-        .sidebar a:hover {
-            color: #FF5258;
-        }
-
-        .sidebar-content {
-            top: 50%;
-            margin-top: 100px;
-        }
-
-        .content {
-            margin-left: 280px; /* 사이드바 너비 + 여백 */
-            padding: 20px;
-            margin-top: 100px;
-        }
-
-        .profile {
-            /*background-color: white;*/
-            padding: 20px;
-            /*border-radius: 10px;*/
-            /*box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);*/
-            margin-bottom: 20px;
-        }
-
-        .profile .row {
-            margin-bottom: 10px;
-        }
-
-        .reservation {
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-            position: relative;
-            border: #FA4A54 1px solid;
-        }
-
-        .reservation img {
-            width: 100px;
-            height: 100px;
-            border-radius: 10px;
-            object-fit: cover;
-        }
-
-        .btn-cancel {
-            background-color: #FF5258;
-            border: none;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-            position: absolute;
-            right: 20px;
-            bottom: 20px;
-        }
-
-        .btn-cancel:hover {
-            background-color: #FA4A54;
-        }
-
-        .rank {
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            border: #FA4A54 1px solid;
-        }
-
-        .badge-reservation {
-            color: white;
-            background-color: #FF5258;
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-size: 12px;
-        }
-
-        .badge-rank {
-            color: red;
-            font-weight: bold;
-        }
-
-        .reservation .info {
-            margin-left: 120px; /* 이미지 너비 + 여백 */
-        }
-    </style>
-</head>
-<body>
-<div class="sidebar">
-    <div class="sidebar-content">
-        <h2>마이페이지</h2>
-        <a href="/myInfo/profile">개인정보수정</a>
-        <a href="#badge">내 뱃지 보기</a>
-        <a href="/myInfo/review">내 리뷰 보기</a>
-        <a href="/myInfo/history">이용내역조회</a>
-        <a href="/myInfo/list">내 리스트 관리</a>
-    </div>
-</div>
-<div class="content">
-    <div class="profile">
-        <div class="row">
-            <div class="col-md-4 text-center">
-                <h3>팔로잉</h3>
-                <p>100</p>
+        </style>
+    </head>
+    <body>
+        <div th:replace="~{/fragment/navbar.html :: navbar}" class="navbar"></div>
+        <div class="sidebar">
+            <div class="sidebar-content">
+            <h2>마이페이지</h2>
+            <a href="/myInfo">개인정보수정</a>
+            <a href="#badge">내 뱃지 보기</a>
+            <a href="/myInfo/review">내 리뷰 보기</a>
+            <a href="/myInfo/history">이용내역조회</a>
+            <a href="/myInfo/list">내 리스트 관리</a>
+        </div>
+        </div>
+        <div class="content">
+            <div class="profile">
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <h3>팔로잉</h3>
+                        <p>100</p>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <h3>팔로우</h3>
+                        <p>5K</p>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <h3>등급</h3>
+                        <img src="path/to/grade_image.png" alt="등급 이미지" width="50">
+                    </div>
+                </div>
+                <p class="col-md-4">OOO님은 150,000kg입니다.</p>
             </div>
-            <div class="col-md-4 text-center">
-                <h3>팔로우</h3>
-                <p>5K</p>
+            <div class="reservation">
+                <div>
+                    <h5 class="d-inline">현재 예약 정보</h5>
+                    <span class="badge-reservation ml-2">예약</span>
+                </div>
+                <div class="d-flex mt-3">
+                    <img src="path/to/restaurant_image.png" alt="도치피자 강남점" class="mr-3">
+                    <div class="info">
+                        <h5>도치피자 강남점</h5>
+                        <p>양식 • 강남구</p>
+                        <p>18:30 예약</p>
+                    </div>
+                </div>
+                <button class="btn btn-cancel">예약 취소</button>
             </div>
-            <div class="col-md-4 text-center">
-                <h3>등급</h3>
-                <img src="path/to/grade_image.png" alt="등급 이미지" width="50">
+            <div class="rank">
+                <h4>내 등급은 <span class="badge-rank">쩝쩝박사</span> 입니다.</h4>
             </div>
         </div>
-        <p class="col-md-4">OOO님은 150,000kg입니다.</p>
-    </div>
-    <div class="reservation">
-        <div>
-            <h5 class="d-inline">현재 예약 정보</h5>
-            <span class="badge-reservation ml-2">예약</span>
-        </div>
-        <div class="d-flex mt-3">
-            <img src="path/to/restaurant_image.png" alt="도치피자 강남점" class="mr-3">
-            <div class="info">
-                <h5>도치피자 강남점</h5>
-                <p>양식 • 강남구</p>
-                <p>18:30 예약</p>
-            </div>
-        </div>
-        <button class="btn btn-cancel">예약 취소</button>
-    </div>
-    <div class="rank">
-        <h4>내 등급은 <span class="badge-rank">쩝쩝박사</span> 입니다.</h4>
-    </div>
-</div>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</body>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script type="text/javascript" th:src="@{/js/fragment/navbar.js}"></script>
+        <script type="text/javascript" th:src="@{/js/reservation/reservationCalendar.js}"></script>
+    </body>
 </html>
