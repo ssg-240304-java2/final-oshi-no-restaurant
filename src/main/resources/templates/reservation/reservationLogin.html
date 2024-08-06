@@ -7,70 +7,7 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/fragment/navbar.css}">
     <link rel="stylesheet" th:href="@{/css/fragment/footer.css}">
-
-    <style>
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-        .invalid-feedback {
-            display: block;
-        }
-        .input-group-text {
-            min-width: 100px;
-            justify-content: center;
-        }
-        .btn-secondary, .btn-secondary:focus, .btn-secondary:active {
-            background-color: #FFFFFF;
-            border: 1px solid #D3D3D3;
-            color: black;
-        }
-        .btn-secondary.clicked {
-            background-color: #FA4A54;
-            border-color: #FA4A54;
-            color: white;
-        }
-        .btn-secondary:hover {
-            background-color: #FA4A54;
-            color: white;
-            border: 1px solid #FA4A54;
-        }
-        .btn-danger {
-            background-color: #FA4A54;
-            border: none;
-        }
-        .btn-danger:hover {
-            background-color: #FA4A54;
-        }
-        .form-label {
-            font-weight: bold;
-        }
-        .btn-group-toggle .btn {
-            border-radius: 0;
-            background-color: #FFFFFF;
-            color: black;
-            border: 1px solid #D3D3D3;
-        }
-        .btn-group-toggle .btn.active,
-        .btn-group-toggle .btn:focus,
-        .btn-group-toggle .btn:active {
-            background-color: #FA4A54 !important;
-            color: white !important;
-            border: 1px solid #FA4A54 !important;
-        }
-        .btn-group-toggle .btn:hover {
-            background-color: #FA4A54 !important;
-            color: white !important;
-            border: 1px solid #FA4A54 !important;
-        }
-        .btn-group-toggle .btn:first-child {
-            border-top-left-radius: .25rem;
-            border-bottom-left-radius: .25rem;
-        }
-        .btn-group-toggle .btn:last-child {
-            border-top-right-radius: .25rem;
-            border-bottom-right-radius: .25rem;
-        }
-    </style>
+    <link rel="stylesheet" th:href="@{/css/reservation/reservationLogin.css}">
 </head>
 <body>
 
@@ -165,17 +102,6 @@
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script type="text/javascript" th:src="@{/js/fragment/navbar.js}"></script>
-
-<script>
-    document.getElementById('userIdCheckBtn').addEventListener('click', function() {
-        this.classList.add('clicked');
-    });
-    document.getElementById('nicknameCheckBtn').addEventListener('click', function() {
-        this.classList.add('clicked');
-    });
-    document.getElementById('emailCheckBtn').addEventListener('click', function() {
-        this.classList.add('clicked');
-    });
-</script>
+<script type="text/javascript" th:src="@{/js/reservation/reservationLogin.js}"></script>
 </body>
 </html>
