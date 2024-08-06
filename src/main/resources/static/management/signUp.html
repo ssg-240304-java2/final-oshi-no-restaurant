@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>회원 가입</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+      body {
+        background-color: #f8f9fa;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+      .container {
+        background-color: white;
+        padding: 60px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        max-width: 800px;
+        width: 100%;
+      }
+      .btn-check {
+        background-color: #6c757d;
+        border: none;
+        color: white;
+      }
+      .btn-check:hover {
+        background-color: #5a6268;
+      }
+      .btn-primary-custom {
+        background-color: #FA4A54;
+        border: none;
+        color: white;
+        font-size: 0.8rem; /* 텍스트 크기 줄이기 */
+      }
+      .btn-primary-custom:hover {
+        background-color: #d14045;
+      }
+      .form-group.row > .col-sm-2 .btn-primary-custom {
+        margin-left: -10px; /* 입력 필드와 버튼 사이 간격 줄이기 */
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h3 class="mb-4 mb-custom text-left">회원 가입</h3><br>
+      <form>
+        <div class="form-group row">
+          <label for="userId" class="col-sm-3 col-form-label">아이디</label>
+          <div class="col-sm-7">
+            <input type="text" class="form-control" id="userId" placeholder="아이디">
+          </div>
+          <div class="col-sm-2">
+            <button type="button" class="btn btn-check">중복확인</button>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="password" class="col-sm-3 col-form-label">비밀번호</label>
+          <div class="col-sm-9">
+            <input type="password" class="form-control" id="password" placeholder="비밀번호">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="passwordConfirm" class="col-sm-3 col-form-label">비밀번호 확인</label>
+          <div class="col-sm-9">
+            <input type="password" class="form-control" id="passwordConfirm" placeholder="비밀번호 확인">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="email" class="col-sm-3 col-form-label">이메일</label>
+          <div class="col-sm-7">
+            <input type="email" class="form-control" id="email" placeholder="이메일">
+          </div>
+          <div class="col-sm-2">
+            <button type="button" class="btn btn-primary-custom">인증 메일 발송</button>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-sm-12 text-center">
+            <button type="submit" class="btn btn-primary-custom mt-3">회원가입</button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  </body>
+</html>
