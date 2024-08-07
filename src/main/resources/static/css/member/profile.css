@@ -1,0 +1,193 @@
+body {
+    background-color: #F9F9F9;
+    margin: 0;
+}
+
+.sidebar {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 250px;
+}
+
+.sidebar h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.sidebar a {
+    display: block;
+    color: #333;
+    text-decoration: none;
+    margin: 10px 0;
+    font-size: 18px;
+}
+
+.sidebar a:hover {
+    color: #FF5258;
+}
+
+.sidebar-content {
+    top: 50%;
+    margin-top: 100px;
+}
+
+.content {
+    margin-left: 280px; /* 사이드바 너비 + 여백 */
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.profile-section {
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 85%; /* 흰색 영역의 너비 조정 */
+    max-width: 780px; /* 전체 너비를 늘려서 버튼과 레이아웃에 여유 공간 추가 */
+}
+
+.profile-section h3 {
+    font-size: 28px;
+    margin-bottom: 40px; /* 제목과 아래 내용의 간격 조정 */
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+}
+
+.profile-photo {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.profile-photo img {
+    width: 150px; /* 이미지 크기 50% 증가 */
+    height: 150px;
+    border-radius: 50%;
+    background-color: #ddd;
+    margin: 0 20px;
+    object-fit: cover;
+}
+
+.btn-photo-change {
+    border: 1px solid #ccc;
+    color: #333;
+    background-color: white;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    margin-top: 100px;
+}
+
+.btn-photo-change:hover {
+    border-color: #FA4A54;
+    color: #FA4A54;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #666;
+    display: block;
+}
+
+.form-control {
+    margin-right: 10px;
+    width: 100%; /* 입력 칸의 폭을 100%로 설정 */
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.row > .col-md-6 {
+    padding-right: 10px; /* 간격 조정 */
+    padding-left: 10px; /* 간격 조정 */
+}
+
+.btn-submit {
+    background-color: #FF5258;
+    border: none;
+    color: white;
+    padding: 15px 0;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    font-size: 16px;
+    width: 100%; /* 버튼을 중앙에 맞추기 위해서 설정 */
+    max-width: 200px; /* 최대 너비 설정 */
+    display: block;
+    margin: 0 auto; /* 중앙 정렬 */
+    margin-top: 20px;
+}
+
+.btn-duplicate-check,
+.btn-mail-check {
+    background-color: #FF5258;
+    border: none;
+    color: white;
+    padding: 8px 10px; /* 버튼의 크기와 높이 조정 */
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    font-size: 14px; /* 버튼 폰트 크기 줄임 */
+    cursor: pointer;
+    display: inline-block;
+    vertical-align: middle;
+    height: 38px; /* 버튼 높이를 입력 칸과 동일하게 설정 */
+    width: 135px; /* 버튼의 좌우 크기를 늘려 텍스트가 잘리지 않도록 설정 */
+    text-align: center;
+}
+
+.btn-submit:hover,
+.btn-duplicate-check:hover,
+.btn-mail-check:hover {
+    background-color: #FA4A54;
+}
+
+.text-danger {
+    color: #FF5258;
+    font-size: 14px;
+}
+
+.text-success {
+    color: #28a745;
+    font-size: 14px;
+}
+
+.d-flex {
+    align-items: center;
+}
+
+/* 성별 버튼 */
+.btn-group-toggle .btn {
+    border-radius: 0;
+    background-color: #FFFFFF;
+    color: black;
+    border: 1px solid #E0E0E0;
+}
+
+.btn-group-toggle .btn.active,
+.btn-group-toggle .btn:hover{
+    background-color: #FA4A54;
+    color: white;
+    border: 1px solid #FA4A54;
+}
+.btn-group-toggle .btn:first-child {
+    border-top-left-radius: .25rem;
+    border-bottom-left-radius: .25rem;
+}
+.btn-group-toggle .btn:last-child {
+    border-top-right-radius: .25rem;
+    border-bottom-right-radius: .25rem;
+}
