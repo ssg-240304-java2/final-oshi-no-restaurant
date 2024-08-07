@@ -10,7 +10,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 
-public class List_Info {
+public class ListInfo {
 
     /* 리스트 정보 */
     @Id
