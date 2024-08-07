@@ -1,4 +1,4 @@
-package kr.oshino.eataku.waiting.user.model;
+package kr.oshino.eataku.waiting.model;
 
 import lombok.*;
 
