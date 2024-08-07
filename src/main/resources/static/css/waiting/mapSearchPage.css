@@ -1,0 +1,76 @@
+body {
+    margin-top: 120px;
+}
+
+/* 추가 스타일 */
+.content {
+    height: 75vh;
+    overflow: hidden;
+    display: flex;
+    position: relative;
+}
+
+.restaurant-info {
+    width: 50%;
+    overflow-y: auto;
+    border-right: 1px solid #ccc;
+    transition: width 0.3s;
+    position: relative;
+    z-index: 1; /* 버튼이 사라지는 문제 해결을 위해 z-index 조정 */
+}
+
+.map {
+    width: 50%;
+    transition: width 0.3s;
+    position: relative;
+    z-index: 1;
+}
+
+.restaurant-card {
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.toggle-button {
+    position: absolute;
+    top: 50%;
+    left: 0px; /* 지도의 왼쪽 경계에 버튼을 표시 */
+    transform: translate(0, -50%);
+    z-index: 2; /* 버튼이 다른 요소 위에 표시되도록 */
+    padding: 5px 10px;
+    height: 50px;
+    width: 40px;
+    /*cursor: pointer;*/
+    background-color: #FA4A54;
+    color: #ffffff;
+    border: 1px solid #FA4A54;
+    border-radius: 10%;
+}
+
+.find-button {
+    display: none;
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 10px 20px;
+    background-color: #FA4A54;
+    border-color: #FA4A54;
+    color: white;
+    cursor: pointer;
+    z-index: 3; /* 지도의 다른 요소보다 앞에 표시되도록 */
+    border-radius: 10%;
+}
+
+.selected {
+    background-color: #FA4A54;
+    border-color: #FA4A54;
+    color: white;
+    border-radius: 10%;
+}
+
+#searchButton {
+    background-color: #FA4A54;
+    color: #ffffff;
+    border-color: #FA4A54;
+}

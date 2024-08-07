@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>회원 가입</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/management/signUp.css}">
+  </head>
+  <body>
+    <div class="container">
+      <h3 class="mb-4 mb-custom text-left">회원 가입</h3><br>
+      <form>
+        <div class="form-group row">
+          <label for="userId" class="col-sm-3 col-form-label">아이디</label>
+          <div class="col-sm-7">
+            <input type="text" class="form-control" id="userId" placeholder="아이디">
+          </div>
+          <div class="col-sm-2">
+            <button type="button" class="btn btn-check">중복확인</button>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="password" class="col-sm-3 col-form-label">비밀번호</label>
+          <div class="col-sm-9">
+            <input type="password" class="form-control" id="password" placeholder="비밀번호">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="passwordConfirm" class="col-sm-3 col-form-label">비밀번호 확인</label>
+          <div class="col-sm-9">
+            <input type="password" class="form-control" id="passwordConfirm" placeholder="비밀번호 확인">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="email" class="col-sm-3 col-form-label">이메일</label>
+          <div class="col-sm-7">
+            <input type="email" class="form-control" id="email" placeholder="이메일">
+          </div>
+          <div class="col-sm-2">
+            <button type="button" class="btn btn-primary-custom">인증 메일 발송</button>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-sm-12 text-center">
+            <button type="submit" class="btn btn-primary-custom mt-3">회원가입</button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  </body>
+</html>

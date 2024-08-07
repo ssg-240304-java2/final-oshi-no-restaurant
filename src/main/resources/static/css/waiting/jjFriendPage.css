@@ -1,0 +1,109 @@
+body {
+    margin-top: 120px;
+}
+
+.content {
+    margin-bottom: 50px;
+    min-height: 48vh;
+}
+.search-bar {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.search-bar input {
+    border: 1px solid #f46a6a;
+    height: 40px; /* 입력 창 높이를 버튼과 동일하게 설정 */
+    flex-grow: 1;
+}
+
+.search-bar button {
+    background-color: #f46a6a;
+    border: none;
+    color: white;
+    padding: 0 15px;
+    height: 40px; /* 버튼 높이 */
+    margin-left: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.search-bar button:hover {
+    background-color: #e75454;
+}
+
+.list-item {
+    border-radius: 20px;
+    background-color: white;
+    margin-bottom: 10px;
+    padding: 15px;
+    color: black;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.3s, color 0.3s;
+    border: 1px solid #f46a6a;
+    cursor: pointer;
+    position: relative; /* 포지션 상대 */
+}
+
+.list-item:hover {
+    background-color: #FA4A54;
+    color: white;
+}
+
+.list-item .profile-pic {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 15px;
+    cursor: pointer;
+    border: 1px solid #d0d0d0;
+    flex-shrink: 0; /* 크기 변경 방지 */
+}
+
+.list-item .username {
+    font-size: 18px;
+    color: inherit;
+    cursor: pointer;
+    flex-shrink: 0; /* 크기 변경 방지 */
+}
+
+.list-item .item-name {
+    font-size: 16px;
+    color: inherit;
+    position: absolute; /* 절대 위치 */
+    left: 50%; /* 왼쪽에서 50% */
+    transform: translateX(-50%); /* 가운데 정렬 */
+    flex-grow: 1;
+    text-align: center;
+}
+
+.list-item .badge {
+    background-color: #ffffff;
+    color: black;
+    border-radius: 20px;
+    padding: 5px 10px;
+    font-size: 14px;
+    border: 1px solid #d0d0d0;
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    flex-shrink: 0; /* 크기 변경 방지 */
+}
+
+.badge .icon {
+    width: 20px;
+    height: 20px;
+    background-color: #f46a6a;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 5px;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+}

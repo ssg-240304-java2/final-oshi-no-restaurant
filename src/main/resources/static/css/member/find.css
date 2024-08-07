@@ -1,0 +1,36 @@
+body {
+    background-color: #FF5258;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.card {
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn {
+    border: 1px solid #FF5258;
+    color: #FF5258;
+    background-color: white;
+    font-size: 18px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.btn:hover {
+    background-color: #FA4A54;
+    color: white;
+}
+
+.icon {
+    width: 80px;
+}
+
+.text-left {
+    white-space: nowrap;
+}

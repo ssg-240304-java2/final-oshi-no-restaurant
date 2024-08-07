@@ -1,0 +1,121 @@
+body {
+    background-color: #F9F9F9;
+    margin: 0;
+}
+
+.footer-custom {
+    width: calc(100% - 250px);
+    margin-left: 250px;
+}
+
+.sidebar {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 250px;
+}
+
+.sidebar h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.sidebar a {
+    display: block;
+    color: #333;
+    text-decoration: none;
+    margin: 10px 0;
+    font-size: 18px;
+}
+
+.sidebar a:hover {
+    color: #FF5258;
+}
+
+.sidebar-content {
+    margin-top: 100px;
+}
+
+.content {
+    margin-left: 280px; /* 사이드바 너비 + 여백 */
+    padding: 20px;
+    margin-top: 50px;
+}
+
+.list-container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.list-item {
+    border: 1px solid #FB3F4A;
+    border-radius: 10px;
+    padding: 10px 20px;
+    margin: 20px 0;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    overflow: visible;
+}
+
+.list-item span {
+    flex-grow: 1;
+    text-align: center;
+}
+
+.badge-public,
+.badge-private {
+    background-color: #FB3F4A;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 10px;
+    position: absolute;
+    top: -12px;
+    left: -12px;
+    z-index: 1;
+    cursor: pointer;
+}
+
+.edit-btn,
+.delete-btn {
+    background: none;
+    border: none !important;
+    color: #FB3F4A;
+    cursor: pointer;
+    font-size: 10px;
+    margin-left: 10px;
+}
+
+.edit-btn:hover {
+    border: none;
+}
+
+.add-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px dashed #aaa;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 20px 0;
+    cursor: pointer;
+    position: relative;
+    text-align: center;
+}
+
+.add-item i {
+    font-size: 24px;
+    color: #aaa;
+}
+
+.list-icon {
+    width: 30px;
+}

@@ -1,0 +1,148 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: white;
+    margin-top: 120px;
+}
+
+.section-title {
+    font-size: 2rem;
+    margin-bottom: 30px;
+    color: #FA4A54;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.section-title span {
+    margin-right: 10px;
+}
+.btn-custom, .btn-outline-custom {
+    background-color: #FA4A54;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    margin: 5px;
+    padding: 10px 20px;
+    transition: all 0.3s ease;
+}
+.btn-custom:hover, .btn-outline-custom:hover {
+    background-color: #FA4A54;
+    color: white !important;
+}
+
+.btn-outline-custom {
+    background-color: #fff;
+    color: #FA4A54;
+    border: 1px solid #FA4A54;
+    border-radius: 20px;
+    margin: 5px;
+    padding: 10px 20px;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-custom.selected {
+    background-color: #FA4A54;
+    color: white !important;
+
+}
+.btn-outline-custom:focus {
+    outline: none;
+}
+.btn-group-toggle .btn,
+.time-selection .btn {
+    border: 1px solid #FA4A54;
+    color: #FA4A54;
+    margin: 10px;
+    background-color: white;
+    font-size: 1.2rem;
+    padding: 10px 20px;
+    border-radius: 20px;
+}
+.btn-group-toggle .btn:hover,
+.time-selection .btn:hover {
+    background-color: #FA4A54;
+    color: white !important;
+}
+
+.btn-group-toggle .btn.selected,
+.time-selection .btn.selected,
+#reserve-button.selected {
+    background-color: #FA4A54;
+    color: white !important;
+}
+.calendar {
+    width: 900px;
+    margin: 0 auto;
+    border-color:  #FA4A54;
+    border-radius: 10px;
+    padding: 30px;
+    color: #484848;
+}
+
+.pika-table th,
+.pika-table td {
+    padding: 40px;
+    border: none;
+    color: #FA4A54;
+    font-size: 2rem;
+}
+
+.pika-table abbr {
+    text-decoration: none;
+}
+
+.pika-table button {
+    background:white;
+    font-size: 1.5rem;
+    text-decoration-color: #484848;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.section {
+    margin-bottom: 60px;
+}
+
+.people input[type="radio"] {
+    display: none;
+}
+
+.people label {
+    cursor: pointer;
+    margin: 5px;
+    padding: 10px 20px;
+    border: 1px solid #FA4A54;
+    border-radius: 20px;
+    color: #FA4A54;
+    background-color: #fff;
+    transition: background-color 0.3s, color 0.3s;
+    font-size: 1.2rem;
+    display: inline-block;
+    text-align: center;
+    width: 80px;
+}
+
+.people input[type="radio"]:checked + label {
+    background-color: #FA4A54;
+    color: white;
+}
+.pika-single {
+    z-index: 1;
+}
+.pika-single .is-selected .pika-button {
+    background: #FA4A54;
+    color: white !important;
+    border-radius: 50px;
+}
+
+.pika-single .is-today .pika-button {
+    color: #FA4A54;
+}
+
+.pika-single .is-disabled .pika-button {
+    color: #888888 !important;
+    background: white;
+}

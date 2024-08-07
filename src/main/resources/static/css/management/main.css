@@ -1,0 +1,58 @@
+body {
+    margin-top: 170px;
+    background-color: #e0e0e0;
+    height: 100%;
+}
+.nav-buttons {
+    margin-bottom: 30px;
+}
+.content {
+    min-height: calc(100% - 393px);
+}
+.nav-buttons .btn {
+    background-color: #FA4A54;
+    border: none;
+    color: white;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+.btn-setting {
+    background-color: transparent;
+    border: none;
+    color: white;
+    margin-right: 10px;
+    margin-bottom: 5px;
+}
+.btn-setting:hover,
+.btn-setting:focus,
+.btn-setting:active {
+    background-color: transparent !important;
+    outline: none;
+    box-shadow: none;
+}
+.nav-buttons .btn:hover {
+    background-color: #d14045;
+}
+.nav-buttons .btn-secondary {
+    border: none;
+}
+.nav-buttons .btn-secondary:hover {
+    background-color: transparent;
+    border: none;
+}
+.btn-secondary img {
+    width: 25px;
+    height: 25px;
+}
+.card {
+    margin-bottom: 20px;
+}
+.table-responsive {
+    overflow-y: scroll;
+}
+.customer-info .card {
+    padding: 15px;
+}
+.card-title {
+    margin-bottom: 30px;
+}

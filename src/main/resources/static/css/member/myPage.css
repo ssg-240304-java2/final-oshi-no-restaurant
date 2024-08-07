@@ -1,0 +1,102 @@
+body {
+    background-color: #F9F9F9;
+    margin: 0;
+}
+.footer-custom {
+    z-index: 999;
+}
+.sidebar {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 250px;
+}
+.sidebar h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+.sidebar a {
+    display: block;
+    color: #333;
+    text-decoration: none;
+    margin: 10px 0;
+    font-size: 18px;
+}
+.sidebar a:hover {
+    color: #FF5258;
+}
+.sidebar-content {
+    top: 50%;
+    margin-top: 100px;
+}
+.content {
+    margin-left: 280px; /* 사이드바 너비 + 여백 */
+    padding: 20px;
+    margin-top: 100px;
+}
+.profile {
+    /*background-color: white;*/
+    padding: 20px;
+    /*border-radius: 10px;*/
+    /*box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);*/
+    margin-bottom: 20px;
+}
+.profile .row {
+    margin-bottom: 10px;
+}
+.reservation {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    position: relative;
+    border: #FA4A54 1px solid;
+}
+.reservation img {
+    width: 100px;
+    height: 100px;
+    border-radius: 10px;
+    object-fit: cover;
+}
+.btn-cancel {
+    background-color: #FF5258;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+}
+.btn-cancel:hover {
+    background-color: #FA4A54;
+}
+.rank {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    border: #FA4A54 1px solid;
+}
+.badge-reservation {
+    color: white;
+    background-color: #FF5258;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+}
+.badge-rank {
+    color: red;
+    font-weight: bold;
+}
+.reservation .info {
+    margin-left: 120px; /* 이미지 너비 + 여백 */
+}

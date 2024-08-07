@@ -1,0 +1,120 @@
+body {
+    background-color: #f9f9f9;
+    font-family: 'Montserrat', sans-serif;
+    margin-top: 120px;
+}
+
+.row {
+    margin-bottom: 50px;
+}
+.content {
+    min-height: 49vh;
+}
+.profile-sidebar {
+    background-color: #f3f4f6;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.profile-image {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background-color: #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: white;
+    margin: 0 auto 20px;
+    object-fit: cover;
+}
+
+.btn-follow {
+    background-color: #f45c5c;
+    color: white;
+    border-radius: 50px;
+    width: 100%;
+    max-width: 120px;
+    margin-top: 10px;
+    transition: background-color 0.3s;
+}
+
+.btn-follow.following {
+    background-color: #28a745;
+}
+
+.profile-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+    min-height: 300px;
+}
+
+.profile-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.profile-header>div:first-child {
+    margin-right: 20px;
+    /* 사진과 소개글 사이의 여백 추가 */
+}
+
+.animal-image {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 10px;
+    border-color: #FA4A54;
+}
+
+.badge-tag {
+    background-color: #f45c5c;
+    color: white;
+    padding: 5px 15px;
+    border-radius: 20px;
+    display: inline-block;
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+.weight {
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.restaurant-list {
+    list-style: none;
+    padding: 0;
+}
+
+.restaurant-item {
+    background-color: #f3f4f6;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.tab-content {
+    margin-top: 20px;
+}
+
+.list-stats {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.list-stats p {
+    margin: 5px 0;
+}

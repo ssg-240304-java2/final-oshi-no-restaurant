@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+    <body>
+        <footer th:fragment="footer" class="footer-custom">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-5">
+                        <h5 class="footer-title">식덕후</h5>
+                        <p class="list-unstyled">현대인의 바쁜 일상 속에서도 간편하게, 실시간 및 날짜 예약과 식당 정보를 손쉽게 공유할 수 있는 스마트 외식 플랫폼을 소개합니다.</p>
+                    </div>
+                    <div class="col-md-3">
+                        <h5 class="footer-title">Member</h5>
+                        <ul class="list-unstyled">
+                            <li>Uijin Kim</li>
+                            <li>Yoonjeong Seo</li>
+                            <li>Sanghyeon Jwa</li>
+                            <li>Jisoo Choi</li>
+                            <li>Kyungho Ko</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-4">
+                        <h5 class="footer-title">HELP CENTER</h5>
+                        <ul class="list-unstyled">
+                            <li>Phone: 010-1234-1234</li>
+                            <li>Email: help@eataku.kr</li>
+                            <li>Location: 서울특별시 강남구</li>
+                        </ul>
+                        <div>
+                            <a href="https://github.com/ssg-240304-java2/final-oshi-no-restaurant"><img th:src="@{/images/footer/github.png}" class="footer-icon" alt="Icon 1"></a>
+                            <img th:src="@{/images/footer/java.png}" class="footer-icon" alt="Icon 2" >
+                            <img th:src="@{/images/footer/spring.png}" class="footer-icon" alt="Icon 3">
+                            <img th:src="@{/images/footer/mysql.png}" class="footer-icon" alt="Icon 4">
+                            <img th:src="@{/images/footer/jpa.png}" class="footer-icon" alt="Icon 5">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 제일 하단 -->
+                <div class="row footer-floor">
+                    <div class="col-md-4">
+                        <p class="footer-left">&copy; 2024 최애의 식당 | 판권소유</p>
+                    </div>
+                    <div class="col-md-4">
+                        <!-- 빈 col -->
+                    </div>
+                    <div class="col-md-4">
+                        <p class="footer-right">사랑으로 만들어진 '최애의 식당'</p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </body>
+</html>

@@ -1,0 +1,111 @@
+!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>마이페이지</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <link rel="stylesheet" th:href="@{/css/fragment/navbar.css}">
+        <link rel="stylesheet" th:href="@{/css/fragment/footer.css}">
+        <link rel="stylesheet" th:href="@{/css/member/history.css}">
+    </head>
+    <body>
+        <div th:replace="~{/fragment/navbar.html :: navbar}" class="navbar"></div>
+
+        <div class="sidebar">
+            <div class="sidebar-content">
+                <h2>마이페이지</h2>
+                <a href="/myInfo">개인정보수정</a>
+                <a href="#badge">내 뱃지 보기</a>
+                <a href="/myInfo/review">내 리뷰 보기</a>
+                <a href="/myInfo/history">이용내역조회</a>
+                <a href="/myInfo/list">내 리스트 관리</a>
+            </div>
+        </div>
+        <div class="content">
+            <div class="container mt-5">
+                <div class="form-group">
+                    <select class="custom-select" id="selectMenu" onchange="filterData()">
+                        <option value="전체 내역">전체 내역</option>
+                        <option value="예약 내역">예약 내역</option>
+                        <option value="웨이팅 내역">웨이팅 내역</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row" id="reservationData">
+                <!-- 예약 내역 데이터 -->
+                <div class="col-md-6 reservation-item" data-type="예약 내역">
+                    <div class="card reservation-card">
+                        <div class="card-body">
+                            <div class="reservation-info">
+                                <img src="https://via.placeholder.com/80" class="img-fluid" alt="도치피자 강남점">
+                                <div class="reservation-details">
+                                    <span>도치피자 강남점</span>
+                                    <span>양식 • 강남구</span>
+                                    <span class="badge badge-custom">예약</span>
+                                    <span>18:30 예약</span>
+                                </div>
+                            </div>
+                            <button class="btn btn-outline-danger">예약 취소</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 reservation-item" data-type="웨이팅 내역">
+                    <div class="card reservation-card">
+                        <div class="card-body">
+                            <div class="reservation-info">
+                                <img src="https://via.placeholder.com/80" class="img-fluid" alt="도치피자 강남점">
+                                <div class="reservation-details">
+                                    <span>도치피자 강남점</span>
+                                    <span>양식 • 강남구</span>
+                                    <span class="badge badge-custom">웨이팅중</span>
+                                    <span>N번째 순번</span>
+                                </div>
+                            </div>
+                            <button class="btn btn-outline-danger">대기 취소</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 reservation-item" data-type="예약 내역">
+                    <div class="card reservation-card">
+                        <div class="card-body">
+                            <div class="reservation-info">
+                                <img src="https://via.placeholder.com/80" class="img-fluid" alt="도치피자 강남점">
+                                <div class="reservation-details">
+                                    <span>도치피자 강남점</span>
+                                    <span>양식 • 강남구</span>
+                                    <span class="badge badge-custom">방문완료</span>
+                                    <span>YYYY/MM/DD HH:MM</span>
+                                </div>
+                            </div>
+                            <button class="btn btn-outline-danger">리뷰 쓰기</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 reservation-item" data-type="예약 내역">
+                    <div class="card reservation-card">
+                        <div class="card-body">
+                            <div class="reservation-info">
+                                <img src="https://via.placeholder.com/80" class="img-fluid" alt="도치피자 강남점">
+                                <div class="reservation-details">
+                                    <span>도치피자 강남점</span>
+                                    <span>양식 • 강남구</span>
+                                    <span class="badge badge-custom">예약취소</span>
+                                    <span>18:30 예약</span>
+                                </div>
+                            </div>
+                            <button class="btn btn-outline-danger">노쇼</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div th:replace="~{/fragment/footer.html :: footer}" class="footer"></div>
+
+        <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script type="text/javascript" th:src="@{/js/fragment/navbar.js}"></script>
+    </body>
+</html>

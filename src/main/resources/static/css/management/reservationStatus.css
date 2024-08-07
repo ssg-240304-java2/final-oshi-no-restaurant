@@ -1,0 +1,63 @@
+body {
+    background-color: #e0e0e0;
+    margin-top: 120px;
+}
+
+.nav-buttons {
+    margin-bottom: 50px;
+}
+
+.nav-buttons .btn {
+    background-color: #FA4A54;
+    border: none;
+    color: white;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.btn-setting {
+    background-color: transparent;
+    border: none;
+    color: white;
+    margin-right: 10px;
+    margin-bottom: 5px;
+}
+
+.nav-buttons .btn:hover {
+    background-color: #d14045;
+}
+
+.btn-secondary {
+    border: none;
+}
+
+.btn-secondary:hover {
+    background-color: #d14045;
+}
+
+.btn-secondary img {
+    width: 25px;
+    height: 25px;
+}
+
+.card {
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.pagination {
+    margin-top: 50px;
+    justify-content: center;
+}
+
+.status-complete {
+    background-color: #007bff;
+    color: white;
+}
+
+.status-pending {
+    background-color: #dc3545;
+    color: white;
+}

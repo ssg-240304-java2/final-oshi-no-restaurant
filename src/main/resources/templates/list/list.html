@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bootstrap Sidebar Layout</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" th:href="@{/css/fragment/navbar.css}">
+    <link rel="stylesheet" th:href="@{/css/fragment/footer.css}">
+    <link rel="stylesheet" th:href="@{/css/list/list.css}">
+</head>
+<body>
+<div th:replace="~{/fragment/navbar.html :: navbar}" class="navbar"></div>
+
+<div class="container-fluid">
+    <div class="map-container">
+        <div id="map" class="map"></div>
+    </div>
+    <nav class="sidebar">
+        <div class="header-row">
+            <div class="logo">
+                <img src="/images/oku.png" alt="Logo">
+            </div>
+            <div class="menu-title" id="favorite-list" onclick="showFavoriteList()">내 쩝쩝 리스트</div>
+            <div class="separator"></div>
+            <div class="list-title" id="follow-list" onclick="showFollowingList()">팔로잉 리스트</div>
+        </div>
+        <div class="list-count custom-margin" id="total-list-count">전체 리스트 개수 3</div>
+        <div class="content-section active" id="favorite-content">
+            <button type="button" class="btn btn-custom" onclick="showRestaurantList('삼성역 맛집')">삼성역 맛집</button>
+            <button type="button" class="btn btn-custom" onclick="showRestaurantList('강남역 맛집')">강남역 맛집</button>
+            <button type="button" class="btn btn-custom" onclick="showRestaurantList('신림역 맛집')">신림역 맛집</button>
+        </div>
+        <div class="content-section" id="following-list">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th scope="col">팔로워</th>
+                        <th scope="col">리스트 수</th>
+                        <th scope="col"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr onclick="showFollowerList('Andrew Bojangles', 3)">
+                        <td><img src="avatar1.jpg" class="rounded-circle" width="30" alt="avatar"> Andrew Bojangles</td>
+                        <td>3</td>
+                        <td>⋮</td>
+                    </tr>
+                    <tr onclick="showFollowerList('Andrew Bojangles', 2)">
+                        <td><img src="avatar2.jpg" class="rounded-circle" width="30" alt="avatar"> Andrew Bojangles</td>
+                        <td>2</td>
+                        <td>⋮</td>
+                    </tr>
+                    <tr onclick="showFollowerList('Andrew Bojangles', 7)">
+                        <td><img src="avatar3.jpg" class="rounded-circle" width="30" alt="avatar"> Andrew Bojangles</td>
+                        <td>7</td>
+                        <td>⋮</td>
+                    </tr>
+                    <tr class="bg-danger text-white" onclick="showFollowerList('Andrew Bojangles', 5)">
+                        <td><img src="avatar4.jpg" class="rounded-circle" width="30" alt="avatar"> Andrew Bojangles</td>
+                        <td>5</td>
+                        <td>⋮</td>
+                    </tr>
+                    <tr onclick="showFollowerList('Andrew Bojangles', 6)">
+                        <td><img src="avatar5.jpg" class="rounded-circle" width="30" alt="avatar"> Andrew Bojangles</td>
+                        <td>6</td>
+                        <td>⋮</td>
+                    </tr>
+                    <tr onclick="showFollowerList('Andrew Bojangles', 3)">
+                        <td><img src="avatar6.jpg" class="rounded-circle" width="30" alt="avatar"> Andrew Bojangles</td>
+                        <td>3</td>
+                        <td>⋮</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="restaurant-list content-section" id="restaurant-list"></div>
+        <div class="follower-restaurant-list content-section" id="follower-restaurant-list"></div>
+        <div class="follower-restaurant-items content-section" id="follower-restaurant-items"></div>
+    </nav>
+    <span class="toggle-btn" onclick="toggleSidebar()">&lt;</span>
+    <div id="restaurant-info-window" class="restaurant-info-window"></div>
+</div>
+
+<div th:replace="~{/fragment/footer.html :: footer}" class="footer"></div>
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script type="text/javascript" th:src="@{/js/fragment/navbar.js}"></script>
+<script type="text/javascript" th:src="@{/js/list/list.js}"></script>
+<script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=4iq0sfkqpd"></script>
+</body>
+</html>

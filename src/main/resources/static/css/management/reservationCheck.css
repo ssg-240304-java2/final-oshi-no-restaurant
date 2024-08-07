@@ -1,0 +1,49 @@
+body {
+    margin-top: 120px;
+    background-color: #e0e0e0;
+}
+
+.nav-buttons {
+    margin-bottom: 30px;
+}
+
+.nav-buttons .btn {
+    background-color: #FA4A54;
+    border: none;
+    color: white;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.btn-setting {
+    background-color: transparent;
+    border: none;
+    color: white;
+    margin-right: 10px;
+    margin-bottom: 5px;
+}
+
+.nav-buttons .btn:hover {
+    background-color: #d14045;
+}
+
+.btn-secondary {
+    border: none;
+}
+
+.btn-secondary:hover {
+    background-color: #d14045;
+}
+
+.btn-secondary img {
+    width: 25px;
+    height: 25px;
+}
+
+.calendar {
+    background-color: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 50px;
+}
