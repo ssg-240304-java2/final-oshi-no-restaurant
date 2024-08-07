@@ -1,4 +1,4 @@
-package kr.oshino.eataku.waiting.admin.controller;
+package kr.oshino.eataku.waiting.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -1,8 +1,8 @@
-package kr.oshino.eataku.waiting.user.controller;
+package kr.oshino.eataku.waiting.controller;
 
-import kr.oshino.eataku.waiting.user.model.ListItem;
-import kr.oshino.eataku.waiting.user.model.Restaurant;
-import kr.oshino.eataku.waiting.user.model.UserProfile;
+import kr.oshino.eataku.waiting.model.ListItem;
+import kr.oshino.eataku.waiting.model.Restaurant;
+import kr.oshino.eataku.waiting.model.UserProfile;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
