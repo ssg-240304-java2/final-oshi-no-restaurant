@@ -10,7 +10,7 @@
         <link rel="stylesheet" th:href="@{/css/management/main.css}">
     </head>
     <body>
-    <div th:replace="~{/fragment/navbar.html :: navbar}" class="navbar"></div>
+    <div th:replace="~{fragment/navbar.html :: navbar}" class="navbar"></div>
         <div class="container content">
             <div class="nav-buttons">
                 <button type="button" class="btn btn-danger" onclick="window.location.href='/main.html'">판매 내역</button>
@@ -93,7 +93,7 @@
                 </div>
             </div>
         </div>
-        <div th:replace="~{/fragment/footer.html :: footer}" class="footer"></div>
+        <div th:replace="~{fragment/footer.html :: footer}" class="footer"></div>
 
 
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
