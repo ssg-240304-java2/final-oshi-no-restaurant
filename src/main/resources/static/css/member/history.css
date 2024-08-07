@@ -1,0 +1,89 @@
+body {
+    background-color: #F9F9F9;
+    margin: 0;
+}
+.footer-custom {
+    margin-left: 250px;
+    width: calc(100% - 250px);
+}
+.sidebar {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 250px;
+}
+.sidebar h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+.sidebar a {
+    display: block;
+    color: #333;
+    text-decoration: none;
+    margin: 10px 0;
+    font-size: 18px;
+}
+.sidebar a:hover {
+    color: #FF5258;
+}
+.sidebar-content {
+    margin-top: 100px;
+}
+.content {
+    margin-left: 280px; /* 사이드바 너비 + 여백 */
+    padding: 20px;
+    margin-top: 50px;
+}
+.reservation-card {
+    border: 1px solid #FB3F4A;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+.reservation-card img {
+    border-radius: 10px;
+}
+.badge-custom {
+    background-color: #FB3F4A;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 10px;
+    margin-bottom: 5px;
+}
+.reservation-card .card-body {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.reservation-info {
+    display: flex;
+    align-items: center;
+}
+.reservation-details {
+    margin-left: 10px;
+}
+.reservation-details span {
+    display: block;
+}
+.reservation-details .badge {
+    margin-top: 5px;
+}
+.custom-select {
+    border: 1px solid #FB3F4A;
+    color: #FB3F4A;
+    border-radius: 10px;
+    width: auto;
+    display: inline-block;
+}
+.custom-select:focus {
+    box-shadow: none;
+    border-color: #FB3F4A;
+}
+#selectMenu{
+    margin-left: -245px;
+}
