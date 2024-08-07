@@ -30,6 +30,12 @@ jobs:
         spring.datasource.username: ${{ secrets.DB_USERNAME }} 
         spring.datasource.password: ${{ secrets.DB_PASSWORD }} 
         spring.datasource.driver-class-name: com.mysql.cj.jdbc.Driver
+        cloud.aws.credentials.access-key: ${{ secrets.STORAGE_ACCESS_KEY }}
+        cloud.aws.credentials.secret-key: ${{ secrets.STORAGE_SECRET_KEY }}
+        cloud.aws.stack.auto: false
+        cloud.aws.region.static: kr-standard
+        cloud.aws.s3.endpoint: https://kr.object.ncloudstorage.com
+        cloud.aws.s3.bucket: ${{ secrets.STORAGE_BUCKET }}
 
     - name: Grant execute permission for gradlew
       run: chmod +x ./gradlew
