@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>마이페이지</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <link rel="stylesheet" th:href="@{/css/fragment/navbar.css}">
+        <link rel="stylesheet" th:href="@{/css/fragment/footer.css}">
+        <link rel="stylesheet" th:href="@{/css/member/myList.css}">
+    </head>
+    <body>
+        <div th:replace="~{/fragment/navbar.html :: navbar}" class="navbar"></div>
+        <div class="sidebar">
+            <div class="sidebar-content">
+                <h2>마이페이지</h2>
+                <a href="/myInfo">개인정보수정</a>
+                <a href="#badge">내 뱃지 보기</a>
+                <a href="/myInfo/review">내 리뷰 보기</a>
+                <a href="/myInfo/history">이용내역조회</a>
+                <a href="/myInfo/list">내 리스트 관리</a>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="list-container">
+
+                <div class="add-item">
+                    <i class="fas fa-plus">
+                        <div class="add-item">
+                            <img class="list-icon" th:src="@{/images/member/listInsert.png}"/>️
+                        </div>
+                    </i>
+                </div>
+            </div>
+
+            <div class="list-item">
+                <span class="badge badge-public" onclick="toggleBadge(this)">공개</span>
+                <span>삼성역 맛집</span>
+                <div class="edit-btn"><img class="list-icon"  th:src="@{/images/member/listModify.png}"/>️</div>
+                <div class="delete-btn"><img class="list-icon"  th:src="@{/images/member/listDelete.png}"/></div>
+                <!--            <div>-->
+                <!--                <button class="edit-btn"><i class="fas fa-pen"></i></button>-->
+                <!--                <button class="delete-btn"><i class="fas fa-times"></i></button>-->
+                <!--            </div>-->
+            </div>
+
+            <div class="list-item">
+                <span class="badge badge-private" onclick="toggleBadge(this)">비공개</span>
+                <span>코엑스 맛집</span>
+                <div class="edit-btn"><img class="list-icon"  th:src="@{/images/member/listModify.png}"/>️</div>
+                <div class="delete-btn"><img class="list-icon"  th:src="@{/images/member/listDelete.png}"/></div>
+                <!--            <div>-->
+                <!--                <button class="edit-btn"><i class="fas fa-pen"></i></button>-->
+                <!--                <button class="delete-btn"><i class="fas fa-times"></i></button>-->
+                <!--            </div>-->
+            </div>
+
+            <div class="list-item">
+                <span class="badge badge-public" onclick="toggleBadge(this)">공개</span>
+                <span>강남역 맛집</span>
+                <div class="edit-btn"><img class="list-icon"  th:src="@{/images/member/listModify.png}"/>️</div>
+                <div class="delete-btn"><img class="list-icon"  th:src="@{/images/member/listDelete.png}"/></div>
+                <!--            <div>-->
+                <!--                <button class="edit-btn"><i class="fas fa-pen"></i></button>-->
+                <!--                <button class="delete-btn"><i class="fas fa-times"></i></button>-->
+                <!--            </div>-->
+            </div>
+        </div>
+        </div>
+        <div th:replace="~{/fragment/footer.html :: footer}" class="footer"></div>
+
+        <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script type="text/javascript" th:src="@{/js/fragment/navbar.js}"></script>
+        <script type="text/javascript" th:src="@{/js/member/myList.js}"></script>
+
+    </body>
+</html>
