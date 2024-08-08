@@ -1,4 +1,2 @@
-package kr.oshino.eataku.review.user.controller;
-
-public class ReviewUserController {
+package kr.oshino.eataku.review.user.controller;public class ReviewUserController {
 }
