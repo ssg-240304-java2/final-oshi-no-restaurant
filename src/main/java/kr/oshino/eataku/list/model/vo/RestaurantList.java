@@ -5,8 +5,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.*;
 
-
-// 임시
 @Embeddable
 @Data
 @Setter(AccessLevel.PRIVATE)
@@ -26,4 +24,5 @@ public class RestaurantList {
     private Double xCoordinate;
     // 식당 y 좌표
     private Double yCoordinate;
+
 }

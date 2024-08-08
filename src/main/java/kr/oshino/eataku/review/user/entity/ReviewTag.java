@@ -15,10 +15,10 @@ import lombok.*;
 public class ReviewTag {
 
     @ManyToOne
-    @JoinColumn(name = "Review")
+    @JoinColumn(name = "review")
     private Review review;
 
     @ManyToOne
-    @JoinColumn(name = "TagList")
+    @JoinColumn(name = "tag_list")
     private TagList tagList;
 }
