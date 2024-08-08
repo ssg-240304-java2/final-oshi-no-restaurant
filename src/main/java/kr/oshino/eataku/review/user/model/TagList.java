@@ -9,6 +9,7 @@ import lombok.*;
 @Setter(AccessLevel.PRIVATE)
 @NoArgsConstructor
 @AllArgsConstructor
+
 public class TagList {
 
     /* 태그 번호 */
