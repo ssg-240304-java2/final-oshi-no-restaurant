@@ -1,10 +1,10 @@
-package kr.oshino.eataku.restaurant.admin.model;
+package kr.oshino.eataku.restaurant.admin.entity;
 
 import com.sun.istack.NotNull;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "accountInfo")
+@Table(name = "tbl_accountInfo")
 public class AccountInfo {      // 식당 계정
 
     @Id
@@ -13,7 +13,8 @@ public class AccountInfo {      // 식당 계정
     private String id;      // 아이디(pk)
 
     @Column(name = "restaurant_no")
-    @EmbeddedId
+    @OneToOne
+    @JoinColumn(name = "restaurant_no")
     private Restaurant restqurantNo;        // 식당 고유 번호(fk)
 
     @Column(name = "password")

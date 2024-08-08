@@ -1,19 +1,24 @@
-package kr.oshino.eataku.restaurant.admin.model;
+package kr.oshino.eataku.restaurant.admin.entity;
 
 import com.sun.istack.NotNull;
 import jakarta.persistence.*;
+import kr.oshino.eataku.restaurant.admin.model.vo.AccountInfo;
 
-import java.io.Serializable;
 import java.time.LocalTime;
+import java.util.List;
 
 @Entity
+//@SecondaryTables({
+//    @SecondaryTable(
+//            name="tbl_accountInfo",
+//            pkJoinColumns = @PrimaryKeyJoinColumn(name="restaurantNo")
+//    )
+//})
 @Table(name = "restaurant")
-@Embeddable
-public class Restaurant implements Serializable {
+public class Restaurant {
 
     @Id
     @Column(name = "restaurant_no")
-    @NotNull
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String restaurantNo;        // 식당 고유 번호(pk)
 
@@ -48,4 +53,6 @@ public class Restaurant implements Serializable {
     @NotNull
     private Double yCoordinate;     // 경도
 
+    @Column(name = "hashtag")
+    private HashTag hashtag;        // 해시태그
 }

@@ -1,9 +1,6 @@
-package kr.oshino.eataku.restaurant.admin.model;
+package kr.oshino.eataku.restaurant.admin.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.EmbeddedId;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.time.LocalTime;
 
@@ -11,7 +8,9 @@ import java.time.LocalTime;
 @Table(name = "waitingSetting")
 public class WaitingSetting {       // 웨이팅 설정
 
-    @EmbeddedId
+    @Id
+    @ManyToOne
+    @JoinColumn(name = "restaurant_no")
     private Restaurant restaurantNo;        // 식당 고유 번호(fk)
 
     @Column(name = "waiting_status")
