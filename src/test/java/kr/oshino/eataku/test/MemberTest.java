@@ -1,7 +1,6 @@
-package kr.oshino.eataku.member;
+package kr.oshino.eataku.test;
 
 import kr.oshino.eataku.member.model.repository.MemberRepository;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

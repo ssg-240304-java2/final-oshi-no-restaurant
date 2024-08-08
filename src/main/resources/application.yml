@@ -3,20 +3,29 @@ spring:
     name: eataku
 
   datasource:
-    url: ${spring.datasource.url}
-    username: ${spring.datasource.username}
-    password: ${spring.datasource.password}
-    driver-class-name: ${spring.datasource.driver-class-name}
+    url: jdbc:mysql://223.130.159.76:3306/oshinodb
+    username: oshino
+    password: oshino
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    database: mysql
+    properties:
+      hibernate:
+        '[format_sql]': true
 
 cloud:
   aws:
     credentials:
-      access-key: ${aws.credentials.access-key}
-      secret-key: ${aws.credentials.secret-key}
+      access-key: ncp_iam_BPASKRWxSTDaP4FehYOM
+      secret-key: ncp_iam_BPKSKRJHikqfZbqxTJPD0W8tvPqhNKMS6T
     stack:
       auto: false
     region:
       static: kr-standard
     s3:
       endpoint: https://kr.object.ncloudstorage.com
-      bucket: ${aws.s3.bucket}
+      bucket: oshino-file
+

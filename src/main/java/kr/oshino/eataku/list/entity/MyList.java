@@ -47,7 +47,7 @@ public class MyList {
     @ElementCollection(fetch= FetchType.EAGER)
     @CollectionTable(
             name = "tbl_mylist_info",
-            joinColumns = @JoinColumn(name="list_no", referencedColumnName = "listNo")
+            joinColumns = @JoinColumn(name="list_no", referencedColumnName = "list_no")
     )
     private Set<RestaurantList> myLists;
 
