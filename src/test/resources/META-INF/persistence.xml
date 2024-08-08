@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence" version="2.2">
+    <!-- 엔티티 매니저 팩트로를 식별하기 위한 이름 설정 -->
+    <persistence-unit name="jpatest">
+        <class>kr.oshino.eataku.restaurant.admin.entity.RestaurantInfo</class>
+        <properties>
+            <!-- 데이터베이스 연결 정보 -->
+            <property name="jakarta.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://ssg-java2.iptime.org:3306/menudb"/>
+            <property name="jakarta.persistence.jdbc.user" value="ohgiraffers"/>
+            <property name="jakarta.persistence.jdbc.password" value="ohgiraffers"/>
+            <!-- hibernate 설정(실행되는 sql구문을 format형태로 보여준다.)-->
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.format_sql" value="true"/>
+            <!-- DML 구문 수행 시 자동으로 스키마 생성-->
+            <!-- DDL 자동생성 -->
+            <!--
+                개발 초기단계
+                create : 실행마다 DDL실행(기존의 테이블을 모두 drop)
+                create-drop : 실행시마다 DDL실행, 종료시 모든 테이블 drop
+                update: 변경사항만 alter DDL실행(테이블이 없는 경우 create, 컬럼추가만 반영(컬럼 반영은 무시)
+            -->
+            <!--
+                운영 시
+                validate : 생성/수정 DDL은 실행하지 않고, 유효성검사만 수행(테이블/컬럼 매핑에 문제 있는 경우 예외를 던짐)
+                none: 아무것도 하지 않음. default
+            -->
+            <property name="hibernate.hbm2ddl.auto" value="create"/>
+        </properties>
+    </persistence-unit>
+</persistence>

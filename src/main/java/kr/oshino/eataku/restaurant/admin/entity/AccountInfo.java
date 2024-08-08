@@ -2,7 +2,11 @@ package kr.oshino.eataku.restaurant.admin.entity;
 
 import com.sun.istack.NotNull;
 import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
+@Data
 @Entity
 @Table(name = "tbl_account_info")
 public class AccountInfo {      // 식당 계정
@@ -12,7 +16,6 @@ public class AccountInfo {      // 식당 계정
     @NotNull
     private String id;      // 아이디(pk)
 
-    @Column(name = "restaurant_no")
     @OneToOne
     @JoinColumn(name = "restaurant_no")
     private RestaurantInfo restqurantNo;        // 식당 고유 번호(fk)

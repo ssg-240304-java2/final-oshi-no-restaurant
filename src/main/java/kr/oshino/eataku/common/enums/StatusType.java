@@ -1,4 +1,4 @@
-package kr.oshino.eataku.waiting.entity;
+package kr.oshino.eataku.common.enums;
 
 public enum StatusType {
 

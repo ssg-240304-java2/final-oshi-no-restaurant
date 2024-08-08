@@ -1,15 +1,19 @@
 package kr.oshino.eataku.restaurant.admin.entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalTime;
 
+@NoArgsConstructor
+@Data
 @Entity
 @Table(name = "tbl_waiting_setting")
 public class WaitingSetting {       // 웨이팅 설정
 
     @Id
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name = "restaurant_no")
     private RestaurantInfo restaurantNo;        // 식당 고유 번호(fk)
 
