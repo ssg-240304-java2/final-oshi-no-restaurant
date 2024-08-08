@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
+@Table(name = "a_tbl_member_login_info")
 @Getter
 @Setter(AccessLevel.PRIVATE)
 @NoArgsConstructor
