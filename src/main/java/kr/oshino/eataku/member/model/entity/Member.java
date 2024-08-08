@@ -9,6 +9,7 @@ import lombok.Setter;
 import java.sql.Date;
 
 @Entity
+@Table(name = "a_tbl_member")
 @Getter
 @Setter(AccessLevel.PRIVATE)
 @NoArgsConstructor
@@ -16,8 +17,9 @@ public class Member {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long member_no;
-
+    private Long id;
+    private String account;
+    private String password;
     private String name;
     private String nickname;
     private Date birthday;
