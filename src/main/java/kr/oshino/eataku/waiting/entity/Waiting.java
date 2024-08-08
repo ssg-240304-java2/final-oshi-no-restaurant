@@ -1,6 +1,8 @@
-package kr.oshino.eataku.waiting.model.entity;
+package kr.oshino.eataku.waiting.entity;
 
 import jakarta.persistence.*;
+import kr.oshino.eataku.member.model.entity.Member;
+import kr.oshino.eataku.restaurant.admin.model.Restaurant;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -8,10 +10,11 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name="Waiting")
+@Table(name="tbl_waiting")
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
+@Setter(AccessLevel.PRIVATE)
 @Builder
 public class Waiting {
 
@@ -20,18 +23,19 @@ public class Waiting {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private int waitingNo;
 
-//    @ManyToOne(fetch=FetchType.LAZY)
-//    @JoinColumn(name = "restaurant_no", nullable = false)
-//    private Restaurant restaurant;
-//
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "member_no", nullable = false)
-//    private Member member;
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name = "restaurant_no", nullable = false)
+    private Restaurant restaurant;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_no", nullable = false)
+    private Member member;
 
     @Column(name="party_size", nullable = false)
     private int partySize;
 
     @Column(name="waiting_status", nullable = false)
+    @Enumerated(EnumType.STRING)
     private StatusType waitingStatus;
 
     @Column(name="created_at", nullable = false, updatable = false)
@@ -41,6 +45,5 @@ public class Waiting {
     @Column(name="updated_at")
     @UpdateTimestamp
     private LocalDateTime updatedAt;
-
 
 }
