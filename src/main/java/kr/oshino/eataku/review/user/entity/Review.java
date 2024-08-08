@@ -1,6 +1,9 @@
 package kr.oshino.eataku.review.user.entity;
 
 import jakarta.persistence.*;
+import kr.oshino.eataku.member.entity.Member;
+import kr.oshino.eataku.restaurant.admin.entity.RestaurantInfo;
+import kr.oshino.eataku.waiting.model.Restaurant;
 import lombok.*;
 
 import java.util.Set;
@@ -42,16 +45,19 @@ public class Review {
             name="tbl_tags",
             joinColumns = @JoinColumn(name = "tag_no", referencedColumnName = "reviewNo")
     )
+
+    /* 태그 */
     @Column(name="review_tag")
     private Set<String> reviewTags;
+
     /* 회원 번호 */
-//    @ManyToOne
-//    @JoinColumn(name = "member_no")
-//    private Member member;
+    @ManyToOne
+    @JoinColumn(name = "member_no")
+    private Member member;
 
     /* 식당 번호 */
-//    @ManyToOne
-//    @JoinColumn(name = "restaurant_no")
-//    private Restaurant restaurant;
+    @ManyToOne
+    @JoinColumn(name = "restaurant_no")
+    private RestaurantInfo restaurantInfo;
 
 }
