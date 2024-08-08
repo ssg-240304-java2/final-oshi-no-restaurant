@@ -10,6 +10,10 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@SecondaryTables({
+        @SecondaryTable(name= "restaurant", pkJoinColumns = @PrimaryKeyJoinColumn(name = "restaurant_no")),
+        @SecondaryTable(name= "미정", pkJoinColumns = @PrimaryKeyJoinColumn(name = "member_no"))
+})
 public class Review {
 
     /* 리뷰 번호 */
@@ -31,13 +35,13 @@ public class Review {
     private int scope;
 
     /* 회원 번호 */
-    //@ManyToOne
-    //@JoinColumn(name = "member_no")
-    //private Member member;
+//    @ManyToOne
+//    @JoinColumn(name = "member_no")
+//    private Member member;
 
-    /* 식당 고유 번호 */
-    //@ManyToOne
-    //@JoinColumn(name = "restaurant_no")
-    //private Restaurant restaurant;
+    /* 식당 번호 */
+//    @ManyToOne
+//    @JoinColumn(name = "restaurant_no")
+//    private Restaurant restaurant;
 
 }
