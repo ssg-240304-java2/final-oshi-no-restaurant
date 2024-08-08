@@ -15,8 +15,9 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @SecondaryTables({
-        @SecondaryTable(name= "tbl_restaurant", pkJoinColumns = @PrimaryKeyJoinColumn(name = "restaurant_no")),
-        @SecondaryTable(name= "tbl_member", pkJoinColumns = @PrimaryKeyJoinColumn(name = "member_no"))
+        @SecondaryTable(name= "tbl_restaurant_info", pkJoinColumns = @PrimaryKeyJoinColumn(name = "restaurant_no")),
+        @SecondaryTable(name= "tbl_member", pkJoinColumns = @PrimaryKeyJoinColumn(name = "member_no")),
+        @SecondaryTable(name= "tbl_average_rating", pkJoinColumns = @PrimaryKeyJoinColumn(name = "rating_no"))
 })
 public class MyList {
 
