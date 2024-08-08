@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 //@Entity
-//@Table(name = "Review")
+//@Table(name = "tbl_review")
 @Data
 @Setter(AccessLevel.PRIVATE)
 @NoArgsConstructor

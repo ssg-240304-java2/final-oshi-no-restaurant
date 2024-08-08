@@ -1,15 +1,15 @@
 package kr.oshino.eataku.list.model.vo;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
 import lombok.*;
 
- // 임시
 @Data
 @Setter(AccessLevel.PRIVATE)
 @NoArgsConstructor
 @AllArgsConstructor
-public class NoName3 {
+public class UserList {
+
+    //유저 번호
+    private Long member_no;
 
     //유저 이름
     private String name;
