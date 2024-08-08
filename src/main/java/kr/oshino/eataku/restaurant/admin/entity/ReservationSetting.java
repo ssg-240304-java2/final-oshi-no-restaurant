@@ -5,13 +5,13 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "reservationSetting")
+@Table(name = "tbl_reservation_setting")
 public class ReservationSetting {
 
     @Id
     @ManyToOne
     @JoinColumn(name = "restaurant_no")
-    private Restaurant restaurantNo;
+    private RestaurantInfo restaurantNo;
 
     @Column(name = "reservation_time")
     private LocalDateTime reservationTime;

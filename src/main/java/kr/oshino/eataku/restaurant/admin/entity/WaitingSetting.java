@@ -5,13 +5,13 @@ import jakarta.persistence.*;
 import java.time.LocalTime;
 
 @Entity
-@Table(name = "waitingSetting")
+@Table(name = "tbl_waiting_setting")
 public class WaitingSetting {       // 웨이팅 설정
 
     @Id
     @ManyToOne
     @JoinColumn(name = "restaurant_no")
-    private Restaurant restaurantNo;        // 식당 고유 번호(fk)
+    private RestaurantInfo restaurantNo;        // 식당 고유 번호(fk)
 
     @Column(name = "waiting_status")
     private String waitingStatus;       // 웨이팅 여부

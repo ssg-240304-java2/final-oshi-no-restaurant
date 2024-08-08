@@ -3,7 +3,7 @@ package kr.oshino.eataku.restaurant.admin.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "menu")
+@Table(name = "tbl_menu")
 public class Menu {
 
     @Id
@@ -13,7 +13,7 @@ public class Menu {
 
     @ManyToOne()
     @JoinColumn(name = "restaurant_no")
-    private Restaurant restaurantNo;
+    private RestaurantInfo restaurantInfoNo;
 
     @Column(name = "menu_name")
     private String menuName;
