@@ -1,6 +1,8 @@
-package kr.oshino.eataku.reservation.user.model.entity;
+package kr.oshino.eataku.reservation.user.entity;
 import jakarta.persistence.*;
 
+import kr.oshino.eataku.member.entity.Member;
+import kr.oshino.eataku.restaurant.admin.entity.Restaurant;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -8,7 +10,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Entity
-@Table(name="Reservation")
+@Table(name="tbl_reservation")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -23,17 +25,15 @@ public class Reservation {
     private int reservationNo;
 
 
-//    /*회원 번호*/
-//    @ManyToOne(fetch = FetchType.LAZY)    아니면 eager?
-//    @JoinColumn(name="member_no",nullable = false)
-//    @Column(name = "member_no")
-//    private Member memberNO;
+    /*회원 번호*/
+    @ManyToOne(fetch = FetchType.LAZY)    // 아니면 eager?
+    @JoinColumn(name="member_no",nullable = false)
+    private Member member;
 
     /*매장 번호*/
-//    @ManyToOne(fetch = FetchType.LAZY)   아니면 eager?
-//    @JoinColumn(name="restaurant_no", nullable = false)
-//    @Column(name = "restaurant_no")
-//    private Restaurant restaurantNo;
+    @ManyToOne(fetch = FetchType.LAZY)   // 아니면 eager?
+    @JoinColumn(name="restaurant_no", nullable = false)
+    private Restaurant restaurant;
 
 
     /*인원 수   를 어디에 보내야하나????*/

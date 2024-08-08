@@ -1,17 +1,21 @@
-package kr.oshino.eataku.list.model.dto.vo;
+package kr.oshino.eataku.list.model.vo;
 
+import jakarta.persistence.Embeddable;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.*;
 
-@Entity
-@Table(name = "list_resaurant") // 임시
+
+// 임시
+@Embeddable
 @Data
 @Setter(AccessLevel.PRIVATE)
 @NoArgsConstructor
 @AllArgsConstructor
-public class restaurantList {
+public class RestaurantList {
 
+    // 식당번호
+    private Long restaurantNo;
     // 식당명
     private String restaurantName;
     // 식당 도로명 주소
