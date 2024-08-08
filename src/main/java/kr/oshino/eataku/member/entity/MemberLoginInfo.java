@@ -1,4 +1,4 @@
-package kr.oshino.eataku.member.model.entity;
+package kr.oshino.eataku.member.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;

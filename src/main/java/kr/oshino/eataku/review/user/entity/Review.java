@@ -1,18 +1,20 @@
-package kr.oshino.eataku.review.user.model;
+package kr.oshino.eataku.review.user.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Set;
+
 @Entity
-@Table(name = "Review")
+@Table(name = "tbl_review")
 @Data
 @Setter(AccessLevel.PRIVATE)
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @SecondaryTables({
-        @SecondaryTable(name= "restaurant", pkJoinColumns = @PrimaryKeyJoinColumn(name = "restaurant_no")),
-        @SecondaryTable(name= "미정", pkJoinColumns = @PrimaryKeyJoinColumn(name = "member_no"))
+        @SecondaryTable(name= "tbl_restaurant", pkJoinColumns = @PrimaryKeyJoinColumn(name = "restaurant_no")),
+        @SecondaryTable(name= "tbl_member", pkJoinColumns = @PrimaryKeyJoinColumn(name = "member_no"))
 })
 public class Review {
 
@@ -32,8 +34,16 @@ public class Review {
 
     /* 별점 */
     @Column(name = "scope")
-    private int scope;
+    @Enumerated(EnumType.STRING)
+    private Scope scope;
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(
+            name="tbl_tags",
+            joinColumns = @JoinColumn(name = "tag_no", referencedColumnName = "reviewNo")
+    )
+    @Column(name="review_tag")
+    private Set<String> reviewTags;
     /* 회원 번호 */
 //    @ManyToOne
 //    @JoinColumn(name = "member_no")

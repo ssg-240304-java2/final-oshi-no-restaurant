@@ -1,4 +1,4 @@
-package kr.oshino.eataku.member.model.entity;
+package kr.oshino.eataku.member.entity;
 
 import jakarta.persistence.*;
 import kr.oshino.eataku.member.model.vo.FollowId;

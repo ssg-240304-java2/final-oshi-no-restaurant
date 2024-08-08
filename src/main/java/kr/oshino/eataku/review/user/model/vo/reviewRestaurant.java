@@ -1,4 +1,4 @@
-package kr.oshino.eataku.review.user.model.dto.vo;
+package kr.oshino.eataku.review.user.model.vo;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
