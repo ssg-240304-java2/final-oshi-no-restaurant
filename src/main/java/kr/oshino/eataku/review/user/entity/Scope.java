@@ -1,4 +1,4 @@
-package kr.oshino.eataku.review.user.model;
+package kr.oshino.eataku.review.user.entity;
 
 public enum Scope {
 

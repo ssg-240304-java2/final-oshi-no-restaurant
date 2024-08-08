@@ -1,19 +1,18 @@
-package kr.oshino.eataku.list.model;
+package kr.oshino.eataku.list.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
 
-@Entity
-@Table(name = "List_Info")
+//@Entity
+//@Table(name = "List_Info")
 @Data
 @Setter(AccessLevel.PRIVATE)
 @NoArgsConstructor
 @AllArgsConstructor
-@SecondaryTables({
-        @SecondaryTable(name= "restaurant", pkJoinColumns = @PrimaryKeyJoinColumn(name = "restaurant_no")),
-        @SecondaryTable(name= "Review", pkJoinColumns = @PrimaryKeyJoinColumn(name = "review_no"))
-})
-
+//@SecondaryTables({
+//        @SecondaryTable(name= "restaurant", pkJoinColumns = @PrimaryKeyJoinColumn(name = "restaurant_no")),
+//        @SecondaryTable(name= "Review", pkJoinColumns = @PrimaryKeyJoinColumn(name = "review_no"))
+//})
 public class ListInfo {
 
     /* 리스트 정보 번호  */
@@ -25,7 +24,7 @@ public class ListInfo {
     /* 리스트 번호 */
     @ManyToOne
     @JoinColumn(name = "list_no")
-    private List list;
+    private MyList list;
 
     /* 매장 번호 */
 //    @ManyToOne
