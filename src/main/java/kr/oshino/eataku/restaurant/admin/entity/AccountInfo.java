@@ -4,7 +4,7 @@ import com.sun.istack.NotNull;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "tbl_accountInfo")
+@Table(name = "tbl_account_info")
 public class AccountInfo {      // 식당 계정
 
     @Id
@@ -15,7 +15,7 @@ public class AccountInfo {      // 식당 계정
     @Column(name = "restaurant_no")
     @OneToOne
     @JoinColumn(name = "restaurant_no")
-    private Restaurant restqurantNo;        // 식당 고유 번호(fk)
+    private RestaurantInfo restqurantNo;        // 식당 고유 번호(fk)
 
     @Column(name = "password")
     @NotNull

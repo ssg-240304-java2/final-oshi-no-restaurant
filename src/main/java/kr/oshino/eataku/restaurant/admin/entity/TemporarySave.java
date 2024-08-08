@@ -1,17 +1,16 @@
 package kr.oshino.eataku.restaurant.admin.entity;
 
 import com.sun.istack.NotNull;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "tbl_certification")
-public class Certification {
+@Table(name = "tbl_temporary_save")
+public class TemporarySave {
 
     @Id
-    @OneToOne()
-    @JoinColumn(name = "restaurant_no")
-    private RestaurantInfo restaurantNo;        // 식당 고유 번호(pk)
-
     @Column(name = "company_no")
     private Long companyNo;      // 사업자 등록 번호
 

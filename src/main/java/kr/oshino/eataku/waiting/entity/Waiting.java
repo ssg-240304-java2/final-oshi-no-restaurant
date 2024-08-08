@@ -2,7 +2,7 @@ package kr.oshino.eataku.waiting.entity;
 
 import jakarta.persistence.*;
 import kr.oshino.eataku.member.entity.Member;
-import kr.oshino.eataku.restaurant.admin.entity.Restaurant;
+import kr.oshino.eataku.restaurant.admin.entity.RestaurantInfo;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -25,7 +25,7 @@ public class Waiting {
 
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "restaurant_no", nullable = false)
-    private Restaurant restaurant;
+    private RestaurantInfo restaurantInfo;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_no", nullable = false)

@@ -2,7 +2,7 @@ package kr.oshino.eataku.reservation.user.entity;
 import jakarta.persistence.*;
 
 import kr.oshino.eataku.member.entity.Member;
-import kr.oshino.eataku.restaurant.admin.entity.Restaurant;
+import kr.oshino.eataku.restaurant.admin.entity.RestaurantInfo;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -33,7 +33,7 @@ public class Reservation {
     /*매장 번호*/
     @ManyToOne(fetch = FetchType.LAZY)   // 아니면 eager?
     @JoinColumn(name="restaurant_no", nullable = false)
-    private Restaurant restaurant;
+    private RestaurantInfo restaurantInfo;
 
 
     /*인원 수   를 어디에 보내야하나????*/
