@@ -1,6 +1,7 @@
 package kr.oshino.eataku.waiting.entity;
 
 import jakarta.persistence.*;
+import kr.oshino.eataku.common.enums.StatusType;
 import kr.oshino.eataku.member.entity.Member;
 import kr.oshino.eataku.restaurant.admin.entity.RestaurantInfo;
 import lombok.*;

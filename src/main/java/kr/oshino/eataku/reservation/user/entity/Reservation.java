@@ -1,6 +1,7 @@
 package kr.oshino.eataku.reservation.user.entity;
 import jakarta.persistence.*;
 
+import kr.oshino.eataku.common.enums.AccountAuth;
 import kr.oshino.eataku.member.entity.Member;
 import kr.oshino.eataku.restaurant.admin.entity.RestaurantInfo;
 import lombok.*;
@@ -44,7 +45,7 @@ public class Reservation {
     /*예약 상태 값*/
     @Column(name = "reservation_status")
     @Enumerated(EnumType.STRING)
-    private ReservationStatus reservationStatus;
+    private AccountAuth.ReservationStatus reservationStatus;
 
 
     /*예약 날짜*/

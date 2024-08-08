@@ -10,7 +10,7 @@ import lombok.Setter;
 import java.sql.Date;
 
 @Entity
-@Table(name = "a_tbl_member")
+@Table(name = "tbl_member")
 @Getter
 @Setter(AccessLevel.PRIVATE)
 @NoArgsConstructor

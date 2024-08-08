@@ -1,9 +1,9 @@
 package kr.oshino.eataku.review.user.entity;
 
 import jakarta.persistence.*;
+import kr.oshino.eataku.common.enums.Scope;
 import kr.oshino.eataku.member.entity.Member;
 import kr.oshino.eataku.restaurant.admin.entity.RestaurantInfo;
-import kr.oshino.eataku.waiting.model.Restaurant;
 import lombok.*;
 
 import java.util.Set;
@@ -16,7 +16,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Builder
 @SecondaryTables({
-        @SecondaryTable(name= "tbl_restaurant", pkJoinColumns = @PrimaryKeyJoinColumn(name = "restaurant_no")),
+        @SecondaryTable(name= "tbl_restaurant_info", pkJoinColumns = @PrimaryKeyJoinColumn(name = "restaurant_no")),
         @SecondaryTable(name= "tbl_member", pkJoinColumns = @PrimaryKeyJoinColumn(name = "member_no"))
 })
 public class Review {
@@ -43,11 +43,12 @@ public class Review {
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(
             name="tbl_tags",
-            joinColumns = @JoinColumn(name = "tag_no", referencedColumnName = "reviewNo")
+            joinColumns = @JoinColumn(name = "review_no", referencedColumnName = "review_no")
     )
 
     /* 태그 */
     @Column(name="review_tag")
+    @Enumerated(EnumType.STRING)
     private Set<String> reviewTags;
 
     /* 회원 번호 */

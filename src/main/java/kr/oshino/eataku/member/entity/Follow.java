@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "a_tbl_follow")
+@Table(name = "tbl_follow")
 @Getter
 @Setter
 @AllArgsConstructor
