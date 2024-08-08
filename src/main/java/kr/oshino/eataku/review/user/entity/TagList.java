@@ -1,10 +1,10 @@
-package kr.oshino.eataku.review.user.model;
+package kr.oshino.eataku.review.user.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
 
-@Entity
-@Table(name = "Review")
+//@Entity
+//@Table(name = "Review")
 @Data
 @Setter(AccessLevel.PRIVATE)
 @NoArgsConstructor

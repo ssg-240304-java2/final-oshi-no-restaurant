@@ -1,8 +1,8 @@
 package kr.oshino.eataku.waiting.entity;
 
 import jakarta.persistence.*;
-import kr.oshino.eataku.member.model.entity.Member;
-import kr.oshino.eataku.restaurant.admin.model.Restaurant;
+import kr.oshino.eataku.member.entity.Member;
+import kr.oshino.eataku.restaurant.admin.entity.Restaurant;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
