@@ -1,9 +1,6 @@
-package kr.oshino.eataku.restaurant.admin.model;
+package kr.oshino.eataku.restaurant.admin.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.EmbeddedId;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
@@ -11,7 +8,9 @@ import java.time.LocalDateTime;
 @Table(name = "reservationSetting")
 public class ReservationSetting {
 
-    @EmbeddedId
+    @Id
+    @ManyToOne
+    @JoinColumn(name = "restaurant_no")
     private Restaurant restaurantNo;
 
     @Column(name = "reservation_time")
