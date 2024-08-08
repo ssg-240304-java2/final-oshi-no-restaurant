@@ -1,6 +1,6 @@
 package kr.oshino.eataku.reservation.user.model.entity;
 import jakarta.persistence.*;
-import kr.oshino.eataku.waiting.user.model.Restaurant;
+//import kr.oshino.eataku.waiting.user.model.Restaurant;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -28,9 +28,9 @@ public class Reservation {
 
     /*매장 번호*/
 
-    @Column(name = "restaurant_no")
-    @EmbeddedId
-    private Restaurant restaurantNo;
+//    @Column(name = "restaurant_no")
+//    @EmbeddedId
+//    private Restaurant restaurantNo;
 
     /*인원 수*/
     @Column(name ="party_size")

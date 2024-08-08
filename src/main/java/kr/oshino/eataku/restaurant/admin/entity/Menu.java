@@ -1,4 +1,4 @@
-package kr.oshino.eataku.restaurant.admin.model;
+package kr.oshino.eataku.restaurant.admin.entity;
 
 import jakarta.persistence.*;
 
@@ -11,7 +11,8 @@ public class Menu {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int menuNo;
 
-    @EmbeddedId
+    @ManyToOne()
+    @JoinColumn(name = "restaurant_no")
     private Restaurant restaurantNo;
 
     @Column(name = "menu_name")
