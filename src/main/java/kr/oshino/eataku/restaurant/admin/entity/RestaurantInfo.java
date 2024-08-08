@@ -2,25 +2,18 @@ package kr.oshino.eataku.restaurant.admin.entity;
 
 import com.sun.istack.NotNull;
 import jakarta.persistence.*;
-import kr.oshino.eataku.restaurant.admin.model.vo.AccountInfo;
-
 import java.time.LocalTime;
-import java.util.List;
+import java.util.Set;
+
 
 @Entity
-//@SecondaryTables({
-//    @SecondaryTable(
-//            name="tbl_accountInfo",
-//            pkJoinColumns = @PrimaryKeyJoinColumn(name="restaurantNo")
-//    )
-//})
-@Table(name = "restaurant")
-public class Restaurant {
+@Table(name = "tbl_restaurant_info")
+public class RestaurantInfo {
 
     @Id
     @Column(name = "restaurant_no")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String restaurantNo;        // 식당 고유 번호(pk)
+    private Long restaurantNo;        // 식당 고유 번호(pk)
 
     @Column(name = "restaurant_name")
     @NotNull
@@ -54,5 +47,22 @@ public class Restaurant {
     private Double yCoordinate;     // 경도
 
     @Column(name = "hashtag")
+    @Enumerated(EnumType.STRING)
     private HashTag hashtag;        // 해시태그
+
+    @OneToMany()
+    private Set<Menu> menu;     // 메뉴
+
+    @OneToMany()
+    private Set<ReservationSetting> reservationSetting;         // 예약 설정
+
+    @OneToMany()
+    private Set<WaitingSetting> waitingSetting;         // 웨이팅 설정
+
+    @OneToOne()
+    private Certification certification;        // 사업자 등록 인증
+
+    @OneToOne()
+    private AccountInfo accountInfo;        // 계정 정보
+
 }
