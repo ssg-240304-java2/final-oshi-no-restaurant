@@ -10,6 +10,10 @@ import lombok.*;
 @Setter(AccessLevel.PRIVATE)
 @NoArgsConstructor
 @AllArgsConstructor
+@SecondaryTables({
+        @SecondaryTable(name= "restaurant", pkJoinColumns = @PrimaryKeyJoinColumn(name = "restaurant_no")),
+        @SecondaryTable(name= "미정", pkJoinColumns = @PrimaryKeyJoinColumn(name = "member_no"))
+})
 
 public class List {
 
@@ -22,7 +26,7 @@ public class List {
     /* 회원 번호 */
 //    @ManyToOne
 //    @JoinColumn(name = "member_no")
-//    private Member member
+//    private Member member;
 
     /* 리스트 이름 */
     @Column(name = "list_name")
