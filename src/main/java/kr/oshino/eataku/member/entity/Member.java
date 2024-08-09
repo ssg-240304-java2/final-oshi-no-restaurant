@@ -34,5 +34,4 @@ public class Member {
     @Column(name = "img_url")
     private String imgUrl;
     private String phone;
-
 }
