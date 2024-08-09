@@ -25,11 +25,11 @@ public class Waiting {
     private int waitingNo;
 
     @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name = "restaurant_no", nullable = false)
+    @JoinColumn(name = "restaurant_no")
     private RestaurantInfo restaurantInfo;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_no", nullable = false)
+    @JoinColumn(name = "member_no")
     private Member member;
 
     @Column(name="party_size", nullable = false)
