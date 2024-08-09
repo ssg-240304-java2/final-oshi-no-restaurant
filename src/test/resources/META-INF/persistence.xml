@@ -3,6 +3,7 @@
     <!-- 엔티티 매니저 팩트로를 식별하기 위한 이름 설정 -->
     <persistence-unit name="jpatest">
         <class>kr.oshino.eataku.restaurant.admin.entity.RestaurantInfo</class>
+        <class>kr.oshino.eataku.reservation.user.entity.Reservation</class>
         <properties>
             <!-- 데이터베이스 연결 정보 -->
             <property name="jakarta.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
