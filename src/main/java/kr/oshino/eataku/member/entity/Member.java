@@ -12,7 +12,7 @@ import java.sql.Date;
 @Entity
 @Table(name = "tbl_member")
 @Getter
-@Setter(AccessLevel.PRIVATE)
+@Setter
 @NoArgsConstructor
 public class Member {
 
@@ -34,4 +34,5 @@ public class Member {
     @Column(name = "img_url")
     private String imgUrl;
     private String phone;
+
 }
