@@ -12,7 +12,7 @@ import java.sql.Date;
 @Entity
 @Table(name = "tbl_member")
 @Getter
-@Setter
+@Setter(AccessLevel.PRIVATE)
 @NoArgsConstructor
 public class Member {
 
