@@ -11,58 +11,8 @@ import java.sql.Time;
 @Table(name = "tbl_restaurant_info")
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
 @Data
 public class RestaurantInfo {
-
-    public String getRestaurantName() {
-        return restaurantName;
-    }
-
-    public String getRestaurantAddress() {
-        return restaurantAddress;
-    }
-
-    public String getFoodType() {
-        return foodType;
-    }
-
-    public Time getBusinessHour() {
-        return businessHour;
-    }
-
-    public String getContact() {
-        return contact;
-    }
-
-    public String getPostNumber() {
-        return postNumber;
-    }
-
-    public String getImgUrl() {
-        return imgUrl;
-    }
-
-    public Double getxCoordinate() {
-        return xCoordinate;
-    }
-
-    public Double getyCoordinate() {
-        return yCoordinate;
-    }
-
-    public HashTag getHashtag() {
-        return hashtag;
-    }
-
-    public Certification getCertification() {
-        return certification;
-    }
-
-    public AccountInfo getAccountInfo() {
-        return accountInfo;
-    }
 
     @Id
     @Column(name = "restaurant_no")
@@ -73,6 +23,9 @@ public class RestaurantInfo {
     @NotNull
     private String restaurantName;          // 식당명
 
+    @Column(name = "description")
+    private String description;         // 식당 소개
+
     @Column(name = "restaurant_address")
     @NotNull
     private String restaurantAddress;       // 도로명 주소
@@ -80,8 +33,11 @@ public class RestaurantInfo {
     @Column(name = "food_type")
     private String foodType;        // 음식 카테고리
 
-    @Column(name = "business_hour")
-    private Time businessHour;         // 영업시간
+    @Column(name = "opening_time")
+    private Time openingTime;         // 오픈시간
+
+    @Column(name = "closing_time")
+    private Time closingTime;       // 마감 시간
 
     @Column(name = "contact")
     private String contact;         // 연락처
@@ -104,18 +60,23 @@ public class RestaurantInfo {
     @Enumerated(EnumType.STRING)
     private HashTag hashtag;        // 해시태그
 
+    @OneToOne(mappedBy = "restaurantNo", cascade = CascadeType.ALL)
+    private Certification certification;        // 사업자 등록 인증
 
-    public Long getRestaurantNo() {
-        return restaurantNo;
-    }
+    @OneToOne(mappedBy = "restaurantNo", cascade = CascadeType.ALL)
+    private AccountInfo accountInfo;        // 계정 정보
 
+    @OneToOne(mappedBy = "restaurantNo", cascade = CascadeType.ALL)
+    private AverageRating averageRating;        // 별점 통계
 
-    public RestaurantInfo(Long restaurantNo, String restaurantName, String restaurantAddress, String foodType, Time businessHour, String contact, String postNumber, String imgUrl, Double xCoordinate, Double yCoordinate, HashTag hashtag) {
+    public RestaurantInfo(Long restaurantNo, String restaurantName, String description, String restaurantAddress, String foodType, Time openingTime, Time closingTime, String contact, String postNumber, String imgUrl, Double xCoordinate, Double yCoordinate, HashTag hashtag) {
         this.restaurantNo = restaurantNo;
         this.restaurantName = restaurantName;
+        this.description = description;
         this.restaurantAddress = restaurantAddress;
         this.foodType = foodType;
-        this.businessHour = businessHour;
+        this.openingTime = openingTime;
+        this.closingTime = closingTime;
         this.contact = contact;
         this.postNumber = postNumber;
         this.imgUrl = imgUrl;
@@ -123,13 +84,4 @@ public class RestaurantInfo {
         this.yCoordinate = yCoordinate;
         this.hashtag = hashtag;
     }
-
-    @OneToOne()
-    @JoinColumn(name = "restaurant_no", referencedColumnName = "restaurant_no")
-    private Certification certification;        // 사업자 등록 인증
-
-    @OneToOne()
-    @JoinColumn(name = "restaurant_no", referencedColumnName = "restaurant_no")
-    private AccountInfo accountInfo;        // 계정 정보
-
 }
