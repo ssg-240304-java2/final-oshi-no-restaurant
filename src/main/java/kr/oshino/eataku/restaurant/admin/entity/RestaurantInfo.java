@@ -66,6 +66,9 @@ public class RestaurantInfo {
     @OneToOne(mappedBy = "restaurantNo", cascade = CascadeType.ALL)
     private AccountInfo accountInfo;        // 계정 정보
 
+    @OneToOne(mappedBy = "restaurantNo", cascade = CascadeType.ALL)
+    private AverageRating averageRating;        // 별점 통계
+
     public RestaurantInfo(Long restaurantNo, String restaurantName, String description, String restaurantAddress, String foodType, Time openingTime, Time closingTime, String contact, String postNumber, String imgUrl, Double xCoordinate, Double yCoordinate, HashTag hashtag) {
         this.restaurantNo = restaurantNo;
         this.restaurantName = restaurantName;
