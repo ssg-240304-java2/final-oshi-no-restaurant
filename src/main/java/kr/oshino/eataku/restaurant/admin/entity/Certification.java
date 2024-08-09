@@ -11,11 +11,12 @@ import lombok.NoArgsConstructor;
 @Table(name = "tbl_certification")
 public class Certification {
 
-    @Id
+
     @OneToOne()
-    @JoinColumn(name = "restaurant_no")
+    @JoinColumn(name = "restaurant_no", referencedColumnName = "restaurant_no")
     private RestaurantInfo restaurantNo;        // 식당 고유 번호(pk)
 
+    @Id
     @Column(name = "company_no")
     private Long companyNo;      // 사업자 등록 번호
 
