@@ -1,23 +1,40 @@
 package kr.oshino.eataku.member.entity;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Table(name = "tbl_member_login_info")
-@Getter
-@Setter(AccessLevel.PRIVATE)
+@Data
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@ToString(exclude = {"member"})
 public class MemberLoginInfo {
 
     @Id
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "member_no")
+    @OneToOne
+    @JoinColumn(name = "member_no", referencedColumnName = "member_no")
     private Member member;
 
-    private String id;
+    private String account;
     private String password;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        MemberLoginInfo that = (MemberLoginInfo) o;
+
+        if (!account.equals(that.account)) return false;
+        return password.equals(that.password);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = account.hashCode();
+        result = 31 * result + password.hashCode();
+        return result;
+    }
 }
