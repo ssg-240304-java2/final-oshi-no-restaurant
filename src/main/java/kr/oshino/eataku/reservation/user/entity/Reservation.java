@@ -28,12 +28,12 @@ public class Reservation {
 
     /*회원 번호*/
     @ManyToOne(fetch = FetchType.LAZY)    // 아니면 eager?
-    @JoinColumn(name="member_no",nullable = false)
+    @JoinColumn(name="member_no",nullable = false)   // nullable =false
     private Member member;
 
     /*매장 번호*/
     @ManyToOne(fetch = FetchType.LAZY)   // 아니면 eager?
-    @JoinColumn(name="restaurant_no", nullable = false)
+    @JoinColumn(name="restaurant_no",nullable = false)   // nullable = false
     private RestaurantInfo restaurantInfo;
 
 
