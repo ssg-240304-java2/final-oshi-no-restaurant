@@ -21,6 +21,4 @@ public class RestaurantList {
     private Double xCoordinate;
     // 식당 y 좌표
     private Double yCoordinate;
-    // 식당 별점 통계
-//    private double rating;
 }
