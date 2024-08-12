@@ -2,6 +2,7 @@ package kr.oshino.eataku.restaurant.admin.entity;
 
 import jakarta.annotation.sql.DataSourceDefinition;
 import jakarta.persistence.*;
+import kr.oshino.eataku.waiting.model.Restaurant;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
