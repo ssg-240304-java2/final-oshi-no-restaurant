@@ -13,11 +13,17 @@ import lombok.*;
 public class MemberLoginInfo {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @MapsId
     @OneToOne
     @JoinColumn(name = "member_no", referencedColumnName = "member_no")
     private Member member;
 
+    @Column(unique = true, nullable = false)
     private String account;
+
     private String password;
 
     @Override

@@ -5,7 +5,6 @@ import kr.oshino.eataku.common.enums.AccountAuth;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.joda.time.DateTime;
 
 import java.sql.Date;
 import java.sql.Timestamp;
