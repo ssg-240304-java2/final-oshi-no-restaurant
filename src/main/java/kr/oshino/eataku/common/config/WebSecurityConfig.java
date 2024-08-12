@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -27,8 +28,14 @@ public class WebSecurityConfig{
                         .loginProcessingUrl("/login")
                         .defaultSuccessUrl("/", true) // 로그인 성공 후 리디렉션할 URL
                         .permitAll()
-                );
-        http
+                )
+                .logout((logout) -> logout
+                        .logoutSuccessUrl("/login")
+                        .invalidateHttpSession(true)
+                )
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
                 .csrf(auth -> auth.disable());
 
         return http.build();

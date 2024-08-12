@@ -1,8 +1,7 @@
 package kr.oshino.eataku.member.controller;
 
-import kr.oshino.eataku.member.entity.Member;
-import kr.oshino.eataku.member.entity.MemberLoginInfo;
 import kr.oshino.eataku.member.model.dto.MemberDTO;
+import kr.oshino.eataku.member.service.MailService;
 import kr.oshino.eataku.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.Map;
+
 @Controller
 //@RequestMapping("/login")
 //@RestController
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class MemberController {
 
     private final MemberService memberService;
+    private final MailService mailService;
 
     @GetMapping("/login")
     public String login() {
@@ -52,22 +54,34 @@ public class MemberController {
     }
 
     @PostMapping("/signUp/sendEmailVerifCode")
-    public ResponseEntity<Integer> sendEmailVerifCode(@RequestBody MemberDTO member) {
+    public ResponseEntity<Boolean> sendEmailVerifCode(@RequestBody MemberDTO member) {
         log.info("⭐️⭐️ [ MemberController ] Send to Email : {} ⭐️⭐️", member.getEmail());
 
-        int verifCode = memberService.sendEmailVerifCode(member.getEmail(), null);
+        int verifCode = mailService.sendEmailVerifCode(member.getEmail(), null);
         log.info("⭐️⭐️ [ MemberController ] Email Send verifCode T/F : {} ⭐️⭐️", verifCode);
 
-        return ResponseEntity.ok(verifCode);
+        return ResponseEntity.ok(true);
+    }
+
+    @PostMapping("/signUp/checkEmailVerifCode")
+    public ResponseEntity<Boolean> checkEmailVerifCode(@RequestBody Map<String,String> request) {
+        String reqVerifCode = request.get("reqVerifCode");
+        String email = request.get("email");
+
+        log.info("⭐️⭐️ [ MemberController ] Request Email : {}, VerifCode : {} ⭐️⭐️", email, reqVerifCode);
+
+        boolean isMatch = mailService.checkMailVerifCode(email, reqVerifCode);
+
+        return ResponseEntity.ok(isMatch);
     }
 
     @PostMapping("/signUp")
-    public String signUpProc(MemberDTO member) {
+    public ResponseEntity<String> signUpProc(@RequestBody  MemberDTO member) {
 
         log.info("⭐️⭐️ [ MemberController ] SignUp MemberInfo : {} ⭐️⭐️", member);
 
         memberService.insertNewMember(member);
 
-        return "redirect:/login";
+        return ResponseEntity.ok("/login");
     }
 }
