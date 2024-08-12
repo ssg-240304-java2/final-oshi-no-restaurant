@@ -17,8 +17,8 @@ public class AccountInfo {      // 식당 계정
     private String id;      // 아이디(pk)
 
     @OneToOne
-    @JoinColumn(name = "restaurant_no")
-    private RestaurantInfo restqurantNo;        // 식당 고유 번호(fk)
+    @JoinColumn(name = "restaurant_no", referencedColumnName = "restaurant_no")
+    private RestaurantInfo restaurantNo;        // 식당 고유 번호(fk)
 
     @Column(name = "password")
     @NotNull
