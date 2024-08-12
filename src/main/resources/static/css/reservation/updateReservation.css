@@ -1,9 +1,10 @@
 body {
     background-color: #f8f9fa;
 }
+
 .reservation-cancel {
     max-width: 500px;
-    margin: 50px auto;
+    margin: 0 auto; /* 모달 내에서 중앙에 배치 */
     padding: 40px 20px;
     border: 1px solid #FA4A54;
     border-radius: 8px;
@@ -11,11 +12,13 @@ body {
     text-align: center;
     color: #FA4A54;
 }
+
 .reservation-cancel .icon {
     width: 80px;
     height: 80px;
     margin: 0 auto 20px;
 }
+
 .reservation-cancel h1 {
     font-size: 24px;
     margin-bottom: 20px;

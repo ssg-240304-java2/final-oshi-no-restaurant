@@ -3,20 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reservation Cancellation</title>
+    <title>예약취소</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" th:href="@{/css/reservation/updateReservation.css}">
+    <link href="reservation-cancellation.css" rel="stylesheet">
 </head>
 <body>
 <div class="container">
-    <div class="reservation-cancel">
-        <div class="icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#ff6f61" width="80" height="80">
-                <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm-1 17.93l-5-5 1.41-1.41L11 14.93l7.59-7.59L20 8.34l-9 9z"/>
-            </svg>
+    <!-- Trigger Button (예약 취소를 클릭하면 모달이 열립니다.) -->
+    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#cancelModal">
+        예약 취소
+    </button>
+</div>
+
+<!-- Modal Structure -->
+<div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cancelModalLabel">예약취소</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Reservation Cancellation Content -->
+                <div class="reservation-cancel text-center">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#ff6f61" width="80" height="80">
+                            <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm-1 17.93l-5-5 1.41-1.41L11 14.93l7.59-7.59L20 8.34l-9 9z"/>
+                        </svg>
+                    </div>
+                    <h3>예약을 취소하시겠습니까?</h3>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+                <button type="button" class="btn btn-danger" id="confirmCancel">취소하기</button>
+            </div>
         </div>
-        <h1>예약취소</h1>
     </div>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<!-- 예약 취소 처리를 위한 스크립트 -->
+<script>
+    document.getElementById('confirmCancel').addEventListener('click', function() {
+        // 예약 취소 처리 로직을 여기에 추가합니다.
+        fetch('/cancel-reservation', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ reservationId: '12345' }) // 예약 ID를 여기에 전달합니다.
+        }).then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('예약이 성공적으로 취소되었습니다.');
+                    $('#cancelModal').modal('hide'); // 모달을 닫습니다.
+                } else {
+                    alert('예약 취소에 실패하였습니다.');
+                }
+            }).catch(error => {
+            console.error('Error:', error);
+            alert('예약 취소 중 오류가 발생하였습니다.');
+        });
+    });
+</script>
+
 </body>
 </html>

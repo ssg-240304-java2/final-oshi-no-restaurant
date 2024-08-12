@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>리스트 생성</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #F9F9F9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .form-container {
+            border: 2px solid #fb3f4a;
+            border-radius: 10px;
+            padding: 30px;
+            max-width: 600px;
+            width: 100%;
+            background-color: white;
+            text-align: center;
+        }
+        .form-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+        .form-header img {
+            width: 40px;
+            margin-right: 15px;
+        }
+        .form-header h1 {
+            color: #fb3f4a;
+            margin: 0;
+            font-size: 24px; /* 폰트 크기 조정 */
+        }
+        .form-group {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            color: #fb3f4a;
+            font-size: 18px;
+            margin-right: 10px;
+        }
+        .form-control {
+            display: inline-block;
+            width: auto;
+            vertical-align: middle;
+        }
+        .btn {
+            background-color: #fb3f4a;
+            border: none;
+            color: white;
+            padding: 5px 15px; /* 버튼 크기 줄이기 */
+            font-size: 14px; /* 폰트 크기 줄이기 */
+            border-radius: 5px;
+        }
+        .btn:hover {
+            background-color: #e6363f;
+        }
+    </style>
+</head>
+<body>
+<div class="form-container">
+    <div class="form-header">
+        <img src="images/oku.png" alt="Bear Icon">
+        <h1>리스트 생성</h1>
+    </div>
+    <form th:action="@{/myLists/createLists}" method="post">
+        <div class="form-group">
+            <label for="listName">리스트명</label>
+            <input type="text" class="form-control" id="listName" name="listName" placeholder="리스트명을 입력하세요" required>
+        </div>
+        <button type="submit" class="btn">생성</button>
+    </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
