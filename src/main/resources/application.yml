@@ -3,18 +3,3 @@ spring:
     name: eataku
   profiles:
     include: local
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
