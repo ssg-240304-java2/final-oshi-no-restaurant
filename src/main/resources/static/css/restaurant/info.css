@@ -1,0 +1,120 @@
+body {
+    margin-top: 170px;
+    background-color: #e0e0e0;
+    height: 100%;
+}
+.nav-buttons {
+    margin-bottom: 30px;
+}
+.content {
+    min-height: calc(100% - 393px);
+}
+/*.nav-buttons {*/
+/*    margin-bottom: 50px;*/
+/*}*/
+.nav-buttons .btn {
+    background-color: #FA4A54;
+    border: none;
+    color: white;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+.btn-setting {
+    background-color: transparent;
+    border: none;
+    color: white;
+    margin-right: 10px;
+    margin-bottom: 5px;
+}
+.btn-setting:hover,
+.btn-setting:focus,
+.btn-setting:active {
+    background-color: transparent !important;
+    outline: none;
+    box-shadow: none;
+}
+.nav-buttons .btn:hover {
+    background-color: #d14045;
+}
+.nav-buttons .btn-secondary {
+    border: none;
+}
+.nav-buttons .btn-secondary:hover {
+    background-color: transparent;
+    border: none;
+}
+.btn-secondary img {
+    width: 25px;
+    height: 25px;
+}
+.btn-add{
+    border: 1px solid #333;
+    padding: 5px;
+    border-radius: 5px;
+    width: 80px;
+    margin-left: 80px;
+}
+.form-section {
+    background-color: white;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+.form-section h4 {
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+.form-section .form-group {
+    margin-bottom: 15px;
+}
+.calendar-section {
+    background-color: white;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+.calendar-section h4 {
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+.btn-outline-secondary {
+    color: #333;
+}
+.btn-outline-secondary:hover {
+    background-color: #d14045;
+    color: white;
+}
+.btn-setting{
+    background-color: transparent;
+    border: none;
+    color: white;
+    margin-right: 10px;
+    margin-bottom: 5px;
+}
+#sample6_postcode, #sample6_address, #sample6_detailAddress, #sample6_extraAddress{
+    width: 510px;
+    /*right: 50%;*/
+}
+
+.food_type{
+    margin-top: -210px;
+    left: -40px;
+}
+.hour{
+    float: right;
+    margin-top: 10px;
+    margin-right: 100px;
+}
+.business_address{
+    margin-left: 15px;
+}
+.tag_type{
+    margin-left: 505px;
+}
+
+
+
