@@ -4,4 +4,6 @@ import kr.oshino.eataku.list.entity.MyList;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MyListRepository extends JpaRepository<MyList, Integer> {
+    MyList findByListName(String listName);
+    void deleteByListName(String ListName);
 }
