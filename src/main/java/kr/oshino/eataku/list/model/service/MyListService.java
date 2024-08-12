@@ -17,6 +17,7 @@ public class MyListService {
 
     @Autowired
     private MyListRepository myListRepository;
+    private String listStatus;
 
     public void createList(String listName) {
         MyList myList = MyList.builder()
@@ -38,14 +39,36 @@ public class MyListService {
 
     // 리스트 이름 수정 메소드
     public void modify(Integer listNo, String newListName) {
-        MyList myList = myListRepository.findById(listNo).orElse(null);
-        if (myList != null) {
-            myList.setListName(newListName);
-            myListRepository.save(myList);
-            System.out.println("List updated successfully: " + newListName);
-        } else {
-            System.out.println("List not found for listNo: " + listNo);
-        }
+        MyList list = myListRepository.findById(listNo)
+                .orElseThrow(() -> new RuntimeException("List not found"));
+
+        // 로그 출력으로 기존 상태 확인
+        System.out.println("Old Status: " + list.getListStatus());
+
+        list.setListStatus(listStatus); // 상태 변경
+        myListRepository.save(list); // 변경 사항 저장
+
+        // 로그 출력으로 변경된 상태 확인
+        System.out.println("New Status: " + list.getListStatus());
     }
 
+
+    // 리스트 공개 상태 변경 메소드
+    @Transactional
+    public void updateStatus(Integer listNo, String listStatus) {
+        // listNo로 리스트를 조회하고, 존재하지 않으면 예외 발생
+        MyList list = myListRepository.findById(listNo)
+                .orElseThrow(() -> new RuntimeException("List not found with id: " + listNo));
+
+        // 상태 변경 전에 기존 상태 로그 출력
+        System.out.println("Old Status: " + list.getListStatus());
+
+        // 상태를 업데이트하고 저장
+        list.setListStatus(listStatus);
+
+        // 상태 변경 후 새로운 상태 로그 출력
+        System.out.println("New Status: " + list.getListStatus());
+
+        myListRepository.save(list); // 이 줄이 실제로 상태를 데이터베이스에 저장함
+    }
 }
