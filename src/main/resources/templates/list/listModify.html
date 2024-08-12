@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>리스트 수정</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #F9F9F9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .form-container {
+            border: 2px solid #fb3f4a;
+            border-radius: 10px;
+            padding: 30px;
+            max-width: 600px;
+            width: 100%;
+            background-color: white;
+            text-align: center;
+        }
+        .form-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+        .form-header img {
+            width: 40px;
+            margin-right: 15px;
+        }
+        .form-header h1 {
+            color: #fb3f4a;
+            margin: 0;
+            font-size: 24px;
+        }
+        .form-group {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            color: #fb3f4a;
+            font-size: 18px;
+            margin-right: 10px;
+        }
+        .form-control {
+            display: inline-block;
+            width: auto;
+            vertical-align: middle;
+        }
+        .btn {
+            background-color: #fb3f4a;
+            border: none;
+            color: white;
+            padding: 5px 15px;
+            font-size: 14px;
+            border-radius: 5px;
+        }
+        .btn:hover {
+            background-color: #e6363f;
+        }
+    </style>
+</head>
+<body>
+<!-- editListModal.html -->
+<!-- 모달 창 (리스트 수정) -->
+<div class="modal fade" id="editListModal" tabindex="-1" aria-labelledby="editListModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editListModalLabel">리스트 수정</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="editListForm" th:action="@{/myLists/modify}" method="post">
+                    <!-- 리스트 번호를 저장하는 숨겨진 필드 -->
+                    <input type="hidden" id="listNo" name="listNo">
+
+                    <div class="form-group">
+                        <label for="newListName">리스트명</label>
+                        <input type="text" class="form-control" id="newListName" name="newListName" placeholder="리스트명을 입력하세요" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">수정</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 모달 창을 띄우는 스크립트 -->
+<script>
+    // 모달 창에 데이터를 넣고 띄우는 함수
+    function showEditModal(listNo, oldListName) {
+        document.getElementById('listNo').value = listNo;
+        document.getElementById('newListName').value = oldListName;
+        $('#editListModal').modal('show');
+    }
+</script>
+
+<!-- 필요한 스크립트들 -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
