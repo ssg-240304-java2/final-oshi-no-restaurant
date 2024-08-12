@@ -2,31 +2,35 @@ package kr.oshino.eataku.member.entity;
 
 import jakarta.persistence.*;
 import kr.oshino.eataku.common.enums.AccountAuth;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 @Entity
 @Table(name = "tbl_member")
-@Getter
-@Setter(AccessLevel.PRIVATE)
+@Data
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@ToString(exclude = {"memberLoginInfo"})
 public class Member {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long member_no;
-    private String account;
-    private String password;
+    @Column(name = "member_no")
+    private Long memberNo;
+
     private String name;
     private String nickname;
     private Date birthday;
     private String gender;
     private String email;
-    private String weight;
+
+    @Column(columnDefinition = "DOUBLE default 3")
+    private Double weight;
 
     @Enumerated(EnumType.STRING)
     private AccountAuth auth;
@@ -34,4 +38,13 @@ public class Member {
     @Column(name = "img_url")
     private String imgUrl;
     private String phone;
+
+    @CreationTimestamp
+    private Timestamp createdAt;
+
+    @UpdateTimestamp
+    private Timestamp updatedAt;
+
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "member")
+    private MemberLoginInfo memberLoginInfo;
 }

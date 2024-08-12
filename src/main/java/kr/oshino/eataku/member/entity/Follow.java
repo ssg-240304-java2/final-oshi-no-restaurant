@@ -1,17 +1,14 @@
 package kr.oshino.eataku.member.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Table(name = "tbl_follow")
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Follow {
 
     @Id
@@ -19,10 +16,10 @@ public class Follow {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fromMemberId")
-    private Member fromMemberId;
+    @JoinColumn(name = "fromMemberNo")
+    private Member fromMemberNo;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "toMemberId")
-    private Member toMemberId;
+    @JoinColumn(name = "toMemberNo")
+    private Member toMemberNo;
 }

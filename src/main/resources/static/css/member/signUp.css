@@ -26,6 +26,13 @@ body {
     color: white;
     border: 1px solid #FA4A54;
 }
+.btn-email {
+    min-width: 118px;
+    height: 38px;
+    background-color: #FFFFFF;
+    border: 1px solid #E0E0E0;
+    color: black;
+}
 .btn-danger {
     background-color: #FA4A54;
     border: none;
@@ -64,4 +71,8 @@ body {
 }
 .btn-danger {
     margin-bottom: 50px;
+}
+
+.hidden {
+    display: none;
 }
