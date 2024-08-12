@@ -37,7 +37,7 @@ public class Waiting {
 
     @Column(name="waiting_status", nullable = false)
     @Enumerated(EnumType.STRING)
-    private StatusType waitingStatus;
+    private StatusType waitingStatus = StatusType.대기중;
 
     @Column(name="created_at", nullable = false, updatable = false)
     @CreationTimestamp
