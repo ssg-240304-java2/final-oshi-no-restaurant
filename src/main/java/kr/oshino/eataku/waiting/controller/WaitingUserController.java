@@ -1,7 +1,9 @@
 package kr.oshino.eataku.waiting.controller;
 
 import kr.oshino.eataku.waiting.model.dto.requestDto.CreateWaitingRequestDto;
+import kr.oshino.eataku.waiting.model.dto.requestDto.ReadWaitingRequestDto;
 import kr.oshino.eataku.waiting.model.dto.responseDto.CreateWaitingResponseDto;
+import kr.oshino.eataku.waiting.model.dto.responseDto.ReadWaitingResponseDto;
 import kr.oshino.eataku.waiting.service.WaitingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +14,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Slf4j
 @Controller
 @RequestMapping("/users")
@@ -21,7 +25,7 @@ public class WaitingUserController {
     private final WaitingService waitingService;
 
     /**
-     * 웨이팅 등록 페이지 이동 메서드
+     * 웨이팅 등록 페이지 이동
      * @param restaurantNo
      * @param model
      * @return
@@ -35,7 +39,7 @@ public class WaitingUserController {
     }
 
     /**
-     * 웨이팅 등록 메서드
+     * 웨이팅 등록
      * @param createWaitingRequestDto
      * @return
      */
@@ -49,9 +53,20 @@ public class WaitingUserController {
                 .body(waitingService.registerWaiting(createWaitingRequestDto));
     }
 
-//    @PatchMapping("/waiting")
-//    public void updateWaiting() {
-//
-//    }
+    /**
+     * 웨이팅 조회 (회원)
+     * @param readWaitingRequestDto
+     */
+    @GetMapping("/waiting")
+    @ResponseBody
+    public ResponseEntity<List<ReadWaitingResponseDto>> getMyWaitingList(@RequestBody ReadWaitingRequestDto readWaitingRequestDto) {
+
+        log.info("readWaitingRequestDto: {}", readWaitingRequestDto);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(waitingService.getWaitingListByMemberNo(readWaitingRequestDto));
+    }
+
+    // 웨이팅 취소 (Patch)
 
 }
