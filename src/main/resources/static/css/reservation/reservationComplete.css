@@ -2,6 +2,7 @@ body {
     background-color: #f8f9fa;
     margin-top: 120px;
 }
+
 .reservation-confirm {
     max-width: 500px;
     margin: 50px auto;
@@ -12,32 +13,39 @@ body {
     text-align: center;
     color: #FA4A54;
 }
+
 .reservation-confirm .icon {
     width: 80px;
     height: 80px;
     margin: 0 auto 20px;
 }
+
 .reservation-confirm h1 {
     font-size: 24px;
     margin-bottom: 20px;
 }
+
 .reservation-confirm .details {
     text-align: left;
     margin-bottom: 20px;
 }
+
 .reservation-confirm .details div {
     margin-bottom: 15px;
     display: flex;
     justify-content: space-between;
 }
+
 .reservation-confirm .details .label {
     font-weight: bold;
     flex-basis: 40%;
 }
+
 .reservation-confirm .details .value {
     flex-basis: 60%;
     text-align: right;
 }
+
 .reservation-confirm .footer {
     margin-top: 20px;
     font-size: 12px;
