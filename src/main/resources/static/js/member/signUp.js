@@ -55,9 +55,6 @@ $('#password').on('input', function () {
 
 $('#confirmPassword').on('input', function () {
 
-    console.log($(this).val());
-    console.log($('#password').val());
-    console.log()
     if ($(this).val() === $('#password').val()) {
         $(this).removeClass('is-invalid');
         $(this).next().addClass('hidden');
@@ -103,7 +100,7 @@ $('#email').on('input', function () {
         $(this).removeClass('is-invalid');
         $('.email-feedback').addClass('hidden');
         $(this).addClass('is-valid');
-        $('#emailCheckBtn').css({disable:'true'});
+        $('#emailCheckBtn').css({disable: 'true'});
     } else {
         $(this).removeClass('is-valid');
         $('.email-feedback').removeClass('hidden');
@@ -112,7 +109,21 @@ $('#email').on('input', function () {
     }
 });
 
-document.addEventListener("DOMContentLoaded", function() {
+$('#phone').on('input', function () {
+
+    const phoneRegex = /^(01[016789]{1})[0-9]{3,4}[0-9]{4}$/;
+    if (phoneRegex.test($(this).val())) {
+        $(this).removeClass('is-invalid');
+        $(this).next().addClass('hidden');
+        $(this).addClass('is-valid');
+    } else {
+        $(this).removeClass('is-valid');
+        $(this).next().removeClass('hidden');
+        $(this).addClass('is-invalid');
+    }
+});
+
+document.addEventListener("DOMContentLoaded", function () {
     const authButton = document.getElementById('emailCheckBtn');
     let timer = null;
     let remainingTime = 180; // 3 minutes in seconds
@@ -147,7 +158,9 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
-    authButton.addEventListener('click', function() {
+    authButton.addEventListener('click', handleMouseClick);
+
+    function handleMouseClick() {
         if (!isRunning || remainingTime <= 0) { // 타이머가 멈췄거나 종료되었을 때만 재시작
             remainingTime = 180;
             startTimer();
@@ -155,25 +168,135 @@ document.addEventListener("DOMContentLoaded", function() {
 
         $('#verifForm').removeClass('hidden');
 
+        const email = $('#email').val();
+        $.ajax({
+            url: 'signUp/sendEmailVerifCode',
+            type: 'post',
+            contentType: 'application/json',
+            dataType: 'json',
+            data: JSON.stringify({"email": email}),
+            success: function (result) {
 
-    });
+            },
+            error: function (e) {
+                console.log(e)
+            }
+        })
+    }
 
-    authButton.addEventListener('mouseenter', function() {
-        $('#emailCheckBtn').css({backgroundColor:'#FA4A54', color:'#FFF'})
+    authButton.addEventListener('mouseenter', handleMouseEnter);
+
+    function handleMouseEnter() {
+        $('#emailCheckBtn').css({backgroundColor: '#FA4A54', color: '#FFF'})
         if (isRunning) {
             authButton.textContent = '인증메일발송';
             pauseTimer(); // 타이머 일시 정지
         }
-    });
+    }
 
-    authButton.addEventListener('mouseleave', function() {
-        $('#emailCheckBtn').css({backgroundColor:'#FFF', color:'#000'})
+    authButton.addEventListener('mouseleave', handleMouseLeave);
+
+    function handleMouseLeave() {
+        $('#emailCheckBtn').css({backgroundColor: '#FFF', color: '#000'})
         if (!isRunning && remainingTime > 0) {
             remainingTime = Math.max(Math.round((endTime - Date.now()) / 1000), 0); // 남은 시간 갱신
             startTimer(); // 마우스를 치우면 타이머 재개
         }
-    });
+    }
+
+    $('#authCodeCheckBtn').on('click', function () {
+
+        const verifCode = $('#authCode').val();
+        const email = $('#email').val();
+
+        $.ajax({
+            url: 'signUp/checkEmailVerifCode',
+            type: 'post',
+            contentType: 'application/json',
+            dataType: 'json',
+            data: JSON.stringify({"reqVerifCode": verifCode, "email": email}),
+            success: function (result) {
+
+                if (result === true) {
+                    clearInterval(timer);
+                    $('#authCode').removeClass('is-invalid')
+                        .addClass('is-valid')
+                        .attr('disabled', true);
+                    $('.verifCode-feedback').addClass('hidden');
+                    $('#authCodeCheckBtn').attr('disabled', true).text('인증 성공');
+                    $('#emailCheckBtn').attr('disabled', true).text('인증 성공');
+                    $('#email').attr('disabled', true);
+
+                    document.getElementById('emailCheckBtn').removeEventListener('mouseenter', handleMouseEnter);
+                    document.getElementById('emailCheckBtn').removeEventListener('mouseleave', handleMouseLeave);
+                } else {
+                    $('#authCode').removeClass('is-valid').addClass('is-invalid');
+                    $('.verifCode-feedback').removeClass('hidden');
+                }
+
+            }
+        })
+    })
 });
 
+$('#signUpBtn').on('click', function () {
+
+    if (
+        // 유효값 체크
+        !$('#userId').hasClass('is-valid') ||
+        !$('#password').hasClass('is-valid') ||
+        !$('#confirmPassword').hasClass('is-valid') ||
+        !$('#phone').hasClass('is-valid') ||
+        !$('#nickname').hasClass('is-valid') ||
+        !$('#email').hasClass('is-valid') ||
+        !$('#authCode').hasClass('is-valid') ||
+        // null값 체크
+        $('#userId').val() == "" ||
+        $('#password').val() == "" ||
+        $('#confirmPassword').val() == "" ||
+        $('#phone').val() == "" ||
+        $('#fullName').val() == "" ||
+        $('#birthDate').val() == "" ||
+        $("input:radio[name='gender']:checked").val() == "" ||
+        $('#nickname').val() == "" ||
+        $('#email').val() == "" ||
+        $('#authCode').val() == ""
+    ) {
+        alert("모든 정보를 입력하고 검증받아야 회원가입 가능합니다.");
+    } else {
+        const account = $('#userId').val();
+        const password = $('#password').val();
+        const name = $('#fullName').val();
+        const phone = $('#phone').val();
+        const birthday = $('#birthDate').val();
+        const gender = $("input:radio[name='gender']:checked").val();
+        const nickname = $('#nickname').val();
+        const email = $('#email').val();
+
+        $.ajax({
+            type: 'post',
+            url: '/signUp',
+            contentType: 'application/json',
+            dataType: 'text',
+            data: JSON.stringify({
+                "account": account,
+                "password": password,
+                "name": name,
+                "phone": phone,
+                "birthday": birthday,
+                "gender": gender,
+                "nickname": nickname,
+                "email": email
+            }),
+            success: function (result) {
+                window.location.href = result;
+            },
+            error: function (e) {
+                console.log("error");
+                console.log(e);
+            }
+        })
+    }
+});
 
 
