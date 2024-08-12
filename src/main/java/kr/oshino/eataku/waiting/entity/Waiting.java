@@ -25,11 +25,11 @@ public class Waiting {
     private int waitingNo;
 
     @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name = "restaurant_no", nullable = false)
+    @JoinColumn(name = "restaurant_no")
     private RestaurantInfo restaurantInfo;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_no", nullable = false)
+    @JoinColumn(name = "member_no")
     private Member member;
 
     @Column(name="party_size", nullable = false)
@@ -37,7 +37,7 @@ public class Waiting {
 
     @Column(name="waiting_status", nullable = false)
     @Enumerated(EnumType.STRING)
-    private StatusType waitingStatus;
+    private StatusType waitingStatus = StatusType.대기중;
 
     @Column(name="created_at", nullable = false, updatable = false)
     @CreationTimestamp

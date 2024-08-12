@@ -5,37 +5,71 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reservation Confirmation</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" th:href="@{/css/reservation/reservationComplete.css}">
-
+    <link href="reservation-confirmation.css" rel="stylesheet"> <!-- CSS 파일 링크 -->
 </head>
 <body>
-<div class="container">
-    <div class="reservation-confirm">
-        <div class="icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#ff6f61" width="80" height="80">
-                <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm-1 17.93l-5-5 1.41-1.41L11 14.93l7.59-7.59L20 8.34l-9 9z"/>
-            </svg>
-        </div>
-        <h1>예약완료</h1>
-        <div class="details">
-            <div>
-                <span class="label">매장명</span>
-                <span class="value">음식점 이름</span>
+
+<!-- Trigger Button (이 버튼을 클릭하면 모달이 열립니다.) -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#reservationModal">
+    마이페이지 예약확인
+</button>
+
+<!-- Modal Structure -->
+<div class="modal fade" id="reservationModal" tabindex="-1" aria-labelledby="reservationModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="reservationModalLabel">예약확정</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
-            <div>
-                <span class="label">인원</span>
-                <span class="value">성인 2명</span>
+            <div class="modal-body">
+                <!-- Reservation Confirmation Content -->
+                <div class="reservation-confirm text-center">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#ff6f61" width="80" height="80">
+                            <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm-1 17.93l-5-5 1.41-1.41L11 14.93l7.59-7.59L20 8.34l-9 9z"/>
+                        </svg>
+                    </div>
+                    <h1>예약완료</h1>
+                    <div class="details mt-4">
+                        <div>
+                            <span class="label font-weight-bold">매장명: </span>
+                            <span class="value">음식점 이름</span>
+                        </div>
+                        <div>
+                            <span class="label font-weight-bold">인원: </span>
+                            <span class="value">성인 2명</span>
+                        </div>
+                        <div>
+                            <span class="label font-weight-bold">예약일시: </span>
+                            <span class="value">2021년 01월 19일 화요일 오후 4:00</span>
+                        </div>
+                    </div>
+                    <div class="footer mt-4">
+                        예약 취소는 예약 24시간 전까지 가능합니다.<br>
+                        예약 취소는 홈페이지를 통해 예약조회를 하시면 됩니다.
+                    </div>
+                </div>
             </div>
-            <div>
-                <span class="label">예약일시</span>
-                <span class="value">2021년 01월 19일 화요일 오후 4:00</span>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
             </div>
-        </div>
-        <div class="footer">
-            예약 취소는 예약 24시간 전까지 가능합니다.<br>
-            예약 취소는 홈페이지를 통해 예약조회를 하시면 됩니다.
         </div>
     </div>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<!-- 자동으로 모달 창을 띄우려면 아래 스크립트를 사용 -->
+<script>
+    $(document).ready(function(){
+        $('#reservationModal').modal('show');
+    });
+</script>
+
 </body>
 </html>

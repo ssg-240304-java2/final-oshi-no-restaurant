@@ -1,15 +1,13 @@
 package kr.oshino.eataku.list.model.vo;
 
+import jakarta.persistence.Embeddable;
 import lombok.*;
 
+@Embeddable
 @Data
-@Setter(AccessLevel.PRIVATE)
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserList {
-
-    //유저 번호
-    private Long member_no;
 
     //유저 이름
     private String name;
