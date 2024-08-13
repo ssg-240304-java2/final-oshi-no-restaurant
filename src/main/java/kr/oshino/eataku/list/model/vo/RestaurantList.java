@@ -3,6 +3,8 @@ package kr.oshino.eataku.list.model.vo;
 import jakarta.persistence.Embeddable;
 import lombok.*;
 
+import java.util.Objects;
+
 @Embeddable
 @Data
 @NoArgsConstructor
@@ -21,4 +23,17 @@ public class RestaurantList {
     private Double xCoordinate;
     // 식당 y 좌표
     private Double yCoordinate;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RestaurantList that = (RestaurantList) o;
+        return Objects.equals(restaurantNo, that.restaurantNo);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(restaurantNo);
+    }
 }
