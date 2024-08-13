@@ -27,7 +27,7 @@ public interface ReservationRepository extends JpaRepository<Reservation,Integer
      * @param restaurantNo
      * @return
      */
-    @Query(value = "SELECT r.reservationTime FROM ReservationSetting r WHERE r.restaurantInfo.restaurantNo = :restaurantNo")
+    @Query(value = "SELECT r.reservationTime FROM ReservationSetting r WHERE r.restaurantNo.restaurantNo = :restaurantNo")
     List<java.sql.Time> findAllTimesByRestaurantNo(@Param("restaurantNo") Long restaurantNo);
 
 
@@ -38,7 +38,7 @@ public interface ReservationRepository extends JpaRepository<Reservation,Integer
      * @param restaurantNo
      * @return
      */
-    @Query("SELECT r.reservationPeople FROM ReservationSetting r WHERE r.restaurantInfo.restaurantNo  = :restaurantNo")
+    @Query("SELECT r.reservationPeople FROM ReservationSetting r WHERE r.restaurantNo.restaurantNo  = :restaurantNo")
     int findPeopleByRestaurantNo(@Param("restaurantNo") Long restaurantNo);
 
 
