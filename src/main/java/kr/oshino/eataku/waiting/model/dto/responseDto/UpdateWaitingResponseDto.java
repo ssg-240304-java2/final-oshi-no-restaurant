@@ -9,9 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateWaitingResponseDto {
+public class UpdateWaitingResponseDto {
 
     private Integer httpCode;
     private String message;
-    private Long memberNo;
 }

@@ -1,11 +1,10 @@
 package kr.oshino.eataku.test.waiting;
 
-import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityNotFoundException;
 import kr.oshino.eataku.common.enums.StatusType;
 import kr.oshino.eataku.member.entity.Member;
 import kr.oshino.eataku.member.model.repository.MemberRepository;
-import kr.oshino.eataku.restaurant.admin.entity.ReservationSetting;
 import kr.oshino.eataku.restaurant.admin.entity.RestaurantInfo;
 import kr.oshino.eataku.restaurant.admin.model.repository.RestaurantRepository;
 import kr.oshino.eataku.waiting.entity.Waiting;
@@ -18,8 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.sql.Date;
-import java.sql.Time;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -41,53 +40,47 @@ public class WaitingTest {
     @Autowired
     private WaitingService waitingService;
 
-    private Member testMember;
-    private RestaurantInfo testRestaurant;
-
     @BeforeEach
     public void setUp() {
         // Set up test member
-        testMember = Member.builder()
-                .account("testuser")
-                .password("password")
-                .name("Test User")
-                .nickname("testnick")
-                .birthday(Date.valueOf("1990-01-01"))
-                .gender("M")
-                .email("testuser@example.com")
-                .weight("70kg")
-                .build();
-        memberRepository.save(testMember);
-
-        // Set up test restaurant
-        testRestaurant = new RestaurantInfo();
-        testRestaurant.setRestaurantName("Test Restaurant");
-        testRestaurant.setDescription("A test restaurant.");
-        testRestaurant.setRestaurantAddress("123 Test Street");
-        testRestaurant.setFoodType("Korean");
-        testRestaurant.setOpeningTime(Time.valueOf("09:00:00"));
-        testRestaurant.setClosingTime(Time.valueOf("22:00:00"));
-        testRestaurant.setContact("010-1234-5678");
-        testRestaurant.setPostNumber("12345");
-        testRestaurant.setImgUrl("http://example.com/image.png");
-        testRestaurant.setXCoordinate(37.5665);
-        testRestaurant.setYCoordinate(126.9780);
-        restaurantRepository.save(testRestaurant);
+//        testMember = Member.builder()
+//                .name("좌상현")
+//                .nickname("mukgojwa")
+//                .birthday(Date.valueOf("1997-12-01"))
+//                .gender("M")
+//                .email("testuser@example.com")
+//                .build();
+//        memberRepository.save(testMember);
+//
+//        // Set up test restaurant
+//        testRestaurant = new RestaurantInfo();
+//        testRestaurant.setRestaurantName("Test Restaurant");
+//        testRestaurant.setDescription("A test restaurant.");
+//        testRestaurant.setRestaurantAddress("123 Test Street");
+//        testRestaurant.setFoodType("Korean");
+//        testRestaurant.setOpeningTime(Time.valueOf("09:00:00"));
+//        testRestaurant.setClosingTime(Time.valueOf("22:00:00"));
+//        testRestaurant.setContact("010-1234-5678");
+//        testRestaurant.setPostNumber("12345");
+//        testRestaurant.setImgUrl("http://example.com/image.png");
+//        testRestaurant.setXCoordinate(37.5665);
+//        testRestaurant.setYCoordinate(126.9780);
+//        restaurantRepository.save(testRestaurant);
     }
 
     @AfterEach
     public void tearDown() {
 
-        waitingRepository.deleteAll();
-        memberRepository.deleteAll();
-        restaurantRepository.deleteAll();
-
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        entityManager.getTransaction().begin();
-        entityManager.createNativeQuery("ALTER TABLE tbl_member AUTO_INCREMENT = 1").executeUpdate();
-        entityManager.createNativeQuery("ALTER TABLE tbl_restaurant_info AUTO_INCREMENT = 1").executeUpdate();
-        entityManager.getTransaction().commit();
-        entityManager.close();
+//        waitingRepository.deleteAll();
+//        memberRepository.deleteAll();
+//        restaurantRepository.deleteAll();
+//
+//        EntityManager entityManager = entityManagerFactory.createEntityManager();
+//        entityManager.getTransaction().begin();
+//        entityManager.createNativeQuery("ALTER TABLE tbl_member AUTO_INCREMENT = 1").executeUpdate();
+//        entityManager.createNativeQuery("ALTER TABLE tbl_restaurant_info AUTO_INCREMENT = 1").executeUpdate();
+//        entityManager.getTransaction().commit();
+//        entityManager.close();
     }
 
     @Test
@@ -95,6 +88,12 @@ public class WaitingTest {
     void waitingCreateTest() {
 
         // given
+        Member testMember = memberRepository.findById(1L).orElseThrow(() -> new EntityNotFoundException(
+                "Member not found with id: 1L"
+        ));
+        RestaurantInfo testRestaurant = restaurantRepository.findById(1L).orElseThrow(() -> new EntityNotFoundException(
+                "Restaurant not found with id: 1L"
+        ));
 
         // when
         Waiting waitingTest = waitingRepository.save(
@@ -114,6 +113,13 @@ public class WaitingTest {
     void waitingSelectTest() {
 
         // given
+        Member testMember = memberRepository.findById(1L).orElseThrow(() -> new EntityNotFoundException(
+                "Member not found with id: 1L"
+        ));
+        RestaurantInfo testRestaurant = restaurantRepository.findById(1L).orElseThrow(() -> new EntityNotFoundException(
+                "Restaurant not found with id: 1L"
+        ));
+
         Waiting waitingTest = waitingRepository.save(
                 Waiting.builder()
                         .member(testMember)
@@ -131,5 +137,36 @@ public class WaitingTest {
         System.out.println(testList);
     }
 
+    @Test
+    @DisplayName("웨이팅 수정 테스트")
+    void waitingUpdateTest() {
+        // given
+        Waiting waiting = waitingRepository.findById(1L).orElseThrow(() -> new EntityNotFoundException(
+                "Waiting not found with id: 1L"
+        ));
 
+        // when
+        waiting.visit();
+        waitingRepository.save(waiting);
+
+        // then
+        assertThat(waiting.getWaitingStatus()).isEqualTo(StatusType.방문완료);
+    }
+
+    @Test
+    @DisplayName("웨이팅 삭제 테스트")
+    void waitingDeleteTest() {
+        // given
+        Waiting waiting = waitingRepository.findById(2L).orElseThrow(() -> new EntityNotFoundException(
+                "Waiting not found with id: 1L"
+        ));
+
+        // when
+        waiting.cancel();
+        waitingRepository.save(waiting);
+
+        // then
+        assertThat(waiting.getWaitingStatus()).isEqualTo(StatusType.대기취소);
+    }
+    
 }
