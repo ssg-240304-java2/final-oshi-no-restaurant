@@ -1,15 +1,6 @@
-html, body {
+body {
     background-color: #e0e0e0;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    min-height: 100vh;
-}
-
-.main-content {
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
+    margin-top: 120px;
 }
 
 .nav-buttons {
@@ -17,7 +8,7 @@ html, body {
 }
 
 .nav-buttons .btn {
-    background-color: #FA4A54;  /* 버튼 배경색 */
+    background-color: #FA4A54;
     border: none;
     color: white;
     margin-right: 10px;
@@ -25,7 +16,7 @@ html, body {
 }
 
 .nav-buttons .btn:hover {
-    background-color: #d14045;  /* 버튼 hover 시 색상 */
+    background-color: #d14045;
 }
 
 .btn-secondary {
@@ -54,66 +45,25 @@ html, body {
     margin: 0;
 }
 
-/* 웨이팅 번호 */
-.badge-info {
-    background-color: #17a2b8;
-    color: #fff;
-    padding: 8px 12px;
+.waiting-card .col-data {
+    padding: 5px;
+    margin-right: 10px;
+    border: 1px solid #484848;
     border-radius: 5px;
-    font-weight: bold;
-    font-size: 1.2em; /* 크기 증가 */
 }
 
-/* 스타일 통일 */
-.waiting-card .col-data p {
-    font-weight: 600;
-    font-size: 1.1em;
-    color: #333;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 5px 10px;
-    margin: 0 5px;
+.waiting-card p {
+    margin: 0;
 }
 
-/* 대기 시간 색상 강조 */
-.waiting-card .col-sm-3-time p {
-    color: #dc3545;
+.waiting-card .actions {
+    border: none;
+    padding: 0;
 }
 
-/* 버튼 크기 및 스타일 조정 */
 .waiting-card .actions .btn {
     margin-right: 10px;
     margin-bottom: 10px;
-    padding: 10px 20px;
-    font-size: 1.1em;
-    border-radius: 5px;
-}
-
-.btn-primary {
-    background-color: #007bff;
-    border-color: #007bff;
-}
-
-.btn-primary:hover {
-    background-color: #0056b3;
-}
-
-.btn-success {
-    background-color: #28a745;
-    border-color: #28a745;
-}
-
-.btn-success:hover {
-    background-color: #218838;
-}
-
-.btn-danger {
-    background-color: #dc3545;
-    border-color: #dc3545;
-}
-
-.btn-danger:hover {
-    background-color: #c82333;
 }
 
 .btn-setting {

@@ -123,8 +123,10 @@ public class WaitingService {
         Long waitingNo = updateWaitingRequestDto.getWaitingNo();
         Waiting waiting = waitingRepository.findById(waitingNo).orElseThrow(() -> new RuntimeException("해당하는 웨이팅 정보가 없습니다!"));
         waiting.visit();
-        waiting.getMember().increaseWeight(3.0);
         waitingRepository.save(waiting);
+
+        // + 몸무게 추가
+        Long memberNo = updateWaitingRequestDto.getMemberNo();
 
         // 여기서 카카오톡 알림 메세지 전송 (리뷰 쓰게?)
 
