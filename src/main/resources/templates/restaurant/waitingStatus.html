@@ -1,73 +1,5 @@
-<!--<!DOCTYPE html>-->
-<!--<html lang="en">-->
-<!--<head>-->
-<!--    <meta charset="UTF-8">-->
-<!--    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">-->
-<!--    <title>웨이팅 내역</title>-->
-<!--    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">-->
-<!--    <link rel="stylesheet" th:href="@{/css/fragment/navbar.css}">-->
-<!--    <link rel="stylesheet" th:href="@{/css/fragment/footer.css}">-->
-<!--    <link rel="stylesheet" th:href="@{/css/management/waitingStatus.css}">-->
-<!--</head>-->
-<!--<body>-->
-
-<!--<div th:replace="~{fragment/navbar.html :: navbar}" class="navbar"></div>-->
-
-<!--<div class="container">-->
-<!--    <div class="nav-buttons">-->
-<!--        <button type="button" class="btn">판매 내역</button>-->
-<!--        <button type="button" class="btn">예약 확인</button>-->
-<!--        <button type="button" class="btn">예약 상태</button>-->
-<!--        <button type="button" class="btn">웨이팅 상태</button>-->
-<!--        <button type="button" class="btn">매장 리뷰</button>-->
-<!--        <button type="button" class="btn-setting btn-secondary float-right">-->
-<!--            <img src="img/setting.png" alt="설정" aria-hidden="true">-->
-<!--        </button>-->
-<!--    </div>-->
-
-<!--    <h3>웨이팅 내역</h3>-->
-
-<!--    <div class="waiting-card">-->
-<!--        <div class="row align-items-center">-->
-<!--            <div class="col-sm-2-name col-data">-->
-<!--                <p>홍길동</p>-->
-<!--            </div>-->
-<!--            <div class="col-sm-2-people col-data">-->
-<!--                <p>2명</p>-->
-<!--            </div>-->
-<!--            <div class="col-sm-3-phone col-data">-->
-<!--                <p>010-0000-0000</p>-->
-<!--            </div>-->
-<!--            <div class="col-sm-3-time col-data">-->
-<!--                <p>20분째 웨이팅 중</p>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--        <div class="row actions">-->
-<!--            <div class="col text-right">-->
-<!--                <button class="btn btn-primary">호출하기</button>-->
-<!--                <button class="btn btn-secondary">입장 완료</button>-->
-<!--                <button class="btn btn-outline-secondary">웨이팅 취소</button>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
-<!--<div th:replace="~{fragment/footer.html :: footer}" class="footer"></div>-->
-
-
-<!--<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>-->
-<!--<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>-->
-<!--<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>-->
-<!--<script type="text/javascript" th:src="@{js/fragment/navbar.js}"></script>-->
-
-<!--<script>-->
-<!--    $(document).on()-->
-<!--</script>-->
-
-<!--</body>-->
-<!--</html>-->
-
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -81,7 +13,7 @@
 
 <div th:replace="~{fragment/navbar.html :: navbar}" class="navbar"></div>
 
-<div class="main-content">
+<div class="container">
     <div class="nav-buttons">
         <button type="button" class="btn">판매 내역</button>
         <button type="button" class="btn">예약 확인</button>
@@ -92,14 +24,9 @@
             <img src="img/setting.png" alt="설정" aria-hidden="true">
         </button>
     </div>
-
     <h3>웨이팅 내역</h3>
-
     <div class="waiting-card">
         <div class="row align-items-center">
-            <div class="col-auto">
-                <span class="badge badge-info">웨이팅 #1</span>
-            </div>
             <div class="col-sm-2-name col-data">
                 <p>홍길동</p>
             </div>
@@ -107,30 +34,27 @@
                 <p>2명</p>
             </div>
             <div class="col-sm-3-phone col-data">
-                <p>010-****-0004</p>
+                <p>010-0000-0000</p>
             </div>
             <div class="col-sm-3-time col-data">
-                <p>3분 웨이팅 중 <span>(+1분)</span></p>
+                <p>20분째 웨이팅 중</p>
             </div>
         </div>
-
-        <div class="row actions justify-content-end">
+        <div class="row actions">
             <div class="col text-right">
-                <button class="btn btn-primary">호출</button>
-                <button class="btn btn-success">입장</button>
-                <button class="btn btn-danger">없음</button>
+                <button class="btn btn-primary">호출하기</button>
+                <button class="btn btn-secondary">입장 완료</button>
+                <button class="btn btn-outline-secondary">웨이팅 취소</button>
             </div>
         </div>
     </div>
 </div>
-
 <div th:replace="~{fragment/footer.html :: footer}" class="footer"></div>
+
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script type="text/javascript" th:src="@{js/fragment/navbar.js}"></script>
-
 </body>
 </html>
-
