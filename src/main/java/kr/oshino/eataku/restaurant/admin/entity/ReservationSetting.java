@@ -30,6 +30,4 @@ public class ReservationSetting {
 
     @Column(name = "reservation_people")
     private int reservationPeople;
-
-
 }
