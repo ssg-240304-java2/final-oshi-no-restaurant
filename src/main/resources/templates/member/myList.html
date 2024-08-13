@@ -1,81 +1,167 @@
 <!DOCTYPE html>
 <html lang="ko">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>마이페이지</title>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-        <link rel="stylesheet" th:href="@{/css/fragment/navbar.css}">
-        <link rel="stylesheet" th:href="@{/css/fragment/footer.css}">
-        <link rel="stylesheet" th:href="@{/css/member/myList.css}">
-    </head>
-    <body>
-        <div th:replace="~{fragment/navbar.html :: navbar}" class="navbar"></div>
-        <div class="sidebar">
-            <div class="sidebar-content">
-                <h2>마이페이지</h2>
-                <a href="/myInfo">개인정보수정</a>
-                <a href="#badge">내 뱃지 보기</a>
-                <a href="/myInfo/review">내 리뷰 보기</a>
-                <a href="/myInfo/history">이용내역조회</a>
-                <a href="/myInfo/list">내 리스트 관리</a>
-            </div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>마이페이지</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" th:href="@{/css/fragment/navbar.css}">
+    <link rel="stylesheet" th:href="@{/css/fragment/footer.css}">
+    <link rel="stylesheet" th:href="@{/css/member/myList.css}">
+</head>
+<body>
+<!-- 네비게이션 바 -->
+<div th:replace="~{fragment/navbar.html :: navbar}" class="navbar"></div>
+
+<!-- 사이드바 -->
+<div class="sidebar">
+    <div class="sidebar-content">
+        <h2>마이페이지</h2>
+        <a href="/myInfo">개인정보수정</a>
+        <a href="#badge">내 뱃지 보기</a>
+        <a href="/myInfo/review">내 리뷰 보기</a>
+        <a href="/myInfo/history">이용내역조회</a>
+        <a href="/myInfo/list">내 리스트 관리</a>
+    </div>
+</div>
+
+<!-- 메인 콘텐츠 -->
+<div class="content">
+    <div class="list-container">
+        <!-- 리스트 생성 버튼 -->
+        <div class="add-item">
+            <a href="/myLists/create">
+                <img class="list-icon" th:src="@{/images/member/listInsert.png}"/>️
+            </a>
         </div>
 
-        <div class="content">
-            <div class="list-container">
+        <!-- 메시지 표시 (리스트 생성/삭제/수정 후) -->
+        <div th:if="${message}">
+            <p th:text="${message}"></p>
+        </div>
 
-                <div class="add-item">
-                    <i class="fas fa-plus">
-                        <div class="add-item">
-                            <img class="list-icon" th:src="@{/images/member/listInsert.png}"/>️
-                        </div>
-                    </i>
-                </div>
+        <!-- 동적으로 생성된 리스트 항목들 -->
+        <div th:each="list : ${myLists}" class="list-item">
+        <span class="badge"
+              th:classappend="${list.listStatus == 'Public' ? 'badge-public' : (list.listStatus == 'NonPublic' ? 'badge-private' : 'badge-onlyme')}"
+              th:text="${list.listStatus == 'Public' ? '공개' : (list.listStatus == 'NonPublic' ? '비공개' : '나만보기')}"
+              th:onclick="toggleBadge(this, [[${list.listNo}]])">
+        </span>
+            <span th:text="${list.listName}"></span>
+
+
+
+            <!-- 리스트 수정 버튼 -->
+            <div class="edit-btn">
+                <form th:action="@{/myLists/modify}" method="post" onsubmit="return openEditModal(this);">
+                    <input type="hidden" name="listNo" th:value="${list.listNo}">
+                    <input type="hidden" name="listName" th:value="${list.listName}">
+                    <button type="submit" class="btn btn-primary">
+                        <img class="list-icon" th:src="@{/images/member/listModify.png}">
+                    </button>
+                </form>
             </div>
 
-            <div class="list-item">
-                <span class="badge badge-public" onclick="toggleBadge(this)">공개</span>
-                <span>삼성역 맛집</span>
-                <div class="edit-btn"><img class="list-icon"  th:src="@{/images/member/listModify.png}"/>️</div>
-                <div class="delete-btn"><img class="list-icon"  th:src="@{/images/member/listDelete.png}"/></div>
-                <!--            <div>-->
-                <!--                <button class="edit-btn"><i class="fas fa-pen"></i></button>-->
-                <!--                <button class="delete-btn"><i class="fas fa-times"></i></button>-->
-                <!--            </div>-->
-            </div>
-
-            <div class="list-item">
-                <span class="badge badge-private" onclick="toggleBadge(this)">비공개</span>
-                <span>코엑스 맛집</span>
-                <div class="edit-btn"><img class="list-icon"  th:src="@{/images/member/listModify.png}"/>️</div>
-                <div class="delete-btn"><img class="list-icon"  th:src="@{/images/member/listDelete.png}"/></div>
-                <!--            <div>-->
-                <!--                <button class="edit-btn"><i class="fas fa-pen"></i></button>-->
-                <!--                <button class="delete-btn"><i class="fas fa-times"></i></button>-->
-                <!--            </div>-->
-            </div>
-
-            <div class="list-item">
-                <span class="badge badge-public" onclick="toggleBadge(this)">공개</span>
-                <span>강남역 맛집</span>
-                <div class="edit-btn"><img class="list-icon"  th:src="@{/images/member/listModify.png}"/>️</div>
-                <div class="delete-btn"><img class="list-icon"  th:src="@{/images/member/listDelete.png}"/></div>
-                <!--            <div>-->
-                <!--                <button class="edit-btn"><i class="fas fa-pen"></i></button>-->
-                <!--                <button class="delete-btn"><i class="fas fa-times"></i></button>-->
-                <!--            </div>-->
+            <!-- 리스트 삭제 버튼 -->
+            <div class="delete-btn">
+                <form th:action="@{/myLists/delete/{listNo}(listNo=${list.listNo})}" method="post">
+                    <button type="submit" class="btn btn-danger">
+                        <img class="list-icon" th:src="@{/images/member/listDelete.png}"/>️
+                    </button>
+                </form>
             </div>
         </div>
+    </div>
+</div>
+
+<!-- 모달 창 (리스트 수정) -->
+<div class="modal fade" id="editListModal" tabindex="-1" aria-labelledby="editListModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editListModalLabel">리스트 수정</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="editListForm" th:action="@{/myLists/modify}" method="post">
+                    <!-- 리스트 번호와 기존 이름을 저장하는 숨겨진 필드 -->
+                    <input type="hidden" id="listNo" name="listNo"> <!-- 리스트 번호 -->
+                    <input type="hidden" id="oldListName" name="oldListName"> <!-- 기존 리스트 이름 -->
+
+                    <div class="form-group">
+                        <label for="newListName">리스트명</label>
+                        <input type="text" class="form-control" id="newListName" name="newListName" placeholder="리스트명을 입력하세요" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">수정</button>
+                </form>
+            </div>
         </div>
-        <div th:replace="~{fragment/footer.html :: footer}" class="footer"></div>
+    </div>
+</div>
 
-        <script src="https://kit.fontawesome.com/a076d05399.js"></script>
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-        <script type="text/javascript" th:src="@{js/fragment/navbar.js}"></script>
-        <script type="text/javascript" th:src="@{js/member/myList.js}"></script>
 
-    </body>
+<!-- 푸터 -->
+<div th:replace="~{fragment/footer.html :: footer}" class="footer"></div>
+
+<!-- 필요한 스크립트들 -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script type="text/javascript" th:src="@{js/fragment/navbar.js}"></script>
+<script type="text/javascript" th:src="@{js/member/myList.js}"></script>
+<script>
+    function openEditModal(form) {
+        var listNo = form.querySelector('input[name="listNo"]').value;
+        var listName = form.querySelector('input[name="listName"]').value;
+
+        document.getElementById('listNo').value = listNo;
+        document.getElementById('oldListName').value = listName;
+        document.getElementById('newListName').value = listName;
+
+        $('#editListModal').modal('show');
+
+        // 모달만 열고 폼 제출은 막기 위해 false를 반환
+        return false;
+    }
+
+    function toggleBadge(element, listNo) {
+        const statusMap = {
+            '공개': { newStatus: 'NonPublic', removeClass: 'badge-public', addClass: 'badge-private', newText: '비공개' },
+            '비공개': { newStatus: 'MyView', removeClass: 'badge-private', addClass: 'badge-onlyme', newText: '나만보기' },
+            '나만보기': { newStatus: 'Public', removeClass: 'badge-onlyme', addClass: 'badge-public', newText: '공개' }
+        };
+
+        let currentStatus = element.textContent.trim();
+        let status = statusMap[currentStatus];
+
+        if (status) {
+            element.classList.remove(status.removeClass);
+            element.classList.add(status.addClass);
+            element.textContent = status.newText;
+
+            // 서버로 상태 변경 요청 전송
+            updateListStatus(listNo, status.newStatus);
+        } else {
+            console.error("Unexpected status:", currentStatus);
+        }
+    }
+
+    function updateListStatus(listNo, status) {
+        $.ajax({
+            url: '/myLists/updateStatus', // 서버의 엔드포인트
+            method: 'POST', // HTTP 메소드 (GET, POST 등)
+            contentType: 'application/json', // 전송할 데이터의 형식
+            data: JSON.stringify({ listNo: listNo, listStatus: status }), // 전송할 데이터
+            success: function(response) {
+                console.log('Status updated successfully:', response);
+            },
+            error: function(error) {
+                console.error('Error updating status:', error);
+            }
+        });
+    }
+</script>
+</body>
 </html>
