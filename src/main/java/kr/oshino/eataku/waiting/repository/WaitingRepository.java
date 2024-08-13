@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface WaitingRepository extends JpaRepository<Waiting, Integer> {
+public interface WaitingRepository extends JpaRepository<Waiting, Long> {
 
     @Query("SELECT new kr.oshino.eataku.waiting.model.dto.responseDto.ReadWaitingResponseDto(" +
             "w.waitingNo, w.partySize, w.waitingStatus, w.createdAt, w.updatedAt, " +

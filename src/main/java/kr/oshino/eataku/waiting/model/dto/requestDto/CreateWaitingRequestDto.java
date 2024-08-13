@@ -8,7 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 public class CreateWaitingRequestDto {
 
-    private int memberNo;
-    private int restaurantNo;
+    private Long memberNo;
+    private Integer restaurantNo;
     private int partySize;
 }
