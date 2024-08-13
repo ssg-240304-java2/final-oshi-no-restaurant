@@ -20,7 +20,7 @@ public class ReservationSetting {
 
     @ManyToOne()
     @JoinColumn(name = "restaurant_no")
-    private RestaurantInfo reservationInfo;
+    private RestaurantInfo restaurantNo;
 
     @Column(name = "reservation_date")
     private Date reservationDate;
