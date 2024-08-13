@@ -23,9 +23,6 @@ public class ReservationUserController {
     private final ReservationUserService reservationUserService;
 
 
-
-
-
     /***
      * 예약 등록 페이지 이동 메서드
      */
@@ -42,23 +39,23 @@ public class ReservationUserController {
      * @param restaurantNo
      * @return ResponseEntity with the restaurant details
      */
-        @GetMapping("/reservation/{restaurantNo}")
-        public String getReservationPage(@PathVariable Long restaurantNo, Model model) {
-            List<LocalTime> times = reservationUserService.getReservationTimes(restaurantNo);
-            int maxPeople = reservationUserService.getMaxPeople(restaurantNo);
+    @GetMapping("/reservation/{restaurantNo}")
+    public String getReservationPage(@PathVariable Long restaurantNo, Model model) {
+        List<LocalTime> times = reservationUserService.getReservationTimes(restaurantNo);
+        int maxPeople = reservationUserService.getMaxPeople(restaurantNo);
 
-            List<Integer> peopleNumbers = new ArrayList<>();
-            for (int i = maxPeople; i > 0; i--) {
-                peopleNumbers.add(i);
-            }
-
-            model.addAttribute("reservationTimes", times);
-            model.addAttribute("reservationPeople", peopleNumbers);
-            System.out.println("peopleNumbers = " + peopleNumbers);
-            System.out.println("times = " + times);
-
-            return "reservation/reservationCalendar";
+        List<Integer> peopleNumbers = new ArrayList<>();
+        for (int i = maxPeople; i > 0; i--) {
+            peopleNumbers.add(i);
         }
+
+        model.addAttribute("reservationTimes", times);
+        model.addAttribute("reservationPeople", peopleNumbers);
+        System.out.println("peopleNumbers = " + peopleNumbers);
+        System.out.println("times = " + times);
+
+        return "reservation/reservationCalendar";
+    }
 
 
 
@@ -68,9 +65,11 @@ public class ReservationUserController {
      * @return
      */
     @PostMapping("/reservation")
+    @ResponseBody
     public ResponseEntity<CreateReservationUserResponseDto> registerReservation(@RequestBody CreateReservationUserRequestDto createReservationUserRequestDto) {
         log.info("CreateReservationUserRequestDto: {}", createReservationUserRequestDto);
         System.out.println("createReservationUserRequestDto 확인!!! = " + createReservationUserRequestDto);
+
         return ResponseEntity.status(HttpStatus.OK)
                 .body(reservationUserService.registerReservation(createReservationUserRequestDto));
     }
@@ -88,11 +87,34 @@ public class ReservationUserController {
     /***
      * 예약취소
      */
-    @GetMapping("/reservation/cancel")
+//    @GetMapping("/reservation/cancel")
+    @DeleteMapping("/reservation/{restaurantNo}")
     public String updateReservation(Model model) {
         return "reservation/updateReservation";
     }
 
 
 
+
+    /***
+     * 예약한 인원수 만큼 예약세팅 베이블에서 빼기
+     */
+    @PutMapping("/reservation/{reservationNo}/subtract")
+    @ResponseBody
+    public ResponseEntity<Void> subtractPartySize(@PathVariable Long reservationNo, @RequestParam int partySize) {
+        try {
+            reservationUserService.subtractPartySize(reservationNo, partySize);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            log.error("Error subtracting party size", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+
+
+
+
 }
+
+

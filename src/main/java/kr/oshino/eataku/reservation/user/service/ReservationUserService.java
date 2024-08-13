@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -55,52 +54,41 @@ public class ReservationUserService {
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-    // 시간을 가져오는 메소드
+    /***
+     * 해당 식당의 시간을 가져오는 메소드
+     * @param restaurantNo
+     * @return
+     */
     public List<LocalTime> getReservationTimes(Long restaurantNo) {
-        List<LocalDateTime> dateTimes = reservationRepository.findTimesByRestaurantNo(restaurantNo);
-
-        // LocalDateTime에서 LocalTime으로 변환
-        return dateTimes.stream()
-                .map(LocalDateTime::toLocalTime)
+        List<java.sql.Time> times = reservationRepository.findAllTimesByRestaurantNo(restaurantNo);
+        return times.stream()
+                .map(java.sql.Time::toLocalTime)
                 .collect(Collectors.toList());
     }
 
 
 
-    // 최대 인원을 가져오는 메소드
+
+    /***
+     * 해당 식당의 최대 인원을 가져오는 메소드
+     * @param restaurantNo
+     * @return
+     */
     public int getMaxPeople(Long restaurantNo) {
-        // 필요한 경우 데이터베이스에서 최대 인원 정보를 가져옴
         return reservationRepository.findPeopleByRestaurantNo(restaurantNo);
     }
 
-
-
-
-
-//    /***
-//     * 식당 reservation_setting 알아오기
-//     * @param restaurantNo
-//     * @return
-//     */
-//
-//    public List<Reservation> getReservationsByRestaurantNo(Long restaurantNo) {
-//        return reservationRepository.findReservationsByRestaurantNo(restaurantNo);
-//    }
-
-    /***
-     * 식당 정보 가져오기
+    /**
+     * 인원수 차감 하는 메소드
+     * @param reservationNo
+     * @param partySize
      */
+
+    @Transactional
+    public void subtractPartySize(Long reservationNo, int partySize) {
+        reservationRepository.subtractPartySizeFromReservationPeople(partySize, reservationNo);
+    }
+
 
 
 
