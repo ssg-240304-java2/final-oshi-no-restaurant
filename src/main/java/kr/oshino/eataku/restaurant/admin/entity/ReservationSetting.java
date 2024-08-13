@@ -16,11 +16,11 @@ public class ReservationSetting {
     @Id
     @Column(name = "reservation_no")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String reservationNo;
+    private Long reservationNo;
 
     @ManyToOne()
     @JoinColumn(name = "restaurant_no")
-    private RestaurantInfo restaurantNo;
+    private RestaurantInfo restaurantInfo;
 
     @Column(name = "reservation_date")
     private Date reservationDate;
@@ -30,4 +30,6 @@ public class ReservationSetting {
 
     @Column(name = "reservation_people")
     private int reservationPeople;
+
+
 }
