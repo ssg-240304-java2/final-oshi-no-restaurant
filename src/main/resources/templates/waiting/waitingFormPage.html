@@ -76,7 +76,7 @@
 
 <div th:replace="~{fragment/footer.html :: footer}" class="footer"></div>
 
-<script type="text/javascript" th:src="@{js/fragment/navbar.js}"></script>
+<script type="text/javascript" th:src="@{../js/fragment/navbar.js}"></script>
 
 <script>
     $(document).ready(function() {
@@ -86,7 +86,7 @@
         let memberNo = 1;
         let restaurantNo = [[${restaurantNo}]];
 
-        const maxPeople = 10; // 최대 인원수 설정
+        const maxPeople = 8; // 최대 인원수 설정
 
         const $partySizeSpan = $('#partySize');
         const $decreaseButton = $('#decrease');
