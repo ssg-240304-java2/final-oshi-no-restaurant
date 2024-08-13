@@ -50,6 +50,13 @@
                     </div>
                 </div>
                 <div class="form-group row">
+                    <label for="phone" class="col-sm-3 col-form-label form-label">휴대폰 번호</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" id="phone" placeholder="- 제외 (예시: 01012341234)" name="phone">
+                        <div class="invalid-feedback hidden">유효한 핸드폰 번호가 아닙니다. 다시 입력해 주세요.</div>
+                    </div>
+                </div>
+                <div class="form-group row">
                     <label for="birthDate" class="col-sm-3 col-form-label form-label">생년월일</label>
                     <div class="col-sm-9">
                         <div class="input-group">
@@ -103,11 +110,11 @@
                                 <button type="button" class="btn btn-secondary" id="authCodeCheckBtn">이메일 인증</button>
                             </div>
                         </div>
-                        <div class="invalid-feedback hidden">인증 코드가 일치하지 않습니다.</div>
+                        <div class="invalid-feedback hidden verifCode-feedback">인증 코드가 일치하지 않습니다.</div>
                     </div>
                 </div>
                 <div class="text-center">
-                    <button type="submit" class="btn btn-danger">회원가입</button>
+                    <button type="button" class="btn btn-danger" id="signUpBtn">회원가입</button>
                 </div>
             </form>
         </div>

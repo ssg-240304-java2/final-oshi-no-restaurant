@@ -19,27 +19,29 @@ th {
     border-radius: 8px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
     padding: 60px;
-    max-width: 500px;
+    max-width: 800px;
     width: 100%;
-    left: 30%;
+    left: 10%;
     box-sizing: unset;
     margin-bottom: 50px;
 }
 
 .form-title {
     font-size: 24px;
-    margin-bottom: 40px;
     text-align: center;
+    padding: 30px;
     color: #000;
 }
 
 .form-group {
+    padding: 5px;
     margin-bottom: 1.5rem;
+    margin-right: 50px;
 }
 
 .form-group input[type="text"] {
     /* width: calc(100% - 5rem); */
-    padding: 8px;
+    padding: 6px;
     margin-right: 5px;
     border: 1px solid #343a40;
     border-radius: 5px;
@@ -52,10 +54,10 @@ th {
     font-weight: bold;
 } */
 
-.form-group table {
-    width: 100%;
-    margin-top: 70px;
-}
+/*.form-group table {*/
+/*    width: 100%;*/
+/*    margin-top: 70px;*/
+/*}*/
 
 /* .form-group th,
 .form-group td {
@@ -122,3 +124,26 @@ th {
 .text-center {
     text-align: center;
 }
+
+.hyphen{
+    margin-top: 5px;
+    margin-right: 5px;
+}
+
+.wrong_text{
+    font-size:1rem;
+    color:#f44e38;
+    letter-spacing:-.2px;
+    font-weight:300;
+    margin:8px 0 2px;
+    line-height:1em;
+    display:none
+}
+
+#sample6_address{
+    width:100%;
+}
+#sample6_postcode, #sample6_address, #sample6_detailAddress, #sample6_extraAddress{
+    margin-bottom: 5px;
+}
+
