@@ -2,8 +2,10 @@ package kr.oshino.eataku.waiting.controller;
 
 import kr.oshino.eataku.waiting.model.dto.requestDto.CreateWaitingRequestDto;
 import kr.oshino.eataku.waiting.model.dto.requestDto.ReadWaitingRequestDto;
+import kr.oshino.eataku.waiting.model.dto.requestDto.UpdateWaitingRequestDto;
 import kr.oshino.eataku.waiting.model.dto.responseDto.CreateWaitingResponseDto;
 import kr.oshino.eataku.waiting.model.dto.responseDto.ReadWaitingResponseDto;
+import kr.oshino.eataku.waiting.model.dto.responseDto.UpdateWaitingResponseDto;
 import kr.oshino.eataku.waiting.service.WaitingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,8 +23,13 @@ import java.util.List;
 @RequestMapping("/users")
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
 public class WaitingUserController {
+    // 회원 전용 컨트롤러
 
     private final WaitingService waitingService;
+
+
+
+
 
     /**
      * 웨이팅 등록 페이지 이동
@@ -38,6 +45,10 @@ public class WaitingUserController {
         return "waiting/waitingFormPage";
     }
 
+
+
+
+
     /**
      * 웨이팅 등록
      * @param createWaitingRequestDto
@@ -45,7 +56,8 @@ public class WaitingUserController {
      */
     @PostMapping("/waiting")
     @ResponseBody
-    public ResponseEntity<CreateWaitingResponseDto> registerWaiting(@RequestBody CreateWaitingRequestDto createWaitingRequestDto) {
+    public ResponseEntity<CreateWaitingResponseDto> registerWaiting(
+            @RequestBody CreateWaitingRequestDto createWaitingRequestDto) {
 
         log.info("createWaitingRequestDto: {}", createWaitingRequestDto);
 
@@ -53,13 +65,18 @@ public class WaitingUserController {
                 .body(waitingService.registerWaiting(createWaitingRequestDto));
     }
 
+
+
+
+
     /**
-     * 웨이팅 조회 (회원)
+     * 웨이팅 조회
      * @param readWaitingRequestDto
      */
     @GetMapping("/waiting")
     @ResponseBody
-    public ResponseEntity<List<ReadWaitingResponseDto>> getMyWaitingList(@RequestBody ReadWaitingRequestDto readWaitingRequestDto) {
+    public ResponseEntity<List<ReadWaitingResponseDto>> getMyWaitingList(
+            ReadWaitingRequestDto readWaitingRequestDto) {
 
         log.info("readWaitingRequestDto: {}", readWaitingRequestDto);
 
@@ -67,6 +84,17 @@ public class WaitingUserController {
                 .body(waitingService.getWaitingListByMemberNo(readWaitingRequestDto));
     }
 
-    // 웨이팅 취소 (Patch)
 
+
+
+
+    // 웨이팅 취소
+    @PatchMapping("/waiting")
+    @ResponseBody
+    public ResponseEntity<UpdateWaitingResponseDto> cancelWaiting(
+            @RequestBody UpdateWaitingRequestDto updateWaitingRequestDto) {
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(waitingService.cancelWaitingByWaitingNo(updateWaitingRequestDto));
+    }
 }

@@ -47,4 +47,12 @@ public class Member {
 
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "member")
     private MemberLoginInfo memberLoginInfo;
+
+    public void increaseWeight(Double num) {
+        this.weight += num;
+    }
+
+    public void decreaseWeight(Double num) {
+        this.weight -= num;
+    }
 }

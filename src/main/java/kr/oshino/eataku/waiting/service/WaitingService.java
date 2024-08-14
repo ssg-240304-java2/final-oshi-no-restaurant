@@ -4,8 +4,10 @@ import kr.oshino.eataku.common.enums.StatusType;
 import kr.oshino.eataku.waiting.entity.Waiting;
 import kr.oshino.eataku.waiting.model.dto.requestDto.CreateWaitingRequestDto;
 import kr.oshino.eataku.waiting.model.dto.requestDto.ReadWaitingRequestDto;
+import kr.oshino.eataku.waiting.model.dto.requestDto.UpdateWaitingRequestDto;
 import kr.oshino.eataku.waiting.model.dto.responseDto.CreateWaitingResponseDto;
 import kr.oshino.eataku.waiting.model.dto.responseDto.ReadWaitingResponseDto;
+import kr.oshino.eataku.waiting.model.dto.responseDto.UpdateWaitingResponseDto;
 import kr.oshino.eataku.waiting.repository.WaitingRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,8 +25,12 @@ public class WaitingService {
     private final WaitingRepository waitingRepository;
     // 여기에 member, restaurant 레포지토리 선언
 
+
+
+
+
     /**
-     * 웨이팅 등록 비즈니스 로직
+     * 웨이팅 등록 (회원)
      * @param createWaitingRequestDto
      * @return
      */
@@ -39,12 +45,18 @@ public class WaitingService {
                 .waitingStatus(StatusType.대기중)
                 .build());
 
+        // 카카오톡 알림 메세지 전송
+
         // 이 부분 수정 필요
-        return new CreateWaitingResponseDto(200, "웨이팅이 등록되었습니다!", 1);
+        return new CreateWaitingResponseDto(200, "웨이팅이 등록되었습니다!", 1L);
     }
 
+
+
+
+
     /**
-     * 웨이팅 조회 비즈니스 로직 (회원)
+     * 웨이팅 조회 (회원)
      * @param readWaitingRequestDto
      * @return
      */
@@ -62,8 +74,12 @@ public class WaitingService {
         return waitingList;
     }
 
+
+
+
+
     /**
-     * 웨이팅 조회 비즈니스 로직 (매장)
+     * 웨이팅 조회 (매장)
      * @param readWaitingRequestDto
      * @return
      */
@@ -72,4 +88,46 @@ public class WaitingService {
     }
 
 
+
+
+
+    /**
+     * 웨이팅 취소 (매장, 회원)
+     * @param updateWaitingRequestDto
+     * @return
+     */
+    @Transactional
+    public UpdateWaitingResponseDto cancelWaitingByWaitingNo(UpdateWaitingRequestDto updateWaitingRequestDto) {
+
+        Long waitingNo = updateWaitingRequestDto.getWaitingNo();
+        Waiting waiting = waitingRepository.findById(waitingNo).orElseThrow(() -> new RuntimeException("해당하는 웨이팅 정보가 없습니다!"));
+        waiting.cancel();
+        waitingRepository.save(waiting);
+
+        // 여기서 카카오톡 알림 메세지 전송
+
+        return new UpdateWaitingResponseDto(200, "웨이팅 대기가 취소되었습니다!");
+    }
+
+
+
+
+
+    /**
+     * 웨이팅 방문 처리 (매장)
+     * @param updateWaitingRequestDto
+     * @return
+     */
+    @Transactional
+    public UpdateWaitingResponseDto updateWaitingByWaitingNo(UpdateWaitingRequestDto updateWaitingRequestDto) {
+        Long waitingNo = updateWaitingRequestDto.getWaitingNo();
+        Waiting waiting = waitingRepository.findById(waitingNo).orElseThrow(() -> new RuntimeException("해당하는 웨이팅 정보가 없습니다!"));
+        waiting.visit();
+        waiting.getMember().increaseWeight(3.0);
+        waitingRepository.save(waiting);
+        
+        // 여기서 카카오톡 알림 메세지 전송 (리뷰 쓰게?)
+
+        return new UpdateWaitingResponseDto(200, "웨이팅 대기가 방문 처리 되었습니다!");
+    }
 }
