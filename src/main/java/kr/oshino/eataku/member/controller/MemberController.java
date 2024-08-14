@@ -1,12 +1,20 @@
 package kr.oshino.eataku.member.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import kr.oshino.eataku.member.model.dto.MemberDTO;
 import kr.oshino.eataku.member.service.MailService;
 import kr.oshino.eataku.member.service.MemberService;
+import kr.oshino.eataku.restaurant.admin.model.dto.RestaurantAccountInfoDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,7 +36,21 @@ public class MemberController {
         return "member/login";
     }
 
-    @GetMapping("/signUp")
+    @GetMapping("/managerLogin")
+    public String managerLogin() { return "member/managerLogin"; }
+
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(authentication != null) {
+            new SecurityContextLogoutHandler().logout(request, response, authentication);
+        }
+
+        return "redirect:/";
+    }
+
+    @GetMapping("/signUp/general")
     public String signUpPage() {
         return "member/signUp";
     }
@@ -83,5 +105,23 @@ public class MemberController {
         memberService.insertNewMember(member);
 
         return ResponseEntity.ok("/login");
+    }
+
+    @GetMapping("/signUp/manager")
+    public String managerSignUpProc() {
+        return "member/managerSignUp";
+
+    }
+
+    @PostMapping("/signUp/manager")
+    public ResponseEntity<String> managerSignUpProc(@RequestBody  RestaurantAccountInfoDTO member, HttpSession session) {
+
+        log.info("⭐️⭐️ [ MemberController ] SignUp Restaurant : {} ⭐️⭐️", member);
+
+        session.setAttribute("id", member.getId());
+        session.setAttribute("password", member.getPassword());
+        session.setAttribute("email", member.getEmail());
+
+        return ResponseEntity.ok("/managerLogin");
     }
 }

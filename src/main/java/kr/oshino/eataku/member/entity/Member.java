@@ -32,8 +32,8 @@ public class Member {
     @Column(columnDefinition = "DOUBLE default 3")
     private Double weight;
 
-    @Enumerated(EnumType.STRING)
-    private AccountAuth auth;
+    @Column
+    private String auth;
 
     @Column(name = "img_url")
     private String imgUrl;

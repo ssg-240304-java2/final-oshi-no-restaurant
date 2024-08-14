@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
     <body>
         <nav th:fragment="navbar" class="navbar navbar-expand-lg navbar-light fixed-top navbar-custom">
             <div class="container">
@@ -23,8 +23,8 @@
                 <!-- 우측 요소 -->
                 <div class="nav-content">
                     <div class="d-flex align-items-right">
-                        <button class="btn btn-login" type="button" onclick="location.href='/login'">로그인</button>
-                        <div class="dropdown ml-3">
+                        <button sec:authorize="!isAuthenticated()" class="btn btn-login" type="button" onclick="location.href='/login'">로그인</button>
+                        <div sec:authorize="isAuthenticated()" class="dropdown ml-3">
                             <button class="btn btn-notify" type="button">
                                 <img th:src="@{/images/navbar/notiBell.png}" alt="알림종">
                             </button>
@@ -72,7 +72,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="dropdown ml-3">
+                        <div sec:authorize="isAuthenticated()" class="dropdown ml-3">
                             <button class="btn btn-user" type="button">
                                 <img th:src="@{/images/navbar/user.png}" alt="사용자">
                             </button>

@@ -1,0 +1,44 @@
+body {
+    background-color: #FA4A54;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.login-card {
+    width: 100%;
+    max-width: 450px;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.login-card img {
+    width: 50px;
+    margin-bottom: 20px;
+}
+.login-card h5 {
+    margin-bottom: 10px;
+}
+.login-card form {
+    width: 100%;
+}
+.login-card .btn {
+    width: 100%;
+}
+.login-card .options {
+    margin-top: 0px;
+    display: flex;
+    justify-content: space-between;
+}
+@media (max-width: 576px) {
+    .login-card {
+        padding: 15px;
+    }
+    .login-card img {
+        width: 40px;
+    }
+}
+.options {
+    padding: 5px;
+}
