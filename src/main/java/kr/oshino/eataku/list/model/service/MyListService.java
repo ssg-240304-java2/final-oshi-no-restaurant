@@ -37,11 +37,6 @@ public class MyListService {
         return myListRepository.findAll();
     }
 
-//    // 생성한 리스트 담기 RestaurantList
-//    public List<RestaurantList> getRestaurantLists() {
-//        return restaurantList
-//    }
-
     // 리스트 삭제 메소드
     public void deleteList(Integer listNo) {
         myListRepository.deleteById(listNo);
@@ -112,14 +107,19 @@ public class MyListService {
         return myList.getRestaurantList();
     }
 
-    // 특정 리스트에 포함된 RestaurantList를 반환하는 메서드 2
-//    public List<RestaurantList> getMyListsByListNo(Integer listNo) {
-//        MyList myList = myListRepository.findById(listNo)
-//                .orElseThrow(() -> new IllegalArgumentException("List not found with ID: " + listNo));
-//        System.out.println("myList = " + myList);
-//        System.out.println("restaurantList = " + restaurantList);
-//        return myList.getMyList();
-//    }
+    public List<RestaurantList> getAllRestaurantCoordinates() {
+        return myListRepository.findAllRestaurantCoordinates();
+    }
 
+    public void deleteRestaurants(Integer listNo, List<Integer> restaurantNos) {
+        MyList myList = myListRepository.findById(listNo)
+                .orElseThrow(() -> new IllegalArgumentException("리스트를 찾을 수 없습니다: " + listNo));
 
+        List<RestaurantList> updatedRestaurantList = myList.getRestaurantList().stream()
+                .filter(restaurant -> !restaurantNos.contains(restaurant.getRestaurantNo()))
+                .collect(Collectors.toList());
+
+        myList.setRestaurantList(updatedRestaurantList);
+        myListRepository.save(myList);
+    }
 }

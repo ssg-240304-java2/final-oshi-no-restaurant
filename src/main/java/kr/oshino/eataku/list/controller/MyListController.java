@@ -134,14 +134,25 @@ public class MyListController {
         return myListService.getRestaurantListsByListNo(listNo);
     }
 
-    // ajax 로 특정 리스트의 식당 정보를 가져오는 메소드2
-//    @GetMapping("/tsktskLists/{listNo}/restaurants")
-//    @ResponseBody
-//    public List<MyList> getMyLists(@PathVariable Integer listNo) {
-//        log.info("리스트 번호: " + listNo + "의 식당 정보를 가져옵니다.");
-//        return myListService.getMyListsByListNo(listNo);
-//    }
 
+    // 식당 좌표 넘겨주기
+    @GetMapping("/tsktskLists/restaurantCoordinates")
+    @ResponseBody
+    public List<RestaurantList> getRestaurantCoordinates() {
+        // 데이터베이스에서 모든 좌표와 식당 정보를 가져오는 메서드
+        return myListService.getAllRestaurantCoordinates();
+    }
+
+    @PostMapping("deleteRestaurantInfo")
+    public ResponseEntity<String> deleteRestaurants(@RequestBody DeleteRequest deleteRequest) {
+        try {
+            myListService.deleteRestaurants(deleteRequest.getListNo(), deleteRequest.getRestaurantNos());
+            return ResponseEntity.ok("식당 정보가 삭제되었습니다.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("삭제 중 오류가 발생했습니다.");
+        }
+    }
 
 
 }
