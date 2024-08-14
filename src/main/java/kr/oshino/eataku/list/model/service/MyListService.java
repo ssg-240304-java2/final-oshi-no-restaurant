@@ -2,6 +2,7 @@ package kr.oshino.eataku.list.model.service;
 
 import kr.oshino.eataku.list.entity.MyList;
 import kr.oshino.eataku.list.model.repository.MyListRepository;
+import kr.oshino.eataku.list.model.vo.RestaurantList;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -18,7 +20,9 @@ public class MyListService {
     @Autowired
     private MyListRepository myListRepository;
     private String listStatus;
+    private String restaurantList;
 
+    // 리스트 생성 메소드
     public void createList(String listName) {
         MyList myList = MyList.builder()
                 .listName(listName)
@@ -28,9 +32,15 @@ public class MyListService {
         myListRepository.save(myList);
     }
 
+    // 생성한 리스트 담기 MyList
     public List<MyList> getLists() {
         return myListRepository.findAll();
     }
+
+//    // 생성한 리스트 담기 RestaurantList
+//    public List<RestaurantList> getRestaurantLists() {
+//        return restaurantList
+//    }
 
     // 리스트 삭제 메소드
     public void deleteList(Integer listNo) {
@@ -71,4 +81,45 @@ public class MyListService {
 
         myListRepository.save(list); // 이 줄이 실제로 상태를 데이터베이스에 저장함
     }
+
+    // 식당을 리스트에 추가하는 메소드 -------------------나중에 수정
+    @Transactional
+    public void addRestaurantToList(Integer listNo, RestaurantList restaurant) {
+        MyList myList = myListRepository.findById(listNo)
+                .orElseThrow(() -> new IllegalArgumentException("List not found with id: " + listNo));
+
+        List<RestaurantList> restaurantList = myList.getRestaurantList();
+        if (!restaurantList.contains(restaurant)) {
+            restaurantList.add(restaurant);
+            myListRepository.save(myList);
+        } else {
+            throw new IllegalArgumentException("Restaurant is already in the list");
+        }
+    }
+
+
+    // 마이페이지에서 만든 모든 리스트를 가져오는 메소드
+    public List<MyList> getAllMyLists() {
+        return myListRepository.findAll();
+    }
+
+    // 특정 리스트에 포함된 RestaurantList를 반환하는 메소드
+    public List<RestaurantList> getRestaurantListsByListNo(Integer listNo) {
+        MyList myList = myListRepository.findById(listNo)
+                .orElseThrow(() -> new IllegalArgumentException("List not found with ID: " + listNo));
+        System.out.println("myList = " + myList);
+        System.out.println("restaurantList = " + restaurantList);
+        return myList.getRestaurantList();
+    }
+
+    // 특정 리스트에 포함된 RestaurantList를 반환하는 메서드 2
+//    public List<RestaurantList> getMyListsByListNo(Integer listNo) {
+//        MyList myList = myListRepository.findById(listNo)
+//                .orElseThrow(() -> new IllegalArgumentException("List not found with ID: " + listNo));
+//        System.out.println("myList = " + myList);
+//        System.out.println("restaurantList = " + restaurantList);
+//        return myList.getMyList();
+//    }
+
+
 }
