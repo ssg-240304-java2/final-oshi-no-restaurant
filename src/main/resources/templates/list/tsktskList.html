@@ -36,8 +36,7 @@
                             th:onclick="toggleRestaurants(`[[${list.listNo}]]`, this)"></button>
 
                     <!-- 식당 정보가 표시될 영역 -->
-                    <div class="restaurant-list" th:id="'restaurant-list-' + ${list.listNo}" style="display: none;">                        <!-- AJAX로 불러온 데이터가 여기 추가됩니다 -->
-
+                    <div class="restaurant-list" th:id="'restaurant-list-' + ${list.listNo}" style="display: none;">       
                         <!-- 삭제 버튼 -->
                         <div class="delete-btn-container" style="text-align: right; margin: 10px 0;">
                             <button class="delete-btn" onclick="toggleDeleteMode([[${list.listNo}]])">식당 삭제</button>
@@ -128,7 +127,6 @@
                 type: 'get',
                 success: function(data) {
                     console.log('---->', data);
-
                     restaurantListDiv.innerHTML = ""; // 이전 내용을 초기화
 
                     if (data && data.length > 0) {
@@ -138,6 +136,7 @@
                                                 <p>${restaurant.restaurantAddress}</p>
                                                 <img src="${restaurant.imgUrl}" alt="${restaurant.restaurantName}" width="100">`;
                             restaurantListDiv.appendChild(restaurantDiv);
+
 
                             // 좌표와 식당 정보를 서버로부터 가져오는 AJAX 요청
                             $.ajax({
@@ -226,6 +225,7 @@
             restaurantListDiv.style.display = "none"; // 리스트가 이미 보이는 경우 숨김
         }
     }
+
     function toggleDeleteMode(listNo) {
         const checkboxes = document.querySelectorAll(`#restaurant-list-${listNo} .delete-checkbox`);
         const deleteButton = document.querySelector(`#restaurant-list-${listNo} .delete-btn`);
@@ -298,9 +298,6 @@
         } else {
             alert("삭제할 항목을 선택하세요.");
         }
-
-
-
 
 
 </script>

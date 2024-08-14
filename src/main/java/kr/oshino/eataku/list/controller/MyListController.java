@@ -134,7 +134,6 @@ public class MyListController {
         return myListService.getRestaurantListsByListNo(listNo);
     }
 
-
     // 식당 좌표 넘겨주기
     @GetMapping("/tsktskLists/restaurantCoordinates")
     @ResponseBody
@@ -153,7 +152,6 @@ public class MyListController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("삭제 중 오류가 발생했습니다.");
         }
     }
-
 
 }
 

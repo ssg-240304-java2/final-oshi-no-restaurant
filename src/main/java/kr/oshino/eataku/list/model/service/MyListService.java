@@ -37,6 +37,11 @@ public class MyListService {
         return myListRepository.findAll();
     }
 
+//    // 생성한 리스트 담기 RestaurantList
+//    public List<RestaurantList> getRestaurantLists() {
+//        return restaurantList
+//    }
+
     // 리스트 삭제 메소드
     public void deleteList(Integer listNo) {
         myListRepository.deleteById(listNo);

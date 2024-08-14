@@ -9,6 +9,6 @@ import lombok.*;
 public class CreateWaitingRequestDto {
 
     private Long memberNo;
-    private Integer restaurantNo;
+    private Long restaurantNo;
     private int partySize;
 }

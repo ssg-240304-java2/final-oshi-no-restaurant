@@ -1,7 +1,9 @@
 $(document).ready(function() {
     console.log("Document is ready!");
     var today = new Date();
-    var reservationDate, partySize, reservationTime;
+    var partySize = 1; // 기본 인원수를 1명으로 설정
+    var reservationDate = today.toISOString().split('T')[0]; // 오늘 날짜를 기본값으로 설정
+    var reservationTime;
 
     // Pikaday 달력 초기화
     var picker = new Pikaday({
@@ -9,6 +11,8 @@ $(document).ready(function() {
         container: document.getElementById('datepicker-container'),
         bound: false,  // 달력을 고정된 위치에 표시
         format: 'YYYY-MM-DD',
+        defaultDate: today,  // 기본 날짜를 오늘로 설정
+        setDefaultDate: true,  // 기본 날짜를 선택된 상태로 유지
         i18n: {
             previousMonth: '이전달',
             nextMonth: '다음달',
@@ -28,11 +32,22 @@ $(document).ready(function() {
             )).toISOString().split('T')[0];  // 'YYYY-MM-DD' 형식으로 변환
 
             console.log("선택된 날짜:", reservationDate);
+
+            // 날짜 선택 후 시간대 업데이트
+            updateAvailableTimeSlots();
         },
         disableDayFn: function(date) {
-            return date < today.setHours(0, 0, 0, 0);  // 오늘 이전의 날짜는 비활성화
+            var todayMidnight = new Date(); // 현재 날짜 가져오기
+            todayMidnight.setHours(0, 0, 0, 0); // 시간을 자정으로 설정
+            return date < todayMidnight; // 오늘 이전의 날짜는 비활성화
         }
     });
+
+    // 기본으로 오늘 날짜의 시간대 업데이트
+    updateAvailableTimeSlots();
+
+    // 기본으로 1명이 선택된 상태로 설정
+    $('.people .btn').eq(0).addClass('selected');
 
     // 인원 선택 버튼 처리
     $(document).on('click', '.people .btn', function(){
@@ -40,7 +55,45 @@ $(document).ready(function() {
         $(this).addClass('selected');
         partySize = parseInt($(this).text());  // 버튼의 텍스트 값을 정수로 변환하여 사용
         console.log("선택된 인원수:", partySize);
+
+        // 인원수 선택 후 시간대 업데이트
+        updateAvailableTimeSlots();
     });
+
+    // 시간대 업데이트 함수
+    function updateAvailableTimeSlots() {
+        if (reservationDate && partySize) {
+            var restaurantNo = 1; // 레스토랑 번호를 여기에 지정합니다.
+
+            $.ajax({
+                url: `/reservation/${restaurantNo}/available-times`,
+                method: 'GET',
+                data: {
+                    date: reservationDate,
+                    partySize: partySize
+                },
+                success: function(timeSlots) {
+                    var timesContainer = $('.times');  // 시간대 버튼들을 담을 컨테이너
+                    timesContainer.empty();  // 기존의 시간대 버튼들을 제거합니다.
+
+                    timeSlots.forEach(function(slot) {
+                        var button = $('<button class="btn">').text(slot.time);
+
+                        if (!slot.isAvailable) {
+                            button.addClass('disabled').css('color', 'gray');  // 예약 불가능한 시간대는 회색으로 표시
+                        }
+
+                        timesContainer.append(button);
+                    });
+
+                    console.log("시간대 업데이트 완료:", timeSlots);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.error('시간대 정보를 가져오는 데 실패했습니다.', textStatus, errorThrown);
+                }
+            });
+        }
+    }
 
     // 이벤트 핸들러: 동적으로 생성된 요소에 대한 이벤트 처리
     $(document).on('click', '.times .btn', function(){
@@ -52,6 +105,7 @@ $(document).ready(function() {
         }
     });
 
+    // 예약 버튼 클릭 이벤트
     $('#reserve-button').on('click', function() {
         console.log("예약 버튼 클릭됨");
 
@@ -86,7 +140,7 @@ $(document).ready(function() {
                     console.log('서버 응답:', response);
 
                     // 예약 성공 후 인원수 차감 처리
-                    subtractPartySize(requestData.restaurantNo, partySize);
+                    subtractPartySize(requestData.restaurantNo, partySize, reservationTime);
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     alert('예약에 실패했습니다. 다시 시도해주세요.');
@@ -99,9 +153,14 @@ $(document).ready(function() {
         }
     });
 
-    function subtractPartySize(reservationNo, partySize) {
+
+
+
+
+    // 인원수 차감 처리 함수
+    function subtractPartySize(reservationNo, partySize, time) {
         $.ajax({
-            url: `/reservation/${reservationNo}/subtract?partySize=${partySize}`,
+            url: `/reservation/${reservationNo}/subtract?partySize=${partySize}&time=${encodeURIComponent(time)}`,
             method: 'PUT',
             success: function(response) {
                 console.log('인원수가 성공적으로 차감되었습니다.');
@@ -111,4 +170,5 @@ $(document).ready(function() {
             }
         });
     }
+
 });
