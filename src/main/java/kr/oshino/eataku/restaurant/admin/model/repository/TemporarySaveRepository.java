@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface TemporarySaveRepository extends JpaRepository<TemporarySave, Long> {
 
-    public TemporarySave save(TemporarySave temporarySave);
+    TemporarySave save(TemporarySave temporarySave);
 
 }

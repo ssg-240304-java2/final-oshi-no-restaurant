@@ -1,14 +1,12 @@
 package kr.oshino.eataku.restaurant.admin.controller;
 
-import kr.oshino.eataku.restaurant.admin.model.dto.CertificationDTO;
+import kr.oshino.eataku.restaurant.admin.model.dto.RegisterInfoDTO;
 import kr.oshino.eataku.restaurant.admin.model.dto.TemporarySaveDTO;
 import kr.oshino.eataku.restaurant.admin.service.RestaurantAdminService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @Slf4j
@@ -22,14 +20,14 @@ public class RestaurantAdminController {
      * 사업자 등록증 등록
      */
     @GetMapping("/certification")
-    public void register(){}
+    public void business(){}
 
     @PostMapping("/certification")
-    public String registerRestaurant(@RequestBody TemporarySaveDTO newRestaurant){
+    public String businessRegister(@RequestBody TemporarySaveDTO newRestaurant){
 
         log.info("\uD83C\uDF4E\uD83C\uDF4E\uD83C\uDF4E newRestaurant : {} ", newRestaurant);
 
-        restaurantAdminService.insertNewRestaurant(newRestaurant);
+        restaurantAdminService.insertNewCertification(newRestaurant);
 
         return "redirect:/restaurant/certification";
     }
@@ -38,9 +36,17 @@ public class RestaurantAdminController {
      * 식당 정보 등록
      * @return
      */
-    @GetMapping("/restaurantInfo")
-    public String restaurantInfo() {
+    @GetMapping("/infoRegister")
+    public void info() {}
 
-        return "restaurant/info";
+    @PostMapping("/infoRegister")
+    public String infoRegister(@RequestBody RegisterInfoDTO newInfo){
+
+        log.info("\uD83C\uDF4E\uD83C\uDF4E\uD83C\uDF4E newInfo : {}", newInfo);
+
+        restaurantAdminService.insertNewInfo(newInfo);
+
+        return "redirect:/restaurant/infoRegister";
+
     }
 }

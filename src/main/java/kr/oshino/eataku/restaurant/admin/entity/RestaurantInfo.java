@@ -2,16 +2,19 @@ package kr.oshino.eataku.restaurant.admin.entity;
 
 import com.sun.istack.NotNull;
 import jakarta.persistence.*;
+import kr.oshino.eataku.common.enums.FoodType;
 import kr.oshino.eataku.common.enums.HashTag;
 import lombok.*;
 
 import java.sql.Time;
+import java.util.List;
 
 @Entity
 @Table(name = "tbl_restaurant_info")
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
+@Builder
 public class RestaurantInfo {
 
     @Id
@@ -31,7 +34,8 @@ public class RestaurantInfo {
     private String restaurantAddress;       // 도로명 주소
 
     @Column(name = "food_type")
-    private String foodType;        // 음식 카테고리
+    @Enumerated(EnumType.STRING)
+    private FoodType foodType;        // 음식 카테고리
 
     @Column(name = "opening_time")
     private Time openingTime;         // 오픈시간
@@ -56,7 +60,7 @@ public class RestaurantInfo {
     @NotNull
     private Double yCoordinate;     // 경도
 
-    @Column(name = "hashtag")
+    @Column(name = "hash_tag")
     @Enumerated(EnumType.STRING)
     private HashTag hashtag;        // 해시태그
 
@@ -66,7 +70,7 @@ public class RestaurantInfo {
     @OneToOne(mappedBy = "restaurantNo", cascade = CascadeType.ALL)
     private AccountInfo accountInfo;        // 계정 정보
 
-    public RestaurantInfo(Long restaurantNo, String restaurantName, String description, String restaurantAddress, String foodType, Time openingTime, Time closingTime, String contact, String postNumber, String imgUrl, Double xCoordinate, Double yCoordinate, HashTag hashtag) {
+    public RestaurantInfo(Long restaurantNo, String restaurantName, String description, String restaurantAddress, FoodType foodType, Time openingTime, Time closingTime, String contact, String postNumber, String imgUrl, Double xCoordinate, Double yCoordinate, HashTag hashtag) {
         this.restaurantNo = restaurantNo;
         this.restaurantName = restaurantName;
         this.description = description;
