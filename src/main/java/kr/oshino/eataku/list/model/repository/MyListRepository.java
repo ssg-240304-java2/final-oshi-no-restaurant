@@ -2,6 +2,7 @@ package kr.oshino.eataku.list.model.repository;
 
 import kr.oshino.eataku.list.entity.MyList;
 import kr.oshino.eataku.list.model.vo.RestaurantList;
+import kr.oshino.eataku.member.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -15,6 +16,12 @@ public interface MyListRepository extends JpaRepository<MyList, Integer> {
 
     @Query("SELECT r FROM MyList m JOIN m.restaurantList r")
     List<RestaurantList> findAllRestaurantCoordinates();
+
+    List<MyList> findByListNameContainingAndListStatusOrderByListShareDesc(String query, String status);
+
+    List<MyList> findByMemberAndListStatus(Member toMember, String status);
+
+    int countByMemberAndListStatus(Member toMember, String status);
 }
 
 
