@@ -34,6 +34,7 @@ public class RestaurantAdminService {
         log.info("\uD83C\uDF4E\uD83C\uDF4E\uD83C\uDF4E temporarySave : {}", temporarySave);
     }
 
+    // TODO
     public void insertNewInfo(RegisterInfoDTO newInfo) {
 
         RestaurantInfo registerInfo = RestaurantInfo.builder()

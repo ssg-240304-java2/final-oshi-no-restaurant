@@ -18,9 +18,9 @@ public class RegisterInfoDTO {
     private String restaurantName;
     private String contact;
     private String restaurantAddress;
-    private List<Enum> foodType;
+    private List<Enum> foodType;        // TODO
     private LocalTime openingTime;
     private LocalTime closingTime;
-    private List<Enum> hashTag;
+    private List<Enum> hashTag;         // TODO
     private String description;
 }

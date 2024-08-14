@@ -35,7 +35,7 @@ public class RestaurantInfo {
 
     @Column(name = "food_type")
     @Enumerated(EnumType.STRING)
-    private FoodType foodType;        // 음식 카테고리
+    private FoodType foodType;        // 음식 카테고리        // TODO
 
     @Column(name = "opening_time")
     private Time openingTime;         // 오픈시간
@@ -62,7 +62,7 @@ public class RestaurantInfo {
 
     @Column(name = "hash_tag")
     @Enumerated(EnumType.STRING)
-    private HashTag hashtag;        // 해시태그
+    private HashTag hashtag;        // 해시태그     // TODO
 
     @OneToOne(mappedBy = "restaurantNo", cascade = CascadeType.ALL)
     private Certification certification;        // 사업자 등록 인증
