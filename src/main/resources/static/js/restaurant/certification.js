@@ -106,6 +106,8 @@ $('#certificationBtn').on('click', function() {
     const businessAddress = $("#sample6_postcode").val() + $("#sample6_address").val() + $("#sample6_detailAddress").val() + $("#sample6_extraAddress").val();
     const imgUrl = $("#imgUrl").val();
 
+    console.log(companyNo)
+
     $.ajax({
         type: 'post',
         url: '/restaurant/certification',
