@@ -29,4 +29,8 @@ public class TemporarySave {
     @Column(name = "business_address")
     @NotNull
     private String businessAddress;     // 사업장 주소
+
+    @Column(name = "img_url")
+    @NotNull
+    private String imgUrl;      // 식당 메인 사진
 }

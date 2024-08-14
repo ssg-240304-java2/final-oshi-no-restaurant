@@ -33,6 +33,5 @@ public class Certification {
     private String businessAddress;     // 사업장 주소
 
     @Column(name = "img_url")
-    @NotNull
     private String imgUrl;      // 사업자등록증 url
 }
