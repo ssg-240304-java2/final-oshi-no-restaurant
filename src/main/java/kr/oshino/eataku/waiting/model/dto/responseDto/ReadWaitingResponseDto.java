@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @ToString
 public class ReadWaitingResponseDto {
 
-    private int waitingNo;
+    private Long waitingNo;
     private int partySize;
     private StatusType waitingStatus;
     private LocalDateTime createdAt;
