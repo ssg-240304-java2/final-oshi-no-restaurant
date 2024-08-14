@@ -1,5 +1,6 @@
 package kr.oshino.eataku.waiting.controller;
 
+import kr.oshino.eataku.waiting.event.WaitingCreatedEvent;
 import kr.oshino.eataku.waiting.model.dto.requestDto.ReadWaitingRequestDto;
 import kr.oshino.eataku.waiting.model.dto.requestDto.UpdateWaitingRequestDto;
 import kr.oshino.eataku.waiting.model.dto.responseDto.ReadWaitingResponseDto;
@@ -8,13 +9,19 @@ import kr.oshino.eataku.waiting.service.WaitingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.event.EventListener;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Sinks;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Controller
@@ -24,6 +31,7 @@ public class WaitingAdminController {
     // 관리자 전용 컨트롤러
 
     private final WaitingService waitingService;
+    private final Map<Long, Sinks.Many<Long>> waitingSinks;
 
 
     /**
@@ -32,6 +40,7 @@ public class WaitingAdminController {
      */
     @GetMapping("/waitingList")
     public String waitingManagementPage() {
+        // 매장 번호 필요
         return "restaurant/waitingStatus";
     }
 
@@ -98,5 +107,30 @@ public class WaitingAdminController {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(waitingService.cancelWaitingByWaitingNo(updateWaitingRequestDto));
+    }
+
+
+
+    @EventListener
+    public void handleWaitingCreatedEvent(WaitingCreatedEvent event) {
+        Long restaurantNo = event.getRestaurantNo();
+
+        Sinks.Many<Long> sink = waitingSinks.get(restaurantNo);
+        if (sink != null) {
+            sink.tryEmitNext(restaurantNo);
+        }
+    }
+
+
+
+    /**
+     * 실시간 웨이팅 스트림
+     * @return
+     */
+    @GetMapping(value = "/waiting/stream/{restaurantNo}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    @ResponseBody
+    public Flux<Long> streamWaiting(@PathVariable Long restaurantNo) {
+        waitingSinks.putIfAbsent(restaurantNo, Sinks.many().multicast().onBackpressureBuffer());
+        return waitingSinks.get(restaurantNo).asFlux();
     }
 }
