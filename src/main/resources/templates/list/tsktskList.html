@@ -28,11 +28,28 @@
         </div>
         <div class="list-count custom-margin" id="total-list-count">전체 리스트 개수 3</div>
         <div class="content-section active" id="favorite-content">
-            <button type="button" class="btn btn-custom" onclick="showRestaurantList('삼성역 맛집')">삼성역 맛집</button>
-            <button type="button" class="btn btn-custom" onclick="showRestaurantList('강남역 맛집')">강남역 맛집</button>
-            <button type="button" class="btn btn-custom" onclick="showRestaurantList('신림역 맛집')">신림역 맛집</button>
-        </div>
-        <div class="content-section" id="following-list">
+            <!-- 동적으로 리스트 버튼 생성 -->
+<!--            <div th:each="list : ${myLists}">-->
+<!--                <button type="button" class="btn btn-custom"-->
+<!--                        th:text="${list.listName}"-->
+<!--                        th:onclick="'showRestaurantList(' + ${list.listNo} + ')'"></button>-->
+<!--            </div>-->
+            <div th:each="list : ${myLists}">
+                <div class="list-box">
+                    <!-- 리스트 이름을 버튼으로 표시 -->
+                    <button type="button" class="btn btn-custom"
+                            th:text="${list.listName}"
+                            th:onclick="toggleRestaurants(`[[${list.listNo}]]`, this)"></button>
+
+                    <!-- 식당 정보가 표시될 영역 -->
+                    <div class="restaurant-list" th:id="'restaurant-list-' + ${list.listNo}" style="display: none;">                        <!-- AJAX로 불러온 데이터가 여기 추가됩니다 -->
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="content-section" id="following-list">
             <div class="table-responsive">
                 <table class="table table-hover">
                     <thead>
@@ -88,11 +105,63 @@
 <div th:replace="~{fragment/footer.html :: footer}" class="footer"></div>
 
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script type="text/javascript" th:src="@{js/fragment/navbar.js}"></script>
 <script type="text/javascript" th:src="@{js/list/list.js}"></script>
 <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=4iq0sfkqpd"></script>
+<script>
+    function toggleRestaurants(listNo, element) {
+        const restaurantListDiv = document.getElementById(`restaurant-list-`+listNo);
+
+        // 요소가 존재하는지 확인
+        if (!restaurantListDiv) {
+            console.error(`ID` +`restaurant-list-` + lsitNo + `를 가진 요소를 찾을 수 없습니다.`);
+            return;
+        }
+
+        if (restaurantListDiv.style.display === "none") {
+            // AJAX 요청 보내기
+            $.ajax({
+                url: `/tsktskLists/`+ listNo + `/restaurants`,
+                type: 'get',
+                success: function(data) {
+                    console.log('---->', data);
+                    restaurantListDiv.innerHTML = ""; // 이전 내용을 초기화
+                    if (data && data.length > 0) {
+                        data.forEach(restaurant => {
+                            const restaurantDiv = document.createElement("div");
+                            restaurantDiv.innerHTML = `<h5>${restaurant.restaurantName}</h5>
+                                                <p>${restaurant.restaurantAddress}</p>
+                                                <img src="${restaurant.imgUrl}" alt="${restaurant.restaurantName}" width="100">`;
+                            restaurantListDiv.appendChild(restaurantDiv);
+                            // 마커 추가
+                            var marker = new naver.maps.Marker({
+                                position: new naver.maps.LatLng(restaurant.yCoordinate, restaurant.xCoordinate),
+                                map: map, // 초기화된 지도
+                                icon: {
+                                    url: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png'
+                                }
+                            });
+                            markers.push(marker);
+                        });
+                        restaurantListDiv.style.display = "block"; // 데이터를 로드한 후 보여줌
+                    } else {
+                        restaurantListDiv.innerHTML = "<p>식당 정보가 없습니다.</p>";
+                        restaurantListDiv.style.display = "block";
+                    }
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+
+        } else {
+            restaurantListDiv.style.display = "none"; // 리스트가 이미 보이는 경우 숨김
+        }
+    }
+
+</script>
 </body>
 </html>
