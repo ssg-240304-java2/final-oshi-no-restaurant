@@ -1,5 +1,6 @@
 package kr.oshino.eataku.test.waiting;
 
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityNotFoundException;
 import kr.oshino.eataku.common.enums.StatusType;
@@ -40,38 +41,11 @@ public class WaitingTest {
     @Autowired
     private WaitingService waitingService;
 
-    @BeforeEach
-    public void setUp() {
-        // Set up test member
-//        testMember = Member.builder()
-//                .name("좌상현")
-//                .nickname("mukgojwa")
-//                .birthday(Date.valueOf("1997-12-01"))
-//                .gender("M")
-//                .email("testuser@example.com")
-//                .build();
-//        memberRepository.save(testMember);
-//
-//        // Set up test restaurant
-//        testRestaurant = new RestaurantInfo();
-//        testRestaurant.setRestaurantName("Test Restaurant");
-//        testRestaurant.setDescription("A test restaurant.");
-//        testRestaurant.setRestaurantAddress("123 Test Street");
-//        testRestaurant.setFoodType("Korean");
-//        testRestaurant.setOpeningTime(Time.valueOf("09:00:00"));
-//        testRestaurant.setClosingTime(Time.valueOf("22:00:00"));
-//        testRestaurant.setContact("010-1234-5678");
-//        testRestaurant.setPostNumber("12345");
-//        testRestaurant.setImgUrl("http://example.com/image.png");
-//        testRestaurant.setXCoordinate(37.5665);
-//        testRestaurant.setYCoordinate(126.9780);
-//        restaurantRepository.save(testRestaurant);
-    }
 
-    @AfterEach
-    public void tearDown() {
-
-//        waitingRepository.deleteAll();
+    @Test
+    @DisplayName("데이터 지우기")
+    void deleteAll() {
+        waitingRepository.deleteAll();
 //        memberRepository.deleteAll();
 //        restaurantRepository.deleteAll();
 //
@@ -82,6 +56,12 @@ public class WaitingTest {
 //        entityManager.getTransaction().commit();
 //        entityManager.close();
     }
+
+
+
+
+
+
 
     @Test
     @DisplayName("웨이팅 등록 테스트")
@@ -108,6 +88,10 @@ public class WaitingTest {
         // then
     }
 
+
+
+
+
     @Test
     @DisplayName("웨이팅 조회 테스트")
     void waitingSelectTest() {
@@ -128,7 +112,7 @@ public class WaitingTest {
                         .waitingStatus(StatusType.대기중)
                         .build()
         );
-        ReadWaitingRequestDto test = new ReadWaitingRequestDto(1L, 1, null);
+        ReadWaitingRequestDto test = new ReadWaitingRequestDto(1L, 1L, null);
 
         // when
         List<ReadWaitingResponseDto> testList = waitingService.getWaitingListByMemberNo(test);
@@ -136,6 +120,10 @@ public class WaitingTest {
         // then
         System.out.println(testList);
     }
+
+
+
+
 
     @Test
     @DisplayName("웨이팅 수정 테스트")
@@ -153,6 +141,10 @@ public class WaitingTest {
         assertThat(waiting.getWaitingStatus()).isEqualTo(StatusType.방문완료);
     }
 
+
+
+
+
     @Test
     @DisplayName("웨이팅 삭제 테스트")
     void waitingDeleteTest() {
@@ -168,5 +160,4 @@ public class WaitingTest {
         // then
         assertThat(waiting.getWaitingStatus()).isEqualTo(StatusType.대기취소);
     }
-    
 }

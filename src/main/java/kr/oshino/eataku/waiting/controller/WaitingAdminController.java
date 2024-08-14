@@ -26,9 +26,6 @@ public class WaitingAdminController {
     private final WaitingService waitingService;
 
 
-
-
-
     /**
      * 웨이팅 관리 페이지 이동
      * @return
@@ -43,14 +40,19 @@ public class WaitingAdminController {
 
 
     /**
-     * 웨이팅 조회 (매장)
-     * @param readWaitingRequestDto
+     * 웨이팅 조회
+     * @param restaurantNo
      * @return
      */
-    @GetMapping("/waiting")
+    @GetMapping("/waiting/{restaurantNo}")
     @ResponseBody
     public ResponseEntity<List<ReadWaitingResponseDto>> getWaitingList(
-            @ModelAttribute ReadWaitingRequestDto readWaitingRequestDto) {
+            @PathVariable Long restaurantNo) {
+
+        ReadWaitingRequestDto readWaitingRequestDto =
+                ReadWaitingRequestDto.builder().restaurantNo(restaurantNo).build();
+
+        log.info("readWaitingRequestDto: {}", readWaitingRequestDto);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(waitingService.getWaitingListByRestaurantNo(readWaitingRequestDto));
@@ -62,13 +64,16 @@ public class WaitingAdminController {
 
     /**
      * 웨이팅 입장 처리
-     * @param updateWaitingRequestDto
+     * @param waitingNo
      * @return
      */
-    @PatchMapping("/waiting/visit")
+    @PatchMapping("/waiting/visit/{waitingNo}")
     @ResponseBody
     public ResponseEntity<UpdateWaitingResponseDto> updateWaitingStatus(
-            @RequestBody UpdateWaitingRequestDto updateWaitingRequestDto) {
+            @PathVariable Long waitingNo) {
+
+        UpdateWaitingRequestDto updateWaitingRequestDto =
+                UpdateWaitingRequestDto.builder().waitingNo(waitingNo).build();
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(waitingService.updateWaitingByWaitingNo(updateWaitingRequestDto));
@@ -80,13 +85,16 @@ public class WaitingAdminController {
 
     /**
      * 웨이팅 취소
-     * @param updateWaitingRequestDto
+     * @param waitingNo
      * @return
      */
-    @PatchMapping("/waiting/cancel")
+    @PatchMapping("/waiting/cancel/{waitingNo}")
     @ResponseBody
     public ResponseEntity<UpdateWaitingResponseDto> cancelWaitingStatus(
-            @RequestBody UpdateWaitingRequestDto updateWaitingRequestDto) {
+            @PathVariable Long waitingNo) {
+
+        UpdateWaitingRequestDto updateWaitingRequestDto =
+                UpdateWaitingRequestDto.builder().waitingNo(waitingNo).build();
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(waitingService.cancelWaitingByWaitingNo(updateWaitingRequestDto));

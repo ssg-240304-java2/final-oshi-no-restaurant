@@ -1,6 +1,15 @@
-body {
-    background-color: #e0e0e0;
+.main-container {
+    min-height: 60vh;
+}
+
+.waiting-container {
+    background-color: #ffffff;
     margin-top: 120px;
+    min-height: 100%;
+}
+
+#waiting-card-container {
+    min-height: 100%;
 }
 
 .nav-buttons {
@@ -72,4 +81,10 @@ body {
     color: white;
     margin-right: 10px;
     margin-bottom: 5px;
+}
+
+.waiting-no {
+    background-color: #007bff;
+    color: #FFFFFF;
+    border: 1px solid #007bff !important;
 }

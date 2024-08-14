@@ -27,5 +27,5 @@ public interface WaitingRepository extends JpaRepository<Waiting, Long> {
             "JOIN w.member m " +
             "JOIN w.restaurantInfo r " +
             "WHERE r.restaurantNo = :restaurantNo AND w.waitingStatus = kr.oshino.eataku.common.enums.StatusType.대기중")
-    List<ReadWaitingResponseDto> findWaitingByRestaurantNo(@Param("restaurantNo") Integer restaurantNo);
+    List<ReadWaitingResponseDto> findWaitingByRestaurantNo(@Param("restaurantNo") Long restaurantNo);
 }

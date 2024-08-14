@@ -28,9 +28,6 @@ public class WaitingUserController {
     private final WaitingService waitingService;
 
 
-
-
-
     /**
      * 웨이팅 등록 페이지 이동
      * @param restaurantNo
@@ -78,8 +75,6 @@ public class WaitingUserController {
     public ResponseEntity<List<ReadWaitingResponseDto>> getMyWaitingList(
             ReadWaitingRequestDto readWaitingRequestDto) {
 
-        log.info("readWaitingRequestDto: {}", readWaitingRequestDto);
-
         return ResponseEntity.status(HttpStatus.OK)
                 .body(waitingService.getWaitingListByMemberNo(readWaitingRequestDto));
     }
@@ -88,7 +83,11 @@ public class WaitingUserController {
 
 
 
-    // 웨이팅 취소
+    /**
+     * 웨이팅 취소
+     * @param updateWaitingRequestDto
+     * @return
+     */
     @PatchMapping("/waiting")
     @ResponseBody
     public ResponseEntity<UpdateWaitingResponseDto> cancelWaiting(
@@ -97,4 +96,6 @@ public class WaitingUserController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(waitingService.cancelWaitingByWaitingNo(updateWaitingRequestDto));
     }
+
+    // 웨이팅 미루기
 }
