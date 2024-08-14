@@ -134,7 +134,7 @@ public class MyListController {
         return myListService.getRestaurantListsByListNo(listNo);
     }
 
-    // 식당 좌표 넘겨주기
+    // 식당 좌표 넘겨주기(지도에 마커 표시)
     @GetMapping("/tsktskLists/restaurantCoordinates")
     @ResponseBody
     public List<RestaurantList> getRestaurantCoordinates() {
@@ -142,16 +142,21 @@ public class MyListController {
         return myListService.getAllRestaurantCoordinates();
     }
 
-    @PostMapping("deleteRestaurantInfo")
-    public ResponseEntity<String> deleteRestaurants(@RequestBody DeleteRequest deleteRequest) {
-        try {
-            myListService.deleteRestaurants(deleteRequest.getListNo(), deleteRequest.getRestaurantNos());
-            return ResponseEntity.ok("식당 정보가 삭제되었습니다.");
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("삭제 중 오류가 발생했습니다.");
-        }
-    }
+    // 식당 삭제 메소드
+//    @PostMapping("/deleteRestaurants")
+//    public String deleteRestaurants(@RequestParam("listNo") Integer listNo,
+//                                    @RequestParam("restaurantNos") List<Integer> restaurantNos,
+//                                    RedirectAttributes redirectAttributes) {
+//        try {
+//            myListService.deleteRestaurants(listNo, restaurantNos);
+//            redirectAttributes.addFlashAttribute("message", "식당 정보가 삭제되었습니다.");
+//            return "redirect:/tsktskLists";
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            redirectAttributes.addFlashAttribute("error", "삭제 중 오류가 발생했습니다.");
+//            return "redirect:/tsktskLists";
+//        }
+//    }
 
 }
 

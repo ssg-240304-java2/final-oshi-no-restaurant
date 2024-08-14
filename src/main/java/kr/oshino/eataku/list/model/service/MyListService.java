@@ -4,17 +4,20 @@ import kr.oshino.eataku.list.entity.MyList;
 import kr.oshino.eataku.list.model.repository.MyListRepository;
 import kr.oshino.eataku.list.model.vo.RestaurantList;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
+@Slf4j
 public class MyListService {
 
     @Autowired
@@ -107,24 +110,42 @@ public class MyListService {
     public List<RestaurantList> getRestaurantListsByListNo(Integer listNo) {
         MyList myList = myListRepository.findById(listNo)
                 .orElseThrow(() -> new IllegalArgumentException("List not found with ID: " + listNo));
-        System.out.println("myList = " + myList);
-        System.out.println("restaurantList = " + restaurantList);
+        log.info("myList: " + myList);
+        log.info("restaurantList: " + myList.getRestaurantList());
         return myList.getRestaurantList();
     }
 
+    // 마커 좌표 설정
     public List<RestaurantList> getAllRestaurantCoordinates() {
-        return myListRepository.findAllRestaurantCoordinates();
-    }
+        // 여기에 로직을 추가하여 식당 좌표와 관련 정보를 가져옵니다.
+        List<MyList> myLists = myListRepository.findAll();
+        List<RestaurantList> restaurantCoordinates = new ArrayList<>();
 
-    public void deleteRestaurants(Integer listNo, List<Integer> restaurantNos) {
-        MyList myList = myListRepository.findById(listNo)
-                .orElseThrow(() -> new IllegalArgumentException("리스트를 찾을 수 없습니다: " + listNo));
+        for (MyList myList : myLists) {
+            // 로그 확인
+            restaurantCoordinates.addAll(myList.getRestaurantList());
+            myList.getRestaurantList().forEach(restaurant ->
+                    log.info("식당 좌표: {}, Coordinates: ({}, {})",
+                            restaurant.getRestaurantName(),
+                            restaurant.getXCoordinate(),
+                            restaurant.getYCoordinate()));
+        }
 
-        List<RestaurantList> updatedRestaurantList = myList.getRestaurantList().stream()
-                .filter(restaurant -> !restaurantNos.contains(restaurant.getRestaurantNo()))
-                .collect(Collectors.toList());
 
-        myList.setRestaurantList(updatedRestaurantList);
-        myListRepository.save(myList);
+
+        return restaurantCoordinates;
     }
 }
+
+    // 리스트 삭제 메소드
+//    public void deleteRestaurants(Integer listNo, List<Integer> restaurantNos) {
+//        MyList myList = myListRepository.findById(listNo)
+//                .orElseThrow(() -> new IllegalArgumentException("리스트를 찾을 수 없습니다: " + listNo));
+//
+//        List<RestaurantList> updatedRestaurantList = myList.getRestaurantList().stream()
+//                .filter(restaurant -> !restaurantNos.contains(restaurant.getRestaurantNo()))
+//                .collect(Collectors.toList());
+//
+//        myList.setRestaurantList(updatedRestaurantList);
+//        myListRepository.save(myList);
+//    }
