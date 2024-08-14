@@ -8,36 +8,41 @@
     <link rel="stylesheet" th:href="@{/css/member/login.css}">
   </head>
   <body>
-    <div class="login-card text-center">
-      <div class="card-body">
-        <div class="toggle-container">
-          <span class="toggle-label">매장으로 로그인</span>
-          <label class="toggle-switch">
-            <input type="checkbox" id="loginToggle">
-            <span class="slider"></span>
-          </label>
-          <span class="toggle-label">사용자로 로그인</span>
-        </div>
-        <br>
-        <div class="d-flex align-items-center text-left mb-4">
-          <img th:src="@{/images/oku.png}" alt="Logo">
-          <div class="ml-3">
-            <h5>안녕하세요 식덕후입니다.</h5>
-            <p>로그인 후 이용가능합니다.</p>
+    <div class="container d-flex justify-content-center align-items-center vh-100">
+      <div class="login-wrapper row no-gutters justify-content-center">
+        <!-- 왼쪽: 일반 로그인 폼 -->
+        <div class="login-card p-4">
+          <div class="card-body">
+            <div class="d-flex align-items-center text-left mb-4">
+              <img th:src="@{/images/oku.png}" alt="Logo">
+              <div class="ml-3">
+                <h5>안녕하세요 식덕후입니다.</h5>
+                <p>로그인 후 이용가능합니다.</p>
+              </div>
+            </div>
+            <form th:action="@{/loginProc}" method="post">
+              <div class="form-group">
+                <input type="text" class="form-control" placeholder="id" name="username" id="username">
+              </div>
+              <div class="form-group">
+                <input type="password" class="form-control" placeholder="Password" name="password" id="password">
+              </div>
+              <input type="submit" class="btn btn-dark" value="로그인">
+            </form>
+            <div class="options">
+              <a href="#">아이디/비밀번호 찾기</a>
+              <a href="/signUp">회원가입</a>
+            </div>
           </div>
         </div>
-        <form action="/loginProc" method="post">
-          <div class="form-group">
-            <input type="text" class="form-control" placeholder="id" name="username" id="username">
+        <!-- 오른쪽: 매장 로그인 버튼 -->
+        <div class="store-login-card d-flex justify-content-center align-items-center p-4">
+          <div class="text-center">
+            <h5 class="mb-4" style="white-space: nowrap">매장회원이신가요?</h5>
+            <a href="/managerLogin"><button type="button" class="btn btn-outline-secondary btn-store-login">
+              매장으로 로그인하기
+            </button></a>
           </div>
-          <div class="form-group">
-            <input type="password" class="form-control" placeholder="Password" name="password" id="password">
-          </div>
-          <input type="submit" class="btn btn-dark" value="로그인">
-        </form>
-        <div class="options">
-          <a href="#">아이디/비밀번호 찾기</a>
-          <a href="/signUp">회원가입</a>
         </div>
       </div>
     </div>

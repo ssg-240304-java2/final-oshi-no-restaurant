@@ -5,19 +5,36 @@ body {
     justify-content: center;
     align-items: center;
 }
-.login-card {
+.login-wrapper {
     width: 100%;
-    max-width: 450px;
-    padding: 20px;
-    border-radius: 8px;
+    max-width: 1000px; /* 전체 너비를 줄여 매장 로그인 폼의 비율을 조정 */
+    /*box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);*/
+    /*border-radius: 8px;*/
+}
+.login-card {
+    width: 368px;
     background-color: #fff;
+    padding: 20px;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+}
+.store-login-card {
+    width: 184px;
+    background-color: #f8f9fa; /* 부트스트랩의 기본 배경색 사용 */
+    padding: 20px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    text-align: center;
+}
+.login-card {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    /*border-radius: 8px;*/
 }
 .login-card img {
     width: 50px;
     margin-bottom: 20px;
 }
-.login-card h5 {
+.login-card h5, .store-login-card h5 {
     margin-bottom: 10px;
 }
 .login-card form {
@@ -31,61 +48,31 @@ body {
     display: flex;
     justify-content: space-between;
 }
-@media (max-width: 576px) {
+.store-login-card .btn-store-login {
+    display: block;
+    width: 100%;
+    font-size: 14px;
+    color: #333;
+    border-color: #333;
+}
+@media (max-width: 768px) {
+    .login-wrapper {
+        flex-direction: column;
+        border-radius: 8px;
+        width: 100%;
+    }
+    .login-card, .store-login-card {
+        border-radius: 8px;
+    }
     .login-card {
-        padding: 15px;
+        width: 100%;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
     }
-    .login-card img {
-        width: 40px;
+    .store-login-card {
+        width: 100%;
+        border-top: 1px solid #ddd;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
     }
-}
-.options {
-    padding: 5px;
-}
-
-/* 토글 버튼 */
-.toggle-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.toggle-label {
-    margin: 0 10px;
-    font-size: 12px;
-}
-.toggle-switch {
-    position: relative;
-    width: 30px;
-    height: 15px;
-}
-.toggle-switch input {
-    display: none;
-}
-.slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ccc;
-    transition: .4s;
-    border-radius: 30px;
-}
-.slider:before {
-    position: absolute;
-    content: "";
-    height: 12px;
-    width: 12px;
-    left: 1.5px;
-    bottom: 1.5px;
-    background-color: white;
-    transition: .4s;
-    border-radius: 50%;
-}
-input:checked + .slider {
-    background-color: #FF5258;
-}
-input:checked + .slider:before {
-    transform: translateX(15px);
 }

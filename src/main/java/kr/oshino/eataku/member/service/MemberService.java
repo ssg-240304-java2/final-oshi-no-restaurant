@@ -26,7 +26,7 @@ public class MemberService {
                 .name(newMember.getName())
                 .email(newMember.getEmail())
                 .phone(newMember.getPhone())
-                .auth(AccountAuth.general)
+                .auth("general")
                 .weight(3.0)
                 .birthday(newMember.getBirthday())
                 .nickname(newMember.getNickname())
