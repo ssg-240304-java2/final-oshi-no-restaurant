@@ -5,14 +5,19 @@ import kr.oshino.eataku.reservation.user.entity.Reservation;
 import kr.oshino.eataku.reservation.user.model.dto.requestDto.CreateReservationUserRequestDto;
 import kr.oshino.eataku.reservation.user.model.dto.responseDto.CreateReservationUserResponseDto;
 import kr.oshino.eataku.reservation.user.repository.ReservationRepository;
+import kr.oshino.eataku.restaurant.admin.entity.ReservationSetting;
 import kr.oshino.eataku.restaurant.admin.entity.RestaurantInfo;
 import kr.oshino.eataku.restaurant.admin.model.repository.RestaurantRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 
@@ -59,37 +64,47 @@ public class ReservationUserService {
      * @param restaurantNo
      * @return
      */
-    public List<LocalTime> getReservationTimes(Long restaurantNo) {
-        List<java.sql.Time> times = reservationRepository.findAllTimesByRestaurantNo(restaurantNo);
-        return times.stream()
-                .map(java.sql.Time::toLocalTime)
+    @Transactional
+    public List<Map<String, Object>> getAvailableTimeSlots(LocalDate date, Long restaurantNo, int partySize) {
+        List<ReservationSetting> reservationSettings = reservationRepository.findAllByDateAndRestaurant(date, restaurantNo);
+
+        return reservationSettings.stream()
+                .map(setting -> {
+                    Map<String, Object> timeSlot = Map.of(
+                            "time", setting.getReservationTime(),
+                            "isAvailable", partySize <= setting.getReservationPeople()
+                    );
+                    return timeSlot;
+                })
                 .collect(Collectors.toList());
     }
 
 
 
 
-    /***
-     * 해당 식당의 최대 인원을 가져오는 메소드
-     * @param restaurantNo
-     * @return
-     */
-    public int getMaxPeople(Long restaurantNo) {
-        return reservationRepository.findPeopleByRestaurantNo(restaurantNo);
-    }
+//    /***
+//     * 해당 식당의 최대 인원을 가져오는 메소드
+//     * @param restaurantNo
+//     * @return
+//     */
+//    public int getMaxPeople(Long restaurantNo) {
+//        return reservationRepository.findPeopleByRestaurantNo(restaurantNo);
+//    }
+
+
+
+
 
     /**
      * 인원수 차감 하는 메소드
      * @param reservationNo
      * @param partySize
+     * @param
      */
-
     @Transactional
-    public void subtractPartySize(Long reservationNo, int partySize) {
-        reservationRepository.subtractPartySizeFromReservationPeople(partySize, reservationNo);
+    public void subtractPartySize(Long reservationNo, int partySize, LocalTime time) {
+        reservationRepository.subtractPartySizeFromReservationPeople(partySize, time, reservationNo);
     }
-
-
 
 
 }

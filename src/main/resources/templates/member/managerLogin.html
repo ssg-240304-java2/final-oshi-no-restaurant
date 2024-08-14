@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Login Page</title>
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" th:href="@{/css/member/managerLogin.css}">
+    </head>
+    <body>
+        <div class="login-card text-center">
+            <div class="card-body">
+                <div class="d-flex align-items-center text-left mb-4">
+                    <img th:src="@{/images/oku.png}" alt="Logo">
+                    <div class="ml-3">
+                        <h5>매장관리를 위한 로그인페이지입니다.</h5>
+                        <p>로그인 후 이용가능합니다.</p>
+                    </div>
+                </div>
+                <form th:action="@{/loginProc}" method="post">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="id" name="username" id="username">
+                    </div>
+                    <div class="form-group">
+                        <input type="password" class="form-control" placeholder="Password" name="password" id="password">
+                    </div>
+                    <input type="submit" class="btn btn-dark" value="로그인">
+                </form>
+                <div class="options">
+                    <a href="/member/find">아이디/비밀번호 찾기</a>
+                    <a href="/signUp/manager">회원가입</a>
+                </div>
+            </div>
+        </div>
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    </body>
+</html>

@@ -10,8 +10,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+
 
 
 @Slf4j
@@ -26,37 +29,33 @@ public class ReservationUserController {
     /***
      * 예약 등록 페이지 이동 메서드
      */
-    @GetMapping("/reservation")
-    public String reservation() {
+    @GetMapping("/reservation/{restaurantNo}")
+    public String reservation(@PathVariable String restaurantNo, Model model) {
+
+        model.addAttribute("restaurantNo", restaurantNo);
         System.out.println("예약 페이지 접속");
         return "reservation/reservationCalendar";
     }
 
 
-
     /***
-     * 특정 식당의 정보를 가져오는 메서드
+     * 특정 식당의 시간을 가져오는 메서드
      * @param restaurantNo
-     * @return ResponseEntity with the restaurant details
+     * @return
      */
-    @GetMapping("/reservation/{restaurantNo}")
-    public String getReservationPage(@PathVariable Long restaurantNo, Model model) {
-        List<LocalTime> times = reservationUserService.getReservationTimes(restaurantNo);
-        int maxPeople = reservationUserService.getMaxPeople(restaurantNo);
+    @ResponseBody
+    @GetMapping("/reservation/{restaurantNo}/available-times")
+    public List<Map<String, Object>> getAvailableTimeSlots(
+            @PathVariable("restaurantNo") Long restaurantNo,
+            @RequestParam("date") String dateStr,
+            @RequestParam("partySize") int partySize) {
 
-        List<Integer> peopleNumbers = new ArrayList<>();
-        for (int i = maxPeople; i > 0; i--) {
-            peopleNumbers.add(i);
-        }
-
-        model.addAttribute("reservationTimes", times);
-        model.addAttribute("reservationPeople", peopleNumbers);
-        System.out.println("peopleNumbers = " + peopleNumbers);
-        System.out.println("times = " + times);
-
-        return "reservation/reservationCalendar";
+        LocalDate date = LocalDate.parse(dateStr);  // 명시적으로 변환
+        System.out.println("partySize = " + partySize);
+        System.out.println("restaurantNo = " + restaurantNo);
+        System.out.println("Received date: " + date); // 디버깅을 위한 로그
+        return reservationUserService.getAvailableTimeSlots(date, restaurantNo, partySize);
     }
-
 
 
     /***
@@ -75,44 +74,24 @@ public class ReservationUserController {
     }
 
 
-    /***
-     * 예약 확정
-     */
-    @GetMapping("/reservation/complete")
-    public String reservationComplete() {
-        return "reservation/reservationComplete";
-    }
-
-
-    /***
-     * 예약취소
-     */
-//    @GetMapping("/reservation/cancel")
-    @DeleteMapping("/reservation/{restaurantNo}")
-    public String updateReservation(Model model) {
-        return "reservation/updateReservation";
-    }
-
-
 
 
     /***
      * 예약한 인원수 만큼 예약세팅 베이블에서 빼기
      */
     @PutMapping("/reservation/{reservationNo}/subtract")
-    @ResponseBody
-    public ResponseEntity<Void> subtractPartySize(@PathVariable Long reservationNo, @RequestParam int partySize) {
+    public ResponseEntity<Void> subtractPartySize(@PathVariable Long reservationNo,
+                                                  @RequestParam int partySize,
+                                                  @RequestParam String time) {
         try {
-            reservationUserService.subtractPartySize(reservationNo, partySize);
+            LocalTime parsedTime = LocalTime.parse(time);
+            reservationUserService.subtractPartySize(reservationNo, partySize, parsedTime);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
-            log.error("Error subtracting party size", e);
+            log.error("인원수 제거 에러남", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-
-
-
 
 
 }

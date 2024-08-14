@@ -16,12 +16,19 @@
 
 <div class="text-center section">
     <h4 class="section-title">
-        <img th:src="@{/images/reservation/Calendar.png}" alt="Clock Icon"/> 시간을 선택해 주세요
+        <img th:src="@{/images/reservation/Person.png}" alt="Clock Icon"/> 인원을 선택해 주세요
     </h4>
-    <div class="times btn-group-toggle mb-4">
-        <button type="button" class="btn btn-custom"
-                th:each="time : ${reservationTimes}"
-                th:text="${time}"></button>
+    <div class="people btn-group-toggle mb-4">
+        <button type="button" class="btn btn-custom" data-value="3명">1명</button>
+        <button type="button" class="btn btn-custom" data-value="3명">2명</button>
+        <button type="button" class="btn btn-custom" data-value="3명">3명</button>
+        <button type="button" class="btn btn-custom" data-value="4명">4명</button>
+        <button type="button" class="btn btn-custom" data-value="5명">5명</button>
+        <button type="button" class="btn btn-custom" data-value="6명">6명</button>
+        <button type="button" class="btn btn-custom" data-value="7명">7명</button>
+        <button type="button" class="btn btn-custom" data-value="8명">8명</button>
+        <button type="button" class="btn btn-custom" data-value="9명">9명</button>
+        <button type="button" class="btn btn-custom" data-value="10명">10명</button>
     </div>
 </div>
 
@@ -31,12 +38,12 @@
 
     <div class="text-center section">
         <h4 class="section-title">
-            <img th:src="@{/images/reservation/person.png}" alt="Person Icon"/> 인원을 선택해 주세요
+            <img th:src="@{/images/reservation/Calendar.png}" alt="Clock Icon"/> 시간을 선택해 주세요
         </h4>
-        <div class="people btn-group-toggle mb-4">
+        <div class="times btn-group-toggle mb-4">
             <button type="button" class="btn btn-custom"
-                    th:each="iStat : ${reservationPeople}"
-                    th:text="${iStat}"></button>
+                    th:each="time : ${reservationTimes}"
+                    th:text="${time}"></button>
         </div>
     </div>
 

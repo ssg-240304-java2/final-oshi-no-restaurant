@@ -28,12 +28,6 @@
         </div>
         <div class="list-count custom-margin" id="total-list-count">전체 리스트 개수 3</div>
         <div class="content-section active" id="favorite-content">
-            <!-- 동적으로 리스트 버튼 생성 -->
-<!--            <div th:each="list : ${myLists}">-->
-<!--                <button type="button" class="btn btn-custom"-->
-<!--                        th:text="${list.listName}"-->
-<!--                        th:onclick="'showRestaurantList(' + ${list.listNo} + ')'"></button>-->
-<!--            </div>-->
             <div th:each="list : ${myLists}">
                 <div class="list-box">
                     <!-- 리스트 이름을 버튼으로 표시 -->
@@ -42,12 +36,16 @@
                             th:onclick="toggleRestaurants(`[[${list.listNo}]]`, this)"></button>
 
                     <!-- 식당 정보가 표시될 영역 -->
-                    <div class="restaurant-list" th:id="'restaurant-list-' + ${list.listNo}" style="display: none;">                        <!-- AJAX로 불러온 데이터가 여기 추가됩니다 -->
+                    <div class="restaurant-list" th:id="'restaurant-list-' + ${list.listNo}" style="display: none;">       
+                        <!-- 삭제 버튼 -->
+                        <div class="delete-btn-container" style="text-align: right; margin: 10px 0;">
+                            <button class="delete-btn" onclick="toggleDeleteMode([[${list.listNo}]])">식당 삭제</button>
+                        </div>
+                    </div>
+<!--                        식당 데이터는 여기에 생성ㅇㅇ-->
                     </div>
                 </div>
             </div>
-
-
 
             <div class="content-section" id="following-list">
             <div class="table-responsive">
@@ -98,6 +96,7 @@
         <div class="follower-restaurant-list content-section" id="follower-restaurant-list"></div>
         <div class="follower-restaurant-items content-section" id="follower-restaurant-items"></div>
     </nav>
+        </div>
     <span class="toggle-btn" onclick="toggleSidebar()">&lt;</span>
     <div id="restaurant-info-window" class="restaurant-info-window"></div>
 </div>
@@ -129,6 +128,7 @@
                 success: function(data) {
                     console.log('---->', data);
                     restaurantListDiv.innerHTML = ""; // 이전 내용을 초기화
+
                     if (data && data.length > 0) {
                         data.forEach(restaurant => {
                             const restaurantDiv = document.createElement("div");
@@ -136,15 +136,79 @@
                                                 <p>${restaurant.restaurantAddress}</p>
                                                 <img src="${restaurant.imgUrl}" alt="${restaurant.restaurantName}" width="100">`;
                             restaurantListDiv.appendChild(restaurantDiv);
-                            // 마커 추가
-                            var marker = new naver.maps.Marker({
-                                position: new naver.maps.LatLng(restaurant.yCoordinate, restaurant.xCoordinate),
-                                map: map, // 초기화된 지도
-                                icon: {
-                                    url: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png'
+
+
+                            // 좌표와 식당 정보를 서버로부터 가져오는 AJAX 요청
+                            $.ajax({
+                                url: '/tsktskLists/restaurantCoordinates',
+                                type: 'get',
+                                success: function(data) {
+                                    console.log('데이터 확인', data)
+
+                                    if (data && data.length > 0) {
+                                        data.forEach(function(restaurant) {
+                                            const restaurantDiv = document.createElement("div");
+                                            restaurantDiv.className = "restaurant-item";
+                                            restaurantDiv.innerHTML = `
+                    <div class="restaurant-card">
+                        <img src="${restaurant.imgUrl}" alt="식당 이미지" class="restaurant-img">
+                        <div class="restaurant-info">
+                            <h5>${restaurant.restaurantName}</h5>
+                            <p>${restaurant.restaurantAddress}</p>
+                        </div>
+                        </div>
+                    </div>`;
+                                            restaurantListDiv.appendChild(restaurantDiv);
+
+                                            // 좌표 확인
+                                            console.log("xCoordinate: ", restaurant.xcoordinate, "yCoordinate: ", restaurant.ycoordinate);
+
+                                            // 위치 생성
+                                            var position = new naver.maps.LatLng(restaurant.xcoordinate, restaurant.ycoordinate);
+
+                                            // 마커 생성
+                                            var marker = new naver.maps.Marker({
+                                                map: map,
+                                                position: position,
+                                                icon: {
+                                                    url: 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png'
+                                                }
+                                            });
+
+                                            // 정보 창 생성
+                                            var infoWindow = new naver.maps.InfoWindow({
+                                                content: `<div style="width:150px;text-align:center;padding:10px;">
+                                <b>${restaurant.restaurantName}</b><br/>
+                                ${restaurant.restaurantAddress}
+                              </div>`
+                                            });
+
+                                            // 마커 클릭 시 정보 창 표시 및 닫기 기능 추가
+                                            naver.maps.Event.addListener(marker, 'click', function() {
+                                                if (infoWindow.getMap()) {
+                                                    // 정보 창이 이미 열려 있다면 닫음
+                                                    infoWindow.close();
+
+                                                } else {
+                                                    // 정보 창이 열려 있지 않다면 열음
+                                                    infoWindow.open(map, marker);
+                                                }
+                                                // 마커색 변경
+                                                marker.setIcon({
+                                                    url: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png'
+                                                })
+                                            });
+                                        });
+                                    } else {
+                                        console.log('식당 정보가 없습니다.');
+                                    }
+                                },
+                                error: function(error) {
+                                    console.error('데이터를 불러오는 중 오류가 발생했습니다.', error);
                                 }
                             });
-                            markers.push(marker);
+
+
                         });
                         restaurantListDiv.style.display = "block"; // 데이터를 로드한 후 보여줌
                     } else {
@@ -161,6 +225,80 @@
             restaurantListDiv.style.display = "none"; // 리스트가 이미 보이는 경우 숨김
         }
     }
+
+    function toggleDeleteMode(listNo) {
+        const checkboxes = document.querySelectorAll(`#restaurant-list-${listNo} .delete-checkbox`);
+        const deleteButton = document.querySelector(`#restaurant-list-${listNo} .delete-btn`);
+
+        checkboxes.forEach(checkbox => {
+            if (checkbox.style.display === "none") {
+                checkbox.style.display = "inline-block";
+            } else {
+                checkbox.style.display = "none";
+            }
+        });
+
+        if (deleteButton.textContent === "식당 삭제") {
+            deleteButton.textContent = "삭제 확인";
+            deleteButton.onclick = function() { confirmDelete(listNo); };
+        } else {
+            deleteButton.textContent = "식당 삭제";
+            deleteButton.onclick = function() { toggleDeleteMode(listNo); };
+        }
+    }
+
+    function confirmDelete(listNo) {
+        const selectedItems = [];
+        document.querySelectorAll(`#restaurant-list-${listNo} .delete-checkbox:checked`).forEach(checkbox => {
+            selectedItems.push(checkbox.value);
+        });
+
+        if (selectedItems.length > 0) {
+            $.ajax({
+                url: '/tsktskLists/deleteRestaurants',
+                type: 'POST',
+                data: JSON.stringify({
+                    listNo: listNo,
+
+                    restaurantNos: selectedItems
+                }),
+                contentType: 'application/json',
+                success: function(response) {
+                    alert("선택한 식당 정보가 삭제되었습니다.");
+                    window.location.reload();
+                },
+                error: function(error) {
+                    console.error('삭제 중 오류가 발생했습니다.', error);
+                    alert("삭제 중 오류가 발생했습니다.");
+                }
+            });
+        } else {
+            alert("삭제할 항목을 선택하세요.");
+        }
+    }
+
+        if (selectedItems.length > 0) {
+            $.ajax({
+                url: '/tsktskLists/deleteRestaurants',
+                type: 'POST',
+                data: JSON.stringify({
+                    listNo: listNo,
+                    restaurantNos: selectedItems
+                }),
+                contentType: 'application/json',
+                success: function(response) {
+                    alert("선택한 식당 정보가 삭제되었습니다.");
+                    window.location.reload();
+                },
+                error: function(error) {
+                    console.error('삭제 중 오류가 발생했습니다.', error);
+                    alert("삭제 중 오류가 발생했습니다.");
+                }
+            });
+        } else {
+            alert("삭제할 항목을 선택하세요.");
+        }
+
 
 </script>
 </body>
