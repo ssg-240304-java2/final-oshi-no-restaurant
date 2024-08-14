@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>쩝쩝 친구</title>
+        <!-- Bootstrap CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" th:href="@{/css/fragment/navbar.css}">
+        <link rel="stylesheet" th:href="@{/css/fragment/footer.css}">
+        <link rel="stylesheet" th:href="@{/css/member/zzupFriend.css}">
+    </head>
+
+    <body>
+
+        <div th:replace="~{fragment/navbar.html :: navbar}" class="navbar"></div>
+
+        <div class="container content">
+            <h1 class="mb-4">쩝쩝 친구</h1>
+            <!-- Search form -->
+            <form action="/zzupFriend" method="GET" class="search-bar">
+                <input type="text" name="query" class="form-control" placeholder="리스트 검색">
+                <button type="submit" class="btn">검색</button>
+            </form>
+            <!-- 타임리프 반복 구문 시작 -->
+            <div th:each="list : ${memberLists}">
+                <a th:href="@{/member/{memberNo}(memberNo=${list.memberNo})} + '#' + ${list.listNo}">
+                <div class="list-group">
+                    <div class="list-item" data-bs-toggle="modal" data-bs-target="#myModal">
+                        <img th:src="${list.memberImg}" alt="Profile" class="profile-pic">
+                        <span class="username" th:text="${list.memberName}">의진</span>
+                        <span class="item-name" th:text="${list.listName}">삼성역 맛집</span>
+                        <span class="badge">
+                            <img class="icon" th:src="@{/images/member/love.png}" alt="cnt">
+                            <span th:text="${list.listShare}">5K</span>
+                        </span>
+                    </div>
+                </div>
+                </a>
+            </div>
+            <!-- 타임리프 반복 구문 끝 -->
+        </div>
+
+        <div th:replace="~{fragment/footer.html :: footer}" class="footer"></div>
+
+        <!-- Modal -->
+        <!--<div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">-->
+        <!--    <div class="modal-dialog modal-dialog-centered">-->
+        <!--        <div class="modal-content">-->
+        <!--            <div class="modal-body">-->
+        <!--                모달 내용-->
+        <!--            </div>-->
+        <!--        </div>-->
+        <!--    </div>-->
+        <!--</div>-->
+
+        <!-- Bootstrap JS and dependencies -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.2/js/bootstrap.min.js"></script>
+        <script type="text/javascript" th:src="@{js/fragment/navbar.js}"></script>
+    </body>
+
+</html>
