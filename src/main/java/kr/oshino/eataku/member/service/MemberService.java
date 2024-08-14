@@ -8,17 +8,25 @@ import kr.oshino.eataku.member.entity.MemberLoginInfo;
 import kr.oshino.eataku.member.model.dto.MemberDTO;
 import kr.oshino.eataku.member.model.repository.MemberLoginInfoRepository;
 import kr.oshino.eataku.member.model.repository.MemberRepository;
+import kr.oshino.eataku.restaurant.admin.entity.AccountInfo;
+import kr.oshino.eataku.restaurant.admin.entity.RestaurantInfo;
+import kr.oshino.eataku.restaurant.admin.model.dto.RestaurantAccountInfoDTO;
+import kr.oshino.eataku.restaurant.admin.model.repository.AccountInfoRepository;
+import kr.oshino.eataku.restaurant.admin.model.repository.RestaurantRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class MemberService {
 
     private final MemberRepository memberRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final MemberLoginInfoRepository memberLoginInfoRepository;
+    private final AccountInfoRepository accountInfoRepository;
 
     public void insertNewMember(MemberDTO newMember) {
 
@@ -45,12 +53,24 @@ public class MemberService {
 
     public boolean checkDuplicateAccount(String account) {
 
-        return memberLoginInfoRepository.existsByAccount(account);
+        boolean isExist = memberLoginInfoRepository.existsByAccount(account);
+        log.info("👀👀 [ MemberService ] exist memberAccount: {} 👀👀", isExist);
+        if (isExist){
+            return true;
+        }
+
+        isExist = accountInfoRepository.existsById(account);
+        log.info("👀👀 [ MemberService ] exist restaurantAccount: {} 👀👀", isExist);
+
+        if (isExist){
+            return true;
+        }
+
+        return false;
     }
 
     public boolean checkDuplicateNickname(String nickname) {
 
         return memberRepository.existsByNickname(nickname);
     }
-
 }

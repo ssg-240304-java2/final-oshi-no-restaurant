@@ -7,14 +7,14 @@
         <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" th:href="@{/css/fragment/navbar.css}">
         <link rel="stylesheet" th:href="@{/css/fragment/footer.css}">
-        <link rel="stylesheet" th:href="@{/css/member/signUp.css}">
+        <link rel="stylesheet" th:href="@{/css/member/managerSignUp.css}">
     </head>
     <body>
         <div th:replace="~{fragment/navbar.html :: navbar}" class="navbar"></div>
 
         <div class="container mt-5" style="max-width: 600px;">
             <h2 class="mb-4 text-center">회원 가입</h2>
-            <form th:action="@{/signUp}" method="post">
+            <form th:action="@{/signUp/manager}" method="post">
                 <div class="form-group row">
                     <label for="userId" class="col-sm-3 col-form-label form-label">아이디</label>
                     <div class="col-sm-9">
@@ -41,52 +41,6 @@
                         <input type="password" class="form-control" id="confirmPassword"
                                placeholder="비밀번호 확인">
                         <div class="invalid-feedback hidden">비밀번호가 일치하지 않습니다. 다시 입력해주세요.</div>
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label for="fullName" class="col-sm-3 col-form-label form-label">이름(실명)</label>
-                    <div class="col-sm-9">
-                        <input type="text" class="form-control" id="fullName" placeholder="이름(실명)" name="name">
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label for="phone" class="col-sm-3 col-form-label form-label">휴대폰 번호</label>
-                    <div class="col-sm-9">
-                        <input type="text" class="form-control" id="phone" placeholder="- 제외 (예시: 01012341234)" name="phone">
-                        <div class="invalid-feedback hidden">유효한 핸드폰 번호가 아닙니다. 다시 입력해 주세요.</div>
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label for="birthDate" class="col-sm-3 col-form-label form-label">생년월일</label>
-                    <div class="col-sm-9">
-                        <div class="input-group">
-                            <input type="date" class="form-control" id="birthDate" max="9999-12-31"
-                                   placeholder="생년월일(예시: 20010121)"  name="birthday">
-                            <div class="input-group-append">
-                                <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                                    <label class="btn gender-btn">
-                                        <input type="radio" name="gender" id="male" autocomplete="off" value="male"> 남
-                                    </label>
-                                    <label class="btn gender-btn">
-                                        <input type="radio" name="gender" id="female" autocomplete="off" value="female"> 여
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-<!--                        <div class="invalid-feedback">유효한 생년월일을 입력해주세요.</div>-->
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label for="nickname" class="col-sm-3 col-form-label form-label">닉네임</label>
-                    <div class="col-sm-9">
-                        <div class="input-group">
-                            <input type="text" class="form-control" id="nickname" placeholder="닉네임" name="nickname">
-                            <div class="input-group-append">
-                                <button type="button" class="btn btn-secondary" id="nicknameCheckBtn">중복확인</button>
-                            </div>
-                        </div>
-                        <div class="invalid-feedback hidden nickname-before">중복확인 눌러 닉네임 중복을 확인해주세요.</div>
-                        <div class="invalid-feedback hidden nickname-after">중복된 닉네임 입니다. 다른 닉네임을 사용해 주세요.</div>
                     </div>
                 </div>
                 <div class="form-group row">
@@ -124,6 +78,6 @@
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
         <script type="text/javascript" th:src="@{/js/fragment/navbar.js}"></script>
-        <script type="text/javascript" th:src="@{/js/member/signUp.js}"></script>
+        <script type="text/javascript" th:src="@{/js/member/managerSignUp.js}"></script>
     </body>
 </html>

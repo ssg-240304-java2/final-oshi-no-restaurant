@@ -1,0 +1,78 @@
+body {
+    margin-top: 120px;
+}
+.form-group {
+    margin-bottom: 1.5rem;
+}
+.invalid-feedback {
+    display: block;
+}
+.input-group-text {
+    min-width: 100px;
+    justify-content: center;
+}
+.btn-secondary, .btn-secondary:focus, .btn-secondary:active {
+    background-color: #FFFFFF;
+    border: 1px solid #E0E0E0;
+    color: black;
+}
+.btn-secondary.clicked {
+    background-color: #FA4A54;
+    border-color: #FA4A54;
+    color: white;
+}
+.btn-secondary:hover {
+    background-color: #FA4A54;
+    color: white;
+    border: 1px solid #FA4A54;
+}
+.btn-email {
+    min-width: 118px;
+    height: 38px;
+    background-color: #FFFFFF;
+    border: 1px solid #E0E0E0;
+    color: black;
+}
+.btn-danger {
+    background-color: #FA4A54;
+    border: none;
+}
+.btn-danger:hover {
+    background-color: #FA4A54;
+}
+.form-label {
+    font-weight: bold;
+}
+.btn-group-toggle .btn {
+    border-radius: 0;
+    background-color: #FFFFFF;
+    color: black;
+    border: 1px solid #E0E0E0;
+}
+.btn-group-toggle .btn.active,
+.btn-group-toggle .btn:focus,
+.btn-group-toggle .btn:active {
+    background-color: #FA4A54 !important;
+    color: white !important;
+    border: 1px solid #FA4A54 !important;
+}
+.btn-group-toggle .btn:hover {
+    background-color: #FA4A54 !important;
+    color: white !important;
+    border: 1px solid #FA4A54 !important;
+}
+.btn-group-toggle .btn:first-child {
+    border-top-left-radius: .25rem;
+    border-bottom-left-radius: .25rem;
+}
+.btn-group-toggle .btn:last-child {
+    border-top-right-radius: .25rem;
+    border-bottom-right-radius: .25rem;
+}
+.btn-danger {
+    margin-bottom: 50px;
+}
+
+.hidden {
+    display: none;
+}

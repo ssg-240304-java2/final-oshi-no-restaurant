@@ -1,6 +1,7 @@
 package kr.oshino.eataku.member.model.dto;
 
 import kr.oshino.eataku.member.entity.Member;
+import kr.oshino.eataku.restaurant.admin.entity.RestaurantInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -9,23 +10,45 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.ArrayList;
 import java.util.Collection;
 
-@RequiredArgsConstructor
 public class CustomMemberDetails implements UserDetails {
 
     private final Member member;
+    private final RestaurantInfo restaurant;
+
+    public CustomMemberDetails(Member member) {
+        this.member = member;
+        this.restaurant = new RestaurantInfo();
+    }
+
+    public CustomMemberDetails(RestaurantInfo restaurant) {
+        this.member = new Member();
+        this.restaurant = restaurant;
+    }
 
     public Long getMemberNo(){
         return member.getMemberNo();
     }
+    public Long getRestaurantNo() {return restaurant.getRestaurantNo(); }
 
     @Override
     public String getUsername() {
-        return member.getMemberLoginInfo().getAccount();
+
+        if(member != null) {
+            return member.getMemberLoginInfo().getAccount();
+        }
+        else {
+            return restaurant.getAccountInfo().getId();
+        }
     }
 
     @Override
     public String getPassword() {
-        return member.getMemberLoginInfo().getPassword();
+        if(member != null) {
+            return member.getMemberLoginInfo().getPassword();
+        }
+        else {
+            return restaurant.getAccountInfo().getPassword();
+        }
     }
 
     @Override
