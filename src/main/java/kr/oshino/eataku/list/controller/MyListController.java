@@ -1,7 +1,11 @@
 package kr.oshino.eataku.list.controller;
 
+import kr.oshino.eataku.list.entity.MyList;
+import kr.oshino.eataku.list.model.dto.MyListDto;
 import kr.oshino.eataku.list.model.service.MyListService;
+import kr.oshino.eataku.list.model.vo.RestaurantList;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -9,11 +13,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
 import java.util.Map;
 
 @Controller
 @RequestMapping
 @RequiredArgsConstructor
+@Slf4j
 public class MyListController {
 
     private final MyListService myListService;
@@ -97,6 +103,46 @@ public class MyListController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update status");
         }
     }
+
+    // 식당을 리스트에 추가 (좋아요 클릭 시)--- 나중에 수정
+    @PostMapping("/{listNo}/addRestaurant")
+    @ResponseBody
+    public ResponseEntity<String> addRestaurantToList(@PathVariable("listNo") Integer listNo,
+                                                      @RequestBody RestaurantList restaurant) {
+        try {
+            myListService.addRestaurantToList(listNo, restaurant);
+            return ResponseEntity.ok("Restaurant added to the list successfully");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add restaurant to list");
+        }
+    }
+
+    // 내 쩝쩝 리스트 페이지를 띄우는 메소드
+    @GetMapping("/tsktskLists")
+    public String showMyLists(Model model) {
+        List<MyList> myLists = myListService.getAllMyLists();
+        model.addAttribute("myLists", myLists);
+        return "list/tsktskList";
+    }
+
+    // ajax 로 특정 리스트의 식당 정보를 가져오는 메소드
+    @GetMapping("/tsktskLists/{listNo}/restaurants")
+    @ResponseBody
+    public List<RestaurantList> getRestaurantLists(@PathVariable Integer listNo) {
+        log.info("리스트 번호: " + listNo + "의 식당 정보를 가져옵니다.");
+        return myListService.getRestaurantListsByListNo(listNo);
+    }
+
+    // ajax 로 특정 리스트의 식당 정보를 가져오는 메소드2
+//    @GetMapping("/tsktskLists/{listNo}/restaurants")
+//    @ResponseBody
+//    public List<MyList> getMyLists(@PathVariable Integer listNo) {
+//        log.info("리스트 번호: " + listNo + "의 식당 정보를 가져옵니다.");
+//        return myListService.getMyListsByListNo(listNo);
+//    }
+
+
 
 }
 
