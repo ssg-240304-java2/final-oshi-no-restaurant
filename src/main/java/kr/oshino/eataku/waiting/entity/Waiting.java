@@ -7,8 +7,10 @@ import kr.oshino.eataku.restaurant.admin.entity.RestaurantInfo;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+
 
 @Entity
 @Table(name="tbl_waiting")

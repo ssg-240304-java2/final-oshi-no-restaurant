@@ -6,6 +6,7 @@ import kr.oshino.eataku.member.model.repository.MemberRepository;
 import kr.oshino.eataku.restaurant.admin.entity.RestaurantInfo;
 import kr.oshino.eataku.restaurant.admin.model.repository.RestaurantRepository;
 import kr.oshino.eataku.waiting.entity.Waiting;
+import kr.oshino.eataku.waiting.event.WaitingCreatedEvent;
 import kr.oshino.eataku.waiting.model.dto.requestDto.CreateWaitingRequestDto;
 import kr.oshino.eataku.waiting.model.dto.requestDto.ReadWaitingRequestDto;
 import kr.oshino.eataku.waiting.model.dto.requestDto.UpdateWaitingRequestDto;
@@ -15,8 +16,10 @@ import kr.oshino.eataku.waiting.model.dto.responseDto.UpdateWaitingResponseDto;
 import kr.oshino.eataku.waiting.repository.WaitingRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import reactor.core.publisher.Sinks;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,6 +32,9 @@ public class WaitingService {
     private final WaitingRepository waitingRepository;
     private final MemberRepository memberRepository;
     private final RestaurantRepository restaurantRepository;
+
+    private final ApplicationEventPublisher eventPublisher;
+
 
 
 
@@ -49,12 +55,14 @@ public class WaitingService {
         RestaurantInfo restaurantInfo = restaurantRepository.findById(createWaitingRequestDto.getRestaurantNo())
                         .orElseThrow(() -> new RuntimeException("해당하는 레스토랑 정보가 없습니다!"));
 
-        waitingRepository.save(Waiting.builder()
-                .partySize(createWaitingRequestDto.getPartySize())
-                .restaurantInfo(restaurantInfo)
-                .member(member)
-                .waitingStatus(StatusType.대기중)
-                .build());
+        Waiting waiting = waitingRepository.save(Waiting.builder()
+                                        .partySize(createWaitingRequestDto.getPartySize())
+                                        .restaurantInfo(restaurantInfo)
+                                        .member(member)
+                                        .waitingStatus(StatusType.대기중)
+                                        .build());
+
+        eventPublisher.publishEvent(new WaitingCreatedEvent(this, waitingRepository.findWaitingByWaitingNo(waiting.getWaitingNo())));
 
         // 카카오톡 알림 메세지 전송
 
