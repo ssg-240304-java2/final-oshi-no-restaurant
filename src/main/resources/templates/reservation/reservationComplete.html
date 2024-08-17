@@ -3,18 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reservation Confirmation</title>
+    <title>예약 확정</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="reservation-confirmation.css" rel="stylesheet"> <!-- CSS 파일 링크 -->
 </head>
 <body>
 
-<!-- Trigger Button (이 버튼을 클릭하면 모달이 열립니다.) -->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#reservationModal">
-    마이페이지 예약확인
-</button>
 
-<!-- Modal Structure -->
+<!--모달 구조-->
 <div class="modal fade" id="reservationModal" tabindex="-1" aria-labelledby="reservationModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -35,16 +31,17 @@
                     <h1>예약완료</h1>
                     <div class="details mt-4">
                         <div>
-                            <span class="label font-weight-bold">매장명: </span>
-                            <span class="value">음식점 이름</span>
+                            <span class="label font-weight-bold">매장명 </span>
+                            <span id="modalRestaurantName" class="value"></span>
                         </div>
                         <div>
-                            <span class="label font-weight-bold">인원: </span>
-                            <span class="value">성인 2명</span>
+                            <span class="label font-weight-bold">인원 </span>
+                            <span id="modalPartySize" class="value"></span>
                         </div>
                         <div>
-                            <span class="label font-weight-bold">예약일시: </span>
-                            <span class="value">2021년 01월 19일 화요일 오후 4:00</span>
+                            <span class="label font-weight-bold">예약일시 </span>
+                            <span id="modalReservationDate" class="value"></span>
+                            <span id="modalReservationTime" class="value"></span>
                         </div>
                     </div>
                     <div class="footer mt-4">
@@ -54,22 +51,18 @@
                 </div>
             </div>
             <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="confirmReservation">확인</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
             </div>
         </div>
     </div>
 </div>
 
+
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-<!-- 자동으로 모달 창을 띄우려면 아래 스크립트를 사용 -->
-<script>
-    $(document).ready(function(){
-        $('#reservationModal').modal('show');
-    });
-</script>
 
 </body>
 </html>

@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>예약취소</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link href="reservation-cancellation.css" rel="stylesheet">
 </head>
 <body>
 <div class="container">
@@ -14,6 +13,8 @@
         예약 취소
     </button>
 </div>
+
+
 
 <!-- Modal Structure -->
 <div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
@@ -44,31 +45,34 @@
     </div>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 <!-- 예약 취소 처리를 위한 스크립트 -->
 <script>
-    document.getElementById('confirmCancel').addEventListener('click', function() {
-        // 예약 취소 처리 로직을 여기에 추가합니다.
-        fetch('/cancel-reservation', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ reservationId: '12345' }) // 예약 ID를 여기에 전달합니다.
-        }).then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert('예약이 성공적으로 취소되었습니다.');
-                    $('#cancelModal').modal('hide'); // 모달을 닫습니다.
-                } else {
-                    alert('예약 취소에 실패하였습니다.');
+    $(document).ready(function() {
+        $('#confirmCancel').click(function() {
+            var reservationNo = '12345'; // 실제 예약 ID를 여기에 넣어야 합니다.
+
+            $.ajax({
+                url: '/reservation/' + reservationNo + '/cancel',
+                type: 'POST',
+                contentType: 'application/json',
+                success: function(response) {
+                    if (response.success) {
+                        alert('예약이 성공적으로 취소되었습니다.');
+                        $('#cancelModal').modal('hide'); // 모달을 닫습니다.
+                        // 예약 목록을 새로 고침하거나 업데이트하는 로직을 추가할 수 있습니다.
+                    } else {
+                        alert('예약 취소에 실패하였습니다: ' + response.message);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', error);
+                    alert('예약 취소 중 오류가 발생하였습니다.');
                 }
-            }).catch(error => {
-            console.error('Error:', error);
-            alert('예약 취소 중 오류가 발생하였습니다.');
+            });
         });
     });
 </script>

@@ -47,16 +47,75 @@
         </div>
     </div>
 
+<div id="modal-container"></div> <!-- 모달이 동적으로 로드될 위치  위치 괜찮나???-->
+
     <div class="text-center mb-4">
-        <button type="button" class="btn btn-outline-custom" id="reserve-button">예약하기</button>
+
+        <button type="button" class="btn btn-outline-custom" id="reserve-button" data-toggle="modal" data-target="#reservationModal">
+            예약하기
+        </button>
+    </div>
+
+
+
+<!--모달 구조 -->
+<div class="modal fade" id="reservationModal" tabindex="-1" aria-labelledby="reservationModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="reservationModalLabel">예약확정</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Reservation Confirmation Content -->
+                <div class="reservation-confirm text-center">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#ff6f61" width="80" height="80">
+                            <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm-1 17.93l-5-5 1.41-1.41L11 14.93l7.59-7.59L20 8.34l-9 9z"/>
+                        </svg>
+                    </div>
+                    <h1>예약완료</h1>
+                    <div class="details mt-4">
+                        <div>
+                            <span class="label font-weight-bold">매장명 </span>
+                            <span id="modalRestaurantName" class="value"></span>
+                        </div>
+                        <div>
+                            <span class="label font-weight-bold">인원 </span>
+                            <span id="modalPartySize" class="value"></span>
+                        </div>
+                        <div>
+                            <span class="label font-weight-bold">예약일시 </span>
+                            <span id="modalReservationDate" class="value"></span>
+                            <span id="modalReservationTime" class="value"></span>
+                        </div>
+                    </div>
+                    <div class="footer mt-4">
+                        예약 취소는 예약 24시간 전까지 가능합니다.<br>
+                        예약 취소는 홈페이지를 통해 예약조회를 하시면 됩니다.
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="confirmReservation">확인</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+            </div>
+        </div>
     </div>
 </div>
+
 
 <div th:replace="~{fragment/footer.html :: footer}" class="footer"></div>
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/pikaday/pikaday.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
 <script th:src="@{/js/fragment/navbar.js}"></script>
 <script th:src="@{/js/reservation/reservationCalendar.js}"></script>
+
 </body>
 </html>
