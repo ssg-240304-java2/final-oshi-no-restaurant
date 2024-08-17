@@ -1,7 +1,9 @@
 body {
     margin-top: 120px;
 }
-
+a {
+    text-decoration-line: none;
+}
 .content {
     margin-bottom: 50px;
     min-height: 48vh;
@@ -95,11 +97,12 @@ body {
 .badge .icon {
     width: 20px;
     height: 20px;
-    background-color: #f46a6a;
-    border-radius: 50%;
+    /*background-color: #f46a6a;*/
+    /*border-radius: 50%;*/
     display: inline-block;
     margin-right: 5px;
 }
+
 
 .modal-content {
     background-color: white;

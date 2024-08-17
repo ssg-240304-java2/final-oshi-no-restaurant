@@ -38,6 +38,7 @@ public class Member {
     @Column(name = "img_url")
     private String imgUrl;
     private String phone;
+    private String introduction;
 
     @CreationTimestamp
     private Timestamp createdAt;

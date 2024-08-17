@@ -12,7 +12,16 @@ public interface WaitingRepository extends JpaRepository<Waiting, Long> {
 
     @Query("SELECT new kr.oshino.eataku.waiting.model.dto.responseDto.ReadWaitingResponseDto(" +
             "w.waitingNo, w.partySize, w.waitingStatus, w.createdAt, w.updatedAt, " +
-            "m.name, m.nickname, m.phone, r.restaurantName) " +
+            "m.name, m.nickname, m.phone, r.restaurantNo, r.restaurantName) " +
+            "FROM Waiting w " +
+            "JOIN w.member m " +
+            "JOIN w.restaurantInfo r " +
+            "WHERE w.waitingNo = :waitingNo")
+    ReadWaitingResponseDto findWaitingByWaitingNo(@Param("waitingNo") Long waitingNo);
+
+    @Query("SELECT new kr.oshino.eataku.waiting.model.dto.responseDto.ReadWaitingResponseDto(" +
+            "w.waitingNo, w.partySize, w.waitingStatus, w.createdAt, w.updatedAt, " +
+            "m.name, m.nickname, m.phone, r.restaurantNo, r.restaurantName) " +
             "FROM Waiting w " +
             "JOIN w.member m " +
             "JOIN w.restaurantInfo r " +
@@ -22,7 +31,7 @@ public interface WaitingRepository extends JpaRepository<Waiting, Long> {
 
     @Query("SELECT new kr.oshino.eataku.waiting.model.dto.responseDto.ReadWaitingResponseDto(" +
             "w.waitingNo, w.partySize, w.waitingStatus, w.createdAt, w.updatedAt, " +
-            "m.name, m.nickname, m.phone, r.restaurantName) " +
+            "m.name, m.nickname, m.phone, r.restaurantNo, r.restaurantName) " +
             "FROM Waiting w " +
             "JOIN w.member m " +
             "JOIN w.restaurantInfo r " +

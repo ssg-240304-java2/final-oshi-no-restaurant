@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
+@Builder
 public class ReadWaitingResponseDto {
 
     private Long waitingNo;
@@ -24,5 +24,6 @@ public class ReadWaitingResponseDto {
     private String phone;
 
     // Restaurant_Info Entity 정보
+    private Long restaurantNo;
     private String restaurantName;
 }

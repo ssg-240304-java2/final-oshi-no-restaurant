@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import kr.oshino.eataku.member.model.dto.MemberDTO;
+import kr.oshino.eataku.member.model.dto.MemberProfileDTO;
 import kr.oshino.eataku.member.service.MailService;
 import kr.oshino.eataku.member.service.MemberService;
 import kr.oshino.eataku.restaurant.admin.model.dto.RestaurantAccountInfoDTO;
@@ -16,6 +17,7 @@ import org.springframework.security.web.authentication.logout.SecurityContextLog
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -123,5 +125,15 @@ public class MemberController {
         session.setAttribute("email", member.getEmail());
 
         return ResponseEntity.ok("/managerLogin");
+    }
+
+    @GetMapping("/member/{memberNo}")
+    public String memberInfo(@PathVariable("memberNo") Long memberNo, Model model) {
+
+        MemberProfileDTO member = memberService.selectProfile(memberNo);
+
+        model.addAttribute("member", member);
+
+        return "member/memberProfile";
     }
 }
