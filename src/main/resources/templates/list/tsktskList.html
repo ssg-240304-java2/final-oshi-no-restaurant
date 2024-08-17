@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bootstrap Sidebar Layout</title>
@@ -33,25 +34,38 @@
                     <!-- 리스트 이름을 버튼으로 표시 -->
                     <button type="button" class="btn btn-custom"
                             th:text="${list.listName}"
-                            th:onclick="toggleRestaurants(`[[${list.listNo}]]`, this)"></button>
+                            th:onclick="toggleRestaurants('[[${list.listNo}]]', this)"></button>
 
-                    <!-- 식당 정보가 표시될 영역 -->
-                    <div class="restaurant-list" th:id="'restaurant-list-' + ${list.listNo}" style="display: none;">       
-                        <!-- 삭제 버튼 -->
+                    <!-- listNo를 서버로 전송하기 위해 hidden 필드 추가 -->
+                    <input type="hidden" name="listNo" th:value="${list.listNo}">
+
+                    <div class="delete-btn-container" style="text-align: right; margin: 10px 0;">
+                        <button type="button" class="delete-btn" onclick="toggleDeleteMode(this)">식당 삭제</button>
+                        <button type="submit" class="delete-btn confirm-delete" style="display:none;">삭제 확인</button>
+                    </div>
+
+                    <!-- 삭제 버튼 및 체크박스 -->
+                    <div class="restaurant-list" th:id="'restaurant-list-' + ${list.listNo}" style="display: none;">
                         <form th:action="@{/tsktskLists/deleteRestaurants}" method="post">
-                            <!-- 삭제 버튼 -->
-                            <div class="delete-btn-container" style="text-align: right; margin: 10px 0;">
-                                <button type="button" class="delete-btn" onclick="toggleDeleteMode()">식당 삭제</button>
-                                <button type="submit" class="delete-btn" style="display:none;">삭제 확인</button>
+
+                            <!-- 식당 삭제 체크 박스 -->
+                            <div th:each="restaurant : ${list.restaurantList}" class="restaurant-item">
+                                <input type="checkbox" name="restaurantNos" th:value="${restaurant.restaurantNo}" class="delete-checkbox" style="display:none;">
+                                <div class="restaurant-info">
+                                    <h5 th:text="${restaurant.restaurantName}"></h5>
+                                    <p th:text="${restaurant.restaurantAddress}"></p>
+                                    <img th:src="${restaurant.imgUrl}" alt="${restaurant.restaurantName}" width="100">
+                                </div>
                             </div>
                         </form>
                     </div>
-                    <!--                        식당 데이터는 여기에 생성ㅇㅇ-->
-                    </div>
                 </div>
             </div>
+        </div>
 
-            <div class="content-section" id="following-list">
+
+
+        <div class="content-section" id="following-list">
             <div class="table-responsive">
                 <table class="table table-hover">
                     <thead>
@@ -123,10 +137,11 @@
 
     function toggleRestaurants(listNo, element) {
         const restaurantListDiv = document.getElementById(`restaurant-list-${listNo}`);
+        const deleteBtnContainer = restaurantListDiv.querySelector('.delete-btn-container');
 
         // 요소가 존재하는지 확인
         if (!restaurantListDiv) {
-            console.error(`ID restaurant-list-${listNo}를 가진 요소를 찾을 수 없습니다.`);
+            console.error(`ID 'restaurant-list-${listNo}'를 가진 요소를 찾을 수 없습니다.`);
             return;
         }
 
@@ -149,6 +164,7 @@
                                 <div class="restaurant-info">
                                     <h5>${restaurant.restaurantName}</h5>
                                     <p>${restaurant.restaurantAddress}</p>
+                                    <input type="checkbox" name="restaurantNos" value="${restaurant.restaurantNo}" class="delete-checkbox" style="display:none;">
                                 </div>
                             </div>
                         `;
@@ -189,6 +205,7 @@
                             });
                         });
                         restaurantListDiv.style.display = "block"; // 데이터를 로드한 후 보여줌
+                        deleteBtnContainer.style.display = "block"; // 삭제 버튼도 함께 보여줌
                     } else {
                         restaurantListDiv.innerHTML = "<p>식당 정보가 없습니다.</p>";
                         restaurantListDiv.style.display = "block";
@@ -200,36 +217,30 @@
             });
         } else {
             restaurantListDiv.style.display = "none"; // 리스트가 이미 보이는 경우 숨김
+            deleteBtnContainer.style.display = "none"; // 삭제 버튼도 함께 숨김
         }
-
-
     }
 
-    // 식당 정보 삭제
-    // function toggleDeleteMode() {
-    //     const checkboxes = document.querySelectorAll('.delete-checkbox');
-    //     const deleteButton = document.querySelector('.delete-btn-container .delete-btn');
-    //
-    //     checkboxes.forEach(checkbox => {
-    //         if (checkbox.style.display === "none") {
-    //             checkbox.style.display = "inline-block";
-    //         } else {
-    //             checkbox.style.display = "none";
-    //         }
-    //     });
-    //
-    //     // 삭제 모드 전환
-    //     if (deleteButton.textContent === "식당 삭제") {
-    //         deleteButton.textContent = "삭제 확인";
-    //         deleteButton.type = "submit";
-    //     } else {
-    //         deleteButton.textContent = "식당 삭제";
-    //         deleteButton.type = "button";
-    //     }
-    // }
+    // 삭제 버튼
+    function toggleDeleteMode(button) {
+        // 삭제 버튼과 삭제 확인 버튼을 찾습니다.
+        const deleteBtnContainer = button.closest('.delete-btn-container');
+        const confirmDeleteButton = deleteBtnContainer.querySelector('.confirm-delete');
 
+        // 삭제 확인 버튼을 표시하고, 삭제 버튼을 숨깁니다.
+        confirmDeleteButton.style.display = 'inline-block';
+        button.style.display = 'none';
 
+        // 해당 리스트 박스의 모든 체크박스를 표시합니다.
+        const restaurantListDiv = deleteBtnContainer.closest('.restaurant-list');
+        const checkboxes = restaurantListDiv.querySelectorAll('.delete-checkbox');
+
+        checkboxes.forEach(checkbox => {
+            checkbox.style.display = checkbox.style.display === "none" ? "block" : "none";
+        });
+    }
 
 </script>
+
 </body>
 </html>
