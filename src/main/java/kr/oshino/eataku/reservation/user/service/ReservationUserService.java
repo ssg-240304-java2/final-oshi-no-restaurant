@@ -140,17 +140,17 @@ public class ReservationUserService {
     @Transactional
     public List<ReadReservationResponseDto> getReservationListByMemberNo(ReadReservationResponseDto readReservationResponseDto) {
 
-        List<ReadReservationResponseDto> reservationList = reservationRepository.findReservationByMemberNo(readReservationResponseDto.getMemberNo());
-        System.out.println("reservationList = " + reservationList);
+//        List<ReadReservationResponseDto> reservationList = reservationRepository.findReservationByMemberNo(readReservationResponseDto.getMemberNo());
+//        System.out.println("reservationList = " + reservationList);
+//
+//        if (readReservationResponseDto.getReservationStatus() != null) {
+//            reservationList = reservationList.stream()
+//                    .filter(dto -> dto.getReservationStatus().equals(readReservationResponseDto.getReservationStatus()))
+//                    .collect(Collectors.toList());
+//        }
 
-        if (readReservationResponseDto.getReservationStatus() != null) {
-            reservationList = reservationList.stream()
-                    .filter(dto -> dto.getReservationStatus().equals(readReservationResponseDto.getReservationStatus()))
-                    .collect(Collectors.toList());
-        }
-
-        return reservationList;
-
+//        return reservationList;
+        return null;
     }
 
 

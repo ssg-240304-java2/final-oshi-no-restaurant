@@ -1,6 +1,7 @@
 package kr.oshino.eataku.reservation.user.model.dto.responseDto;
 
 import kr.oshino.eataku.common.enums.AccountAuth;
+import kr.oshino.eataku.common.enums.ReservationStatus;
 import lombok.*;
 
 @Getter
@@ -13,7 +14,7 @@ public class ReadReservationResponseDto {
     // Reservation
     private int reservationNo;
 
-    private AccountAuth reservationStatus;
+    private ReservationStatus reservationStatus;
     private int partySize;
 
 
