@@ -143,22 +143,28 @@ public class MyListController {
     }
 
     // 식당 삭제 메소드
-//    @PostMapping("/deleteRestaurants")
-//    public String deleteRestaurants(@RequestParam("listNo") Integer listNo,
-//                                    @RequestParam("restaurantNos") List<Integer> restaurantNos,
-//                                    RedirectAttributes redirectAttributes) {
-//        try {
-//            myListService.deleteRestaurants(listNo, restaurantNos);
-//            redirectAttributes.addFlashAttribute("message", "식당 정보가 삭제되었습니다.");
-//            return "redirect:/tsktskLists";
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            redirectAttributes.addFlashAttribute("error", "삭제 중 오류가 발생했습니다.");
-//            return "redirect:/tsktskLists";
-//        }
-//    }
+    @PostMapping("/tsktskLists/deleteRestaurants")
+    public String deleteRestaurants(@RequestParam(value = "restaurantNos", required = false) List<Long> restaurantNos,
+                                    @RequestParam("listNo") Integer listNo,
+                                    RedirectAttributes redirectAttributes) {
+        try {
+            if (restaurantNos != null && !restaurantNos.isEmpty()) {
+                myListService.deleteRestaurants(listNo, restaurantNos);
+                redirectAttributes.addFlashAttribute("message", "식당 정보가 삭제되었습니다.");
+            } else {
+                redirectAttributes.addFlashAttribute("error", "삭제할 식당을 선택하지 않았습니다.");
+            }
+            return "redirect:/tsktskLists";
+        } catch (Exception e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("error", "삭제 중 오류가 발생했습니다.");
+            return "redirect:/tsktskLists";
+        }
+    }
+
 
 }
+
 
 
 

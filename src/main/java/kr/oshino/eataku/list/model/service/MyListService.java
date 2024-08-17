@@ -135,17 +135,22 @@ public class MyListService {
 
         return restaurantCoordinates;
     }
-}
 
     // 리스트 삭제 메소드
-//    public void deleteRestaurants(Integer listNo, List<Integer> restaurantNos) {
-//        MyList myList = myListRepository.findById(listNo)
-//                .orElseThrow(() -> new IllegalArgumentException("리스트를 찾을 수 없습니다: " + listNo));
-//
-//        List<RestaurantList> updatedRestaurantList = myList.getRestaurantList().stream()
-//                .filter(restaurant -> !restaurantNos.contains(restaurant.getRestaurantNo()))
-//                .collect(Collectors.toList());
-//
-//        myList.setRestaurantList(updatedRestaurantList);
-//        myListRepository.save(myList);
-//    }
+    @Transactional
+    public void deleteRestaurants(Integer listNo, List<Long> restaurantNos) {
+
+        MyList myList = myListRepository.findById(listNo)
+                .orElseThrow(() -> new IllegalArgumentException("List not found with ID: " + listNo));
+
+        List<RestaurantList> updatedList = myList.getRestaurantList().stream()
+                .filter(restaurant -> !restaurantNos.contains(restaurant.getRestaurantNo()))
+                .collect(Collectors.toList());
+
+        myList.setRestaurantList(updatedList);
+        myListRepository.save(myList);
+    }
+
+}
+
+
