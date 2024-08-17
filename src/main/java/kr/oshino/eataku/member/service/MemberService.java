@@ -1,18 +1,21 @@
 package kr.oshino.eataku.member.service;
 
+import kr.oshino.eataku.common.enums.ReservationStatus;
+import kr.oshino.eataku.common.enums.StatusType;
 import kr.oshino.eataku.list.entity.MyList;
 import kr.oshino.eataku.list.model.repository.MyListRepository;
 import kr.oshino.eataku.member.entity.Member;
 import kr.oshino.eataku.member.entity.MemberLoginInfo;
-import kr.oshino.eataku.member.model.dto.CustomMemberDetails;
-import kr.oshino.eataku.member.model.dto.MemberDTO;
-import kr.oshino.eataku.member.model.dto.MemberProfileDTO;
-import kr.oshino.eataku.member.model.dto.ZzupListDTO;
+import kr.oshino.eataku.member.model.dto.*;
 import kr.oshino.eataku.member.model.repository.FollowRepository;
 import kr.oshino.eataku.member.model.repository.MemberLoginInfoRepository;
 import kr.oshino.eataku.member.model.repository.MemberRepository;
+import kr.oshino.eataku.reservation.user.entity.Reservation;
+import kr.oshino.eataku.reservation.user.repository.ReservationRepository;
 import kr.oshino.eataku.restaurant.admin.model.repository.AccountInfoRepository;
 import kr.oshino.eataku.review.user.model.repository.ReviewRepository;
+import kr.oshino.eataku.waiting.entity.Waiting;
+import kr.oshino.eataku.waiting.repository.WaitingRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -34,6 +37,8 @@ public class MemberService {
     private final FollowRepository followRepository;
     private final ReviewRepository reviewRepository;
     private final MyListRepository myListRepository;
+    private final ReservationRepository reservationRepository;
+    private final WaitingRepository waitingRepository;
 
     public void insertNewMember(MemberDTO newMember) {
 
@@ -150,6 +155,50 @@ public class MemberService {
                                                   ,entity.getMember().getImgUrl()))
                                           .collect(Collectors.toList()));
         }
+
+        return member;
+    }
+
+    public MyInfoDTO selectMyProfile(Long logginedMemberNo) {
+
+        // (+) 프로필 정보 조회
+        Member memberInfo = memberRepository.findByMemberNo(logginedMemberNo);
+        MyInfoDTO member = new MyInfoDTO();
+
+        if (memberInfo != null) {
+            member.setName(memberInfo.getName());
+            member.setNickname(memberInfo.getNickname());
+            member.setIntroduction(memberInfo.getIntroduction());
+            member.setRegisterDate(memberInfo.getCreatedAt());
+            member.setImgUrl(memberInfo.getImgUrl());
+            member.setWeight(memberInfo.getWeight());
+        }
+
+        int followerCnt = followRepository.countByToMemberNo(memberInfo);
+        member.setFollowerCnt(followerCnt);
+        int followingCnt = followRepository.countByFromMemberNo(memberInfo);
+        member.setFollowingCnt(followingCnt);
+
+        // TODO
+        member.setAnimalUrl("파이리");
+        // (-) 프로필 정보 조회
+
+        // (+) 예약 정보 조회
+        List<Reservation> reservationInfo = reservationRepository.findByMember_MemberNoAndReservationStatusIn(logginedMemberNo, new ReservationStatus[]{ReservationStatus.예약대기, ReservationStatus.예약완료});
+        if (reservationInfo != null && !reservationInfo.isEmpty()) {
+            member.setReservationInfo(reservationInfo);
+        }
+        // (-) 예약 정보 조회
+
+        // (+) 웨이팅 정보 조회
+        Waiting waitingInfo = waitingRepository.findWaitingByMember_MemberNoAndWaitingStatus(logginedMemberNo, StatusType.대기중);
+        member.setWaitingInfo(waitingInfo);
+        // (-) 웨이팅 정보 조회
+
+        // (+) 뱃지 조회
+        String badge = memberRepository.findBadgeByMemberNo(logginedMemberNo);
+        member.setBadge(badge);
+        // (-) 뱃지 조회
 
         return member;
     }
