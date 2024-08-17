@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>매장 정보 입력</title>
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+        <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+        <script src="/javascript/popup_2.js"></script>
+        <link rel="stylesheet" th:href="@{/css/fragment/navbar.css}">
+        <link rel="stylesheet" th:href="@{/css/fragment/footer.css}">
+        <link rel="stylesheet" th:href="@{/css/restaurant/info.css}">
+    </head>
+    <body>
+        <div th:replace="~{fragment/navbar.html :: navbar}" class="navbar"></div>
+
+        <div class="container content">
+            <div class="nav-buttons">
+                <button type="button" class="btn">판매 내역</button>
+                <button type="button" class="btn">예약 확인</button>
+                <button type="button" class="btn">예약 상태</button>
+                <button type="button" class="btn">웨이팅 상태</button>
+                <button type="button" class="btn">매장 리뷰</button>
+                <button type="button" class="btn-setting btn-secondary float-right">
+                    <img th:src="@{/images/setting.png}" alt="설정" class="glyphicon glyphicon-cog" aria-hidden="true">
+                </button>
+            </div>
+
+            <div class="form-section">
+                <h4>매장 정보</h4>
+                <form>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="storeName">매장명</label>
+                            <input type="text" class="form-control" id="storeName" placeholder="매장명을 입력하세요.">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="storePhone">대표 전화</label>
+                            <input type="text" class="form-control" id="storePhone" placeholder="매장 전화번호를 입력하세요.">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-8">
+                            <label for="sample6_postcode">사업장 주소</label>
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control col-8" id="sample6_postcode" placeholder="우편번호">
+                                <div class="input-group-append">
+                                    <button type="button" class="btn btn-secondary"
+                                            onclick="sample6_execDaumPostcode()">우편번호 찾기
+                                    </button>
+                                </div>
+                            </div>
+                            <input type="text" class="form-control mb-2" id="sample6_address" placeholder="주소">
+                            <input type="text" class="form-control mb-2" id="sample6_detailAddress" placeholder="상세주소">
+                            <input type="text" class="form-control" id="sample6_extraAddress" placeholder="참고항목">
+                        </div>
+                        <div class="form-group col-md-4 text-right">
+                            <label>음식 종류</label>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="foodType1" name="foodType" value="한식">
+                                <label class="form-check-label" for="foodType1">한식</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="foodType2" name="foodType" value="일식">
+                                <label class="form-check-label" for="foodType2">일식</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="foodType3" name="foodType" value="중식">
+                                <label class="form-check-label" for="foodType3">중식</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="foodType4" name="foodType" value="양식">
+                                <label class="form-check-label" for="foodType4">양식</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="foodType5" name="foodType" value="퓨전 음식">
+                                <label class="form-check-label" for="foodType5">퓨전 음식</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="foodType6" name="foodType" value="분식">
+                                <label class="form-check-label" for="foodType6">분식</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label>오픈 시간</label>
+                            <input type="time" class="form-control" id="openingHoursStart" value="00:00">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>마감 시간</label>
+                            <input type="time" class="form-control" id="openingHoursEnd" value="00:00">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label>태그 종류</label>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="tagType1" name="tagType" value="미쉐린1스타">
+                                <label class="form-check-label" for="tagType1">미쉐린1스타</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="tagType2" name="tagType" value="미쉐린2스타">
+                                <label class="form-check-label" for="tagType2">미쉐린2스타</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="tagType3" name="tagType" value="미쉐린3스타">
+                                <label class="form-check-label" for="tagType3">미쉐린3스타</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="tagType4" name="tagType" value="단체">
+                                <label class="form-check-label" for="tagType4">단체</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="tagType5" name="tagType" value="데이트">
+                                <label class="form-check-label" for="tagType5">데이트</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="tagType6" name="tagType" value="혼밥">
+                                <label class="form-check-label" for="tagType6">혼밥</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="storeIntro">한줄 소개</label>
+                        <input type="text" class="form-control" id="storeIntro" placeholder="식당의 소개글을 입력하세요.">
+                    </div>
+                    <div class="form-group text-center">
+                        <button type="button" class="btn btn-primary" id="infoRegisterBtn">가입하기</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div th:replace="~{fragment/footer.html :: footer}" class="footer"></div>
+        <script type="text/javascript" th:src="@{../js/fragment/navbar.js}"></script>
+        <script type="text/javascript" th:src="@{../js/restaurant/info.js}"></script>
+
+    </body>
+</html>

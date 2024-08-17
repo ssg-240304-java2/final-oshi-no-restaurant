@@ -41,6 +41,7 @@ public class WebSecurityConfig {
 
                         // 모든 사용자가 접근 가능한 URL
                         .requestMatchers("/search/**").permitAll()
+                        .requestMatchers("/restaurant/**").permitAll()
 
                         // 비로그인 사용자만 접근 가능한 URL
                         .requestMatchers("/login/**", "/signUp/**", "/managerLogin/**", "/managerLogin").anonymous()
