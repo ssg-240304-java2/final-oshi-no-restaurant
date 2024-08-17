@@ -90,15 +90,14 @@ public interface ReservationRepository extends JpaRepository<Reservation,Integer
      * @param memberNo
      * @return
      */
-
-    @Query("SELECT new kr.oshino.eataku.reservation.user.model.dto.responseDto.ReadReservationResponseDto( " +
-            "r.reservationNo, r.partySize, r.reservationStatus, " +
-            "m.name , m.nickname , m.phone, ri.restaurantName) " +
-            "FROM Reservation r " +
-            "JOIN r.member m " +
-            "JOIN r.restaurantInfo ri " +
-            "WHERE m.memberNo = :memberNo")
-    List<ReadReservationResponseDto> findReservationByMemberNo(Long memberNo);
+//    @Query("SELECT new kr.oshino.eataku.reservation.user.model.dto.responseDto.ReadReservationResponseDto( " +
+//            "r.reservationNo, r.partySize, r.reservationStatus, " +
+//            "m.name , m.nickname , m.phone, ri.restaurantName) " +
+//            "FROM Reservation r " +
+//            "JOIN r.member m " +
+//            "JOIN r.restaurantInfo ri " +
+//            "WHERE m.memberNo = :memberNo")
+//    List<ReadReservationResponseDto> findReservationByMemberNo(Long memberNo);
 
 
 
