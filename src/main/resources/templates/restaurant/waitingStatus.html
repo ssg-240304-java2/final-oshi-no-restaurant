@@ -58,8 +58,11 @@
 <!--</script>-->
 
 <script>
-    $(document).ready(function() {
+    // 여기에 세션 값
+    let restaurantNo = 1;
 
+    // 화면에 웨이팅 정보 표시
+    function fetchWaiting() {
         $.ajax({
             url: '/admin/waiting/' + 1,
             method: 'GET',
@@ -109,6 +112,24 @@
                 console.error('웨이팅 리스트를 기져오는 중 오류가 발생했습니다!', error);
             }
         });
+    }
+
+    // SSE 연결을 설정하여 서버에서 전송하는 실시간 이벤트를 수신
+    const eventSource = new EventSource(`/admin/waiting/stream/${restaurantNo}`);
+
+    eventSource.onmessage = function(event) {
+        fetchWaiting();
+    };
+
+    eventSource.onerror = function(error) {
+        console.error("SSE 수신 받는데 오류가 생겼습니다.", error);
+    };
+
+
+
+    $(document).ready(function() {
+
+        fetchWaiting();
 
         // 카카오톡 알림 전송 로직 필요
         $(document).on('click', '.call-button', function() {
@@ -117,6 +138,9 @@
             let phone = card.find('col-sm-3-phone p').text();
             alert(`호출하기 버튼 클릭 -> ID: ${waitingNo} 전화번호 : ${phone}}`)
         });
+
+
+
 
         // 입장 처리 비동기 요청
         $(document).on('click', '.complete-button', function() {
@@ -136,6 +160,8 @@
             });
         });
 
+
+
         // 취소 처리 비동기 요청
         $(document).on('click', '.cancel-button', function() {
             let card = $(this).closest('.waiting-card')
@@ -151,11 +177,9 @@
                 error: function(error) {
                     console.error('웨이팅을 취소 처리하는 중 오류가 발생했습니다!', error);
                 }
-            })
-        })
-
+            });
+        });
     });
 </script>
-
 </body>
 </html>
