@@ -7,7 +7,6 @@
         <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
         <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
         <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-        <script src="/javascript/popup_2.js"></script>
 
         <!-- Footer, Header 링크 및 스크립트 -->
         <link rel="stylesheet" th:href="@{/css/fragment/navbar.css}">
@@ -21,25 +20,25 @@
         <div class="container mt-5">
             <div class="card p-4">
                 <div class="form-title text-center mb-4">사업자 등록 인증</div>
-                <form name="frm1" method="post" action="../../..">
+                <form name="frm1">
                     <div class="form-group row align-items-center">
                         <input type="hidden" name="code" value="">
                         <input type="hidden" name="overlap_code_ok" value="">
                         <div class="col-sm-3 col-form-label text-right">사업자등록번호</div>
                         <div class="col-sm-6">
-                            <div class="input-group">
-                                <input type="text" name="code1" value="" size="3" alt="사업자등록번호1"
+                            <div class="input-group" name="certification">
+                                <input type="text" name="code1" value="" size="3" alt="사업자등록번호1" id="code1"
                                        style="ime-mode:disabled;" maxlength="3">
                                 <span class="hyphen">-</span>
-                                <input type="text" name="code2" value="" size="2" alt="사업자등록번호2"
+                                <input type="text" name="code2" value="" size="2" alt="사업자등록번호2" id="code2"
                                        style="ime-mode:disabled;" maxlength="2">
                                 <span class="hyphen">-</span>
-                                <input type="text" name="code3" value="" size="5" alt="사업자등록번호3"
+                                <input type="text" name="code3" value="" size="5" alt="사업자등록번호3" id="code3"
                                        style="ime-mode:disabled;" maxlength="5">
                             </div>
                         </div>
                         <div class="col-sm-3 text-right">
-                            <button type="button" class="btn btn-danger" onclick="code_check();">인증하기</button>
+                            <button type="button" class="btn btn-danger" id="btnCheck">인증하기</button>
                         </div>
                     </div>
 
@@ -51,9 +50,9 @@
                     </div>
 
                     <div class="form-group row">
-                        <label for="businessName" class="col-sm-3 col-form-label text-right">상호</label>
+                        <label for="companyName" class="col-sm-3 col-form-label text-right">상호</label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control" id="businessName" placeholder="상호 입력">
+                            <input type="text" class="form-control" id="companyName" placeholder="상호 입력">
                         </div>
                     </div>
 
@@ -69,16 +68,16 @@
                     </div>
 
                     <div class="form-group row">
-                        <label for="documentUpload" class="col-sm-3 col-form-label text-right">서류 첨부</label>
+                        <label for="imgUrl" class="col-sm-3 col-form-label text-right">서류 첨부</label>
                         <div class="col-sm-9">
-                            <input type="file" class="form-control-file" id="documentUpload">
+                            <input type="file" class="form-control-file" id="imgUrl">
                             <small class="form-text text-muted">1년 이내 발급된 사업자등록증을 첨부해주세요.</small>
                         </div>
                     </div>
 
                     <div class="form-group row">
                         <div class="col-sm-12 text-center">
-                            <button type="submit" class="btn btn-primary-custom mt-3">다음으로</button>
+                            <button type="button" class="btn btn-primary-custom mt-3" id="certificationBtn">다음으로</button>
                         </div>
                     </div>
                 </form>
@@ -87,8 +86,8 @@
 
         <div th:replace="~{fragment/footer.html :: footer}" class="footer"></div>
 
-        <script type="text/javascript" th:src="@{js/fragment/navbar.js}"></script>
-        <script type="text/javascript" th:src="@{js/restaurant/certification.js}"></script>
+        <script type="text/javascript" th:src="@{../js/fragment/navbar.js}"></script>
+        <script type="text/javascript" th:src="@{../js/restaurant/certification.js}"></script>
     </body>
 
 </html>

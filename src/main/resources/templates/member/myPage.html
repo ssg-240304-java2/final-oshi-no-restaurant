@@ -28,18 +28,18 @@
                 <div class="row">
                     <div class="col-md-4 text-center">
                         <h3>팔로잉</h3>
-                        <p>100</p>
+                        <p th:text="${member.followingCnt}">100</p>
                     </div>
                     <div class="col-md-4 text-center">
                         <h3>팔로우</h3>
-                        <p>5K</p>
+                        <p th:text="${member.followerCnt}">5K</p>
                     </div>
                     <div class="col-md-4 text-center">
                         <h3>등급</h3>
-                        <img src="path/to/grade_image.png" alt="등급 이미지" width="50">
+                        <img th:src="${member.animalUrl}" alt="등급 이미지" width="50">
                     </div>
                 </div>
-                <p class="col-md-4">OOO님은 150,000kg입니다.</p>
+                <p th:text="${member.nickname}+'님은 '+${member.weight}+'kg입니다.'" class="col-md-4">OOO님은 150,000kg입니다.</p>
             </div>
             <div class="reservation">
                 <div>
@@ -63,7 +63,7 @@
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-        <script type="text/javascript" th:src="@{js/fragment/navbar.js}"></script>
-        <script type="text/javascript" th:src="@{js/reservation/reservationCalendar.js}"></script>
+        <script type="text/javascript" th:src="@{/js/fragment/navbar.js}"></script>
+        <script type="text/javascript" th:src="@{/js/reservation/reservationCalendar.js}"></script>
     </body>
 </html>

@@ -12,7 +12,7 @@ function checkInput_null(formName, fieldNames) {
     return true;
 }
 
-function code_check() {
+document.getElementById('btnCheck').addEventListener('click', function(){
     if (!checkInput_null('frm1', 'code1,code2,code3')) {
         frm1.overlap_code_ok.value = "";
     } else {
@@ -33,7 +33,8 @@ function code_check() {
                 console.log(result);
                 if (result.match_cnt == "1") {
                     console.log("success");
-                    document.frm1.submit();
+                    $(document.frm1).attr({'action': '', 'type': 'post'}).submit();
+
                 } else {
                     console.log("fail");
                     alert(result.data[0]["tax_type"]);
@@ -45,7 +46,8 @@ function code_check() {
             }
         });
     }
-}
+});
+
 
 function sample6_execDaumPostcode() {
     new daum.Postcode({
@@ -94,3 +96,37 @@ function sample6_execDaumPostcode() {
         }
     }).open();
 }
+
+
+$('#certificationBtn').on('click', function() {
+
+    const companyNo = $("#code1").val() + $("#code2").val() + $("#code3").val();
+    const representativeName = $("#representativeName").val();
+    const companyName = $("#companyName").val();
+    const businessAddress = $("#sample6_postcode").val() + $("#sample6_address").val() + $("#sample6_detailAddress").val() + $("#sample6_extraAddress").val();
+    const imgUrl = $("#imgUrl").val();
+
+    console.log(companyNo)
+
+    $.ajax({
+        type: 'post',
+        url: '/restaurant/certification',
+        contentType: 'application/json',
+        dataType: 'text',
+        data: JSON.stringify({
+            "companyNo" : companyNo,
+            "representativeName" : representativeName,
+            "companyName" : companyName,
+            "businessAddress" : businessAddress,
+            "imgUrl" : imgUrl
+        }),
+        success : function(result) {
+            console.log("success")
+            window.location.href = result;
+        },
+        error : function (e){
+            console.log("failed")
+            console.log(e);
+        }
+    })
+})

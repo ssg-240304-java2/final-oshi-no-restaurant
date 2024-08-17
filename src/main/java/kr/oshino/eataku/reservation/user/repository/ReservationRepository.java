@@ -1,5 +1,9 @@
 package kr.oshino.eataku.reservation.user.repository;
+
 import jakarta.transaction.Transactional;
+
+import kr.oshino.eataku.common.enums.ReservationStatus;
+
 import kr.oshino.eataku.reservation.user.entity.Reservation;
 import kr.oshino.eataku.reservation.user.model.dto.responseDto.ReadReservationResponseDto;
 import kr.oshino.eataku.restaurant.admin.entity.ReservationSetting;
@@ -63,6 +67,7 @@ public interface ReservationRepository extends JpaRepository<Reservation,Integer
     List<ReservationSetting> findAllByDateAndRestaurant(@Param("date") LocalDate date, @Param("restaurantNo") Long restaurantNo);
 
 
+
     /***
      * 식당 상제정보 가져오기
      * @param restaurantNo
@@ -105,6 +110,9 @@ public interface ReservationRepository extends JpaRepository<Reservation,Integer
     @Transactional
     @Query("UPDATE ReservationSetting rs SET rs.reservationPeople = rs.reservationPeople + :partySize WHERE rs.restaurantNo = :restaurantNo")
     void updateAvailableSeats(@Param("restaurantNo")int restaurantNo, @Param("partySize") int partySize);
+
+
+    List<Reservation> findByMember_MemberNoAndReservationStatusIn(Long memberNo, ReservationStatus[] status);
 
 }
 

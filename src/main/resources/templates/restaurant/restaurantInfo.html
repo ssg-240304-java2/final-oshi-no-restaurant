@@ -10,7 +10,6 @@
         <link rel="stylesheet" th:href="@{/css/fragment/navbar.css}">
         <link rel="stylesheet" th:href="@{/css/fragment/footer.css}">
         <link rel="stylesheet" th:href="@{/css/restaurant/info.css}">
-
     </head>
     <body>
         <div th:replace="~{fragment/navbar.html :: navbar}" class="navbar"></div>
@@ -41,108 +40,88 @@
                         </div>
                     </div>
 
-                    <!-- 편잡중 -->
-                    <div class=" form-group row ml-12">
-
-                        <div class="business_address form-group">
-                            <div class="address_container">
-                                <div for="sample6_postcode" class=" text-left mb-2">사업장 주소</div>
-                                <div class="input_container">
-                                    <div class=" input-group mb-2">
-                                        <input type="text" class="form-control col-sm-2" id="sample6_postcode"
-                                               placeholder="우편번호">
-                                        <div class="input-group-append">
-                                            <button type="button" class="btn btn-secondary"
-                                                    onclick="sample6_execDaumPostcode()">우편번호 찾기
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <input type="text" class="form-control mb-2" id="sample6_address" placeholder="주소">
-                                    <input type="text" class="form-control mb-2" id="sample6_detailAddress"
-                                           placeholder="상세주소">
-                                    <input type="text" class="form-control" id="sample6_extraAddress"
-                                           placeholder="참고항목">
+                    <div class="form-row">
+                        <div class="form-group col-md-8">
+                            <label for="sample6_postcode">사업장 주소</label>
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control col-8" id="sample6_postcode" placeholder="우편번호">
+                                <div class="input-group-append">
+                                    <button type="button" class="btn btn-secondary" onclick="sample6_execDaumPostcode()">우편번호 찾기</button>
                                 </div>
                             </div>
+                            <input type="text" class="form-control mb-2" id="sample6_address" placeholder="주소">
+                            <input type="text" class="form-control mb-2" id="sample6_detailAddress" placeholder="상세주소">
+                            <input type="text" class="form-control" id="sample6_extraAddress" placeholder="참고항목">
                         </div>
-
-                        <div>
-                            <div class="food_type col-sm-12 text-right mb-2">
-                                <label class="">음식 종류</label>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" id="foodType1" value="한식" checked>
-                                    <label class="form-check-label" for="foodType1">한식</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" id="foodType2" value="일식">
-                                    <label class="form-check-label" for="foodType2">일식</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" id="foodType3" value="중식">
-                                    <label class="form-check-label" for="foodType3">중식</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" id="foodType4" value="양식">
-                                    <label class="form-check-label" for="foodType4">양식</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" id="foodType5" value="퓨전 음식">
-                                    <label class="form-check-label" for="foodType5">퓨전 음식</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" id="foodType6" value="분식">
-                                    <label class="form-check-label" for="foodType6">분식</label>
-                                </div>
+                        <div class="form-group col-md-4 text-right">
+                            <label>음식 종류</label>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="foodType1" value="한식" checked>
+                                <label class="form-check-label" for="foodType1">한식</label>
                             </div>
-
-                            <div class="hour ">
-                                <div class="form-row mb-2 text-right">
-                                    <div class="mr-2">오픈 시간</div>
-                                    <div class="">
-                                        <input type="time" class="form-control" id="openingHoursStart"
-                                               value="00:00">
-                                    </div>
-                                    <div class="mr-2 ml-3">마감 시간</div>
-                                    <div class="">
-                                        <input type="time" class="form-control " id="openingHoursEnd" value="00:00">
-                                    </div>
-                                </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="foodType2" value="일식">
+                                <label class="form-check-label" for="foodType2">일식</label>
                             </div>
-
-                            <div>
-                                <div class="tag_type col-sm-6 text-center mb-2">
-                                    <label class="">태그 종류</label>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" id="tagType1" value="미쉐린1스타"
-                                               checked>
-                                        <label class="form-check-label" for="tagType1">미쉐린1스타</label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" id="tagType2" value="미쉐린2스타">
-                                        <label class="form-check-label" for="tagType2">미쉐린2스타</label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" id="tagType3" value="미쉐린3스타">
-                                        <label class="form-check-label" for="tagType3">미쉐린3스타</label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" id="tagType4" value="단체">
-                                        <label class="form-check-label" for="tagType4">단체</label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" id="tagType5" value="데이트">
-                                        <label class="form-check-label" for="tagType5">데이트</label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" id="tagType6" value="혼밥">
-                                        <label class="form-check-label" for="tagType6">혼밥</label>
-                                    </div>
-                                </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="foodType3" value="중식">
+                                <label class="form-check-label" for="foodType3">중식</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="foodType4" value="양식">
+                                <label class="form-check-label" for="foodType4">양식</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="foodType5" value="퓨전 음식">
+                                <label class="form-check-label" for="foodType5">퓨전 음식</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="foodType6" value="분식">
+                                <label class="form-check-label" for="foodType6">분식</label>
                             </div>
                         </div>
                     </div>
 
-                    <!-- 편집 마감 -->
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label>오픈 시간</label>
+                            <input type="time" class="form-control" id="openingHoursStart" value="00:00">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>마감 시간</label>
+                            <input type="time" class="form-control" id="openingHoursEnd" value="00:00">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label>태그 종류</label>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="tagType1" value="미쉐린1스타" checked>
+                                <label class="form-check-label" for="tagType1">미쉐린1스타</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="tagType2" value="미쉐린2스타">
+                                <label class="form-check-label" for="tagType2">미쉐린2스타</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="tagType3" value="미쉐린3스타">
+                                <label class="form-check-label" for="tagType3">미쉐린3스타</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="tagType4" value="단체">
+                                <label class="form-check-label" for="tagType4">단체</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="tagType5" value="데이트">
+                                <label class="form-check-label" for="tagType5">데이트</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="tagType6" value="혼밥">
+                                <label class="form-check-label" for="tagType6">혼밥</label>
+                            </div>
+                        </div>
+                    </div>
 
                     <div class="form-group">
                         <label for="storeIntro">한줄 소개</label>
@@ -167,8 +146,7 @@
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="reservationPeople">허용 인원</label>
-                                    <input type="number" class="form-control" id="reservationPeople"
-                                           placeholder="인원수 입력">
+                                    <input type="number" class="form-control" id="reservationPeople" placeholder="인원수 입력">
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label>&nbsp;</label>
@@ -237,7 +215,7 @@
         </div>
         <div th:replace="~{fragment/footer.html :: footer}" class="footer"></div>
         <script type="text/javascript" th:src="@{js/fragment/navbar.js}"></script>
-        <script type="text/javascript" th:src="@{js/restaurant/certification.js}"></script>
+        <script type="text/javascript" th:src="@{js/restaurant/info.js}"></script>
 
     </body>
 </html>

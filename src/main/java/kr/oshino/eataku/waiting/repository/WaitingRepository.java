@@ -1,5 +1,6 @@
 package kr.oshino.eataku.waiting.repository;
 
+import kr.oshino.eataku.common.enums.StatusType;
 import kr.oshino.eataku.waiting.entity.Waiting;
 import kr.oshino.eataku.waiting.model.dto.responseDto.ReadWaitingResponseDto;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -37,4 +38,6 @@ public interface WaitingRepository extends JpaRepository<Waiting, Long> {
             "JOIN w.restaurantInfo r " +
             "WHERE r.restaurantNo = :restaurantNo AND w.waitingStatus = kr.oshino.eataku.common.enums.StatusType.대기중")
     List<ReadWaitingResponseDto> findWaitingByRestaurantNo(@Param("restaurantNo") Long restaurantNo);
+
+    Waiting findWaitingByMember_MemberNoAndWaitingStatus(Long logginedMemberNo, StatusType statusType);
 }
