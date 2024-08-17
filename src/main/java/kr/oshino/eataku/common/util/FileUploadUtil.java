@@ -10,6 +10,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Component
@@ -40,6 +42,24 @@ public class FileUploadUtil {
 
         return "https://kr.object.ncloudstorage.com/" + bucketName + "/" + newFileName;
     }
+
+    /**
+     * 파일 업로드 (멀티)
+     * @param files
+     * @return
+     * @throws IOException
+     */
+    public List<String> uploadMultipleFiles(List<MultipartFile> files) throws IOException {
+        List<String> fileNames = new ArrayList<>();
+
+        for (MultipartFile file : files) {
+            String fileUrl = uploadFile(file);
+            fileNames.add(fileUrl);
+        }
+
+        return fileNames;
+    }
+
 
     /**
      * 확장자 추출 메소드

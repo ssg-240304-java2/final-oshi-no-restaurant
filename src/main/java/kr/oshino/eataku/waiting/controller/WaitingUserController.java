@@ -37,6 +37,9 @@ public class WaitingUserController {
     @GetMapping("/waitingForm/{restaurantNo}")
     public String waitingFormPage(@PathVariable int restaurantNo, Model model) {
 
+//        CustomMemberDetails member = (CustomMemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        Long memberNo = member.getMemberNo();
+//        model.addAttribute("memberNo", memberNo);
         model.addAttribute("restaurantNo", restaurantNo);
         // 여기서 회원 정보도 가지고 들어가야 하는지 판별해야 함.
         return "waiting/waitingFormPage";

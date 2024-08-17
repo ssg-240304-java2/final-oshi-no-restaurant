@@ -15,9 +15,6 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @ToString(exclude = "member")
-@SecondaryTables({
-        @SecondaryTable(name = "tbl_restaurant_info", pkJoinColumns = @PrimaryKeyJoinColumn(name = "restaurant_no"))
-})
 public class MyList {
 
     /* 리스트 번호 */
@@ -43,18 +40,11 @@ public class MyList {
     private Member member;
 
     /* 식당 목록 */
-    @ElementCollection(fetch = FetchType.EAGER)
+    @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(
             name = "tbl_user_list",
             joinColumns = @JoinColumn(name = "list_no", referencedColumnName = "list_no")
     )
     private List<RestaurantList> restaurantList;
 
-//    @Embedded
-//    @AttributeOverrides({
-//            @AttributeOverride(name = "name", column = @Column(name = "name", table = "tbl_member")),
-//            @AttributeOverride(name = "nickname", column = @Column(name = "nickname", table = "tbl_member")),
-//            @AttributeOverride(name = "imgUrl", column = @Column(name = "img_url", table = "tbl_member"))
-//    })
-//    private UserList userList;
 }
