@@ -27,7 +27,7 @@ public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="reservation_no")
-    private Long reservationNo;
+    private int reservationNo;
 
 
     /*회원 번호*/
