@@ -1,13 +1,16 @@
 package kr.oshino.eataku.restaurant.admin.model.dto;
 
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import kr.oshino.eataku.common.enums.FoodType;
+import kr.oshino.eataku.common.enums.HashTag;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.sql.Time;
 import java.time.LocalTime;
-import java.util.List;
+import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,9 +21,9 @@ public class RegisterInfoDTO {
     private String restaurantName;
     private String contact;
     private String restaurantAddress;
-    private List<Enum> foodType;        // TODO
+    private Set<FoodType> foodType;
     private LocalTime openingTime;
     private LocalTime closingTime;
-    private List<Enum> hashTag;         // TODO
+    private Set<HashTag> hashTag;
     private String description;
 }

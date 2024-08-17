@@ -4,6 +4,7 @@ import kr.oshino.eataku.restaurant.admin.entity.RestaurantInfo;
 import kr.oshino.eataku.restaurant.admin.entity.TemporarySave;
 import kr.oshino.eataku.restaurant.admin.model.dto.RegisterInfoDTO;
 import kr.oshino.eataku.restaurant.admin.model.dto.TemporarySaveDTO;
+import kr.oshino.eataku.restaurant.admin.model.repository.RestaurantRepository;
 import kr.oshino.eataku.restaurant.admin.model.repository.TemporarySaveRepository;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,7 @@ import java.sql.Time;
 public class RestaurantAdminService {
 
     private final TemporarySaveRepository temporarySaveRepository;
+    private final RestaurantRepository restaurantRepository;
 
     public void insertNewCertification(TemporarySaveDTO newRestaurant) {
 
@@ -41,12 +43,14 @@ public class RestaurantAdminService {
                 .restaurantName(newInfo.getRestaurantName())
                 .contact(newInfo.getContact())
                 .restaurantAddress(newInfo.getRestaurantAddress())
-//                .foodType(newInfo.getFoodType())
+                .foodType(newInfo.getFoodType())
                 .openingTime(Time.valueOf(newInfo.getOpeningTime()))
-                .closingTime(Time.valueOf(newInfo.getClosingTime())).build();
-//                .hashtag(newInfo.getHashTag().toString())
+                .closingTime(Time.valueOf(newInfo.getClosingTime()))
+                .hashTag(newInfo.getHashTag())
+                .description(newInfo.getDescription()).build();
 
+        restaurantRepository.save(registerInfo);
 
-
+        log.info("\uD83C\uDF4E\uD83C\uDF4E\uD83C\uDF4E registerInfo : {}", registerInfo);
     }
 }

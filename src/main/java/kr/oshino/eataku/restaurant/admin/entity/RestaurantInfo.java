@@ -4,10 +4,12 @@ import com.sun.istack.NotNull;
 import jakarta.persistence.*;
 import kr.oshino.eataku.common.enums.FoodType;
 import kr.oshino.eataku.common.enums.HashTag;
+import kr.oshino.eataku.restaurant.admin.service.RestaurantAdminService;
 import lombok.*;
 
 import java.sql.Time;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "tbl_restaurant_info")
@@ -33,10 +35,6 @@ public class RestaurantInfo {
     @NotNull
     private String restaurantAddress;       // 도로명 주소
 
-    @Column(name = "food_type")
-    @Enumerated(EnumType.STRING)
-    private FoodType foodType;        // 음식 카테고리        // TODO
-
     @Column(name = "opening_time")
     private Time openingTime;         // 오픈시간
 
@@ -53,16 +51,26 @@ public class RestaurantInfo {
     private String imgUrl;      // 식당 메인 사진
 
     @Column(name = "x_coordinate")
-    @NotNull
     private Double xCoordinate;     // 위도
 
     @Column(name = "y_coordinate")
-    @NotNull
     private Double yCoordinate;     // 경도
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(
+        name = "tbl_food_type",
+        joinColumns = @JoinColumn(name = "restaurant_no", referencedColumnName = "restaurant_no")
+    )
+    @Column(name = "food_type")
+    private Set<FoodType> foodType;      // 음식종류
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(
+            name = "tbl_hash_tag",
+            joinColumns = @JoinColumn(name = "restaurant_no", referencedColumnName = "restaurant_no")
+    )
     @Column(name = "hash_tag")
-    @Enumerated(EnumType.STRING)
-    private HashTag hashtag;        // 해시태그     // TODO
+    private Set<HashTag> hashTag;        // 해시태그
 
     @OneToOne(mappedBy = "restaurantNo", cascade = CascadeType.ALL)
     private Certification certification;        // 사업자 등록 인증
@@ -70,12 +78,11 @@ public class RestaurantInfo {
     @OneToOne(mappedBy = "restaurantNo", cascade = CascadeType.ALL)
     private AccountInfo accountInfo;        // 계정 정보
 
-    public RestaurantInfo(Long restaurantNo, String restaurantName, String description, String restaurantAddress, FoodType foodType, Time openingTime, Time closingTime, String contact, String postNumber, String imgUrl, Double xCoordinate, Double yCoordinate, HashTag hashtag) {
+    public RestaurantInfo(Long restaurantNo, String restaurantName, String description, String restaurantAddress, Time openingTime, Time closingTime, String contact, String postNumber, String imgUrl, Double xCoordinate, Double yCoordinate, Set<FoodType> foodType, Set<HashTag> hashTag) {
         this.restaurantNo = restaurantNo;
         this.restaurantName = restaurantName;
         this.description = description;
         this.restaurantAddress = restaurantAddress;
-        this.foodType = foodType;
         this.openingTime = openingTime;
         this.closingTime = closingTime;
         this.contact = contact;
@@ -83,6 +90,8 @@ public class RestaurantInfo {
         this.imgUrl = imgUrl;
         this.xCoordinate = xCoordinate;
         this.yCoordinate = yCoordinate;
-        this.hashtag = hashtag;
+        this.foodType = foodType;
+        this.hashTag = hashTag;
     }
 }
+
