@@ -4,6 +4,8 @@ import kr.oshino.eataku.member.model.repository.MemberRepository;
 import kr.oshino.eataku.reservation.user.entity.Reservation;
 import kr.oshino.eataku.reservation.user.model.dto.requestDto.CreateReservationUserRequestDto;
 import kr.oshino.eataku.reservation.user.model.dto.responseDto.CreateReservationUserResponseDto;
+import kr.oshino.eataku.reservation.user.model.dto.responseDto.ReadReservationResponseDto;
+import kr.oshino.eataku.reservation.user.model.dto.responseDto.modalDto;
 import kr.oshino.eataku.reservation.user.repository.ReservationRepository;
 import kr.oshino.eataku.restaurant.admin.entity.ReservationSetting;
 import kr.oshino.eataku.restaurant.admin.entity.RestaurantInfo;
@@ -12,12 +14,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -80,23 +83,9 @@ public class ReservationUserService {
     }
 
 
-
-
-//    /***
-//     * 해당 식당의 최대 인원을 가져오는 메소드
-//     * @param restaurantNo
-//     * @return
-//     */
-//    public int getMaxPeople(Long restaurantNo) {
-//        return reservationRepository.findPeopleByRestaurantNo(restaurantNo);
-//    }
-
-
-
-
-
     /**
      * 인원수 차감 하는 메소드
+     *
      * @param reservationNo
      * @param partySize
      * @param
@@ -106,6 +95,99 @@ public class ReservationUserService {
         reservationRepository.subtractPartySizeFromReservationPeople(partySize, time, reservationNo);
     }
 
+    /***
+     * 상세정보가져오기
+     * @param restaurantNo
+     * @return
+     */
+    @Transactional
+    public modalDto getModalDetails(Long restaurantNo) {
+        Optional<Reservation> reservations = reservationRepository.findTopReservationByRestaurantNo(restaurantNo);
 
+        if (reservations.isEmpty()) {
+            throw new RuntimeException("예약정보가 없습니다. restaurantNo: " + restaurantNo);
+        }
+
+        Reservation reservation = reservations.get();
+        System.out.println("reservation = " + reservation);
+
+        return new modalDto(
+                reservation.getRestaurantInfo().getRestaurantName(),
+                reservation.getPartySize(),
+                reservation.getReservationDate(),
+                reservation.getReservationTime()
+        );
+
+    }
+
+    /***
+     * 날짜 가져오기
+     * @param restaurantNo
+     * @return
+     */
+    @Transactional
+    public List<LocalDate> getAvailableDates(Long restaurantNo) {
+        return reservationRepository.findAvailableDatesByRestaurantNo(restaurantNo);
+    }
+
+
+    /**
+     * 예약 조회 (회원)
+     *
+     * @param readReservationResponseDto
+     * @return
+     */
+    @Transactional
+    public List<ReadReservationResponseDto> getReservationListByMemberNo(ReadReservationResponseDto readReservationResponseDto) {
+
+        List<ReadReservationResponseDto> reservationList = reservationRepository.findReservationByMemberNo(readReservationResponseDto.getMemberNo());
+        System.out.println("reservationList = " + reservationList);
+
+        if (readReservationResponseDto.getReservationStatus() != null) {
+            reservationList = reservationList.stream()
+                    .filter(dto -> dto.getReservationStatus().equals(readReservationResponseDto.getReservationStatus()))
+                    .collect(Collectors.toList());
+        }
+
+        return reservationList;
+
+    }
+
+
+    /***
+     * 예약 취소
+     *
+     */
+
+    @Transactional
+    public boolean cancelReservation(int reservationNo) {
+        Optional<Reservation> optionalReservation = reservationRepository.findById(reservationNo);
+
+        if (optionalReservation.isPresent()) {
+            Reservation reservation = optionalReservation.get();
+
+            // 현재 시간과 예약 시간의 차이를 계산
+            long hoursUntilReservation = ChronoUnit.HOURS.between(LocalDateTime.now(), reservation.getReservationTime());
+
+            // 예약 시간 24시간 이전인 경우에만 취소 가능
+            if (hoursUntilReservation >= 24) {
+                // 예약 취소 처리
+                reservationRepository.delete(reservation);
+
+                // 취소한 인원수를 reservation_setting 테이블에 다시 추가
+                reservationRepository.updateAvailableSeats(reservation.getReservationNo(), reservation.getPartySize());
+
+                return true;
+            } else {
+                // 취소 불가
+                return false;
+            }
+        } else {
+            // 해당 예약이 없는 경우
+            return false;
+        }
+    }
 }
+
+
 

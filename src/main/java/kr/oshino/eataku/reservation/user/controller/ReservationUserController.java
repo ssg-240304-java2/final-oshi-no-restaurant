@@ -1,6 +1,8 @@
 package kr.oshino.eataku.reservation.user.controller;
 import kr.oshino.eataku.reservation.user.model.dto.requestDto.CreateReservationUserRequestDto;
 import kr.oshino.eataku.reservation.user.model.dto.responseDto.CreateReservationUserResponseDto;
+import kr.oshino.eataku.reservation.user.model.dto.responseDto.ReadReservationResponseDto;
+import kr.oshino.eataku.reservation.user.model.dto.responseDto.modalDto;
 import kr.oshino.eataku.reservation.user.service.ReservationUserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -50,10 +52,10 @@ public class ReservationUserController {
             @RequestParam("date") String dateStr,
             @RequestParam("partySize") int partySize) {
 
-        LocalDate date = LocalDate.parse(dateStr);  // 명시적으로 변환
+        LocalDate date = LocalDate.parse(dateStr);
         System.out.println("partySize = " + partySize);
         System.out.println("restaurantNo = " + restaurantNo);
-        System.out.println("Received date: " + date); // 디버깅을 위한 로그
+        System.out.println("Received date: " + date);
         return reservationUserService.getAvailableTimeSlots(date, restaurantNo, partySize);
     }
 
@@ -74,8 +76,6 @@ public class ReservationUserController {
     }
 
 
-
-
     /***
      * 예약한 인원수 만큼 예약세팅 베이블에서 빼기
      */
@@ -93,6 +93,72 @@ public class ReservationUserController {
         }
     }
 
+    /***
+     * 모달창에 상세정보
+     */
+    @GetMapping("/reservation/{restaurantNo}/modal")
+    public String modal(@PathVariable String restaurantNo, Model model) {
+        // 모델에 필요한 데이터를 추가
+        model.addAttribute("restaurantNo", restaurantNo);
+        return "reservation/reservationComplete";  // 이 뷰 페이지가 실제로 모달을 포함하고 있어야 함
+    }
+
+    /***
+     * 모달에 대한 상세정보 반환
+     * @param restaurantNo
+     * @return
+     */
+
+    @PostMapping("/reservation/{restaurantNo}/modal/data")
+    @ResponseBody
+    public ResponseEntity<modalDto> getModalDetails(@PathVariable Long restaurantNo) {
+
+        modalDto modalDetails = reservationUserService.getModalDetails(restaurantNo);
+
+        System.out.println("modalDetails = " + modalDetails);
+        return ResponseEntity.ok(modalDetails);
+    }
+
+    /***
+     * 날짜 가져오기
+     */
+    @PostMapping("/reservation/{restaurantNo}/available-dates")
+    @ResponseBody
+    public List<LocalDate> getAvailableDates(@PathVariable Long restaurantNo) {
+
+        return reservationUserService.getAvailableDates(restaurantNo);
+    }
+
+    /***
+     * 예약 조회
+     */
+    @GetMapping("/reservation")
+    @ResponseBody
+    public ResponseEntity<List<ReadReservationResponseDto>> getMyreservationList(
+            ReadReservationResponseDto readReservationResponseDto){
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(reservationUserService.getReservationListByMemberNo(readReservationResponseDto));
+    }
+
+
+
+
+    /***
+     * 예약 취소
+     */
+    @PostMapping("/reservation/{reservationNo}/cancel")
+    @ResponseBody
+    public ResponseEntity<?> cancelReservation(@PathVariable int reservationNo) {
+        boolean isCancelled = reservationUserService.cancelReservation(reservationNo);
+        System.out.println("isCancelled = " + isCancelled);
+
+        if (isCancelled) {
+            return ResponseEntity.ok().body("{\"성공\"}");
+        } else {
+            return ResponseEntity.status(400).body("{\"오류\"}");
+        }
+    }
 
 }
 

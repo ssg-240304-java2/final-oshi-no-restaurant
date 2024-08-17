@@ -1,6 +1,11 @@
 package kr.oshino.eataku.reservation.user.repository;
+
+import jakarta.transaction.Transactional;
+
 import kr.oshino.eataku.common.enums.ReservationStatus;
+
 import kr.oshino.eataku.reservation.user.entity.Reservation;
+import kr.oshino.eataku.reservation.user.model.dto.responseDto.ReadReservationResponseDto;
 import kr.oshino.eataku.restaurant.admin.entity.ReservationSetting;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -9,6 +14,7 @@ import org.springframework.data.repository.query.Param;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 
 public interface ReservationRepository extends JpaRepository<Reservation,Integer> {
 
@@ -60,5 +66,55 @@ public interface ReservationRepository extends JpaRepository<Reservation,Integer
     @Query("SELECT r FROM ReservationSetting r WHERE r.reservationDate = :date AND r.restaurantNo.restaurantNo = :restaurantNo")
     List<ReservationSetting> findAllByDateAndRestaurant(@Param("date") LocalDate date, @Param("restaurantNo") Long restaurantNo);
 
+
+
+    /***
+     * 식당 상제정보 가져오기
+     * @param restaurantNo
+     * @return
+     */
+    @Query("SELECT r FROM Reservation r WHERE r.restaurantInfo.restaurantNo = :restaurantNo ORDER BY r.reservationNo DESC LIMIT 1")
+    Optional<Reservation> findTopReservationByRestaurantNo(@Param("restaurantNo") Long restaurantNo);
+
+
+    /**
+     * 영업
+     * 날짜 가져오기
+     */
+    @Query("SELECT DISTINCT CAST(r.reservationDate AS java.time.LocalDate) FROM ReservationSetting r WHERE r.restaurantNo.restaurantNo = :restaurantNo")
+    List<LocalDate> findAvailableDatesByRestaurantNo(@Param("restaurantNo") Long restaurantNo);
+
+
+    /***
+     * 예약 정보 조회
+     * @param memberNo
+     * @return
+     */
+
+    @Query("SELECT new kr.oshino.eataku.reservation.user.model.dto.responseDto.ReadReservationResponseDto( " +
+            "r.reservationNo, r.partySize, r.reservationStatus, " +
+            "m.name , m.nickname , m.phone, ri.restaurantName) " +
+            "FROM Reservation r " +
+            "JOIN r.member m " +
+            "JOIN r.restaurantInfo ri " +
+            "WHERE m.memberNo = :memberNo")
+    List<ReadReservationResponseDto> findReservationByMemberNo(Long memberNo);
+
+
+
+
+    /***
+     * 예약취소 관련 메소드
+     */
+    @Modifying
+    @Transactional
+    @Query("UPDATE ReservationSetting rs SET rs.reservationPeople = rs.reservationPeople + :partySize WHERE rs.restaurantNo = :restaurantNo")
+    void updateAvailableSeats(@Param("restaurantNo")int restaurantNo, @Param("partySize") int partySize);
+
+
     List<Reservation> findByMember_MemberNoAndReservationStatusIn(Long memberNo, ReservationStatus[] status);
+
 }
+
+
+
