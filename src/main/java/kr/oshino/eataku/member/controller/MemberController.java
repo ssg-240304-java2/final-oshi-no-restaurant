@@ -3,8 +3,10 @@ package kr.oshino.eataku.member.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import kr.oshino.eataku.member.model.dto.CustomMemberDetails;
 import kr.oshino.eataku.member.model.dto.MemberDTO;
 import kr.oshino.eataku.member.model.dto.MemberProfileDTO;
+import kr.oshino.eataku.member.model.dto.MyInfoDTO;
 import kr.oshino.eataku.member.service.MailService;
 import kr.oshino.eataku.member.service.MemberService;
 import kr.oshino.eataku.restaurant.admin.model.dto.RestaurantAccountInfoDTO;
@@ -135,5 +137,19 @@ public class MemberController {
         model.addAttribute("member", member);
 
         return "member/memberProfile";
+    }
+
+    @GetMapping("/myPage")
+    public String myPage(Model model) {
+
+        CustomMemberDetails logginedMember = (CustomMemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long logginedMemberNo = logginedMember.getMemberNo();
+
+        // 프로필 정보 조회
+        MyInfoDTO member = memberService.selectMyProfile(logginedMemberNo);
+
+        model.addAttribute("member", member);
+
+        return "member/myPage";
     }
 }

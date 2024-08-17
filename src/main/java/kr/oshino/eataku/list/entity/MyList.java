@@ -35,7 +35,7 @@ public class MyList {
     @Column(name = "list_share")
     private Long listShare;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "member_no", referencedColumnName = "member_no")
     private Member member;
 

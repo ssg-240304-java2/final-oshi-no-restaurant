@@ -1,4 +1,5 @@
 package kr.oshino.eataku.reservation.user.repository;
+import kr.oshino.eataku.common.enums.ReservationStatus;
 import kr.oshino.eataku.reservation.user.entity.Reservation;
 import kr.oshino.eataku.restaurant.admin.entity.ReservationSetting;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -59,4 +60,5 @@ public interface ReservationRepository extends JpaRepository<Reservation,Integer
     @Query("SELECT r FROM ReservationSetting r WHERE r.reservationDate = :date AND r.restaurantNo.restaurantNo = :restaurantNo")
     List<ReservationSetting> findAllByDateAndRestaurant(@Param("date") LocalDate date, @Param("restaurantNo") Long restaurantNo);
 
+    List<Reservation> findByMember_MemberNoAndReservationStatusIn(Long memberNo, ReservationStatus[] status);
 }
