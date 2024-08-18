@@ -8,4 +8,5 @@ public interface TemporarySaveRepository extends JpaRepository<TemporarySave, Lo
 
     TemporarySave save(TemporarySave temporarySave);
 
+    TemporarySave findByAccount(String account);
 }

@@ -16,8 +16,9 @@ import java.util.Set;
 @AllArgsConstructor
 @Data
 @Builder
-public class RegisterInfoDTO {
+public class RestaurantInfoDTO {
 
+    private Long restaurantNo;
     private String restaurantName;
     private String contact;
     private String restaurantAddress;
