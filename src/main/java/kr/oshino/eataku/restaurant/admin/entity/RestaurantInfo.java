@@ -74,7 +74,7 @@ public class RestaurantInfo {
         joinColumns = @JoinColumn(name = "restaurant_no", referencedColumnName = "restaurant_no")
     )
     @Column(name = "food_type")
-    private Set<FoodType> foodType;      // 음식종류
+    private Set<FoodType> foodTypes;      // 음식종류
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(
@@ -82,7 +82,7 @@ public class RestaurantInfo {
             joinColumns = @JoinColumn(name = "restaurant_no", referencedColumnName = "restaurant_no")
     )
     @Column(name = "hash_tag")
-    private Set<HashTag> hashTag;        // 해시태그
+    private Set<HashTag> hashTags;        // 해시태그
 
     @OneToOne(mappedBy = "restaurantNo", cascade = CascadeType.ALL)
     private Certification certification;        // 사업자 등록 인증
@@ -90,11 +90,15 @@ public class RestaurantInfo {
     @OneToOne(mappedBy = "restaurantNo", cascade = CascadeType.ALL)
     private AccountInfo accountInfo;        // 계정 정보
 
-    public RestaurantInfo(Long restaurantNo, String restaurantName, String description, String restaurantAddress, Time openingTime, Time closingTime, String contact, String postNumber, String imgUrl, Double xCoordinate, Double yCoordinate, Set<FoodType> foodType, Set<HashTag> hashTag) {
+    public RestaurantInfo(Long restaurantNo, String restaurantName, String description, String restaurantAddress, String postCode, String address, String detailAddress, String extraAddress, Time openingTime, Time closingTime, String contact, String postNumber, String imgUrl, Double xCoordinate, Double yCoordinate, Set<FoodType> foodTypes, Set<HashTag> hashTags) {
         this.restaurantNo = restaurantNo;
         this.restaurantName = restaurantName;
         this.description = description;
         this.restaurantAddress = restaurantAddress;
+        this.postCode = postCode;
+        this.address = address;
+        this.detailAddress = detailAddress;
+        this.extraAddress = extraAddress;
         this.openingTime = openingTime;
         this.closingTime = closingTime;
         this.contact = contact;
@@ -102,8 +106,8 @@ public class RestaurantInfo {
         this.imgUrl = imgUrl;
         this.xCoordinate = xCoordinate;
         this.yCoordinate = yCoordinate;
-        this.foodType = foodType;
-        this.hashTag = hashTag;
+        this.foodTypes = foodTypes;
+        this.hashTags = hashTags;
     }
 }
 

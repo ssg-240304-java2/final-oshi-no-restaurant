@@ -19,13 +19,14 @@ public class RestaurantInfoDTO {
     private String restaurantName;
     private String contact;
     private String restaurantAddress;
-    private Set<FoodType> foodType;
+    private Set<FoodType> foodTypes;
     private LocalTime openingTime;
     private LocalTime closingTime;
-    private Set<HashTag> hashTag;
+    private Set<HashTag> hashTags;
     private String description;
     private String postCode;
     private String address;
     private String detailAddress;
     private String extraAddress;
+    private String imgUrl;
 }

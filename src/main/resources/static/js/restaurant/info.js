@@ -69,6 +69,7 @@ function handleRestaurantInfo(actionUrl) {
     });
 
     const storeIntro = $("#storeIntro").val();
+    const storeImage = $("#storeImage").val();
 
     console.log(storeName, foodType, tagType);
 
@@ -85,11 +86,12 @@ function handleRestaurantInfo(actionUrl) {
             "address" : address,
             "detailAddress" : detailAddress,
             "extraAddress" : extraAddress,
-            "foodType": foodType,
+            "foodTypes": foodType,
             "openingTime": openingHoursStart,
             "closingTime": openingHoursEnd,
-            "hashTag": tagType,
-            "description": storeIntro
+            "hashTags": tagType,
+            "description": storeIntro,
+            "imgUrl" : storeImage
         }),
         success: function (result) {
             console.log("success");
@@ -115,6 +117,24 @@ $(document).ready(function() {
         });
     }
 });
+
+// 식당 사진 미리보기
+function previewImage(event) {
+    const image = document.getElementById('imagePreview');
+    const file = event.target.files[0];
+
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            image.src = e.target.result;
+            image.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+    } else {
+        image.src = '';
+        image.style.display = 'none';
+    }
+}
 
 // 회원가입 시 식당 정보 등록
 $('#infoRegisterBtn').on('click', function (){
