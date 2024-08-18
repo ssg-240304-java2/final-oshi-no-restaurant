@@ -38,7 +38,7 @@
                         </div>
                         <div class="form-group col-md-6">
                             <label for="storePhone">대표 전화</label>
-                            <input type="text" class="form-control" id="storePhone" placeholder="매장 전화번호를 입력하세요.">
+                            <input type="text" class="form-control" id="storePhone" th:value="${restaurant.contact}">
                         </div>
                     </div>
 
@@ -46,7 +46,7 @@
                         <div class="form-group col-md-8">
                             <label for="sample6_postcode">사업장 주소</label>
                             <div class="input-group mb-2">
-                                <input type="text" class="form-control col-8" id="sample6_postcode" placeholder="우편번호">
+                                <input type="text" class="form-control col-8" id="sample6_postcode" th:value="${restaurant.cer}">
                                 <div class="input-group-append">
                                     <button type="button" class="btn btn-secondary" onclick="sample6_execDaumPostcode()">우편번호 찾기</button>
                                 </div>

@@ -1,8 +1,5 @@
 package kr.oshino.eataku.restaurant.admin.model.dto;
 
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
 import kr.oshino.eataku.common.enums.FoodType;
 import kr.oshino.eataku.common.enums.HashTag;
 import lombok.AllArgsConstructor;
@@ -27,4 +24,8 @@ public class RestaurantInfoDTO {
     private LocalTime closingTime;
     private Set<HashTag> hashTag;
     private String description;
+    private String postCode;
+    private String address;
+    private String detailAddress;
+    private String extraAddress;
 }

@@ -67,6 +67,10 @@ public class RestaurantAdminService {
                 .restaurantName(newInfo.getRestaurantName())
                 .contact(newInfo.getContact())
                 .restaurantAddress(newInfo.getRestaurantAddress())
+                .postCode(newInfo.getPostCode())
+                .address(newInfo.getAddress())
+                .detailAddress(newInfo.getDetailAddress())
+                .extraAddress(newInfo.getExtraAddress())
                 .foodType(newInfo.getFoodType())
                 .openingTime(Time.valueOf(newInfo.getOpeningTime()))
                 .closingTime(Time.valueOf(newInfo.getClosingTime()))
@@ -97,8 +101,11 @@ public class RestaurantAdminService {
             restaurant.setRestaurantNo(restaurantInfo.getRestaurantNo());
             restaurant.setRestaurantName(restaurantInfo.getRestaurantName());
             restaurant.setContact(restaurantInfo.getContact());
-            restaurant.setRestaurantAddress(restaurantInfo.getRestaurantAddress());
             restaurant.setFoodType(restaurantInfo.getFoodType());
+            restaurant.setPostCode(restaurantInfo.getPostCode());
+            restaurant.setAddress(restaurantInfo.getAddress());
+            restaurant.setDetailAddress(restaurantInfo.getDetailAddress());
+            restaurant.setExtraAddress(restaurantInfo.getExtraAddress());
             restaurant.setOpeningTime(restaurantInfo.getOpeningTime().toLocalTime());
             restaurant.setClosingTime(restaurantInfo.getClosingTime().toLocalTime());
             restaurant.setHashTag(restaurantInfo.getHashTag());

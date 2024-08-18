@@ -51,7 +51,10 @@ function handleRestaurantInfo(actionUrl) {
     const storeName = $("#storeName").val();
     const storePhone = $("#storePhone").val();
     const businessAddress = $("#sample6_postcode").val() + $("#sample6_address").val() + $("#sample6_detailAddress").val() + $("#sample6_extraAddress").val();
-
+    const postCode = $("#sample6_postcode").val();
+    const address = $("#sample6_address").val();
+    const detailAddress = $("#sample6_detailAddress").val();
+    const extraAddress = $("#sample6_extraAddress").val();
     const foodType = [];
     $("input[name='foodType']:checked").each(function () {
         foodType.push($(this).val());
@@ -78,6 +81,10 @@ function handleRestaurantInfo(actionUrl) {
             "restaurantName": storeName,
             "contact": storePhone,
             "restaurantAddress": businessAddress,
+            "postCode" : postCode,
+            "address" : address,
+            "detailAddress" : detailAddress,
+            "extraAddress" : extraAddress,
             "foodType": foodType,
             "openingTime": openingHoursStart,
             "closingTime": openingHoursEnd,

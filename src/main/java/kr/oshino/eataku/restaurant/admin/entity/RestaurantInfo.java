@@ -33,7 +33,19 @@ public class RestaurantInfo {
 
     @Column(name = "restaurant_address")
     @NotNull
-    private String restaurantAddress;       // 도로명 주소
+    private String restaurantAddress;       // 식당 전체 주소
+
+    @Column(name = "post_code")
+    private String postCode;        // 우편 번호
+
+    @Column(name = "address")
+    private String address;         // 도로명 주소
+
+    @Column(name = "detail_address")
+    private String detailAddress;       // 상세 주소
+
+    @Column(name = "extra_address")
+    private String extraAddress;        // 추가 주소
 
     @Column(name = "opening_time")
     private Time openingTime;         // 오픈시간

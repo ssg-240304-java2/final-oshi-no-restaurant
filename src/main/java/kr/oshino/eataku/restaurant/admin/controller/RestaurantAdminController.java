@@ -65,7 +65,7 @@ public class RestaurantAdminController {
          return "restaurant/infoUpdate";
     }
 
-    @PostMapping("/infoUpdate/{restaurantNo}")
+    @PostMapping("/infoUpdate")
     public String infoUpdate(@RequestBody RestaurantInfoDTO updateInfo){
 
         log.info("\uD83C\uDF4E\uD83C\uDF4E\uD83C\uDF4E updateInfo : {}", updateInfo);
