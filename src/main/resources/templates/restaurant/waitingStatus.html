@@ -52,19 +52,14 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script type="text/javascript" th:src="@{../js/fragment/navbar.js}"></script>
 
-<!-- 세션에서 사용한다면 사용해야 할 것 -->
-<!--<script type="text/javascript">-->
-<!--    var restaurantNo = /*[[${session.restaurantNo}]]*/;-->
-<!--</script>-->
-
 <script>
     // 여기에 세션 값
-    let restaurantNo = 1;
+    let restaurantNo = [[${restaurantNo}]];
 
     // 화면에 웨이팅 정보 표시
     function fetchWaiting() {
         $.ajax({
-            url: '/admin/waiting/' + 1,
+            url: '/admin/waiting/' + restaurantNo,
             method: 'GET',
             success: function(response) {
 
@@ -74,14 +69,14 @@
                 response.forEach(function(waiting) {
 
                     let createdAt = new Date(waiting.createdAt);
-                    let now = new Date();
+                    let now = new Date(); // --> 9시간 +
                     let minutesElapsed = Math.floor((now - createdAt) / (1000 * 60));
 
                     const waitingCard = `
                     <div class="waiting-card" data-waiting-no="${waiting.waitingNo}">
                         <div class="row align-items-center">
                             <div class="col-sm-2-no col-data waiting-no">
-                                <p>#${waiting.waitingNo}</p>
+                                <p>#${waiting.sequenceNumber}</p>
                             </div>
                             <div class="col-sm-2-name col-data">
                                 <p>${waiting.name}</p>
@@ -154,8 +149,10 @@
                     alert(response.message)
                     card.remove();
                 },
-                error: function(error) {
-                    console.error('웨이팅을 방문 처리하는 중 오류가 발생했습니다!', error);
+                error: function(xhr, status, error) {
+                    let response = JSON.parse(xhr.responseText);
+                    alert(response.message);
+                    card.remove();
                 }
             });
         });
@@ -174,8 +171,10 @@
                     alert(response.message)
                     card.remove();
                 },
-                error: function(error) {
-                    console.error('웨이팅을 취소 처리하는 중 오류가 발생했습니다!', error);
+                error: function(xhr, status, error) {
+                    let response = JSON.parse(xhr.responseText);
+                    alert(response.message);
+                    card.remove();
                 }
             });
         });

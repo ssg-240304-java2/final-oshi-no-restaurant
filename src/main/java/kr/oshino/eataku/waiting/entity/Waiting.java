@@ -2,12 +2,13 @@ package kr.oshino.eataku.waiting.entity;
 
 import jakarta.persistence.*;
 import kr.oshino.eataku.common.enums.StatusType;
+import kr.oshino.eataku.common.exception.exception.WaitingException;
+import kr.oshino.eataku.common.exception.info.WaitingExceptionInfo;
 import kr.oshino.eataku.member.entity.Member;
 import kr.oshino.eataku.restaurant.admin.entity.RestaurantInfo;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
@@ -41,6 +42,9 @@ public class Waiting {
     @Enumerated(EnumType.STRING)
     private StatusType waitingStatus = StatusType.대기중;
 
+    @Column(name="sequence_number")
+    private int sequenceNumber;
+
     @Column(name="created_at", nullable = false, updatable = false)
     @CreationTimestamp
     private LocalDateTime createdAt;
@@ -53,13 +57,13 @@ public class Waiting {
         if(waitingStatus != StatusType.대기취소)
             this.waitingStatus = StatusType.대기취소;
         else
-            throw new IllegalArgumentException("해당 대기 정보는 이미 취소되었습니다!");
+            throw new WaitingException(WaitingExceptionInfo.REQUEST_ALREADY_CANCELED);
     }
 
     public void visit() {
         if(waitingStatus != StatusType.방문완료)
             this.waitingStatus = StatusType.방문완료;
         else
-            throw new IllegalArgumentException("해당 대기 정보는 이미 방문 처리 되었습니다!");
+            throw new WaitingException(WaitingExceptionInfo.REQUEST_ALREADY_HANDLED);
     }
 }
