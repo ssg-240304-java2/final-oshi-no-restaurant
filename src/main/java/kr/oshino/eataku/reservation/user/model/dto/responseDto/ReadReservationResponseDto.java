@@ -1,6 +1,7 @@
 package kr.oshino.eataku.reservation.user.model.dto.responseDto;
 
 import kr.oshino.eataku.common.enums.AccountAuth;
+import kr.oshino.eataku.common.enums.ReservationStatus;
 import lombok.*;
 
 @Getter
@@ -12,9 +13,8 @@ public class ReadReservationResponseDto {
 
     // Reservation
     private int reservationNo;
-
-    private AccountAuth reservationStatus;
     private int partySize;
+    private ReservationStatus reservationStatus;
 
 
     //Member Entity 정보
@@ -22,6 +22,7 @@ public class ReadReservationResponseDto {
     private String nickname;
     private String phone;
     private Long memberNo;
+
     // Restaurant_Info Entity 정보
     private String restaurantName;
 

@@ -6,6 +6,7 @@ import kr.oshino.eataku.common.enums.ReservationStatus;
 
 import kr.oshino.eataku.reservation.user.entity.Reservation;
 import kr.oshino.eataku.reservation.user.model.dto.responseDto.ReadReservationResponseDto;
+import kr.oshino.eataku.reservation.user.model.dto.responseDto.RestaurantInfoDetails;
 import kr.oshino.eataku.restaurant.admin.entity.ReservationSetting;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -90,10 +91,9 @@ public interface ReservationRepository extends JpaRepository<Reservation,Integer
      * @param memberNo
      * @return
      */
-
     @Query("SELECT new kr.oshino.eataku.reservation.user.model.dto.responseDto.ReadReservationResponseDto( " +
             "r.reservationNo, r.partySize, r.reservationStatus, " +
-            "m.name , m.nickname , m.phone, ri.restaurantName) " +
+            "m.name , m.nickname , m.phone, m.memberNo, ri.restaurantName) " +
             "FROM Reservation r " +
             "JOIN r.member m " +
             "JOIN r.restaurantInfo ri " +
@@ -108,11 +108,29 @@ public interface ReservationRepository extends JpaRepository<Reservation,Integer
      */
     @Modifying
     @Transactional
-    @Query("UPDATE ReservationSetting rs SET rs.reservationPeople = rs.reservationPeople + :partySize WHERE rs.restaurantNo = :restaurantNo")
-    void updateAvailableSeats(@Param("restaurantNo")int restaurantNo, @Param("partySize") int partySize);
+    @Query("UPDATE ReservationSetting rs SET rs.reservationPeople = rs.reservationPeople+ :partySize WHERE rs.reservationNo = :reservationNo")
+    void updateAvailableSeats(int reservationNo, int partySize);
 
 
+
+
+    /**
+     * 회원 예약 상태 조회
+     * @param memberNo
+     * @param status
+     * @return
+     */
     List<Reservation> findByMember_MemberNoAndReservationStatusIn(Long memberNo, ReservationStatus[] status);
+
+
+    /***
+     * 상세정보
+     */
+    @Query("SELECT new kr.oshino.eataku.reservation.user.model.dto.responseDto.RestaurantInfoDetails(" +
+            "r.restaurantName, r.restaurantAddress) " +
+            "FROM RestaurantInfo r " +
+            "WHERE r.restaurantNo = :restaurantNo")
+    Optional<RestaurantInfoDetails> findRestaurantDetailsByReservationNo(@Param("restaurantNo") Long restaurantNo);
 
 }
 
