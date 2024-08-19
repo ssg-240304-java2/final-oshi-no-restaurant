@@ -21,11 +21,11 @@
             <!-- Search form -->
             <form action="/zzupFriend" method="GET" class="search-bar">
                 <input type="text" name="query" class="form-control" placeholder="리스트 검색">
-                <button type="submit" class="btn">검색</button>
+                <button type="submit" class="btn" style="white-space: nowrap">검색</button>
             </form>
             <!-- 타임리프 반복 구문 시작 -->
             <div th:each="list : ${memberLists}">
-                <a th:href="@{/member/{memberNo}(memberNo=${list.memberNo})} + '#' + ${list.listNo}">
+                <a th:href="@{/member/{memberNo}(memberNo=${list.memberNo})} + '#list' + ${list.listNo}">
                 <div class="list-group">
                     <div class="list-item" data-bs-toggle="modal" data-bs-target="#myModal">
                         <img th:src="${list.memberImg}" alt="Profile" class="profile-pic">

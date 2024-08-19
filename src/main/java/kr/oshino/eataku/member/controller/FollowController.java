@@ -32,10 +32,11 @@ public class FollowController {
 
         log.info("⭐⭐ [ FollowController ] Request query: {} ⭐⭐", query);
 
-        List<ZzupListDTO> queryResult = new ArrayList<>();
+        List<MyList> queryResult = followService.findByListNameContainingAndListStatusOrderByListShareDesc(query, "Public");
+        List<ZzupListDTO> memberLists = new ArrayList<>();
 
-        if (query != null || !query.isEmpty()) {
-            queryResult = followService.findByListNameContainingAndListStatusOrderByListShareDesc(query, "Public")
+        if (queryResult != null || !queryResult.isEmpty()) {
+            memberLists = queryResult
                     .stream()
                     .map(entity -> new ZzupListDTO(entity.getListNo()
                     ,entity.getListName()
@@ -43,10 +44,10 @@ public class FollowController {
                     ,entity.getMember().getMemberNo()
                     ,entity.getMember().getName()
                     ,entity.getMember().getImgUrl()))
-                    .collect(Collectors.toList());
+                    .toList();
         }
 
-        model.addAttribute("memberLists", queryResult);
+        model.addAttribute("memberLists", memberLists);
 
 
         return "member/zzupFriend";

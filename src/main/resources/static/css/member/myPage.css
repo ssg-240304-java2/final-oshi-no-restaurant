@@ -37,7 +37,7 @@ body {
 .content {
     margin-left: 280px; /* 사이드바 너비 + 여백 */
     padding: 20px;
-    margin-top: 100px;
+    margin-top: 60px;
 }
 .profile {
     /*background-color: white;*/
@@ -94,9 +94,10 @@ body {
     font-size: 12px;
 }
 .badge-rank {
-    color: red;
+    color: #FA4A54;
     font-weight: bold;
 }
-.reservation .info {
-    margin-left: 120px; /* 이미지 너비 + 여백 */
+
+.card-time {
+    color: #FA4A54;
 }

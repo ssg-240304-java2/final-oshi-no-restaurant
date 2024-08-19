@@ -1,7 +1,5 @@
 package kr.oshino.eataku.member.model.dto;
 
-import kr.oshino.eataku.reservation.user.entity.Reservation;
-import kr.oshino.eataku.waiting.entity.Waiting;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,8 +25,8 @@ public class MyInfoDTO {
 
     private String animalUrl;
 
-    private Waiting waitingInfo;
-    private List<Reservation> reservationInfo;
+    private List<WaitingInfoDTO> waitingInfo;
+    private List<ReservationInfoDTO> reservationInfo;
 
     private String badge;
 }
