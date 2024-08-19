@@ -52,19 +52,14 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script type="text/javascript" th:src="@{../js/fragment/navbar.js}"></script>
 
-<!-- 세션에서 사용한다면 사용해야 할 것 -->
-<!--<script type="text/javascript">-->
-<!--    var restaurantNo = /*[[${session.restaurantNo}]]*/;-->
-<!--</script>-->
-
 <script>
     // 여기에 세션 값
-    let restaurantNo = 1;
+    let restaurantNo = [[${restaurantNo}]];
 
     // 화면에 웨이팅 정보 표시
     function fetchWaiting() {
         $.ajax({
-            url: '/admin/waiting/' + 1,
+            url: '/admin/waiting/' + restaurantNo,
             method: 'GET',
             success: function(response) {
 
@@ -74,7 +69,7 @@
                 response.forEach(function(waiting) {
 
                     let createdAt = new Date(waiting.createdAt);
-                    let now = new Date();
+                    let now = new Date(); // --> 9시간 +
                     let minutesElapsed = Math.floor((now - createdAt) / (1000 * 60));
 
                     const waitingCard = `
