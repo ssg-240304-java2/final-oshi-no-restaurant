@@ -29,7 +29,7 @@ body {
 }
 
 .sidebar a:hover {
-    color: #FF5258;
+    color: #FA4A54;
 }
 
 .sidebar-content {
@@ -118,7 +118,7 @@ body {
 }
 
 .btn-submit {
-    background-color: #FF5258;
+    background-color: #FA4A54;
     border: none;
     color: white;
     padding: 15px 0;
@@ -133,8 +133,9 @@ body {
 }
 
 .btn-duplicate-check,
-.btn-mail-check {
-    background-color: #FF5258;
+.btn-mail-check ,
+.btn-change-password {
+    background-color: #FA4A54;
     border: none;
     color: white;
     padding: 8px 10px; /* 버튼의 크기와 높이 조정 */
@@ -151,12 +152,15 @@ body {
 
 .btn-submit:hover,
 .btn-duplicate-check:hover,
-.btn-mail-check:hover {
-    background-color: #FA4A54;
+.btn-mail-check:hover ,
+.btn-change-password:hover {
+    background-color: #fff;
+    color: black;
+    border: black 1px solid;
 }
 
 .text-danger {
-    color: #FF5258;
+    color: #FA4A54;
     font-size: 14px;
 }
 
@@ -190,4 +194,17 @@ body {
 .btn-group-toggle .btn:last-child {
     border-top-right-radius: .25rem;
     border-bottom-right-radius: .25rem;
+}
+
+.nowPage {
+    text-decoration-line: underline;
+    font-weight: bold;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.invalid-feedback {
+    display: inline-block;
 }

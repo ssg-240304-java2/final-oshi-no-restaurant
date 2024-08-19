@@ -33,7 +33,7 @@ public class CustomMemberDetails implements UserDetails {
     @Override
     public String getUsername() {
 
-        if(member != null) {
+        if(member.getMemberLoginInfo() != null) {
             return member.getMemberLoginInfo().getAccount();
         }
         else {
@@ -43,7 +43,7 @@ public class CustomMemberDetails implements UserDetails {
 
     @Override
     public String getPassword() {
-        if(member != null) {
+        if(member.getMemberLoginInfo() != null) {
             return member.getMemberLoginInfo().getPassword();
         }
         else {
@@ -60,7 +60,12 @@ public class CustomMemberDetails implements UserDetails {
             @Override
             public String getAuthority() {
 
-                return member.getAuth();
+                if(member.getMemberLoginInfo() != null) {
+                    return member.getAuth();
+                }
+                else  {
+                    return "ROLE_MANAGER";
+                }
             }
         });
 

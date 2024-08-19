@@ -3,6 +3,7 @@ package kr.oshino.eataku.member.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import kr.oshino.eataku.member.entity.Member;
 import kr.oshino.eataku.member.model.dto.CustomMemberDetails;
 import kr.oshino.eataku.member.model.dto.MemberDTO;
 import kr.oshino.eataku.member.model.dto.MemberProfileDTO;
@@ -18,10 +19,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Map;
 
@@ -151,5 +150,35 @@ public class MemberController {
         model.addAttribute("member", member);
 
         return "member/myPage";
+    }
+
+    @GetMapping("/myInfo")
+    public String myInfo(Model model) {
+
+        CustomMemberDetails logginedMember = (CustomMemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long logginedMemberNo = logginedMember.getMemberNo();
+
+        Member member = memberService.selectMyData(logginedMemberNo);
+
+        model.addAttribute("member", member);
+
+        return "member/editProfile";
+    }
+
+    @PutMapping("/myInfo")
+    public ResponseEntity<Boolean> modifyProfile(@RequestPart(value = "file", required = false) MultipartFile file, @RequestPart("jsonData") MemberDTO member){
+
+        CustomMemberDetails logginedMember = (CustomMemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long logginedMemberNo = logginedMember.getMemberNo();
+
+        log.info("⭐️⭐️ [ MemberController ] modifyProfile file : {}, member : {} ⭐️⭐️", file.isEmpty() , member);
+
+        boolean isSuccess = memberService.updateProfile(file, member, logginedMemberNo);
+
+        if(isSuccess){
+            return ResponseEntity.ok(true);
+        }
+
+        return ResponseEntity.ok(false);
     }
 }
