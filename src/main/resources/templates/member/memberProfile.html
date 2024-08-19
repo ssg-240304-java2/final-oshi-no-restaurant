@@ -21,9 +21,9 @@
 <div class="container mt-5 content">
   <div class="row">
     <!-- 영역1: 프로필 사이드바 -->
-    <div class="col-md-3 mb-3">
+    <div class="col-md-4">
       <div class="profile-sidebar">
-        <img th:src="${member.imgUrl}" alt="Profile Image" class="profile-image">
+        <img th:src="${member.imgUrl}" alt="Profile Image" class="profile-image"><br>
         <button th:if="${member.followed}" id="followButton" class="btn btn-follow following" th>팔로잉</button>
         <button th:unless="${member.followed}" id="followButton" class="btn btn-follow" th>팔로우</button>
         <div class="list-stats">
@@ -35,7 +35,7 @@
     </div>
 
     <!-- 영역2: 메인 콘텐츠 -->
-    <div class="col-md-9">
+    <div class="col-md-8">
       <div class="profile-content">
         <div class="profile-header">
           <div>
@@ -43,13 +43,31 @@
             <h4 class="header-meta">팔로잉 : <b th:text="${member.followingCnt}">100</b> | 팔로워 : <b th:text="${member.followerCnt}">5K</b></h4>
             <p th:text="'Joined in ' + ${member.registerDate}">Joined in 2021</p>
             <p th:text="${member.introduction}">이곳은 소개글 작성 란 입니다.</p>
-            <span class="badge-tag">쩝쩝 석사</span>
           </div>
           <div class="text-center">
-            <img th:src="@{https://kr.object.ncloudstorage.com/oshino-file/138fc7a5-760d-4ba1-9128-6a333769c8d3.png}" alt="Animal Image" class="animal-image">
-            <div class="weight">몸무게: <span th:text="${member.weight}">90KG</span></div>
+            <img th:src="${member.animalUrl}" alt="Animal Image" class="animal-image">
+            <div class="weight">몸무게: <span th:text="${member.weight}+'kg'">90KG</span></div>
           </div>
         </div>
+
+        <h4>보유 뱃지</h4>
+        <hr>
+        <p th:if="${member.badge == '쩝쩝학생'}" class="badge-tag">
+          <img th:src="@{/images/badge/none.png}" alt="none"><br>
+          <span>쩝쩝학생</span>
+        </p>
+        <p th:if="${member.badge == '쩝쩝학사'}" class="badge-tag">
+          <img th:src="@{/images/badge/bronze.png}" alt="none"><br>
+          <span>쩝쩝학사</span>
+        </p>
+        <p th:if="${member.badge == '쩝쩝석사'}" class="badge-tag">
+          <img th:src="@{/images/badge/silver.png}" alt="none"><br>
+          <span>쩝쩝석사</span>
+        </p>
+        <p th:if="${member.badge == '쩝쩝박사'}" class="badge-tag">
+          <img th:src="@{/images/badge/gold.png}" alt="none"><br>
+          <span>쩝쩝박사</span>
+        </p>
 
         <!-- 영역3: 식당 리스트 -->
         <ul class="nav nav-tabs" id="listTab" role="tablist">
@@ -63,13 +81,13 @@
         <div class="tab-content" id="listTabContent">
           <div class="tab-pane fade show active" id="public-list" role="tabpanel" aria-labelledby="public-list-tab">
             <ul class="restaurant-list">
-              <li th:each="item : ${member.publicList}" th:id="${item.listNo}" class="restaurant-item" th:text="${item.listName}">리스트 이름</li>
+              <li th:each="item : ${member.publicList}" th:id="'list'+${item.listNo}" class="restaurant-item" th:text="${item.listName}">리스트 이름</li>
             </ul>
           </div>
           <div class="tab-pane fade" id="private-list" role="tabpanel" aria-labelledby="private-list-tab">
 <!--            <p id="private-message" class="text-muted">비공개 리스트는 팔로우한 사용자만 볼 수 있습니다.</p>-->
             <ul class="restaurant-list">
-              <li th:each="item : ${member.privateList}" th:id="${item.listNo}" class="restaurant-item" th:text="${item.listName}">리스트 이름</li>
+              <li th:each="item : ${member.privateList}" th:id="'list'+${item.listNo}" class="restaurant-item" th:text="${item.listName}">리스트 이름</li>
             </ul>
           </div>
         </div>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>개인정보수정</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <link rel="stylesheet" th:href="@{/css/member/editProfile.css}">
+    </head>
+    <body>
+        <div class="sidebar">
+            <div class="sidebar-content">
+                <h2>마이페이지</h2>
+                <a href="/myInfo" class="nowPage">개인정보수정</a>
+                <a href="#badge">내 뱃지 보기</a>
+                <a href="/myInfo/review">내 리뷰 보기</a>
+                <a href="/myInfo/history">이용내역조회</a>
+                <a href="/myInfo/list">내 리스트 관리</a>
+            </div>
+        </div>
+        <div class="content">
+            <div class="profile-section">
+                <h3>개인정보수정</h3>
+                <!--        <div class="profile-photo">-->
+                <!--            <img id="profileImage" src="path/to/profile.png" alt="프로필 사진">-->
+                <!--            <input type="file" id="photoInput" accept="image/*" style="display: none;">-->
+                <!--            <button class="btn-photo-change" onclick="$('#photoInput').click();">사진 변경</button>-->
+                <!--        </div>-->
+                <form id="profileForm" enctype="multipart/form-data">
+                    <div class="profile-photo">
+                        <img id="profileImage" th:src="${member.imgUrl}" alt="프로필 사진" >
+                        <input type="file" id="photoInput" name="profileImage" accept="image/*" style="display: none;">
+                        <button class="btn-photo-change" onclick="$('#photoInput').click();">사진 변경</button>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="userId">아이디</label>
+                        <div class="d-flex align-items-center">
+                            <input th:value="${member.memberLoginInfo.account}" type="text" id="userId"
+                                   class="form-control" placeholder="아이디" th:attr="data-initial-value=${member.memberLoginInfo.account}">
+                            <button type="button" class="btn-duplicate-check">중복 확인</button>
+                        </div>
+                        <div class="invalid-feedback hidden account-before">아이디 중복확인 후 변경 가능합니다.</div>
+                        <div class="invalid-feedback hidden account-after">사용할 수 없는 아이디 입니다. 다른 아이디를 입력해 주세요.</div>
+                    </div>
+                    <div class="form-group">
+                        <button type="button" class="btn-change-password" id="btn-change-password">비밀번호 변경</button>
+                    </div>
+
+                    <div class="form-group hidden" id="password-form">
+                        <label for="password">비밀번호</label>
+                        <div class="d-flex align-items-center">
+                            <input type="password" id="password" class="form-control" placeholder="비밀번호">
+                        </div>
+                        <div class="invalid-feedback hidden" id="password-feedback">비밀번호는 8자에서 16자 사이로, 영문자, 숫자, 그리고 특수기호를 포함해야 합니다.</div>
+                    </div>
+                    <div class="form-group hidden" id="passwordConfirm-form">
+                        <label for="confirmPassword">비밀번호 확인</label>
+                        <div class="d-flex align-items-center">
+                            <input type="password" id="confirmPassword" class="form-control" placeholder="비밀번호 확인">
+                        </div>
+                        <div class="invalid-feedback hidden" id="passwordConfirm-feedback">비밀번호가 일치하지 않습니다. 다시 입력해주세요.</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="name">이름(실명)</label>
+                        <div class="d-flex align-items-center">
+                            <input th:value="${member.name}" type="text" id="name" class="form-control" value="고길동" th:attr="data-initial-value=${member.name}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="nickname">닉네임</label>
+                        <div class="d-flex align-items-center">
+                            <input th:value="${member.nickname}" type="text" id="nickname" class="form-control mr-2"
+                                   placeholder="닉네임" th:attr="data-initial-value=${member.nickname}">
+                            <button type="button" class="btn-duplicate-check">중복 검사</button>
+                        </div>
+                        <div class="invalid-feedback hidden nickname-before">중복확인 눌러 닉네임 중복을 확인해주세요.</div>
+                        <div class="invalid-feedback hidden nickname-after">중복된 닉네임 입니다. 다른 닉네임을 사용해 주세요.</div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-6">
+                            <label for="birthdate">생년월일</label>
+                            <div class="d-flex align-items-center">
+                                <input th:value="${member.birthday}" type="date" id="birthDate" max="9999-12-31"
+                                       placeholder="생년월일(예시: 20010121)"  name="birthday" th:attr="data-initial-value=${member.birthday}">
+                            </div>
+                        </div>
+                        <div class="form-group col-6">
+                            <label>성별</label>
+                            <div class="d-flex align-items-center">
+                                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                    <label class="btn gender-btn">
+                                        <input th:field="${member.gender}" th:value="male" type="radio" name="gender"
+                                               id="male" autocomplete="off"> 남
+                                    </label>
+                                    <label class="btn gender-btn">
+                                        <input th:field="${member.gender}" th:value="female" type="radio" name="gender"
+                                               id="female" autocomplete="off"> 여
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">이메일</label>
+                        <div class="d-flex align-items-center">
+                            <input th:value="${member.email}" type="email" id="email" class="form-control"
+                                   placeholder="이메일" th:attr="data-initial-value=${member.email}">
+                            <button class="btn-mail-check" id="emailCheckBtn" type="button" style="white-space: nowrap">인증메일발송</button>
+                        </div>
+                        <div class="invalid-feedback hidden email-feedback">유효한 이메일을 입력해주세요.</div>
+                    </div>
+                    <div class="form-group hidden" id="verifForm">
+                        <label for="authCode">이메일 인증코드</label>
+                        <div class="d-flex align-items-center">
+                            <input type="text" id="authCode" name="verifCode" class="form-control" placeholder="이메일 수신 코드">
+                            <button class="btn-mail-check" id="authCodeCheckBtn" type="button" style="white-space: nowrap">인증메일발송</button>
+                        </div>
+                        <div class="invalid-feedback hidden verifCode-feedback">인증 코드가 일치하지 않습니다.</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">전화번호</label>
+                        <div class="d-flex align-items-center">
+                            <input th:value="${member.phone}" type="text" id="phone" class="form-control"
+                                   placeholder="전화번호 (01012341234)"  th:attr="data-initial-value=${member.phone}">
+                        </div>
+                        <span id="phoneFeedback" class="text-danger" style="display:none;">전화번호는 11자리 숫자여야 합니다.</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="bio">소개글</label>
+                        <textarea th:field="${member.introduction}" id="bio" class="form-control" rows="3"
+                                  placeholder="소개글을 입력하세요."></textarea>
+                    </div>
+                    <button type="button" class="btn-submit" id="btn-submit">수정 완료</button>
+                </form>
+            </div>
+        </div>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script type="text/javascript" th:src="@{/js/member/editProfile.js}"></script>
+
+    </body>
+</html>

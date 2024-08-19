@@ -33,4 +33,6 @@ public class MemberProfileDTO {
 
     private List<ZzupListDTO> publicList;
     private List<ZzupListDTO> privateList;
+
+    private String badge;
 }
