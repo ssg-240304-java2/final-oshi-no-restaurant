@@ -15,6 +15,7 @@ public class ReadWaitingResponseDto {
     private Long waitingNo;
     private int partySize;
     private StatusType waitingStatus;
+    private int sequenceNumber;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 

@@ -82,8 +82,7 @@
     $(document).ready(function() {
         let partySize = 0;
 
-        // 이 부분 값 받아와야 함.
-        let memberNo = 1;
+        let memberNo = [[${memberNo}]];
         let restaurantNo = [[${restaurantNo}]];
 
         const maxPeople = 8; // 최대 인원수 설정
@@ -112,6 +111,7 @@
                 alert('0명은 등록할 수 없습니다!');
                 return;
             }
+
             // 서버로 데이터 전송
             $.ajax({
                 url: '/users/waiting',
@@ -126,8 +126,8 @@
                         window.location.href = '../../'; // 인덱스 페이지로 이동
                 },
                 error: function(xhr, status, error) {
-                    alert('서버와 통신 중 오류가 발생했습니다.');
-                    console.error('Error:', error);
+                    let response = JSON.parse(xhr.responseText);
+                    alert(response.message);
                 }
             });
         });
