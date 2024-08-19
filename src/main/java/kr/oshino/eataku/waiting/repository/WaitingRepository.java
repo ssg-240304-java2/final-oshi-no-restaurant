@@ -1,13 +1,17 @@
 package kr.oshino.eataku.waiting.repository;
 
 import kr.oshino.eataku.common.enums.StatusType;
+import kr.oshino.eataku.member.entity.Member;
+import kr.oshino.eataku.restaurant.admin.entity.RestaurantInfo;
 import kr.oshino.eataku.waiting.entity.Waiting;
 import kr.oshino.eataku.waiting.model.dto.responseDto.ReadWaitingResponseDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 public interface WaitingRepository extends JpaRepository<Waiting, Long> {
 
@@ -40,4 +44,8 @@ public interface WaitingRepository extends JpaRepository<Waiting, Long> {
     List<ReadWaitingResponseDto> findWaitingByRestaurantNo(@Param("restaurantNo") Long restaurantNo);
 
     Waiting findWaitingByMember_MemberNoAndWaitingStatus(Long logginedMemberNo, StatusType statusType);
+
+    Optional<Waiting> findByMemberAndRestaurantInfoAndWaitingStatus(
+            Member member, RestaurantInfo restaurantInfo, StatusType statusType
+    );
 }

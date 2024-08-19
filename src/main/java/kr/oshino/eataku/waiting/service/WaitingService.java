@@ -1,6 +1,8 @@
 package kr.oshino.eataku.waiting.service;
 
 import kr.oshino.eataku.common.enums.StatusType;
+import kr.oshino.eataku.common.exception.exception.WaitingException;
+import kr.oshino.eataku.common.exception.info.WaitingExceptionInfo;
 import kr.oshino.eataku.member.entity.Member;
 import kr.oshino.eataku.member.model.repository.MemberRepository;
 import kr.oshino.eataku.restaurant.admin.entity.RestaurantInfo;
@@ -19,7 +21,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import reactor.core.publisher.Sinks;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,7 +33,6 @@ public class WaitingService {
     private final WaitingRepository waitingRepository;
     private final MemberRepository memberRepository;
     private final RestaurantRepository restaurantRepository;
-
     private final ApplicationEventPublisher eventPublisher;
 
 
@@ -48,12 +48,15 @@ public class WaitingService {
 
         // 여기 이전에 레스토랑에서 웨이팅 가능 여부를 확인해야 한다.
 
-        // 멤버 객체와 레스토랑 객체 조회 후 객체 넣어줘야 한다.
         Member member = memberRepository.findById(createWaitingRequestDto.getMemberNo())
                 .orElseThrow(() -> new RuntimeException("해당하는 회원 정보가 없습니다!"));
-
         RestaurantInfo restaurantInfo = restaurantRepository.findById(createWaitingRequestDto.getRestaurantNo())
                         .orElseThrow(() -> new RuntimeException("해당하는 레스토랑 정보가 없습니다!"));
+
+        if(waitingRepository.findByMemberAndRestaurantInfoAndWaitingStatus(
+                member, restaurantInfo, StatusType.대기중).isPresent()) {
+            throw new WaitingException(WaitingExceptionInfo.DUPLICATED_WAITING);
+        }
 
         Waiting waiting = waitingRepository.save(Waiting.builder()
                                         .partySize(createWaitingRequestDto.getPartySize())
