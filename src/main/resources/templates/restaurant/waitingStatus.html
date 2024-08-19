@@ -76,7 +76,7 @@
                     <div class="waiting-card" data-waiting-no="${waiting.waitingNo}">
                         <div class="row align-items-center">
                             <div class="col-sm-2-no col-data waiting-no">
-                                <p>#${waiting.waitingNo}</p>
+                                <p>#${waiting.sequenceNumber}</p>
                             </div>
                             <div class="col-sm-2-name col-data">
                                 <p>${waiting.name}</p>
@@ -149,8 +149,10 @@
                     alert(response.message)
                     card.remove();
                 },
-                error: function(error) {
-                    console.error('웨이팅을 방문 처리하는 중 오류가 발생했습니다!', error);
+                error: function(xhr, status, error) {
+                    let response = JSON.parse(xhr.responseText);
+                    alert(response.message);
+                    card.remove();
                 }
             });
         });
@@ -169,8 +171,10 @@
                     alert(response.message)
                     card.remove();
                 },
-                error: function(error) {
-                    console.error('웨이팅을 취소 처리하는 중 오류가 발생했습니다!', error);
+                error: function(xhr, status, error) {
+                    let response = JSON.parse(xhr.responseText);
+                    alert(response.message);
+                    card.remove();
                 }
             });
         });
