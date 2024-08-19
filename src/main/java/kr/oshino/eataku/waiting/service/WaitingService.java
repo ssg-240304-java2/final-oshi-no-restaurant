@@ -22,6 +22,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,14 +54,20 @@ public class WaitingService {
         RestaurantInfo restaurantInfo = restaurantRepository.findById(createWaitingRequestDto.getRestaurantNo())
                         .orElseThrow(() -> new RuntimeException("해당하는 레스토랑 정보가 없습니다!"));
 
+        // 동일 매장 중복 웨이팅 존재 여부 판별
         if(waitingRepository.findByMemberAndRestaurantInfoAndWaitingStatus(
                 member, restaurantInfo, StatusType.대기중).isPresent()) {
             throw new WaitingException(WaitingExceptionInfo.DUPLICATED_WAITING);
         }
 
+        // 가장 최근의 순번을 가져와서 순번 결정
+        Integer maxSequenceNumber = waitingRepository.findMaxSequenceNumberByRestaurantAndDate(restaurantInfo, LocalDate.now());
+        int newSequenceNumber = (maxSequenceNumber != null) ? maxSequenceNumber + 1 : 1;
+
         Waiting waiting = waitingRepository.save(Waiting.builder()
                                         .partySize(createWaitingRequestDto.getPartySize())
                                         .restaurantInfo(restaurantInfo)
+                                        .sequenceNumber(newSequenceNumber)
                                         .member(member)
                                         .waitingStatus(StatusType.대기중)
                                         .build());
