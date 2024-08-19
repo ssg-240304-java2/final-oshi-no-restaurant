@@ -135,12 +135,12 @@ public class MyListController {
     }
 
     // 식당 좌표 넘겨주기(지도에 마커 표시)
-    @GetMapping("/tsktskLists/restaurantCoordinates")
-    @ResponseBody
-    public List<RestaurantList> getRestaurantCoordinates() {
-        // 데이터베이스에서 모든 좌표와 식당 정보를 가져오는 메서드
-        return myListService.getAllRestaurantCoordinates();
-    }
+//    @GetMapping("/tsktskLists/restaurantCoordinates")
+//    @ResponseBody
+//    public List<RestaurantList> getRestaurantCoordinates() {
+//        // 데이터베이스에서 모든 좌표와 식당 정보를 가져오는 메서드
+//        return myListService.getAllRestaurantCoordinates();
+//    }
 
     // 식당 삭제 메소드
     @PostMapping("/tsktskLists/deleteRestaurants")
@@ -162,6 +162,21 @@ public class MyListController {
         }
     }
 
+    // 팔로우한 사람 리스트 가져오기
+    @PostMapping("/tsktskLists")
+    public String followingLists(Model model, @RequestParam("listNo") Integer listNo) {
+
+        log.info("⭐⭐ [ MyListController ] Request listId: {} ⭐⭐", listNo);
+
+        // listId에 해당하는 팔로우한 사람의 리스트 가져오기
+        List<MyList> followingLists = myListService.getFollowingLists(listNo);
+
+        // 모델에 리스트 추가
+        model.addAttribute("followingLists", followingLists);
+
+        // 리다이렉트할 경로
+        return "redirect:/list/tsktskList";
+    }
 
 }
 
