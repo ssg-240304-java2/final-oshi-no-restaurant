@@ -126,7 +126,7 @@ public class MemberController {
         session.setAttribute("password", member.getPassword());
         session.setAttribute("email", member.getEmail());
 
-        return ResponseEntity.ok("/managerLogin");
+        return ResponseEntity.ok("/restaurant/certification");
     }
 
     @GetMapping("/member/{memberNo}")

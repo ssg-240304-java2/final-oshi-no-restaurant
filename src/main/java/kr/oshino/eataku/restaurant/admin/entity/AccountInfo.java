@@ -2,6 +2,8 @@ package kr.oshino.eataku.restaurant.admin.entity;
 
 import com.sun.istack.NotNull;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,6 +11,9 @@ import lombok.NoArgsConstructor;
 @Data
 @Entity
 @Table(name = "tbl_account_info")
+@AllArgsConstructor
+@Builder
+
 public class AccountInfo {      // 식당 계정
 
     @Id

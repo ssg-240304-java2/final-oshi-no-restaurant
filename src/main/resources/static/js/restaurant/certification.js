@@ -122,6 +122,7 @@ $('#certificationBtn').on('click', function() {
         }),
         success : function(result) {
             console.log("success")
+            console.log(result)
             window.location.href = result;
         },
         error : function (e){

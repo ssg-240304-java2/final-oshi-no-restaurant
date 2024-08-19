@@ -46,50 +46,78 @@ function sample6_execDaumPostcode() {
     }).open();
 }
 
-$('#infoRegisterBtn').on('click', function () {
-    const storeName = $("#storeName").val()
+// 식당 정보 관련 메서드
+function handleRestaurantInfo(actionUrl) {
+    const storeName = $("#storeName").val();
     const storePhone = $("#storePhone").val();
-    const businessAddress = $("#sample6_postcode").val() + $("#sample6_address").val() + $("#sample6_detailAddress").val() + $("#sample6_extraAddress").val()
+    const businessAddress = $("#sample6_postcode").val() + $("#sample6_address").val() + $("#sample6_detailAddress").val() + $("#sample6_extraAddress").val();
 
-    const foodType= [];
-    $("input[name='foodType']:checked").each(function (){
+    const foodType = [];
+    $("input[name='foodType']:checked").each(function () {
         foodType.push($(this).val());
-    })
+    });
 
-    const openingHoursStart = $("#openingHoursStart").val()
-    const openingHoursEnd = $("#openingHoursEnd").val()
+    const openingHoursStart = $("#openingHoursStart").val();
+    const openingHoursEnd = $("#openingHoursEnd").val();
 
     const tagType = [];
-    $("input[name='tagType']:checked").each(function (){
+    $("input[name='tagType']:checked").each(function () {
         tagType.push($(this).val());
-    })
+    });
 
-    const storeIntro = $("#storeIntro").val()
+    const storeIntro = $("#storeIntro").val();
 
-    console.log(storeName, foodType, tagType)
+    console.log(storeName, foodType, tagType);
 
     $.ajax({
         type: 'post',
-        url: '/restaurant/infoRegister',
+        url: actionUrl,
         contentType: 'application/json',
         dataType: 'text',
         data: JSON.stringify({
-            "restaurantName" : storeName,
-            "contact" : storePhone,
-            "restaurantAddress" : businessAddress,
-            "foodType" : foodType,
-            "openingTime" : openingHoursStart,
-            "closingTime" : openingHoursEnd,
-            "hashTag" : tagType,
-            "description" : storeIntro
+            "restaurantName": storeName,
+            "contact": storePhone,
+            "restaurantAddress": businessAddress,
+            "foodType": foodType,
+            "openingTime": openingHoursStart,
+            "closingTime": openingHoursEnd,
+            "hashTag": tagType,
+            "description": storeIntro
         }),
-        success: function (result){
-            console.log("success")
+        success: function (result) {
+            console.log("success");
             window.location.href = result;
         },
-        error: function (e){
-            console.log("failed")
+        error: function (e) {
+            console.log("failed");
             console.log(e);
         }
-    })
-})
+    });
+}
+
+// 데이트픽
+$(document).ready(function() {
+    if($('#reservationDate').length) {
+        $("#reservationDate").datepicker({
+            dateFormat: "yy-mm-dd"
+        });
+    }
+    if($('#waitingDate').length){
+        $("#waitingDate").datepicker({
+            dateFormat: "yy-mm-dd"
+        });
+    }
+});
+
+// 회원가입 시 식당 정보 등록
+$('#infoRegisterBtn').on('click', function (){
+    handleRestaurantInfo('/restaurant/infoRegister');
+});
+
+// 식당 정보 수정 및 웨이팅, 예약 정보 입력
+$('#updateBtn').on('click', function (){
+    handleRestaurantInfo('/restaurant/infoUpdate');
+});
+
+
+
