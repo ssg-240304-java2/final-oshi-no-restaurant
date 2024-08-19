@@ -3,6 +3,8 @@ package kr.oshino.eataku.restaurant.admin.controller;
 import jakarta.servlet.http.HttpSession;
 import kr.oshino.eataku.common.enums.FoodType;
 import kr.oshino.eataku.common.enums.HashTag;
+import kr.oshino.eataku.restaurant.admin.entity.RestaurantInfo;
+import kr.oshino.eataku.restaurant.admin.model.dto.ReservSettingDTO;
 import kr.oshino.eataku.restaurant.admin.model.dto.RestaurantInfoDTO;
 import kr.oshino.eataku.restaurant.admin.model.dto.TemporarySaveDTO;
 import kr.oshino.eataku.restaurant.admin.service.RestaurantAdminService;
@@ -19,6 +21,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.List;
 import java.util.Set;
 
 @Controller
@@ -33,7 +36,7 @@ public class RestaurantAdminController {
      * 사업자 등록증 등록
      */
     @GetMapping("/certification")
-    public void business() {
+    public void businessView() {
     }
 
     @PostMapping("/certification")
@@ -53,7 +56,7 @@ public class RestaurantAdminController {
      * @return
      */
     @GetMapping("/infoRegister")
-    public void register() {
+    public void info() {
     }
 
     @PostMapping("/infoRegister")
@@ -75,9 +78,12 @@ public class RestaurantAdminController {
      * @return
      */
     @GetMapping("/infoUpdate/{restaurantNo}")
-    public String restaurantInfo(@PathVariable("restaurantNo") Long restaurantNo, Model model) {
+    public String infoView(@PathVariable("restaurantNo") Long restaurantNo, Model model) {
 
         RestaurantInfoDTO restaurant = restaurantAdminService.selectMyRestaurant(14785L);
+
+        List<ReservSettingDTO> reservSettings = restaurantAdminService.selectReservSetting(14785L);
+
 
         Set<FoodType> foodTypes = restaurant.getFoodTypes();
         Set<HashTag> hashTags = restaurant.getHashTags();
@@ -86,10 +92,12 @@ public class RestaurantAdminController {
         model.addAttribute("restaurant", restaurant);
         model.addAttribute("foodTypes", foodTypes);
         model.addAttribute("hashTags", hashTags);
+        model.addAttribute("reservSetting", reservSettings);
 //        model.addAttribute("imageData", imageData);
 
         log.info("\uD83C\uDF4E foodTypes : {} ", foodTypes);
         log.info("\uD83C\uDF4E hashTags : {} ", hashTags);
+        log.info("\uD83C\uDF4E reservSetting : {} ", reservSettings);
 
         return "restaurant/infoUpdate";
     }
@@ -123,6 +131,14 @@ public class RestaurantAdminController {
         restaurantAdminService.updateRestaurant(updateInfo);
 
         return "redirect:/restaurant/infoUpdate/"+ updateInfo.getRestaurantNo();
+    }
+
+
+    @PostMapping("/reservationInsert")
+    public String setRegister(@RequestBody ReservSettingDTO reservSetting) {
+
+        log.info("\uD83C\uDF4E reservation : {} ", reservSetting);
+        return "redirect:/restaurant/reservationInsert/" + reservSetting.getReservationNo();
     }
 
 }

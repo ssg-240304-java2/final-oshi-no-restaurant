@@ -2,12 +2,11 @@ package kr.oshino.eataku.restaurant.admin.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpSession;
-import kr.oshino.eataku.restaurant.admin.entity.AccountInfo;
-import kr.oshino.eataku.restaurant.admin.entity.Certification;
-import kr.oshino.eataku.restaurant.admin.entity.RestaurantInfo;
-import kr.oshino.eataku.restaurant.admin.entity.TemporarySave;
+import kr.oshino.eataku.restaurant.admin.entity.*;
+import kr.oshino.eataku.restaurant.admin.model.dto.ReservSettingDTO;
 import kr.oshino.eataku.restaurant.admin.model.dto.RestaurantInfoDTO;
 import kr.oshino.eataku.restaurant.admin.model.dto.TemporarySaveDTO;
+import kr.oshino.eataku.restaurant.admin.model.repository.ReservationSettingRepository;
 import kr.oshino.eataku.restaurant.admin.model.repository.RestaurantRepository;
 import kr.oshino.eataku.restaurant.admin.model.repository.TemporarySaveRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +19,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.sql.Time;
 import java.time.LocalTime;
 import java.util.Base64;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -29,6 +30,7 @@ public class RestaurantAdminService {
 
     private final TemporarySaveRepository temporarySaveRepository;
     private final RestaurantRepository restaurantRepository;
+    private final ReservationSettingRepository reservationSettingRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     /***
@@ -159,7 +161,7 @@ public class RestaurantAdminService {
             restaurantInfo.setHashTags(updateInfo.getHashTags());
             restaurantInfo.setDescription(updateInfo.getDescription());
 
-            if(updateInfo.getImgUrl() != null){
+            if (updateInfo.getImgUrl() != null) {
                 restaurantInfo.setImgUrl(updateInfo.getImgUrl());
             }
 
@@ -171,10 +173,26 @@ public class RestaurantAdminService {
         }
     }
 
+
 //    public String getRestaurantImageById(Long restaurantNo) {
 //
 //        RestaurantInfo restaurantInfo = restaurantRepository.findById(restaurantNo).orElseThrow(() -> new EntityNotFoundException("Restaurant not found with id: " + restaurantNo));
 //
 //        return restaurantInfo.getImgUrl();
 //    }
+
+    public List<ReservSettingDTO> selectReservSetting(Long restaurantNo) {
+
+        RestaurantInfo restaurantInfo = restaurantRepository.findById(restaurantNo).orElseThrow(() -> new EntityNotFoundException("Restaurant not found width id: " + restaurantNo));
+
+        List<ReservationSetting> reservationSettings = reservationSettingRepository.findByRestaurantNo(restaurantInfo);
+
+        return reservationSettings.stream().map(reservationSetting -> {
+            ReservSettingDTO reservSetting = new ReservSettingDTO();
+            reservSetting.setReservationDate(reservationSetting.getReservationDate().toLocalDate());
+            reservSetting.setReservationTime(reservationSetting.getReservationTime().toLocalTime());
+            reservSetting.setReservationPeople(reservationSetting.getReservationPeople());
+            return reservSetting;
+        }).collect(Collectors.toList());
+    }
 }

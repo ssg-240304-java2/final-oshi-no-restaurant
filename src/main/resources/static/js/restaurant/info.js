@@ -141,10 +141,39 @@ $('#infoRegisterBtn').on('click', function (){
     handleRestaurantInfo('/restaurant/infoRegister');
 });
 
-// 식당 정보 수정 및 웨이팅, 예약 정보 입력
+// 식당 정보 수정
 $('#updateBtn').on('click', function (){
     handleRestaurantInfo('/restaurant/infoUpdate');
 });
+
+// 예약 정보 입력
+$('#reservationBtn').on('click', function () {
+    const reservationDate = $('#reservationDate').val();
+    const reservationTime = $('#reservationTime').val();
+    const reservationPeople = $('#reservationPeople').val();
+
+    console.log(reservationDate, reservationTime, reservationPeople)
+
+    $.ajax({
+        type: 'post',
+        url: '/restaurant/infoUpdate',
+        contentType: 'application/json',
+        dataType: 'text',
+        data: JSON.stringify({
+            "reservationDate" : reservationDate,
+            "reservationTime" : reservationTime,
+            "reservationPeople" : reservationPeople
+        }),
+        success: function (result){
+            console.log("success")
+            window.location.href = result;
+        },
+        error: function (e){
+            console.log("failed")
+            console.log(e);
+        }
+    })
+})
 
 
 

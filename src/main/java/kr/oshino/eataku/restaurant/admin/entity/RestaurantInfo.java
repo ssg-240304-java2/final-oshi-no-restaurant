@@ -74,6 +74,7 @@ public class RestaurantInfo {
         joinColumns = @JoinColumn(name = "restaurant_no", referencedColumnName = "restaurant_no")
     )
     @Column(name = "food_type")
+    @Enumerated(EnumType.STRING)
     private Set<FoodType> foodTypes;      // 음식종류
 
     @ElementCollection(fetch = FetchType.EAGER)
@@ -82,6 +83,7 @@ public class RestaurantInfo {
             joinColumns = @JoinColumn(name = "restaurant_no", referencedColumnName = "restaurant_no")
     )
     @Column(name = "hash_tag")
+    @Enumerated(EnumType.STRING)
     private Set<HashTag> hashTags;        // 해시태그
 
     @OneToOne(mappedBy = "restaurantNo", cascade = CascadeType.ALL)

@@ -200,14 +200,14 @@ $('#signUpBtn').on('click', function () {
     if (
         // 유효값 체크
         !$('#userId').hasClass('is-valid') ||
-        // !$('#password').hasClass('is-valid') ||
-        // !$('#confirmPassword').hasClass('is-valid') ||
+        !$('#password').hasClass('is-valid') ||
+        !$('#confirmPassword').hasClass('is-valid') ||
         !$('#email').hasClass('is-valid') ||
         !$('#authCode').hasClass('is-valid') ||
         // null값 체크
         $('#userId').val() == "" ||
-        // $('#password').val() == "" ||
-        // $('#confirmPassword').val() == "" ||
+        $('#password').val() == "" ||
+        $('#confirmPassword').val() == "" ||
         $('#email').val() == "" ||
         $('#authCode').val() == ""
     ) {
