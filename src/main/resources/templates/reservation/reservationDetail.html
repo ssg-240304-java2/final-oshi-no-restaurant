@@ -16,7 +16,7 @@
 <div class="container">
     <div class="section-content text-center">
         <div id="main-img" class="img-placeholder" style="background-color: #ddd; width: 100%; max-width: 900px; height: 400px; margin: auto;"></div>
-        <h2 class="section-title">음식점 이름</h2>
+        <h2 th:text="${restaurant.restaurantName}">이름</h2>
         <div class="circle-buttons">
             <button class="btn btn-outline-custom">쩝쩝채팅</button>
             <button class="btn btn-outline-custom">쩝쩝웨이팅</button>
@@ -25,11 +25,10 @@
     </div>
 
     <div class="info-section text-center">
-        <p><i class="fas fa-globe"></i><img src="/picture/Globe.png"/>    www.example.com</p>
-        <p><i class="fas fa-map-marker-alt"></i><img src="/picture/Map%20pin.png"/> 서울 송파구 올림픽로 240 지하 1층</p>
-        <p><i class="fas fa-phone"></i><img src="/picture/Phone.png"/>    010-1234-1234</p>
-        <p><i class="fas fa-gift"></i><img src="/picture/Gift.png"/>  포장가능</p>
-        <p><i class="fas fa-car"></i><img src="/picture/Info.png"/>   주차가능</p>
+        <div>
+            <img th:src="@{/images/reservation/Map pin.png}"/>
+            <span th:text="${restaurant.restaurantAddress}"></span>
+        </div>
     </div>
 
     <div class="map-container" id="map-container">
@@ -39,10 +38,7 @@
     </div>
 
     <div class="rating-section">
-        <h2>이용내역   <img src="/picture/Vector.png"/></h2>
-        <div class="rating">
-            <i class="fas fa-star"></i>  5.0
-        </div>
+        <h2>이용내역   <img th:src="@{/images/reservation/Vector.png}"/>
         <div class="rating-details">
             <div class="detail">
                 <p>맛있어요</p>
@@ -95,9 +91,9 @@
         </div>
 
         <div class="arrow-button" id="arrow-button">
-            <button class="custom-arrow-button">
-                <img src="/picture/next%20arrow.png" alt="Next">
-            </button>
+            <div class="custom-arrow-button">
+                <img th:src="@{/images/reservation/next arrow.png}"/>
+            </div>
         </div>
     </div>
 

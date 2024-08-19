@@ -1,7 +1,9 @@
 package kr.oshino.eataku.reservation.user.controller;
+import kr.oshino.eataku.member.model.dto.CustomMemberDetails;
 import kr.oshino.eataku.reservation.user.model.dto.requestDto.CreateReservationUserRequestDto;
 import kr.oshino.eataku.reservation.user.model.dto.responseDto.CreateReservationUserResponseDto;
 import kr.oshino.eataku.reservation.user.model.dto.responseDto.ReadReservationResponseDto;
+import kr.oshino.eataku.reservation.user.model.dto.responseDto.RestaurantInfoDetails;
 import kr.oshino.eataku.reservation.user.model.dto.responseDto.modalDto;
 import kr.oshino.eataku.reservation.user.service.ReservationUserService;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -33,6 +36,8 @@ public class ReservationUserController {
      */
     @GetMapping("/reservation/{restaurantNo}")
     public String reservation(@PathVariable String restaurantNo, Model model) {
+
+
 
         model.addAttribute("restaurantNo", restaurantNo);
         System.out.println("예약 페이지 접속");
@@ -129,6 +134,7 @@ public class ReservationUserController {
         return reservationUserService.getAvailableDates(restaurantNo);
     }
 
+
     /***
      * 예약 조회
      */
@@ -141,12 +147,22 @@ public class ReservationUserController {
                 .body(reservationUserService.getReservationListByMemberNo(readReservationResponseDto));
     }
 
-
-
-
     /***
      * 예약 취소
      */
+    @GetMapping("/reservation/cancel")
+
+    public String cancelReservations() {
+
+        return "reservation/updateReservation";
+    }
+
+    /***
+     * 예약취소
+     * @param reservationNo
+     * @return
+     */
+
     @PostMapping("/reservation/{reservationNo}/cancel")
     @ResponseBody
     public ResponseEntity<?> cancelReservation(@PathVariable int reservationNo) {
@@ -154,10 +170,32 @@ public class ReservationUserController {
         System.out.println("isCancelled = " + isCancelled);
 
         if (isCancelled) {
-            return ResponseEntity.ok().body("{\"성공\"}");
+            return ResponseEntity.ok().body(Map.of("success", true, "message", "예약이 성공적으로 취소되었습니다."));
         } else {
-            return ResponseEntity.status(400).body("{\"오류\"}");
+            return ResponseEntity.status(400).body(Map.of("success", false, "message", "예약 취소에 실패하였습니다."));
         }
+    }
+
+    /***
+     * 식당 상세 페이지
+     */
+
+    /**
+     * 식당 상세 페이지를 로드
+     */
+    @GetMapping("/detail")
+    public String detail() {
+        return "reservation/reservationDetail";
+    }
+
+    /**
+     * 특정 식당의 상세 정보 가져오기
+     */
+    @GetMapping("/detail/{restaurantNo}/detailPage")
+    public String detailPage(@PathVariable Long restaurantNo, Model model) {
+        RestaurantInfoDetails restaurant = reservationUserService.getRestaurantDetailsByReservation(restaurantNo);
+        model.addAttribute("restaurant", restaurant);
+        return "reservation/reservationDetail";
     }
 
 }
