@@ -51,7 +51,10 @@ function handleRestaurantInfo(actionUrl) {
     const storeName = $("#storeName").val();
     const storePhone = $("#storePhone").val();
     const businessAddress = $("#sample6_postcode").val() + $("#sample6_address").val() + $("#sample6_detailAddress").val() + $("#sample6_extraAddress").val();
-
+    const postCode = $("#sample6_postcode").val();
+    const address = $("#sample6_address").val();
+    const detailAddress = $("#sample6_detailAddress").val();
+    const extraAddress = $("#sample6_extraAddress").val();
     const foodType = [];
     $("input[name='foodType']:checked").each(function () {
         foodType.push($(this).val());
@@ -66,6 +69,7 @@ function handleRestaurantInfo(actionUrl) {
     });
 
     const storeIntro = $("#storeIntro").val();
+    const storeImage = $("#storeImage").val();
 
     console.log(storeName, foodType, tagType);
 
@@ -78,11 +82,16 @@ function handleRestaurantInfo(actionUrl) {
             "restaurantName": storeName,
             "contact": storePhone,
             "restaurantAddress": businessAddress,
-            "foodType": foodType,
+            "postCode" : postCode,
+            "address" : address,
+            "detailAddress" : detailAddress,
+            "extraAddress" : extraAddress,
+            "foodTypes": foodType,
             "openingTime": openingHoursStart,
             "closingTime": openingHoursEnd,
-            "hashTag": tagType,
-            "description": storeIntro
+            "hashTags": tagType,
+            "description": storeIntro,
+            "imgUrl" : storeImage
         }),
         success: function (result) {
             console.log("success");
@@ -109,15 +118,62 @@ $(document).ready(function() {
     }
 });
 
+// 식당 사진 미리보기
+function previewImage(event) {
+    const image = document.getElementById('imagePreview');
+    const file = event.target.files[0];
+
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            image.src = e.target.result;
+            image.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+    } else {
+        image.src = '';
+        image.style.display = 'none';
+    }
+}
+
 // 회원가입 시 식당 정보 등록
 $('#infoRegisterBtn').on('click', function (){
     handleRestaurantInfo('/restaurant/infoRegister');
 });
 
-// 식당 정보 수정 및 웨이팅, 예약 정보 입력
+// 식당 정보 수정
 $('#updateBtn').on('click', function (){
     handleRestaurantInfo('/restaurant/infoUpdate');
 });
+
+// 예약 정보 입력
+$('#reservationBtn').on('click', function () {
+    const reservationDate = $('#reservationDate').val();
+    const reservationTime = $('#reservationTime').val();
+    const reservationPeople = $('#reservationPeople').val();
+
+    console.log(reservationDate, reservationTime, reservationPeople)
+
+    $.ajax({
+        type: 'post',
+        url: '/restaurant/infoUpdate',
+        contentType: 'application/json',
+        dataType: 'text',
+        data: JSON.stringify({
+            "reservationDate" : reservationDate,
+            "reservationTime" : reservationTime,
+            "reservationPeople" : reservationPeople
+        }),
+        success: function (result){
+            console.log("success")
+            window.location.href = result;
+        },
+        error: function (e){
+            console.log("failed")
+            console.log(e);
+        }
+    })
+})
 
 
 

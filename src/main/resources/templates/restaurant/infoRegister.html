@@ -74,7 +74,7 @@
                                 <label class="form-check-label" for="foodType4">양식</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" id="foodType5" name="foodType" value="퓨전 음식">
+                                <input class="form-check-input" type="checkbox" id="foodType5" name="foodType" value="퓨전음식">
                                 <label class="form-check-label" for="foodType5">퓨전 음식</label>
                             </div>
                             <div class="form-check form-check-inline">
@@ -129,6 +129,15 @@
                         <label for="storeIntro">한줄 소개</label>
                         <input type="text" class="form-control" id="storeIntro" placeholder="식당의 소개글을 입력하세요.">
                     </div>
+
+                    <div class="form-group">
+                        <label for="storeImage">사진 업로드</label>
+                        <input type="file" class="form-control-file" id="storeImage" accept="image/*" onchange="previewImage(event)">
+                        <div class="mt-3">
+                            <img id="imagePreview" src="#" alt="이미지 미리보기" style="display:none; max-width: 100%; height: auto;">
+                        </div>
+                    </div>
+
                     <div class="form-group text-center">
                         <button type="button" class="btn btn-primary" id="infoRegisterBtn">가입하기</button>
                     </div>
