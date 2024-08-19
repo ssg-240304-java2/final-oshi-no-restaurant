@@ -4,8 +4,17 @@ $(document).ready(function() {
     var partySize = 1;
     var reservationDate = today.toISOString().split('T')[0];
     var reservationTime;
-    var restaurantNo = 1;
+    // var restaurantNo =1;
     var availableDates = [];
+
+    console.log(restaurantNo);
+
+    // URL에서 restaurantNo 추출
+    var url = window.location.pathname;
+    var restaurantNo = url.substring(url.lastIndexOf('/') + 1);
+
+    console.log("RestaurantNo:", restaurantNo);
+
 
     // 서버에서 예약 가능한 날짜 데이터를 가져옴
     $.ajax({
@@ -159,7 +168,7 @@ $(document).ready(function() {
 
             var requestData = {
                 memberNo: 1,
-                restaurantNo: 1,
+                restaurantNo: restaurantNo,
                 partySize: partySize,
                 reservationDate: reservationDate,
                 reservationTime: reservationTime
