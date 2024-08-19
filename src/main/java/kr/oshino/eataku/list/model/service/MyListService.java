@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
-import java.util.ArrayList;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -116,25 +116,25 @@ public class MyListService {
     }
 
     // 마커 좌표 설정
-    public List<RestaurantList> getAllRestaurantCoordinates() {
-        // 여기에 로직을 추가하여 식당 좌표와 관련 정보를 가져옵니다.
-        List<MyList> myLists = myListRepository.findAll();
-        List<RestaurantList> restaurantCoordinates = new ArrayList<>();
-
-        for (MyList myList : myLists) {
-            // 로그 확인
-            restaurantCoordinates.addAll(myList.getRestaurantList());
-            myList.getRestaurantList().forEach(restaurant ->
-                    log.info("식당 좌표: {}, Coordinates: ({}, {})",
-                            restaurant.getRestaurantName(),
-                            restaurant.getXCoordinate(),
-                            restaurant.getYCoordinate()));
-        }
-
-
-
-        return restaurantCoordinates;
-    }
+//    public List<RestaurantList> getAllRestaurantCoordinates() {
+//        // 여기에 로직을 추가하여 식당 좌표와 관련 정보를 가져옵니다.
+//        List<MyList> myLists = myListRepository.findAll();
+//        List<RestaurantList> restaurantCoordinates = new ArrayList<>();
+//
+//        for (MyList myList : myLists) {
+//            // 로그 확인
+//            restaurantCoordinates.addAll(myList.getRestaurantList());
+//            myList.getRestaurantList().forEach(restaurant ->
+//                    log.info("식당 좌표: {}, Coordinates: ({}, {})",
+//                            restaurant.getRestaurantName(),
+//                            restaurant.getXCoordinate(),
+//                            restaurant.getYCoordinate()));
+//        }
+//
+//
+//
+//        return restaurantCoordinates;
+//    }
 
     // 리스트 삭제 메소드
     @Transactional
@@ -151,6 +151,10 @@ public class MyListService {
         myListRepository.save(myList);
     }
 
+    // 팔로우 리스트 서비스 메소드
+    public List<MyList> getFollowingLists(Integer listNo) {
+        return (List<MyList>) myListRepository.findByListNo(listNo);
+    }
 }
 
 
