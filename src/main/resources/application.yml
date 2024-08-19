@@ -26,7 +26,6 @@ spring:
     show-sql: true
     database: mysql
     properties:
-      hibernate.jdbc.time_zone: Asia/Seoul
       hibernate:
         '[format_sql]': true
 
