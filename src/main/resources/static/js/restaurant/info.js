@@ -156,7 +156,7 @@ $('#reservationBtn').on('click', function () {
 
     $.ajax({
         type: 'post',
-        url: '/restaurant/infoUpdate',
+        url: '/restaurant/reservationSetting',
         contentType: 'application/json',
         dataType: 'text',
         data: JSON.stringify({
@@ -174,6 +174,35 @@ $('#reservationBtn').on('click', function () {
         }
     })
 })
+
+// 예약 정보 조회
+$('#reservationDate').on('change', function () {
+    const selectedDate = $(this).val();
+
+    $.ajax({
+        type: 'GET',
+        url: '/restaurant/reservationSetting/' + selectedDate,
+        contentType: 'application/json',
+        success: function (reservations) {
+            console.log("success", reservations);
+            const reservationList = $('.list-group');
+            reservationList.empty();  // 기존 리스트 비우기
+
+            reservations.forEach(function (reserv) {
+                const listItem = `
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span>${reserv.reservationTime} - ${reserv.reservationPeople}명</span>
+                        <button type="button" class="btn btn-danger btn-sm" id="removeBtn">삭제</button>
+                    </li>`;
+                reservationList.append(listItem);
+            });
+        },
+        error: function (e) {
+            console.log("failed", e);
+        }
+    });
+});
+
 
 
 

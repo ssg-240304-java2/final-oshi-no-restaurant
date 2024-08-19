@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalTime;
 import java.util.Base64;
@@ -181,6 +182,7 @@ public class RestaurantAdminService {
 //        return restaurantInfo.getImgUrl();
 //    }
 
+    // 등록된 예약 세팅 조회
     public List<ReservSettingDTO> selectReservSetting(Long restaurantNo) {
 
         RestaurantInfo restaurantInfo = restaurantRepository.findById(restaurantNo).orElseThrow(() -> new EntityNotFoundException("Restaurant not found width id: " + restaurantNo));
@@ -194,5 +196,37 @@ public class RestaurantAdminService {
             reservSetting.setReservationPeople(reservationSetting.getReservationPeople());
             return reservSetting;
         }).collect(Collectors.toList());
+    }
+
+    public void insertNewReserv(ReservSettingDTO reservSetting) {
+
+        ReservationSetting reservationSetting = ReservationSetting.builder()
+                .reservationDate(Date.valueOf(reservSetting.getReservationDate()))
+                .reservationTime(Time.valueOf(reservSetting.getReservationTime()))
+                .reservationPeople(reservSetting.getReservationPeople())
+                .restaurantNo(reservSetting.getRestaurantNo())
+                .build();
+
+        reservationSettingRepository.save(reservationSetting);
+
+        log.info("\uD83C\uDF4E reservationSetting : {}", reservationSetting);
+    }
+
+    public List<ReservSettingDTO> findReservSettingByDate(Date reservationDate, Long loginedRestaurantNo) {
+
+
+        RestaurantInfo restaurantInfo = new RestaurantInfo();
+        restaurantInfo.setRestaurantNo(loginedRestaurantNo);
+
+        List<ReservationSetting> reservationSettings = reservationSettingRepository.findByReservationDateAndRestaurantNo(reservationDate, restaurantInfo);
+
+        return reservationSettings.stream().map(reservationSetting -> {
+            ReservSettingDTO reservSettingDTO = new ReservSettingDTO();
+            reservSettingDTO.setReservationDate(reservationSetting.getReservationDate().toLocalDate());
+            reservSettingDTO.setReservationTime(reservationSetting.getReservationTime().toLocalTime());
+            reservSettingDTO.setReservationPeople(reservationSetting.getReservationPeople());
+            return reservSettingDTO;
+        }).collect(Collectors.toList());
+
     }
 }

@@ -1,8 +1,10 @@
 package kr.oshino.eataku.restaurant.admin.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import kr.oshino.eataku.common.enums.FoodType;
 import kr.oshino.eataku.common.enums.HashTag;
+import kr.oshino.eataku.member.model.dto.CustomMemberDetails;
 import kr.oshino.eataku.restaurant.admin.entity.RestaurantInfo;
 import kr.oshino.eataku.restaurant.admin.model.dto.ReservSettingDTO;
 import kr.oshino.eataku.restaurant.admin.model.dto.RestaurantInfoDTO;
@@ -11,6 +13,7 @@ import kr.oshino.eataku.restaurant.admin.service.RestaurantAdminService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +24,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.sql.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -52,7 +56,7 @@ public class RestaurantAdminController {
     }
 
     /***
-     * 식당 정보 등록
+     * 회원가입 시 식당 정보 등록
      * @return
      */
     @GetMapping("/infoRegister")
@@ -72,17 +76,19 @@ public class RestaurantAdminController {
     }
 
     /***
-     * 식당 정보 수정
-     * @param restaurantNo
+     * 식당 정보 조회
      * @param model
      * @return
      */
-    @GetMapping("/infoUpdate/{restaurantNo}")
-    public String infoView(@PathVariable("restaurantNo") Long restaurantNo, Model model) {
+    @GetMapping("/infoUpdate")
+    public String infoView(Model model) {
 
-        RestaurantInfoDTO restaurant = restaurantAdminService.selectMyRestaurant(14785L);
+        CustomMemberDetails member = (CustomMemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long loginedRestaurantNo = member.getRestaurantNo();
 
-        List<ReservSettingDTO> reservSettings = restaurantAdminService.selectReservSetting(14785L);
+        RestaurantInfoDTO restaurant = restaurantAdminService.selectMyRestaurant(loginedRestaurantNo);
+
+        List<ReservSettingDTO> reservSettings = restaurantAdminService.selectReservSetting(loginedRestaurantNo);
 
 
         Set<FoodType> foodTypes = restaurant.getFoodTypes();
@@ -102,10 +108,18 @@ public class RestaurantAdminController {
         return "restaurant/infoUpdate";
     }
 
+    /***
+     * 식당 정보 수정
+     * @param updateInfo
+     * @return
+     */
     @PostMapping("/infoUpdate")
     public String infoUpdate(@RequestBody RestaurantInfoDTO updateInfo
 //                             @RequestParam("storeImage")MultipartFile imageFile
     ) {
+
+        CustomMemberDetails member = (CustomMemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long loginedRestaurantNo = member.getRestaurantNo();
 
         log.info("\uD83C\uDF4E\uD83C\uDF4E\uD83C\uDF4E updateInfo : {}", updateInfo);
 
@@ -127,18 +141,73 @@ public class RestaurantAdminController {
 //            }
 //        }
 
-        updateInfo.setRestaurantNo(14785L);
+        updateInfo.setRestaurantNo(loginedRestaurantNo);
         restaurantAdminService.updateRestaurant(updateInfo);
 
-        return "redirect:/restaurant/infoUpdate/"+ updateInfo.getRestaurantNo();
+        return "redirect:/restaurant/infoUpdate";
     }
 
-
-    @PostMapping("/reservationInsert")
+    /***
+     * 예약 세팅 등록
+     * @param reservSetting
+     * @return
+     */
+    @PostMapping("/reservationSetting")
     public String setRegister(@RequestBody ReservSettingDTO reservSetting) {
 
+        CustomMemberDetails member = (CustomMemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long loginedRestaurantNo = member.getRestaurantNo();
+
         log.info("\uD83C\uDF4E reservation : {} ", reservSetting);
-        return "redirect:/restaurant/reservationInsert/" + reservSetting.getReservationNo();
+
+        RestaurantInfo restaurantInfo = new RestaurantInfo();
+        restaurantInfo.setRestaurantNo(loginedRestaurantNo);
+        reservSetting.setRestaurantNo(restaurantInfo);
+
+        restaurantAdminService.insertNewReserv(reservSetting);
+
+        return "redirect:/restaurant/infoUpdate";
+    }
+
+    /***
+     * 등록된 예약 조회
+     * @param reservationDate
+     * @param session
+     * @return
+     */
+    @GetMapping("/reservationSetting/{reservationDate}")
+    public ResponseEntity<List<ReservSettingDTO>> selectReservationByDate(@PathVariable Date reservationDate, HttpSession session) {
+
+        CustomMemberDetails member = (CustomMemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long loginedRestaurantNo = member.getRestaurantNo();
+
+        List<ReservSettingDTO> reservations = restaurantAdminService.findReservSettingByDate(reservationDate, loginedRestaurantNo);
+
+        return ResponseEntity.ok(reservations);
+    }
+
+//    @PostMapping("/reservationSetting")
+//    public String reservationUpdate(@RequestBody ReservSettingDTO updateSetting) {
+//
+//        CustomMemberDetails member = (CustomMemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        Long loginedRestaurantNo = member.getRestaurantNo();
+//
+//        log.info("\uD83C\uDF4E controller : {}", updateSetting);
+//
+//        updateSetting.setRestaurantNo(loginedRestaurantNo);
+//
+//    }
+
+    /***
+     * 메인 페이지 조회
+     * @param request
+     * @return
+     */
+    @GetMapping("/main")
+    public String main(HttpServletRequest request) {
+        String method = request.getMethod();
+        log.info("\uD83C\uDF4E main Request method : {} ", method);
+        return "restaurant/main";
     }
 
 }
