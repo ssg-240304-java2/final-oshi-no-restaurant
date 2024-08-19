@@ -16,4 +16,6 @@ public class TemporarySaveDTO {
     private String companyName;
     private String representativeName;
     private String imgUrl;
+    private String account;
+
 }

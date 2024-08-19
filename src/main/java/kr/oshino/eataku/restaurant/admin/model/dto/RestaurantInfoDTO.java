@@ -1,8 +1,5 @@
 package kr.oshino.eataku.restaurant.admin.model.dto;
 
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
 import kr.oshino.eataku.common.enums.FoodType;
 import kr.oshino.eataku.common.enums.HashTag;
 import lombok.AllArgsConstructor;
@@ -16,14 +13,20 @@ import java.util.Set;
 @AllArgsConstructor
 @Data
 @Builder
-public class RegisterInfoDTO {
+public class RestaurantInfoDTO {
 
+    private Long restaurantNo;
     private String restaurantName;
     private String contact;
     private String restaurantAddress;
-    private Set<FoodType> foodType;
+    private Set<FoodType> foodTypes;
     private LocalTime openingTime;
     private LocalTime closingTime;
-    private Set<HashTag> hashTag;
+    private Set<HashTag> hashTags;
     private String description;
+    private String postCode;
+    private String address;
+    private String detailAddress;
+    private String extraAddress;
+    private String imgUrl;
 }

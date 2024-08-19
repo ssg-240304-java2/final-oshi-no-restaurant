@@ -13,9 +13,8 @@ public class ReadReservationResponseDto {
 
     // Reservation
     private int reservationNo;
-
-    private ReservationStatus reservationStatus;
     private int partySize;
+    private ReservationStatus reservationStatus;
 
 
     //Member Entity 정보
@@ -23,6 +22,7 @@ public class ReadReservationResponseDto {
     private String nickname;
     private String phone;
     private Long memberNo;
+
     // Restaurant_Info Entity 정보
     private String restaurantName;
 

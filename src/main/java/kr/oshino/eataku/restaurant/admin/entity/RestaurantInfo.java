@@ -33,7 +33,19 @@ public class RestaurantInfo {
 
     @Column(name = "restaurant_address")
     @NotNull
-    private String restaurantAddress;       // 도로명 주소
+    private String restaurantAddress;       // 식당 전체 주소
+
+    @Column(name = "post_code")
+    private String postCode;        // 우편 번호
+
+    @Column(name = "address")
+    private String address;         // 도로명 주소
+
+    @Column(name = "detail_address")
+    private String detailAddress;       // 상세 주소
+
+    @Column(name = "extra_address")
+    private String extraAddress;        // 추가 주소
 
     @Column(name = "opening_time")
     private Time openingTime;         // 오픈시간
@@ -62,7 +74,8 @@ public class RestaurantInfo {
         joinColumns = @JoinColumn(name = "restaurant_no", referencedColumnName = "restaurant_no")
     )
     @Column(name = "food_type")
-    private Set<FoodType> foodType;      // 음식종류
+    @Enumerated(EnumType.STRING)
+    private Set<FoodType> foodTypes;      // 음식종류
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(
@@ -70,7 +83,8 @@ public class RestaurantInfo {
             joinColumns = @JoinColumn(name = "restaurant_no", referencedColumnName = "restaurant_no")
     )
     @Column(name = "hash_tag")
-    private Set<HashTag> hashTag;        // 해시태그
+    @Enumerated(EnumType.STRING)
+    private Set<HashTag> hashTags;        // 해시태그
 
     @OneToOne(mappedBy = "restaurantNo", cascade = CascadeType.ALL)
     private Certification certification;        // 사업자 등록 인증
@@ -78,11 +92,15 @@ public class RestaurantInfo {
     @OneToOne(mappedBy = "restaurantNo", cascade = CascadeType.ALL)
     private AccountInfo accountInfo;        // 계정 정보
 
-    public RestaurantInfo(Long restaurantNo, String restaurantName, String description, String restaurantAddress, Time openingTime, Time closingTime, String contact, String postNumber, String imgUrl, Double xCoordinate, Double yCoordinate, Set<FoodType> foodType, Set<HashTag> hashTag) {
+    public RestaurantInfo(Long restaurantNo, String restaurantName, String description, String restaurantAddress, String postCode, String address, String detailAddress, String extraAddress, Time openingTime, Time closingTime, String contact, String postNumber, String imgUrl, Double xCoordinate, Double yCoordinate, Set<FoodType> foodTypes, Set<HashTag> hashTags) {
         this.restaurantNo = restaurantNo;
         this.restaurantName = restaurantName;
         this.description = description;
         this.restaurantAddress = restaurantAddress;
+        this.postCode = postCode;
+        this.address = address;
+        this.detailAddress = detailAddress;
+        this.extraAddress = extraAddress;
         this.openingTime = openingTime;
         this.closingTime = closingTime;
         this.contact = contact;
@@ -90,8 +108,8 @@ public class RestaurantInfo {
         this.imgUrl = imgUrl;
         this.xCoordinate = xCoordinate;
         this.yCoordinate = yCoordinate;
-        this.foodType = foodType;
-        this.hashTag = hashTag;
+        this.foodTypes = foodTypes;
+        this.hashTags = hashTags;
     }
 }
 

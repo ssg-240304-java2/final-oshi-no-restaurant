@@ -40,4 +40,8 @@ public class TemporarySave {
     @Column(name = "img_url")
     @NotNull
     private String imgUrl;      // 식당 메인 사진
+
+    @Column(name = "account")
+    @NotNull
+    private String account;
 }

@@ -40,7 +40,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/", "/css/**", "/js/**", "/images/**").permitAll()
 
                         // 모든 사용자가 접근 가능한 URL
-                        .requestMatchers("/search/**").permitAll()
+                        .requestMatchers("/search/**","/signUp/checkDupAccount","/signUp/checkDupNickname","/signUp/checkEmailVerifCode","/signUp/sendEmailVerifCode").permitAll()
                         .requestMatchers("/restaurant/**").permitAll()
 
                         // 비로그인 사용자만 접근 가능한 URL

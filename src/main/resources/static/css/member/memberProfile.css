@@ -4,6 +4,10 @@ body {
     margin-top: 120px;
 }
 
+a {
+    text-decoration-line: none;
+}
+
 .row {
     margin-bottom: 50px;
 }
@@ -12,7 +16,7 @@ body {
 }
 .profile-sidebar {
     background-color: #f3f4f6;
-    padding: 20px;
+    /*padding: 20px;*/
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     text-align: center;
@@ -23,13 +27,13 @@ body {
     height: 150px;
     border-radius: 50%;
     background-color: #ddd;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     font-size: 24px;
     color: white;
-    margin: 0 auto 20px;
     object-fit: cover;
+    margin: 20px 0 20px 0;
 }
 
 .btn-follow {
@@ -64,21 +68,25 @@ body {
 }
 
 .animal-image {
-    width: 150px;
-    height: 150px;
+    width: 75px;
+    height: 75px;
     object-fit: cover;
     border-radius: 10px;
     border-color: #FA4A54;
 }
 
 .badge-tag {
-    background-color: #f45c5c;
-    color: white;
+    /*background-color: #FA4A54;*/
+    border: #FA4A54 1px solid;
     padding: 5px 15px;
     border-radius: 20px;
     display: inline-block;
     font-size: 18px;
-    margin-bottom: 20px;
+    margin: 20px 0 20px 0;
+
+}
+.badge-tag img {
+    width: 60px;
 }
 
 .weight {
@@ -126,4 +134,8 @@ body {
     background-color: white;
     color: black;
     transition: color 0.5s, background-color 0.5s;
+}
+
+[id^="list"] {
+    scroll-margin-top: 60px;
 }
