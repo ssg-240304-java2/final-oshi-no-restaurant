@@ -140,7 +140,7 @@ public class ReservationUserService {
      */
     @Transactional
     public List<ReadReservationResponseDto> getReservationListByMemberNo(ReadReservationResponseDto readReservationResponseDto) {
-
+        
         List<ReadReservationResponseDto> reservationList = reservationRepository.findReservationByMemberNo(readReservationResponseDto.getMemberNo());
         System.out.println("reservationList = " + reservationList);
 
@@ -151,6 +151,7 @@ public class ReservationUserService {
         }
 
         return reservationList;
+
     }
 
 

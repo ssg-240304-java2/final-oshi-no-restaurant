@@ -103,6 +103,7 @@ public interface ReservationRepository extends JpaRepository<Reservation,Integer
 
 
 
+
     /***
      * 예약취소 관련 메소드
      */
