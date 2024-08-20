@@ -20,8 +20,8 @@ public class WaitingSetting {       // 웨이팅 설정
     @Column(name = "waiting_status")
     private String waitingStatus;       // 웨이팅 여부
 
-    @Column(name = "on_off")
-    private int onOff;      // 웨이팅 여부
+    @Column(name = "waiting_people")
+    private int waitingPeople;      // 웨이팅 인원
 
     @Column(name = "start_time")
     private LocalTime startTime;        // 웨이팅 시작 시간

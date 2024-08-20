@@ -222,7 +222,7 @@
                 <div class="form-row">
                     <div class="col-md-6">
                         <label for="waitingDate">날짜 선택</label>
-                        <input type="text" id="waitingDate" class="form-control mb-2" placeholder="웨이팅 날짜 선택">
+                        <input type="text" id="waitingDate" class="form-control mb-2" placeholder="웨이팅 날짜 선택" placeholder="웨이팅 날짜 선택">
                     </div>
                     <div class="col-md-6">
                         <h5>웨이팅 정보 추가</h5>
@@ -240,7 +240,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="waitingPeople">인원</label>
-                                <input type="number" class="form-control" id="waitingPeople" value="2">
+                                <input type="number" class="form-control" id="waitingPeople" placeholder="인원수 입력">
                             </div>
                             <div class="form-group">
                                 <label class="mt-4">웨이팅 추가</label>
@@ -248,6 +248,9 @@
                                     <input type="checkbox" class="custom-control-input" id="waitingToggle">
                                     <label class="custom-control-label" for="waitingToggle">ON/OFF</label>
                                 </div>
+                            </div>
+                            <div class="form-group text-center">
+                                <button type="button" class="btn btn-primary" id="waitingSaveBtn">저장하기</button>
                             </div>
                         </form>
                     </div>
@@ -257,7 +260,5 @@
         <div th:replace="~{fragment/footer.html :: footer}" class="footer"></div>
         <script type="text/javascript" th:src="@{/js/fragment/navbar.js}"></script>
         <script type="text/javascript" th:src="@{/js/restaurant/info.js}"></script>
-
-
     </body>
 </html>

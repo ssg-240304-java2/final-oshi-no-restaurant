@@ -6,6 +6,7 @@ import kr.oshino.eataku.restaurant.admin.entity.*;
 import kr.oshino.eataku.restaurant.admin.model.dto.ReservSettingDTO;
 import kr.oshino.eataku.restaurant.admin.model.dto.RestaurantInfoDTO;
 import kr.oshino.eataku.restaurant.admin.model.dto.TemporarySaveDTO;
+import kr.oshino.eataku.restaurant.admin.model.dto.WaitingSettingDTO;
 import kr.oshino.eataku.restaurant.admin.model.repository.ReservationSettingRepository;
 import kr.oshino.eataku.restaurant.admin.model.repository.RestaurantRepository;
 import kr.oshino.eataku.restaurant.admin.model.repository.TemporarySaveRepository;
@@ -251,4 +252,9 @@ public class RestaurantAdminService {
     }
 
 
+    public WaitingSettingDTO selectWaitingSetting(Long loginedRestaurantNo) {
+
+        WaitingSettingDTO waitingSetting = new WaitingSettingDTO();
+        return waitingSetting;
+    }
 }

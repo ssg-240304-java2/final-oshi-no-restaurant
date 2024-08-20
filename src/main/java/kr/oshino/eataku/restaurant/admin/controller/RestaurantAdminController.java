@@ -11,6 +11,7 @@ import kr.oshino.eataku.restaurant.admin.entity.RestaurantInfo;
 import kr.oshino.eataku.restaurant.admin.model.dto.ReservSettingDTO;
 import kr.oshino.eataku.restaurant.admin.model.dto.RestaurantInfoDTO;
 import kr.oshino.eataku.restaurant.admin.model.dto.TemporarySaveDTO;
+import kr.oshino.eataku.restaurant.admin.model.dto.WaitingSettingDTO;
 import kr.oshino.eataku.restaurant.admin.model.repository.RestaurantRepository;
 import kr.oshino.eataku.restaurant.admin.service.RestaurantAdminService;
 import lombok.RequiredArgsConstructor;
@@ -91,9 +92,8 @@ public class RestaurantAdminController {
         Long loginedRestaurantNo = member.getRestaurantNo();
 
         RestaurantInfoDTO restaurant = restaurantAdminService.selectMyRestaurant(loginedRestaurantNo);
-
         List<ReservSettingDTO> reservSettings = restaurantAdminService.selectReservSetting(loginedRestaurantNo);
-
+        WaitingSettingDTO waitingSettings = restaurantAdminService.selectWaitingSetting(loginedRestaurantNo);
 
         Set<FoodType> foodTypes = restaurant.getFoodTypes();
         Set<HashTag> hashTags = restaurant.getHashTags();
@@ -103,11 +103,13 @@ public class RestaurantAdminController {
         model.addAttribute("foodTypes", foodTypes);
         model.addAttribute("hashTags", hashTags);
         model.addAttribute("reservSetting", reservSettings);
+        model.addAttribute("waitingSettings", waitingSettings);
 //        model.addAttribute("imageData", imageData);
 
         log.info("\uD83C\uDF4E foodTypes : {} ", foodTypes);
         log.info("\uD83C\uDF4E hashTags : {} ", hashTags);
         log.info("\uD83C\uDF4E reservSetting : {} ", reservSettings);
+        log.info("\uD83C\uDF4E waitingSetting : {}", waitingSettings);
 
         return "restaurant/infoUpdate";
     }
@@ -158,13 +160,10 @@ public class RestaurantAdminController {
      */
     @PostMapping("/reservationSetting")
     @ResponseBody
-    public ReservSettingDTO setRegister(@RequestBody ReservSettingDTO newSetting) {
+    public ReservSettingDTO reservationRegister(@RequestBody ReservSettingDTO newSetting) {
 
         CustomMemberDetails member = (CustomMemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long loginedRestaurantNo = member.getRestaurantNo();
-
-//        RestaurantInfo restaurantInfo = restaurantRepository.findById(loginedRestaurantNo)
-//                .orElseThrow(() -> new EntityNotFoundException("Restaurant not found with id: " + loginedRestaurantNo));
 
         log.info("\uD83C\uDF4E reservation : {} ", newSetting);
 
@@ -214,6 +213,17 @@ public class RestaurantAdminController {
         String method = request.getMethod();
         log.info("\uD83C\uDF4E main Request method : {} ", method);
         return "restaurant/main";
+    }
+
+    @PostMapping("/waitingSetting")
+    public WaitingSettingDTO waitingRegister(@RequestBody WaitingSettingDTO newSetting){
+
+        CustomMemberDetails member = (CustomMemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long loginedRestaurantNo = member.getRestaurantNo();
+
+        log.info("\uD83C\uDF4E newSetting : {}", newSetting);
+
+        return newSetting;
     }
 
 }

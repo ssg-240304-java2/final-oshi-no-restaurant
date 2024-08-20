@@ -276,5 +276,42 @@ $(document).on('click', '.reservationRmvBtn', function () {
     }
 });
 
+// 웨이팅 정보 등록
+$(document).ready(function () {
+    $('#waitingSaveBtn').on('click', function () {
+        const waitingDate = $('#waitingDate').val();
+        const waitingStartTime = $('#waitingStartTime').val();
+        const waitingEndTime = $('#waitingEndTime').val();
+        const waitingPeople = $('#waitingPeople').val();
+        const isWaitingOn = $('#waitingToggle').val();
+
+        console.log(waitingDate, waitingStartTime, waitingPeople, isWaitingOn);
+
+        if(isWaitingOn && waitingDate) {
+            $.ajax({
+                type: 'post',
+                url: '/restaurant/waitingSetting',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    "waitingDate" : waitingDate,
+                    "waitingStartTime" : waitingStartTime,
+                    "waitingEndTime" : waitingEndTime,
+                    "waitingPeople" : waitingPeople,
+                }),
+                success: function (response) {
+                    alert("등록되었습니다.");
+                    console.log('success', response);
+                },
+                error: function (error) {
+                    console.log('error', error);
+                    alert("등록에 실패했습니다.");
+                }
+            });
+        } else {
+            alert("웨이팅 정보 등록을 위해 날짜를 선택하고 ON으로 설정해주세요.")
+        }
+    });
+});
+
 
 
