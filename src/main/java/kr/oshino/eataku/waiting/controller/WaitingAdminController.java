@@ -8,6 +8,7 @@ import kr.oshino.eataku.waiting.model.dto.responseDto.UpdateWaitingResponseDto;
 import kr.oshino.eataku.waiting.service.WaitingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.nurigo.sdk.message.response.SingleMessageSentResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.http.HttpStatus;
@@ -116,6 +117,22 @@ public class WaitingAdminController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(waitingService.cancelWaitingByWaitingNo(updateWaitingRequestDto));
     }
+
+
+
+
+    /**
+     * 웨이팅 입장 메세지 전송
+     * @param waitingNo
+     * @return
+     */
+    @PostMapping("/waiting/sendOne/{waitingNo}")
+    @ResponseBody
+    public SingleMessageSentResponse sendEntryMessage(@PathVariable Long waitingNo) {
+        return waitingService.sendWaitingEntryMessage(waitingNo);
+    }
+
+
 
 
 
