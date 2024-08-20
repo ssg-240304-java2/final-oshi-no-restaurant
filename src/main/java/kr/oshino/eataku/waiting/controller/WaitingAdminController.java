@@ -8,12 +8,14 @@ import kr.oshino.eataku.waiting.model.dto.responseDto.UpdateWaitingResponseDto;
 import kr.oshino.eataku.waiting.service.WaitingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.nurigo.sdk.message.response.SingleMessageSentResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Sinks;
@@ -34,13 +36,20 @@ public class WaitingAdminController {
     private final Map<Long, Sinks.Many<Long>> waitingSinks;
 
 
+
+
+
     /**
      * 웨이팅 관리 페이지 이동
      * @return
      */
     @GetMapping("/waitingList")
-    public String waitingManagementPage() {
-        // 매장 번호 필요
+    public String waitingManagementPage(Model model) {
+
+        // 나중에 세션으로 변경해야 함
+        Long restaurantNo = 3L;
+        model.addAttribute("restaurantNo", restaurantNo);
+
         return "restaurant/waitingStatus";
     }
 
@@ -108,6 +117,22 @@ public class WaitingAdminController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(waitingService.cancelWaitingByWaitingNo(updateWaitingRequestDto));
     }
+
+
+
+
+    /**
+     * 웨이팅 입장 메세지 전송
+     * @param waitingNo
+     * @return
+     */
+    @PostMapping("/waiting/sendOne/{waitingNo}")
+    @ResponseBody
+    public SingleMessageSentResponse sendEntryMessage(@PathVariable Long waitingNo) {
+        return waitingService.sendWaitingEntryMessage(waitingNo);
+    }
+
+
 
 
 

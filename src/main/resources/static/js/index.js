@@ -4,6 +4,18 @@ $(document).ready(function(){
         $('.fab-menu').toggleClass('active');
     });
 
+    document.getElementById('searchInput').addEventListener('keypress', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault(); // 기본 동작(폼 제출) 방지
+
+            const query = event.target.value.trim(); // 입력된 값을 가져오고, 앞뒤 공백 제거
+
+            if (query) { // 입력된 값이 있으면
+                window.location.href = '/search/card?query=' + encodeURIComponent(query);
+            }
+        }
+    });
+
     $('.fab-menu-item-container').click(function (){
         const index = $(this).index();
 

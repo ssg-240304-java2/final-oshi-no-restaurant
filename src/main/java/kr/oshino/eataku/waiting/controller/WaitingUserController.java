@@ -1,5 +1,7 @@
 package kr.oshino.eataku.waiting.controller;
 
+import kr.oshino.eataku.common.util.FileUploadUtil;
+import kr.oshino.eataku.member.model.dto.CustomMemberDetails;
 import kr.oshino.eataku.waiting.model.dto.requestDto.CreateWaitingRequestDto;
 import kr.oshino.eataku.waiting.model.dto.requestDto.ReadWaitingRequestDto;
 import kr.oshino.eataku.waiting.model.dto.requestDto.UpdateWaitingRequestDto;
@@ -12,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +30,6 @@ public class WaitingUserController {
 
     private final WaitingService waitingService;
 
-
     /**
      * 웨이팅 등록 페이지 이동
      * @param restaurantNo
@@ -37,11 +39,12 @@ public class WaitingUserController {
     @GetMapping("/waitingForm/{restaurantNo}")
     public String waitingFormPage(@PathVariable int restaurantNo, Model model) {
 
-//        CustomMemberDetails member = (CustomMemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        Long memberNo = member.getMemberNo();
-//        model.addAttribute("memberNo", memberNo);
+        CustomMemberDetails member = (CustomMemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long memberNo = member.getMemberNo();
+
+        model.addAttribute("memberNo", memberNo);
         model.addAttribute("restaurantNo", restaurantNo);
-        // 여기서 회원 정보도 가지고 들어가야 하는지 판별해야 함.
+
         return "waiting/waitingFormPage";
     }
 
@@ -88,13 +91,15 @@ public class WaitingUserController {
 
     /**
      * 웨이팅 취소
-     * @param updateWaitingRequestDto
      * @return
      */
-    @PatchMapping("/waiting")
+    @PatchMapping("/waiting/{waitingNo}")
     @ResponseBody
     public ResponseEntity<UpdateWaitingResponseDto> cancelWaiting(
-            @RequestBody UpdateWaitingRequestDto updateWaitingRequestDto) {
+            @PathVariable Long waitingNo) {
+
+        UpdateWaitingRequestDto updateWaitingRequestDto = UpdateWaitingRequestDto.builder()
+                .waitingNo(waitingNo).build();
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(waitingService.cancelWaitingByWaitingNo(updateWaitingRequestDto));
