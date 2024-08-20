@@ -13,5 +13,6 @@ public interface ReservationSettingRepository extends JpaRepository<ReservationS
 
     List<ReservationSetting> findByRestaurantNo(RestaurantInfo restaurantNo);
 
+
     List<ReservationSetting> findByReservationDateAndRestaurantNo(Date reservationDate, RestaurantInfo restaurantInfo);
 }

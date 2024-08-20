@@ -1,14 +1,17 @@
 package kr.oshino.eataku.restaurant.admin.controller;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import kr.oshino.eataku.common.enums.FoodType;
 import kr.oshino.eataku.common.enums.HashTag;
 import kr.oshino.eataku.member.model.dto.CustomMemberDetails;
+import kr.oshino.eataku.restaurant.admin.entity.ReservationSetting;
 import kr.oshino.eataku.restaurant.admin.entity.RestaurantInfo;
 import kr.oshino.eataku.restaurant.admin.model.dto.ReservSettingDTO;
 import kr.oshino.eataku.restaurant.admin.model.dto.RestaurantInfoDTO;
 import kr.oshino.eataku.restaurant.admin.model.dto.TemporarySaveDTO;
+import kr.oshino.eataku.restaurant.admin.model.repository.RestaurantRepository;
 import kr.oshino.eataku.restaurant.admin.service.RestaurantAdminService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +38,7 @@ import java.util.Set;
 public class RestaurantAdminController {
 
     private final RestaurantAdminService restaurantAdminService;
+    private final RestaurantRepository restaurantRepository;
 
     /***
      * 사업자 등록증 등록
@@ -149,34 +153,35 @@ public class RestaurantAdminController {
 
     /***
      * 예약 세팅 등록
-     * @param reservSetting
+     * @param newSetting
      * @return
      */
     @PostMapping("/reservationSetting")
-    public String setRegister(@RequestBody ReservSettingDTO reservSetting) {
+    @ResponseBody
+    public ReservSettingDTO setRegister(@RequestBody ReservSettingDTO newSetting) {
 
         CustomMemberDetails member = (CustomMemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long loginedRestaurantNo = member.getRestaurantNo();
 
-        log.info("\uD83C\uDF4E reservation : {} ", reservSetting);
+//        RestaurantInfo restaurantInfo = restaurantRepository.findById(loginedRestaurantNo)
+//                .orElseThrow(() -> new EntityNotFoundException("Restaurant not found with id: " + loginedRestaurantNo));
 
-        RestaurantInfo restaurantInfo = new RestaurantInfo();
-        restaurantInfo.setRestaurantNo(loginedRestaurantNo);
-        reservSetting.setRestaurantNo(restaurantInfo);
+        log.info("\uD83C\uDF4E reservation : {} ", newSetting);
 
-        restaurantAdminService.insertNewReserv(reservSetting);
+        newSetting.setRestaurantNo(loginedRestaurantNo);
 
-        return "redirect:/restaurant/infoUpdate";
+        newSetting = restaurantAdminService.insertNewReserv(newSetting, loginedRestaurantNo);
+
+        return newSetting;
     }
 
     /***
-     * 등록된 예약 조회
+     * 등록된 예약 세팅 조회
      * @param reservationDate
-     * @param session
      * @return
      */
     @GetMapping("/reservationSetting/{reservationDate}")
-    public ResponseEntity<List<ReservSettingDTO>> selectReservationByDate(@PathVariable Date reservationDate, HttpSession session) {
+    public ResponseEntity<List<ReservSettingDTO>> selectReservationByDate(@PathVariable Date reservationDate) {
 
         CustomMemberDetails member = (CustomMemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long loginedRestaurantNo = member.getRestaurantNo();
@@ -186,17 +191,18 @@ public class RestaurantAdminController {
         return ResponseEntity.ok(reservations);
     }
 
-//    @PostMapping("/reservationSetting")
-//    public String reservationUpdate(@RequestBody ReservSettingDTO updateSetting) {
-//
-//        CustomMemberDetails member = (CustomMemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        Long loginedRestaurantNo = member.getRestaurantNo();
-//
-//        log.info("\uD83C\uDF4E controller : {}", updateSetting);
-//
-//        updateSetting.setRestaurantNo(loginedRestaurantNo);
-//
-//    }
+    /***
+     * 예약 세팅 삭제
+     * @param reservationNo
+     * @return
+     */
+    @DeleteMapping("/deleteReservationSetting/{reservationNo}")
+    public ResponseEntity<String> deleteReservationSetting(@PathVariable Long reservationNo){
+
+        restaurantAdminService.deleteSetting(reservationNo);
+
+        return ResponseEntity.ok("삭제되었습니다.");
+    }
 
     /***
      * 메인 페이지 조회

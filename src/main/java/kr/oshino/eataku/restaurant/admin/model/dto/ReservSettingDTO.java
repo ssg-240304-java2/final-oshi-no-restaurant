@@ -16,7 +16,7 @@ import java.time.LocalTime;
 public class ReservSettingDTO {
 
     private Long reservationNo;
-    private RestaurantInfo restaurantNo;
+    private Long restaurantNo;
     private LocalDate reservationDate;
     private LocalTime reservationTime;
     private int reservationPeople;

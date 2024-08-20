@@ -206,11 +206,11 @@
                             </div>
                         </form>
                         <h5 class="mt-4">현재 등록된 예약 정보</h5>
-                        <ul class="list-group">
-                            <li th:each="reservSetting : ${reservSetting}"
+                        <ul id="reservationList" class="list-group" style="display:none;">
+                            <li th:each="reservSettings : ${reservSetting}"
                                 class="list-group-item d-flex justify-content-between align-items-center">
-                                <span th:text="${reservSetting.reservationTime} + '-' + ${reservSetting.reservationPeople} + '명'"></span>
-                                <button type="button" class="btn btn-danger btn-sm" id="removeBtn">삭제</button>
+                                <span th:text="${reservSettings.reservationTime} + ' - ' + ${reservSettings.reservationPeople} + ' 명'"></span>
+                                <button type="button" class="btn btn-danger btn-sm reservationRmvBtn" th:data-id="${reservSettings.reservationNo}">삭제</button>
                             </li>
                         </ul>
                     </div>

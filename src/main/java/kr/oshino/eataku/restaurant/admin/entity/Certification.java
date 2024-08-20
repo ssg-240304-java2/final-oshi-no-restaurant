@@ -1,5 +1,6 @@
 package kr.oshino.eataku.restaurant.admin.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.sun.istack.NotNull;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -18,6 +19,7 @@ public class Certification {
 
 
     @OneToOne()
+    @JsonBackReference
     @JoinColumn(name = "restaurant_no", referencedColumnName = "restaurant_no")
     private RestaurantInfo restaurantNo;        // 식당 고유 번호(pk)
 

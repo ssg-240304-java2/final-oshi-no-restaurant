@@ -12,6 +12,4 @@ public interface RestaurantRepository extends JpaRepository<RestaurantInfo, Long
 
     boolean existsByAccountInfoId(String account);
 
-    RestaurantInfo save(RestaurantInfo restaurantInfo);
-
 }
