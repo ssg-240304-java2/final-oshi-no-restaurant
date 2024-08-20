@@ -15,7 +15,10 @@
 
 <div class="container">
     <div class="section-content text-center">
-        <div id="main-img" class="img-placeholder" style="background-color: #ddd; width: 100%; max-width: 900px; height: 400px; margin: auto;"></div>
+        <div id="main-img" class="img-placeholder" style="background-color: #ddd; width: 100%; max-width: 500px; height: 500px; margin: auto;">
+            <img th:src="@{${restaurant.imgUrl}}" alt="Restaurant Image" style="width: 100%; height: 100%; object-fit: cover; max-width: 500px; max-height: 500px;">
+        </div>
+
         <h2 th:text="${restaurant.restaurantName}">이름</h2>
         <div class="circle-buttons">
             <button class="btn btn-outline-custom">쩝쩝채팅</button>
@@ -36,106 +39,71 @@
             <div class="img-placeholder" style="background-color: #ddd; width: 100%; height: 400px; margin: auto;"></div>
         </div>
     </div>
+</div>
+
 
     <div class="rating-section">
-        <h2>이용내역   <img th:src="@{/images/reservation/Vector.png}"/>
-        <div class="rating-details">
-            <div class="detail">
-                <p>맛있어요</p>
-                <div class="line"></div>
-                <span class="count">N</span>
+        <h2>이용내역 <img th:src="@{/images/reservation/Vector.png}"/>
+            <div class="rating-details">
+                <div class="detail">
+                    <p>맛있어요</p>
+                    <div class="line"></div>
+                    <span class="count">N</span>
+                </div>
+                <div class="detail">
+                    <p>친절해요</p>
+                    <div class="line"></div>
+                    <span class="count">N</span>
+                </div>
+                <div class="detail">
+                    <p>쾌적해요</p>
+                    <div class="line"></div>
+                    <span class="count">N</span>
+                </div>
+                <div class="detail">
+                    <p>다시 갈래요</p>
+                    <div class="line"></div>
+                    <span class="count">N</span>
+                </div>
+                <div class="detail">
+                    <p>분위기가 좋아요</p>
+                    <div class="line"></div>
+                    <span class="count">N</span>
+                </div>
             </div>
-            <div class="detail">
-                <p>친절해요</p>
-                <div class="line"></div>
-                <span class="count">N</span>
-            </div>
-            <div class="detail">
-                <p>쾌적해요</p>
-                <div class="line"></div>
-                <span class="count">N</span>
-            </div>
-            <div class="detail">
-                <p>다시 갈래요</p>
-                <div class="line"></div>
-                <span class="count">N</span>
-            </div>
-            <div class="detail">
-                <p>분위기가 좋아요</p>
-                <div class="line"></div>
-                <span class="count">N</span>
-            </div>
-        </div>
-    </div>
-
-    <div class="card-container" id="card-container">
-        <div class="card" id="card-0">
-            <div class="img-placeholder" style="background-color: #ddd; width: 150px; height: 150px;"></div>
-            <div class="card-body">
-            </div>
-        </div>
-        <div class="card" id="card-1">
-            <div class="img-placeholder" style="background-color: #ddd; width: 150px; height: 150px;"></div>
-            <div class="card-body">
-            </div>
-        </div>
-        <div class="card" id="card-2">
-            <div class="img-placeholder" style="background-color: #ddd; width: 150px; height: 150px;"></div>
-            <div class="card-body">
-            </div>
-        </div>
-        <div class="card" id="card-3">
-            <div class="img-placeholder" style="background-color: #ddd; width: 150px; height: 150px;"></div>
-            <div class="card-body">
-            </div>
-        </div>
-
-        <div class="arrow-button" id="arrow-button">
-            <div class="custom-arrow-button">
-                <img th:src="@{/images/reservation/next arrow.png}"/>
-            </div>
-        </div>
     </div>
 
     <div class="review-section">
-        <div class="review">
+        <!-- 리뷰 리스트를 반복문을 통해 출력 -->
+        <div th:each="review : ${ReviewDetails}" class="review">
+            <!-- 이미지 부분은 placeholder로 설정 -->
             <img src="https://via.placeholder.com/80" alt="Reviewer Image">
-            <p><strong>호시노 경호</strong> 2024.07.31</p>
-            <p class="star-rating"><span class="text-warning">&#9733;&#9733;&#9733;&#9733;&#9733;</span></p>
-            <p>아주 놀라운 음식이에요.</p>
-        </div>
-        <div class="review">
-            <img src="https://via.placeholder.com/80" alt="Reviewer Image">
-            <p><strong>홍길동</strong> 2024.07.31</p>
-            <p class="star-rating"><span class="text-warning">&#9733;&#9733;&#9733;&#9733;&#9733;</span></p>
-            <p>아주 맛있어요.</p>
-        </div>
-        <div class="review">
-            <img src="https://via.placeholder.com/80" alt="Reviewer Image">
-            <p><strong>김철수</strong> 2024.07.31</p>
-            <p class="star-rating"><span class="text-warning">&#9733;&#9733;&#9733;&#9733;&#9733;</span></p>
-            <p>서비스가 좋아요.</p>
-        </div>
-        <div class="review">
-            <img src="https://via.placeholder.com/80" alt="Reviewer Image">
-            <p><strong>이영희</strong> 2024.07.31</p>
-            <p class="star-rating"><span class="text-warning">&#9733;&#9733;&#9733;&#9733;&#9733;</span></p>
-            <p>가격이 적당해요.</p>
+
+            <!-- 리뷰어 이름 -->
+            <p>
+                <strong th:text="${review.name}">Reviewer Name</strong>
+                <!-- 날짜는 기본값이나 임시값으로 설정 (예: '2024.07.31') -->
+                <span>2024.07.31</span>
+            </p>
+
+            <!-- 별점은 고정된 기본값을 사용 (예: 5개의 별) -->
+            <p class="star-rating">
+            <span class="text-warning">
+                &#9733;&#9733;&#9733;&#9733;&#9733;
+            </span>
+            </p>
+
+            <!-- 리뷰 내용 -->
+            <p th:text="${review.reviewContent}">Review content goes here</p>
         </div>
     </div>
 
-    <div class="more-button-container">
-        <button class="more-button" id="more-button">더 보기</button>
-    </div>
-</div>
+    <div th:replace="~{fragment/footer.html :: footer}" class="footer"></div>
 
-<div th:replace="~{fragment/footer.html :: footer}" class="footer"></div>
-
-
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script src="https://kit.fontawesome.com/a076d05399.js"></script>
-<script type="text/javascript" th:src="@{js/fragment/navbar.js}"></script>
-<script type="text/javascript" th:src="@{js/reservation/reservationDetail.js}"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <script type="text/javascript" th:src="@{js/fragment/navbar.js}"></script>
+    <script type="text/javascript" th:src="@{js/reservation/reservationDetail.js}"></script>
 </body>
 </html>

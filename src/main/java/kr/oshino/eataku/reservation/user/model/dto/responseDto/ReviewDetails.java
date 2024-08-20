@@ -8,8 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class RestaurantInfoDetails {
-    private String restaurantName;
-    private String restaurantAddress;
-    private String imgUrl;
+public class ReviewDetails {
+    private String name;
+    private String reviewContent;
 }

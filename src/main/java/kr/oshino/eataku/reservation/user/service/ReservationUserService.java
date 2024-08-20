@@ -4,10 +4,7 @@ import kr.oshino.eataku.member.entity.Member;
 import kr.oshino.eataku.member.model.repository.MemberRepository;
 import kr.oshino.eataku.reservation.user.entity.Reservation;
 import kr.oshino.eataku.reservation.user.model.dto.requestDto.CreateReservationUserRequestDto;
-import kr.oshino.eataku.reservation.user.model.dto.responseDto.CreateReservationUserResponseDto;
-import kr.oshino.eataku.reservation.user.model.dto.responseDto.ReadReservationResponseDto;
-import kr.oshino.eataku.reservation.user.model.dto.responseDto.RestaurantInfoDetails;
-import kr.oshino.eataku.reservation.user.model.dto.responseDto.modalDto;
+import kr.oshino.eataku.reservation.user.model.dto.responseDto.*;
 import kr.oshino.eataku.reservation.user.repository.ReservationRepository;
 import kr.oshino.eataku.restaurant.admin.entity.ReservationSetting;
 import kr.oshino.eataku.restaurant.admin.entity.RestaurantInfo;
@@ -195,7 +192,6 @@ public class ReservationUserService {
      */
     @Transactional
     public void updateAvailableSeats(int reservationNo, int partySize) {
-
         reservationRepository.updateAvailableSeats(reservationNo, partySize);
     }
 
@@ -206,9 +202,18 @@ public class ReservationUserService {
      * @return
      */
     @Transactional
-
     public RestaurantInfoDetails getRestaurantDetailsByReservation(Long restaurantNo) {
         return reservationRepository.findRestaurantDetailsByReservationNo(restaurantNo)
                 .orElseThrow(() -> new IllegalArgumentException("없는 식당 " + restaurantNo));
+    }
+
+    /**
+     * 식당의 리뷰 가져오기
+     * @param restaurantNo
+     * @return
+     */
+    @Transactional
+    public List<ReviewDetails> getReviewDetails(Long restaurantNo) {
+        return reservationRepository.getReviewDetails(restaurantNo);
     }
 }
