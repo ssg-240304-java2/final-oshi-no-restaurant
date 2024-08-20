@@ -18,13 +18,13 @@
             <img th:src="@{/images/oku.png}" alt="Logo" class="logo">
             <h3>안녕하세요, 식덕후 입니다.<br>당신의 맛집을 공유해 주세요!</h3>
             <div class="search-bar">
-                <input type="text" placeholder="맛집 검색" name="query">
+                <input type="text" id="searchInput" placeholder="맛집 검색" name="query">
                 <img th:src="@{/images/index/magnifier.png}" alt="돋보기">
             </div>
             <div class="icons">
-                <a th:href="@{/search?type=reservation}"><img th:src="@{/images/index/reservIcon.png}" alt="예약"></a>
-                <a th:href="@{/search?type=waiting}"><img th:src="@{/images/index/waitingIcon.png}" alt="줄서기"></a>
-                <a th:href="@{/around}"><img th:src="@{/images/index/aroundIcon.png}" alt="내 주변"></a>
+                <a th:href="@{/search/card}"><img th:src="@{/images/index/reservIcon.png}" alt="예약"></a>
+                <a th:href="@{/search/card}"><img th:src="@{/images/index/waitingIcon.png}" alt="줄서기"></a>
+                <a th:href="@{/search/map}"><img th:src="@{/images/index/aroundIcon.png}" alt="내 주변"></a>
                 <a th:href="@{/zzupFriend}"><img th:src="@{/images/index/zzupFriendIcon.png}" alt="쩝쩝친구"></a>
                 <a th:href="@{/zzupList}"><img th:src="@{/images/index/zzupListIcon.png}" alt="쩝쩝 리스트"></a>
             </div>

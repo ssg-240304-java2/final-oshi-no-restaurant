@@ -7,6 +7,7 @@ import kr.oshino.eataku.common.enums.ReservationStatus;
 import kr.oshino.eataku.reservation.user.entity.Reservation;
 import kr.oshino.eataku.reservation.user.model.dto.responseDto.ReadReservationResponseDto;
 import kr.oshino.eataku.reservation.user.model.dto.responseDto.RestaurantInfoDetails;
+import kr.oshino.eataku.reservation.user.model.dto.responseDto.ReviewDetails;
 import kr.oshino.eataku.restaurant.admin.entity.ReservationSetting;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -128,11 +129,24 @@ public interface ReservationRepository extends JpaRepository<Reservation,Integer
      * 상세정보
      */
     @Query("SELECT new kr.oshino.eataku.reservation.user.model.dto.responseDto.RestaurantInfoDetails(" +
-            "r.restaurantName, r.restaurantAddress) " +
+            "r.restaurantName, r.restaurantAddress,r.imgUrl ) " +
             "FROM RestaurantInfo r " +
             "WHERE r.restaurantNo = :restaurantNo")
     Optional<RestaurantInfoDetails> findRestaurantDetailsByReservationNo(@Param("restaurantNo") Long restaurantNo);
 
+
+    /**
+     * 식당의 리뷰 가져오기
+     * @param restaurantNo
+     * @return
+     */
+    @Query("SELECT new kr.oshino.eataku.reservation.user.model.dto.responseDto.ReviewDetails( "  +
+            "m.name , re.reviewContent ) " +
+            "FROM Review re " +
+            "JOIN re.member m " +
+            "JOIN re.restaurantInfo r " +
+            "WHERE r.restaurantNo= :restaurantNo")
+    List<ReviewDetails> getReviewDetails(@Param("restaurantNo") Long restaurantNo);
 }
 
 

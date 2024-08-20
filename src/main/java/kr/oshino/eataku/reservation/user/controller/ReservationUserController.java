@@ -1,17 +1,12 @@
 package kr.oshino.eataku.reservation.user.controller;
-import kr.oshino.eataku.member.model.dto.CustomMemberDetails;
 import kr.oshino.eataku.reservation.user.model.dto.requestDto.CreateReservationUserRequestDto;
-import kr.oshino.eataku.reservation.user.model.dto.responseDto.CreateReservationUserResponseDto;
-import kr.oshino.eataku.reservation.user.model.dto.responseDto.ReadReservationResponseDto;
-import kr.oshino.eataku.reservation.user.model.dto.responseDto.RestaurantInfoDetails;
-import kr.oshino.eataku.reservation.user.model.dto.responseDto.modalDto;
+import kr.oshino.eataku.reservation.user.model.dto.responseDto.*;
 import kr.oshino.eataku.reservation.user.service.ReservationUserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -37,9 +32,8 @@ public class ReservationUserController {
     @GetMapping("/reservation/{restaurantNo}")
     public String reservation(@PathVariable String restaurantNo, Model model) {
 
-
-
         model.addAttribute("restaurantNo", restaurantNo);
+        System.out.println("restaurantNo = " + restaurantNo);
         System.out.println("예약 페이지 접속");
         return "reservation/reservationCalendar";
     }
@@ -141,7 +135,7 @@ public class ReservationUserController {
     @GetMapping("/reservation")
     @ResponseBody
     public ResponseEntity<List<ReadReservationResponseDto>> getMyreservationList(
-            ReadReservationResponseDto readReservationResponseDto){
+            ReadReservationResponseDto readReservationResponseDto) {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(reservationUserService.getReservationListByMemberNo(readReservationResponseDto));
@@ -195,6 +189,10 @@ public class ReservationUserController {
     public String detailPage(@PathVariable Long restaurantNo, Model model) {
         RestaurantInfoDetails restaurant = reservationUserService.getRestaurantDetailsByReservation(restaurantNo);
         model.addAttribute("restaurant", restaurant);
+        List<ReviewDetails> reviewDetails = reservationUserService.getReviewDetails(restaurantNo);
+        model.addAttribute("ReviewDetails", reviewDetails);
+        System.out.println("reviewDetails = " + reviewDetails);
+        System.out.println("restaurant = " + restaurant);
         return "reservation/reservationDetail";
     }
 

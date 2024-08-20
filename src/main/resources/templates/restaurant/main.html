@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <title>예약 관리</title>
+        <title>메인 페이지</title>
         <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" th:href="@{/css/fragment/navbar.css}">
         <link rel="stylesheet" th:href="@{/css/fragment/footer.css}">
@@ -23,7 +23,8 @@
                         <img th:src="@{/images/setting.png}" alt="설정" class="glyphicon glyphicon-cog" aria-hidden="true">
                     </button>
                     <div class="dropdown-menu dropdown-menu-right">
-                        <button class="dropdown-item" type="button">매장 정보 수정</button>
+<!--                        <button class="dropdown-item" type="button" onclick="window.location.href='/restaurant/infoUpdate'">매장 정보 수정</button>-->
+                        <a class="dropdown-item" href="/restaurant/infoUpdate">매장 정보 수정</a>
                         <button class="dropdown-item" type="button">메뉴 수정</button>
                         <button class="dropdown-item" type="button">화면 보기</button>
                     </div>

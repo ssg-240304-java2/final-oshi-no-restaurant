@@ -9,6 +9,26 @@ document.getElementById('more-button').addEventListener('click', function() {
     }
 });
 
+// // 예시: 식당 번호를 URL에서 가져온다고 가정
+// const restaurantNo = new URLSearchParams(window.location.search).get('restaurantNo');
+//
+// // 식당 정보를 서버에서 가져오는 함수
+// async function fetchRestaurantDetails(restaurantNo) {
+//     const response = await fetch(`/api/restaurants/${restaurantNo}`);
+//     const data = await response.json();
+//     return data;
+// }
+//
+// // 식당 정보를 가져와서 이미지 설정
+// fetchRestaurantDetails(restaurantNo).then(data => {
+//     console.log("Image URL:", data.imgUrl);  // 콘솔에 이미지 URL 출력
+//     document.getElementById("dynamic-img").src = data.imgUrl;
+// }).catch(error => {
+//     console.error("Error fetching restaurant details:", error);
+// });
+
+
+
 const images = [
     'https://via.placeholder.com/150?text=Image+1',
     'https://via.placeholder.com/150?text=Image+2',

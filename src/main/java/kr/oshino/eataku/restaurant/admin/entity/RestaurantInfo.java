@@ -1,5 +1,7 @@
 package kr.oshino.eataku.restaurant.admin.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.sun.istack.NotNull;
 import jakarta.persistence.*;
 import kr.oshino.eataku.common.enums.FoodType;
@@ -87,6 +89,7 @@ public class RestaurantInfo {
     private Set<HashTag> hashTags;        // 해시태그
 
     @OneToOne(mappedBy = "restaurantNo", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private Certification certification;        // 사업자 등록 인증
 
     @OneToOne(mappedBy = "restaurantNo", cascade = CascadeType.ALL)

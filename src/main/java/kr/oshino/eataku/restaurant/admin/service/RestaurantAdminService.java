@@ -6,6 +6,7 @@ import kr.oshino.eataku.restaurant.admin.entity.*;
 import kr.oshino.eataku.restaurant.admin.model.dto.ReservSettingDTO;
 import kr.oshino.eataku.restaurant.admin.model.dto.RestaurantInfoDTO;
 import kr.oshino.eataku.restaurant.admin.model.dto.TemporarySaveDTO;
+import kr.oshino.eataku.restaurant.admin.model.dto.WaitingSettingDTO;
 import kr.oshino.eataku.restaurant.admin.model.repository.ReservationSettingRepository;
 import kr.oshino.eataku.restaurant.admin.model.repository.RestaurantRepository;
 import kr.oshino.eataku.restaurant.admin.model.repository.TemporarySaveRepository;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalTime;
 import java.util.Base64;
@@ -181,6 +183,7 @@ public class RestaurantAdminService {
 //        return restaurantInfo.getImgUrl();
 //    }
 
+    // 등록된 예약 세팅 조회
     public List<ReservSettingDTO> selectReservSetting(Long restaurantNo) {
 
         RestaurantInfo restaurantInfo = restaurantRepository.findById(restaurantNo).orElseThrow(() -> new EntityNotFoundException("Restaurant not found width id: " + restaurantNo));
@@ -189,10 +192,69 @@ public class RestaurantAdminService {
 
         return reservationSettings.stream().map(reservationSetting -> {
             ReservSettingDTO reservSetting = new ReservSettingDTO();
+            reservSetting.setReservationNo(reservationSetting.getReservationNo());
             reservSetting.setReservationDate(reservationSetting.getReservationDate().toLocalDate());
             reservSetting.setReservationTime(reservationSetting.getReservationTime().toLocalTime());
             reservSetting.setReservationPeople(reservationSetting.getReservationPeople());
             return reservSetting;
         }).collect(Collectors.toList());
+    }
+
+    // 예약 정보 등록
+    public ReservSettingDTO insertNewReserv(ReservSettingDTO newSetting, Long loginedRestaurantNo) {
+
+        RestaurantInfo restaurantInfo = restaurantRepository.findById(loginedRestaurantNo)
+                .orElseThrow(() -> new EntityNotFoundException("Restaurant not found with id: " + loginedRestaurantNo));
+
+        ReservationSetting reservationSetting = ReservationSetting.builder()
+                .reservationDate(Date.valueOf(newSetting.getReservationDate()))
+                .reservationTime(Time.valueOf(newSetting.getReservationTime()))
+                .reservationPeople(newSetting.getReservationPeople())
+                .restaurantNo(restaurantInfo)
+                .build();
+
+        reservationSettingRepository.save(reservationSetting);
+
+        log.info("\uD83C\uDF4E reservationSetting : {}", reservationSetting);
+
+        newSetting.setReservationNo(reservationSetting.getReservationNo());
+        return newSetting;
+    }
+
+    // 등록된 예약 조회
+    public List<ReservSettingDTO> findReservSettingByDate(Date reservationDate, Long loginedRestaurantNo) {
+
+        RestaurantInfo restaurantInfo = restaurantRepository.findById(loginedRestaurantNo)
+                .orElseThrow(() -> new EntityNotFoundException("Restaurant not found with id: " + loginedRestaurantNo));
+
+        List<ReservationSetting> reservationSettings = reservationSettingRepository.findByReservationDateAndRestaurantNo(reservationDate, restaurantInfo);
+
+        return reservationSettings.stream().map(reservationSetting -> {
+            ReservSettingDTO reservSettingDTO = new ReservSettingDTO();
+            reservSettingDTO.setRestaurantNo(loginedRestaurantNo);
+            reservSettingDTO.setReservationNo(reservationSetting.getReservationNo());
+            reservSettingDTO.setReservationDate(reservationSetting.getReservationDate().toLocalDate());
+            reservSettingDTO.setReservationTime(reservationSetting.getReservationTime().toLocalTime());
+            reservSettingDTO.setReservationPeople(reservationSetting.getReservationPeople());
+            return reservSettingDTO;
+        }).collect(Collectors.toList());
+
+    }
+
+    // 예약 삭제
+    public void deleteSetting(Long reservationNo) {
+
+        ReservationSetting reservationSetting = reservationSettingRepository.findById(reservationNo)
+                .orElseThrow(() -> new EntityNotFoundException("Reservation not found with id: " + reservationNo));
+
+        reservationSettingRepository.delete(reservationSetting);
+
+    }
+
+
+    public WaitingSettingDTO selectWaitingSetting(Long loginedRestaurantNo) {
+
+        WaitingSettingDTO waitingSetting = new WaitingSettingDTO();
+        return waitingSetting;
     }
 }
