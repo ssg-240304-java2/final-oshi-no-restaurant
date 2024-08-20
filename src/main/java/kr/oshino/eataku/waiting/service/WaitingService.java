@@ -1,8 +1,10 @@
 package kr.oshino.eataku.waiting.service;
 
+import kr.oshino.eataku.common.enums.SmsMessageType;
 import kr.oshino.eataku.common.enums.StatusType;
 import kr.oshino.eataku.common.exception.exception.WaitingException;
 import kr.oshino.eataku.common.exception.info.WaitingExceptionInfo;
+import kr.oshino.eataku.common.util.SmsUtil;
 import kr.oshino.eataku.member.entity.Member;
 import kr.oshino.eataku.member.model.repository.MemberRepository;
 import kr.oshino.eataku.restaurant.admin.entity.RestaurantInfo;
@@ -18,6 +20,8 @@ import kr.oshino.eataku.waiting.model.dto.responseDto.UpdateWaitingResponseDto;
 import kr.oshino.eataku.waiting.repository.WaitingRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.nurigo.sdk.message.response.SingleMessageSentResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,6 +39,9 @@ public class WaitingService {
     private final MemberRepository memberRepository;
     private final RestaurantRepository restaurantRepository;
     private final ApplicationEventPublisher eventPublisher;
+
+    @Autowired
+    private final SmsUtil smsUtil;
 
 
 
@@ -76,7 +83,7 @@ public class WaitingService {
 
         // 카카오톡 알림 메세지 전송
 
-        // 이 부분 수정 필요
+
         return new CreateWaitingResponseDto(200, "웨이팅이 등록되었습니다!", member.getMemberNo());
     }
 
@@ -154,9 +161,24 @@ public class WaitingService {
         waiting.visit();
         waiting.getMember().increaseWeight(3.0);
         waitingRepository.save(waiting);
-        
-        // 여기서 카카오톡 알림 메세지 전송 (리뷰 쓰게?)
+
+
 
         return new UpdateWaitingResponseDto(200, "웨이팅 대기가 방문 처리 되었습니다!");
+    }
+
+
+
+
+    /**
+     * 웨이팅 입장 메세지 전송
+     * @param waitingNo
+     * @return
+     */
+    public SingleMessageSentResponse sendWaitingEntryMessage(Long waitingNo) {
+
+        ReadWaitingResponseDto waitingData = waitingRepository.findWaitingByWaitingNo(waitingNo);
+        return smsUtil.sendWaitingMessage(waitingData.getPhone(), SmsMessageType.WAITING_ENTRY_MESSAGE,
+                waitingData.getSequenceNumber(), waitingData.getRestaurantName(), waitingData.getPartySize());
     }
 }
