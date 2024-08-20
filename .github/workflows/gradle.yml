@@ -43,6 +43,9 @@ jobs:
         cloud.aws.region.static: kr-standard
         cloud.aws.s3.endpoint: https://kr.object.ncloudstorage.com
         cloud.aws.s3.bucket: ${{ secrets.STORAGE_BUCKET }}
+        coolsms.api.key: ${{ secrets.COOLSMS_API_KEY }}
+        coolsms.api.secret: ${{ secrets.COOLSMS_API_SECRET }}
+        coolsms.api.number: ${{ secrets.COOLSMS_API_NUMBER }}
 
     - name: Grant execute permission for gradlew
       run: chmod +x ./gradlew

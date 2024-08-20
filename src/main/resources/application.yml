@@ -29,6 +29,12 @@ spring:
       hibernate:
         '[format_sql]': true
 
+coolsms:
+  api:
+    key: ${coolSmsKey}
+    secret: ${coolSmsSecret}
+    number: ${coolSmsNumber}
+
 cloud:
   aws:
     credentials:
