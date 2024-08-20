@@ -50,11 +50,11 @@ body {
     max-width: 1200px; /* 최대 폭을 설정하여 양쪽 여백을 동일하게 유지 */
     margin: 0 auto; /* 가운데 정렬 */
 }
-/*@media (min-width: 992px) { !* lg 화면 이상에서 *!*/
-/*    .row {*/
-/*        --bs-gutter-x: 2rem; !* 좌우 카드 간의 간격 조정 *!*/
-/*    }*/
-/*}*/
+@media (min-width: 992px) { /* lg 화면 이상에서 */
+    .row {
+        --bs-gutter-x: 2rem; /* 좌우 카드 간의 간격 조정 */
+    }
+}
 
 .footer {
     width: 100%;
@@ -62,8 +62,4 @@ body {
     padding: 10px 0;
     text-align: center;
     flex-shrink: 0; /* footer가 수축하지 않도록 설정 */
-}
-
-.rating {
-    color: #FFD700;
 }
