@@ -2,6 +2,7 @@ package kr.oshino.eataku.restaurant.admin.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpSession;
+import kr.oshino.eataku.reservation.user.entity.Reservation;
 import kr.oshino.eataku.restaurant.admin.entity.*;
 import kr.oshino.eataku.restaurant.admin.model.dto.ReservSettingDTO;
 import kr.oshino.eataku.restaurant.admin.model.dto.RestaurantInfoDTO;
@@ -263,7 +264,7 @@ public class RestaurantAdminService {
         LocalDate today = LocalDate.now();
         WaitingSetting waitingSetting = waitingSettingRepository.findByWaitingDateAndRestaurantNo(Date.valueOf(today), restaurantInfo);
 
-        if(waitingSetting != null) {
+        if (waitingSetting != null) {
             return WaitingSettingDTO.builder()
                     .waitingNo(waitingSetting.getWaitingNo())
                     .restaurantNo(waitingSetting.getRestaurantNo().getRestaurantNo())
@@ -325,11 +326,11 @@ public class RestaurantAdminService {
         WaitingSetting savedSetting = waitingSettingRepository.save(waitingSetting);
 
         log.info("\uD83C\uDF4E waitingSetting: {}", waitingSetting);
-        return converToDTO(savedSetting);
+        return convertToDTO(savedSetting);
 
     }
 
-    private WaitingSettingDTO converToDTO(WaitingSetting waitingSetting) {
+    private WaitingSettingDTO convertToDTO(WaitingSetting waitingSetting) {
         return WaitingSettingDTO.builder()
                 .waitingNo(waitingSetting.getWaitingNo())
                 .restaurantNo(waitingSetting.getRestaurantNo().getRestaurantNo())
@@ -342,10 +343,11 @@ public class RestaurantAdminService {
 
     }
 
+    // 웨이팅 수정
     @Transactional
     public void updateWaiting(WaitingSettingDTO updateSetting, Long loginedRestaurantNo) {
 
-        WaitingSetting existingSetting = waitingSettingRepository.findById(updateSetting.getWaitingNo()).orElseThrow(() -> new EntityNotFoundException("WaitingSetting not found with id: " + updateSetting.getWaitingNo()));
+        WaitingSetting existingSetting = waitingSettingRepository.findById(updateSetting.getWaitingNo()).orElseThrow(() -> new EntityNotFoundException("WaitingSetting not found with id: " + loginedRestaurantNo));
 
         existingSetting.setWaitingDate(Date.valueOf(updateSetting.getWaitingDate()));
         existingSetting.setStartTime(Time.valueOf(updateSetting.getStartTime()));
@@ -356,4 +358,34 @@ public class RestaurantAdminService {
         waitingSettingRepository.save(existingSetting);
     }
 
+    public void deleteWaitingByDateAndRestaurantNo(LocalDate waitingDate, Long loginedRestaurantNo) {
+
+        RestaurantInfo restaurantInfo = restaurantRepository.findById(loginedRestaurantNo).orElseThrow(() -> new EntityNotFoundException("Restaurant not found with id: " + loginedRestaurantNo));
+
+        WaitingSetting existingSetting = waitingSettingRepository.findByWaitingDateAndRestaurantNo(Date.valueOf(waitingDate), restaurantInfo);
+
+        if (existingSetting != null) {
+            waitingSettingRepository.delete(existingSetting);
+            log.info("\uD83C\uDF4E deleted setting for date : {} and restaurantNo : {}", waitingDate, loginedRestaurantNo);
+        } else {
+            log.warn("No waiting setting found to delete for date: {} and restaurantNo: {}", waitingDate, loginedRestaurantNo);
+        }
+
+    }
+
+    @Transactional
+    public void deleteWaitingSetting(Date waitingDate, Long loginedRestaurantNo) {
+
+        RestaurantInfo restaurantInfo = restaurantRepository.findById(loginedRestaurantNo).orElseThrow(() -> new EntityNotFoundException("Restaurant not found with id: " + loginedRestaurantNo));
+
+        WaitingSetting waitingSetting = waitingSettingRepository.findByWaitingDateAndRestaurantNo(waitingDate, restaurantInfo);
+
+        if(waitingSetting == null) {
+            log.warn("No waiting settings found for date: {} and restaurant id: {}", waitingDate, loginedRestaurantNo);
+            throw new EntityNotFoundException("No waiting settings found for the specified date and restaurant.");
+        }
+
+        waitingSettingRepository.delete(waitingSetting);
+        log.info("\uD83C\uDF4E date: {} and restaurant: {}", waitingDate, loginedRestaurantNo);
+    }
 }

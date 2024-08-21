@@ -14,6 +14,7 @@ import kr.oshino.eataku.restaurant.admin.model.dto.RestaurantInfoDTO;
 import kr.oshino.eataku.restaurant.admin.model.dto.TemporarySaveDTO;
 import kr.oshino.eataku.restaurant.admin.model.dto.WaitingSettingDTO;
 import kr.oshino.eataku.restaurant.admin.model.repository.RestaurantRepository;
+import kr.oshino.eataku.restaurant.admin.model.repository.WaitingSettingRepository;
 import kr.oshino.eataku.restaurant.admin.service.RestaurantAdminService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,7 +41,6 @@ import java.util.Set;
 public class RestaurantAdminController {
 
     private final RestaurantAdminService restaurantAdminService;
-    private final RestaurantRepository restaurantRepository;
 
     /***
      * 사업자 등록증 등록
@@ -259,6 +259,11 @@ public class RestaurantAdminController {
         return newSetting;
     }
 
+    /***
+     * 웨이팅 세팅 수정
+     * @param updateSetting
+     * @return
+     */
     @PostMapping("/waitingUpdate")
     public String waitingUpdate(@RequestBody WaitingSettingDTO updateSetting) {
 
@@ -268,8 +273,26 @@ public class RestaurantAdminController {
         log.info("\uD83C\uDF4E updateSetting: {}", updateSetting);
 
         updateSetting.setRestaurantNo(loginedRestaurantNo);
-        restaurantAdminService.updateWaiting(updateSetting, loginedRestaurantNo);
+
+        if("N".equals(updateSetting.getWaitingStatus())){
+            restaurantAdminService.deleteWaitingByDateAndRestaurantNo(updateSetting.getWaitingDate(), loginedRestaurantNo);
+        } else {
+            restaurantAdminService.updateWaiting(updateSetting, loginedRestaurantNo);
+        }
 
         return "redirect:/restaurant/infoUpdate";
+    }
+
+    @DeleteMapping("/deleteWaitingSetting/{waitingDate}")
+    public ResponseEntity<String> deleteWaitingSetting(@PathVariable String waitingDate) {
+
+        CustomMemberDetails member = (CustomMemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long loginedRestaurantNo = member.getRestaurantNo();
+
+        log.info("delete for date : {}", waitingDate);
+
+        restaurantAdminService.deleteWaitingSetting(Date.valueOf(waitingDate), loginedRestaurantNo);
+
+        return ResponseEntity.ok("삭제되었습니다.");
     }
 }

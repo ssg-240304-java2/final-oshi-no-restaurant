@@ -296,7 +296,7 @@ function handleWaitingSetting(actionUrl) {
                 "startTime": waitingStartTime,
                 "endTime": waitingEndTime,
                 "waitingPeople": waitingPeople,
-                "waitingStatus": isWaitingOn
+                "waitingStatus": isWaitingOn ? "Y" : "N"
             }),
             success: function (response) {
                 alert("등록되었습니다.");
@@ -305,6 +305,25 @@ function handleWaitingSetting(actionUrl) {
             error: function (error) {
                 console.log('error', error);
                 alert("등록에 실패했습니다.");
+            }
+        });
+    } else if(!isWaitingOn && waitingDate) {
+        // off일 때 삭제
+        $.ajax({
+            type: 'DELETE',
+            url: '/restaurant/deleteWaitingSetting/' + waitingDate,
+            success: function (response) {
+                alert("삭제되었습니다.");
+                console.log('deleted', response);
+
+                $('#waitingStartTime').val('00:00');
+                $('#waitingEndTime').val('00:00');
+                $('#waitingPeople').val('');
+                $('#waitingToggle').prop('checked', false);
+            },
+            error: function (error){
+                console.log('error', error);
+                alert("삭제에 실패했습니다.");
             }
         });
     } else {
@@ -349,12 +368,6 @@ $(document).ready(function () {
     });
 });
 
-// // 웨이팅 정보 등록
-// $(document).ready(function () {
-//     $('#waitingSaveBtn').on('click', function () {
-//         handleWaitingSetting('/restaurant/waitingSetting');
-//     });
-// });
 
 
 
