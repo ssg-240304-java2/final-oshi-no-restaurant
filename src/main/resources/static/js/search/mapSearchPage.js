@@ -21,6 +21,11 @@ $(document).ready(function() {
 
                     console.log('위도: ' + latitude);
                     console.log('경도: ' + longitude);
+                    mapOptions = {
+                        center: new naver.maps.LatLng(latitude,longitude),
+                        zoom: 16
+                    }
+                    map = new naver.maps.Map('map',mapOptions)
                 },
                 function(error) {
                     // 위치 정보를 가져오는데 실패한 경우
@@ -80,7 +85,19 @@ $(document).ready(function() {
         if(latitude === undefined || longitude === undefined){
             alert('위치좌표제공에 동의해주세요.')
         } else {
-            window.location.href=`/search/map?latitude=${latitude}&longitude=${longitude}`
+            const query = new URLSearchParams(window.location.search).get('query');
+
+            $.ajax({
+                type: 'get',
+                url: `/search/map/coordinate?latitude=${latitude}&longitude=${longitude}&query=${query}` + encodeURIComponent(query),
+                success: function ( data ){
+                    console.log(data);
+                    appendRestaurants(data);
+                },
+                error: function (e) {
+                    console.log(e)
+                }
+            });
         }
     });
 
@@ -92,5 +109,90 @@ $(document).ready(function() {
     function onMapMove() {
         $('#findButton').show();
     }
+
+    document.getElementById('searchInput').addEventListener('keypress', search);
+    $('#searchButton').on('click',search);
+
+    function search (event){
+        if (event.key === 'Enter' || $(this).hasClass('btn')) {
+            event.preventDefault(); // 기본 동작(폼 제출) 방지
+
+            const query = $('#searchInput').val(); // 입력된 값을 가져오고, 앞뒤 공백 제거
+
+                $.ajax({
+                    type: 'get',
+                    url: '/search/map/coordinate',
+                    data: {
+                        latitude: latitude,
+                        longitude: longitude,
+                        query: query
+                    },
+                    success: function ( data ){
+                        console.log(data);
+                        appendRestaurants(data);
+                    },
+                    error: function (e) {
+                        console.log(e)
+                    }
+                })
+
+        }
+    }
+
+    function appendRestaurants(restaurants) {
+        const container = $('#restaurantInfo');
+        document.getElementById('restaurantInfo').replaceChildren();
+        restaurants.forEach(function(restaurant) {
+            const restaurantHtml = `
+            <div class="restaurant-card" id="${restaurant.restaurantNo}">
+            <h3>${restaurant.restaurantName}</h3>
+            <img src="${restaurant.imgUrl}">
+            <p>${restaurant.restaurantAddress}</p>
+            <p>${restaurant.foodType}</p>
+            <p>${restaurant.rating}</p>
+            <button class="favorite-button btn btn-outline-secondary mt-2">관심 식당 등록</button>
+        </div>`;
+            container.append(restaurantHtml);
+
+            // 위치 생성
+            var restaurantPosition = new naver.maps.LatLng(restaurant.xcoordinate, restaurant.ycoordinate);
+
+            // 마커 생성
+            var marker = new naver.maps.Marker({
+                map: map,
+                position: restaurantPosition,
+                icon: {
+                    url: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png'
+                }
+            });
+            // 정보 창 생성
+            var infoWindow = new naver.maps.InfoWindow({
+                content: `<div style="width:150px;text-align:center;padding:10px;">
+                                <b>${restaurant.restaurantName}</b><br/>
+                                ${restaurant.restaurantAddress}
+                              </div>`
+            });
+
+            // 마커 클릭 시 정보 창 표시 및 닫기 기능 추가
+            naver.maps.Event.addListener(marker, 'click', function() {
+                if (infoWindow.getMap()) {
+                    // 정보 창이 이미 열려 있다면 닫음
+                    infoWindow.close();
+                    marker.setIcon({ url: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png'})
+                } else {
+                    // 정보 창이 열려 있지 않다면 열음
+                    infoWindow.open(map, marker);
+                    marker.setIcon({ url: 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png'})
+                }
+            });
+
+
+        });
+    }
+
+    $('.restaurant-card').on('click', function () {
+
+        window.location.href = ''+$(this).attr('id');
+    });
 });
 

@@ -1,11 +1,13 @@
 package kr.oshino.eataku.search.service;
 
+import kr.oshino.eataku.member.model.repository.MemberRepository;
 import kr.oshino.eataku.restaurant.admin.model.repository.RestaurantRepository;
 import kr.oshino.eataku.search.model.dto.SearchResultDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,6 +19,7 @@ import java.util.stream.Collectors;
 public class SearchService {
 
     private final RestaurantRepository restaurantRepository;
+    private final MemberRepository memberRepository;
 
     public List<SearchResultDTO> selectQueryByKeyword(String keyword, int page, int size ) {
         Pageable pageable = PageRequest.of(page, size);
@@ -49,9 +52,16 @@ public class SearchService {
                                    xCoordinate, yCoordinate, imgUrl, foodType, hashTags, rating);
     }
 
-    public List<SearchResultDTO> selectQueryBylatitudeAndlongitude(Double latitude, Double longitude) {
-        List<Object[]> results = restaurantRepository.selectQueryBylatitudeAndlongitude(latitude, longitude);
+    public List<SearchResultDTO> selectQueryBylatitudeAndlongitude(Double latitude, Double longitude, String keyword) {
+        List<Object[]> results = restaurantRepository.selectQueryBylatitudeAndlongitude(latitude, longitude, keyword);
 
         return results.stream().map(this::mapToSearchResultDTO).collect(Collectors.toList());
+    }
+
+    @Scheduled(cron = "0 0/10 * * * *")
+    public void restaurantStat(){
+
+//        memberRepository.updateBusiestRestaurant();
+//        memberRepository.updateListAddRestaurant();
     }
 }
