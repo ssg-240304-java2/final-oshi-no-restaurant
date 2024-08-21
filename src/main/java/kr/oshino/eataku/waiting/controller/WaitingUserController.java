@@ -62,8 +62,6 @@ public class WaitingUserController {
     public ResponseEntity<CreateWaitingResponseDto> registerWaiting(
             @RequestBody CreateWaitingRequestDto createWaitingRequestDto) {
 
-        log.info("createWaitingRequestDto: {}", createWaitingRequestDto);
-
         return ResponseEntity.status(HttpStatus.OK)
                 .body(waitingService.registerWaiting(createWaitingRequestDto));
     }
