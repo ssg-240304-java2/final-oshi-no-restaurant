@@ -18,7 +18,7 @@
 
         <div class="container">
             <div class="review-form scale-up">
-                <h2 class="mb-4" style="font-size: 2rem;">용용선생 리뷰 작성하기</h2>
+                <h2 class="mb-4" style="font-size: 2rem;">리뷰 작성하기</h2>
                 <div class="mb-4 align-center">
                     <label for="star-rating" class="mr-3 mb-0" style="font-size: 1.5rem;">별점</label>
                     <div id="star-rating" class="star-rating">
@@ -32,12 +32,13 @@
                 <div class="mb-4 align-center">
                     <label for="tags" class="mr-3 mb-0" style="font-size: 1.5rem;">태그</label>
                     <div id="tags">
-                        <button type="button" class="btn btn-outline-danger tag-btn">맛있어요</button>
-                        <button type="button" class="btn btn-outline-danger tag-btn">친절해요</button>
-                        <button type="button" class="btn btn-outline-danger tag-btn">쾌적해요</button>
-                        <button type="button" class="btn btn-outline-danger tag-btn">다시갈래요</button>
-                        <button type="button" class="btn btn-outline-danger tag-btn">분위기가 좋아요</button>
+                        <button type="button" class="btn btn-outline-danger tag-btn" data-tag="맛있어요">맛있어요</button>
+                        <button type="button" class="btn btn-outline-danger tag-btn" data-tag="친절해요">친절해요</button>
+                        <button type="button" class="btn btn-outline-danger tag-btn" data-tag="쾌적해요">쾌적해요</button>
+                        <button type="button" class="btn btn-outline-danger tag-btn" data-tag="다시 갈래요">다시갈래요</button>
+                        <button type="button" class="btn btn-outline-danger tag-btn" data-tag="분위기가 좋아요">분위기가 좋아요</button>
                     </div>
+                    <input type="hidden" name="selectedTags" id="selectedTags" value="">
                 </div>
                 <div class="mb-4">
                     <label for="review-content" style="font-size: 1.5rem;">리뷰작성</label>

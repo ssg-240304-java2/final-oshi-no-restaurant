@@ -215,7 +215,7 @@ public class ReservationUserController {
                 tagCountMap.put(tag, count);
             } else {
                 // 태그나 횟수가 올바른 형식이 아닐 경우를 처리
-                System.err.println("Invalid tag format: " + tagCount);
+                System.err.println(" 올바른 형식이이 아님 " + tagCount);
             }
         }
 
