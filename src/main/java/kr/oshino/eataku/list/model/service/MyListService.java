@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,6 +23,8 @@ public class MyListService {
     private MyListRepository myListRepository;
     private String listStatus;
     private String restaurantList;
+
+//    private final FollowingRepository followRepository;
 
     // 리스트 생성 메소드
     public void createList(String listName) {
@@ -151,10 +152,13 @@ public class MyListService {
         myListRepository.save(myList);
     }
 
-    // 팔로우 리스트 서비스 메소드
-    public List<MyList> getFollowingLists(Integer listNo) {
-        return (List<MyList>) myListRepository.findByListNo(listNo);
+    // 내 리스트 가져오기 + 팔로우
+    public List<MyList> getFollowingLists(Long loginedMemberNo) {
+
+        return myListRepository.findByfollowMember(loginedMemberNo);
     }
+
+
 }
 
 
