@@ -215,6 +215,17 @@ public class RestaurantAdminController {
         return "restaurant/main";
     }
 
+    @GetMapping("/waitingSetting")
+    public ResponseEntity<WaitingSettingDTO> selectWaitingByDate(@PathVariable Date waitingDate){
+
+        CustomMemberDetails member = (CustomMemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long loginedRestaurantNo = member.getRestaurantNo();
+
+        WaitingSettingDTO waitings = restaurantAdminService.findWaitingSettingByDate(waitingDate, loginedRestaurantNo);
+
+        return ResponseEntity.ok(waitings);
+    }
+
     @PostMapping("/waitingSetting")
     public WaitingSettingDTO waitingRegister(@RequestBody WaitingSettingDTO newSetting){
 
