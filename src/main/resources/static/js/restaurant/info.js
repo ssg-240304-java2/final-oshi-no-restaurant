@@ -276,45 +276,43 @@ $(document).on('click', '.reservationRmvBtn', function () {
     }
 });
 
-// 웨이팅 정보 등록
-$(document).ready(function () {
-    $('#waitingSaveBtn').on('click', function () {
-        const waitingDate = $('#waitingDate').val();
-        const waitingStartTime = $('#waitingStartTime').val();
-        const waitingEndTime = $('#waitingEndTime').val();
-        const waitingPeople = $('#waitingPeople').val();
-        const isWaitingOn = $('#waitingToggle').prop('checked');
+// 웨이팅 메서드
+function handleWaitingSetting(actionUrl) {
+    const waitingDate = $('#waitingDate').val();
+    const waitingStartTime = $('#waitingStartTime').val();
+    const waitingEndTime = $('#waitingEndTime').val();
+    const waitingPeople = $('#waitingPeople').val();
+    const isWaitingOn = $('#waitingToggle').prop('checked');
 
-        console.log(waitingDate, waitingStartTime, waitingEndTime, waitingPeople, isWaitingOn);
+    console.log(waitingDate, waitingStartTime, waitingEndTime, waitingPeople, isWaitingOn);
 
-        if (isWaitingOn && waitingDate) {
-            $.ajax({
-                type: 'post',
-                url: '/restaurant/waitingSetting',
-                contentType: 'application/json',
-                data: JSON.stringify({
-                    "waitingDate": waitingDate,
-                    "startTime": waitingStartTime,
-                    "endTime": waitingEndTime,
-                    "waitingPeople": waitingPeople,
-                    "waitingStatus": isWaitingOn
-                }),
-                success: function (response) {
-                    alert("등록되었습니다.");
-                    console.log('success', response);
-                },
-                error: function (error) {
-                    console.log('error', error);
-                    alert("등록에 실패했습니다.");
-                }
-            });
-        } else {
-            alert("웨이팅 정보 등록을 위해 날짜를 선택하고 ON으로 설정해주세요.")
-        }
-    });
-});
+    if (isWaitingOn && waitingDate) {
+        $.ajax({
+            type: 'post',
+            url: actionUrl,
+            contentType: 'application/json',
+            data: JSON.stringify({
+                "waitingDate": waitingDate,
+                "startTime": waitingStartTime,
+                "endTime": waitingEndTime,
+                "waitingPeople": waitingPeople,
+                "waitingStatus": isWaitingOn
+            }),
+            success: function (response) {
+                alert("등록되었습니다.");
+                console.log('success', response);
+            },
+            error: function (error) {
+                console.log('error', error);
+                alert("등록에 실패했습니다.");
+            }
+        });
+    } else {
+        alert("웨이팅 정보 등록을 위해 날짜를 선택하고 ON으로 설정해주세요.")
+    }
+}
 
-// 웨이팅 조회
+// 날짜에 따른 웨이팅 정보 조회
 $(document).ready(function () {
     $('#waitingDate').on('change', function () {
         let dateText = $('#waitingDate').val();
@@ -343,9 +341,21 @@ $(document).ready(function () {
                 $('#waitingToggle').prop('checked', false);
             }
         });
-
     });
-})
+    // 웨이팅 정보 등록 및 수정
+    $('#waitingSaveBtn').on('click', function () {
+        const actionUrl = $(this).data('action-url') || '/restaurant/waitingSetting';
+        handleWaitingSetting(actionUrl);
+    });
+});
+
+// // 웨이팅 정보 등록
+// $(document).ready(function () {
+//     $('#waitingSaveBtn').on('click', function () {
+//         handleWaitingSetting('/restaurant/waitingSetting');
+//     });
+// });
+
 
 
 

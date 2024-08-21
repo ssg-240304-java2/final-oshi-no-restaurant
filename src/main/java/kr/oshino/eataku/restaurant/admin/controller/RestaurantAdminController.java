@@ -92,9 +92,9 @@ public class RestaurantAdminController {
         CustomMemberDetails member = (CustomMemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long loginedRestaurantNo = member.getRestaurantNo();
 
-        RestaurantInfoDTO restaurant = restaurantAdminService.selectMyRestaurant(loginedRestaurantNo);
-        List<ReservSettingDTO> reservSettings = restaurantAdminService.selectReservSetting(loginedRestaurantNo);
-        WaitingSettingDTO waitingSettings = restaurantAdminService.selectWaitingSetting(loginedRestaurantNo);
+        RestaurantInfoDTO restaurant = restaurantAdminService.selectMyRestaurant(loginedRestaurantNo);      // 식당 정보 조회
+        List<ReservSettingDTO> reservSettings = restaurantAdminService.selectReservSetting(loginedRestaurantNo);            // 예약 페이지 조회
+        WaitingSettingDTO waitingSettings = restaurantAdminService.selectWaitingSetting(loginedRestaurantNo);       // 웨이팅 페이지 조회
 
         Set<FoodType> foodTypes = restaurant.getFoodTypes();
         Set<HashTag> hashTags = restaurant.getHashTags();
@@ -259,6 +259,17 @@ public class RestaurantAdminController {
         return newSetting;
     }
 
+    @PostMapping("/waitingUpdate")
+    public String waitingUpdate(@RequestBody WaitingSettingDTO updateSetting) {
 
+        CustomMemberDetails member = (CustomMemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long loginedRestaurantNo = member.getRestaurantNo();
 
+        log.info("\uD83C\uDF4E updateSetting: {}", updateSetting);
+
+        updateSetting.setRestaurantNo(loginedRestaurantNo);
+        restaurantAdminService.updateWaiting(updateSetting, loginedRestaurantNo);
+
+        return "redirect:/restaurant/infoUpdate";
+    }
 }
