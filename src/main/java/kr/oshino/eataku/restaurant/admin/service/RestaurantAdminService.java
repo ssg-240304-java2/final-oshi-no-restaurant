@@ -260,20 +260,47 @@ public class RestaurantAdminService {
         return waitingSetting;
     }
 
-    // 등록된 웨이팅 내역 조회
+    // 등록된 웨이팅 내역 조회    // 수정!!!!
     public WaitingSettingDTO findWaitingSettingByDate(Date waitingDate, Long loginedRestaurantNo) {
 
         RestaurantInfo restaurantInfo = restaurantRepository.findById(loginedRestaurantNo).orElseThrow(() -> new EntityNotFoundException("Restaurant not found with id: " + loginedRestaurantNo));
 
         WaitingSetting waitingSettings = waitingSettingRepository.findByWaitingDateAndRestaurantNo(waitingDate, restaurantInfo);
 
-        WaitingSettingDTO waitingSettingDTO = new WaitingSettingDTO();
-        waitingSettingDTO.setRestaurantNo(loginedRestaurantNo);
-        waitingSettingDTO.setWaitingDate(waitingSettings.getWaitingDate().toLocalDate());
-        waitingSettingDTO.setStartTime(waitingSettings.getStartTime().toLocalTime());
-        waitingSettingDTO.setEndTime(waitingSettings.getEndTime().toLocalTime());
-        waitingSettingDTO.setWaitingStatus(waitingSettings.getWaitingStatus());
-        waitingSettingDTO.setWaitingPeople(waitingSettings.getWaitingPeople());
-        return waitingSettingDTO;
+        if(waitingSettings != null) {
+            WaitingSettingDTO waitingSettingDTO = new WaitingSettingDTO();
+            waitingSettingDTO.setRestaurantNo(loginedRestaurantNo);
+            waitingSettingDTO.setWaitingNo(waitingSettings.getWaitingNo());
+            waitingSettingDTO.setWaitingDate(waitingSettings.getWaitingDate().toLocalDate());
+            waitingSettingDTO.setStartTime(waitingSettings.getStartTime().toLocalTime());
+            waitingSettingDTO.setEndTime(waitingSettings.getEndTime().toLocalTime());
+            waitingSettingDTO.setWaitingStatus(waitingSettings.getWaitingStatus());
+            waitingSettingDTO.setWaitingPeople(waitingSettings.getWaitingPeople());
+            return waitingSettingDTO;
+        } else {
+            return null;
+        }
+    }
+
+    // 웨이팅 등록
+    public WaitingSettingDTO insertNewWaiting(WaitingSettingDTO newSetting, Long loginedRestaurantNo) {
+
+        RestaurantInfo restaurantInfo = restaurantRepository.findById(loginedRestaurantNo).orElseThrow(() -> new EntityNotFoundException("Restaurant not found with id : " + loginedRestaurantNo));
+
+        WaitingSetting waitingSetting = WaitingSetting.builder()
+                .restaurantNo(restaurantInfo)
+                .waitingDate(Date.valueOf(newSetting.getWaitingDate()))
+                .startTime(Time.valueOf(newSetting.getStartTime()))
+                .endTime(Time.valueOf(newSetting.getEndTime()))
+                .waitingStatus(newSetting.getWaitingStatus())
+                .waitingPeople(newSetting.getWaitingPeople())
+                .build();
+
+        waitingSettingRepository.save(waitingSetting);
+
+        log.info("\uD83C\uDF4E waitingSetting: {}", waitingSetting);
+
+        newSetting.setWaitingNo(waitingSetting.getWaitingNo());
+        return newSetting;
     }
 }

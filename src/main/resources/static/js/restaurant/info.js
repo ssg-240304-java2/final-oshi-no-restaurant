@@ -173,7 +173,7 @@ $('#reservationBtn').on('click', function () {
                     <button type="button" class="btn btn-danger btn-sm reservationRmvBtn" data-id="${reservation.reservationNo}">삭제</button>
                 </li>`;
             $('#reservationList').append(listItem);
-            $('#reservationList').css({"display":"block"});
+            $('#reservationList').css({"display": "block"});
         },
         error: function (e) {
             alert("등록에 실패했습니다.");
@@ -239,8 +239,8 @@ $(document).on('click', '.reservationRmvBtn', function () {
                 alert('삭제되었습니다.');
 
                 $.ajax({
-                    type:'GET',
-                    url:'/restaurant/reservationSetting/' + selectedDate,
+                    type: 'GET',
+                    url: '/restaurant/reservationSetting/' + selectedDate,
                     contentType: 'application/json',
                     success: function (reservations) {
                         console.log("success", reservations);
@@ -248,7 +248,7 @@ $(document).on('click', '.reservationRmvBtn', function () {
                         const reservationList = $('#reservationList');
                         reservationList.empty();
 
-                        if(reservations.length > 0) {
+                        if (reservations.length > 0) {
                             reservations.forEach(function (reservSettings) {
                                 const listItem = `
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
@@ -283,20 +283,21 @@ $(document).ready(function () {
         const waitingStartTime = $('#waitingStartTime').val();
         const waitingEndTime = $('#waitingEndTime').val();
         const waitingPeople = $('#waitingPeople').val();
-        const isWaitingOn = $('#waitingToggle').val();
+        const isWaitingOn = $('#waitingToggle').prop('checked');
 
-        console.log(waitingDate, waitingStartTime, waitingPeople, isWaitingOn);
+        console.log(waitingDate, waitingStartTime, waitingEndTime, waitingPeople, isWaitingOn);
 
-        if(isWaitingOn && waitingDate) {
+        if (isWaitingOn && waitingDate) {
             $.ajax({
                 type: 'post',
                 url: '/restaurant/waitingSetting',
                 contentType: 'application/json',
                 data: JSON.stringify({
-                    "waitingDate" : waitingDate,
-                    "waitingStartTime" : waitingStartTime,
-                    "waitingEndTime" : waitingEndTime,
-                    "waitingPeople" : waitingPeople,
+                    "waitingDate": waitingDate,
+                    "startTime": waitingStartTime,
+                    "endTime": waitingEndTime,
+                    "waitingPeople": waitingPeople,
+                    "waitingStatus": isWaitingOn
                 }),
                 success: function (response) {
                     alert("등록되었습니다.");
@@ -312,6 +313,39 @@ $(document).ready(function () {
         }
     });
 });
+
+// 웨이팅 조회
+$(document).ready(function () {
+    $('#waitingDate').on('change', function () {
+        let dateText = $('#waitingDate').val();
+
+        $.ajax({
+            url: '/restaurant/waitingSetting/' + dateText,
+            method: 'GET',
+            success: function (data) {
+                if (data) {
+                    $('#waitingStartTime').val(data.startTime);
+                    $('#waitingEndTime').val(data.endTime);
+                    $('#waitingPeople').val(data.waitingPeople);
+                    $('#waitingToggle').prop('checked', data.waitingStatus);
+                } else {
+                    $('#waitingStartTime').val('00:00');
+                    $('#waitingEndTime').val('00:00');
+                    $('#waitingPeople').val('');
+                    $('#waitingToggle').prop('checked', false);
+                }
+            },
+            error: function (error) {
+                console.log('Error fetching waiting setting: ', error);
+                $('#waitingStartTime').val('00:00');
+                $('#waitingEndTime').val('00:00');
+                $('#waitingPeople').val('');
+                $('#waitingToggle').prop('checked', false);
+            }
+        });
+
+    });
+})
 
 
 

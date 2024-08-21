@@ -8,7 +8,7 @@
         <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
         <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-        <script src="/javascript/popup_2.js"></script>
+        <!--        <script src="/javascript/popup_2.js"></script>-->
         <link rel="stylesheet" th:href="@{/css/fragment/navbar.css}">
         <link rel="stylesheet" th:href="@{/css/fragment/footer.css}">
         <link rel="stylesheet" th:href="@{/css/restaurant/info.css}">
@@ -224,8 +224,7 @@
                 <div class="form-row">
                     <div class="col-md-6">
                         <label for="waitingDate">날짜 선택</label>
-                        <input type="text" id="waitingDate" class="form-control mb-2" placeholder="웨이팅 날짜 선택"
-                               th:value="${waitingSettings.waitingDate}">
+                        <input type="text" id="waitingDate" class="form-control mb-2" placeholder="웨이팅 날짜 선택">
                     </div>
                     <div class="col-md-6">
                         <h5>웨이팅 정보 추가</h5>
@@ -234,25 +233,22 @@
                                 <label class="mt-4">웨이팅 시작 및 마감 시간</label>
                                 <div class="form-row">
                                     <div class="col-md-6">
-                                        <input type="time" class="form-control" id="waitingStartTime"
-                                               th:value="${waitingSettings.waitingStartTime}">
+                                        <input type="time" class="form-control" id="waitingStartTime" value="00:00">
                                     </div>
                                     <div class="col-md-6">
-                                        <input type="time" class="form-control" id="waitingEndTime"
-                                               th:value="${waitingSettings.waitingEndTime}">
+                                        <input type="time" class="form-control" id="waitingEndTime" value="00:00">
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="waitingPeople">인원</label>
-                                <input type="number" class="form-control" id="waitingPeople" placeholder="인원수 입력"
-                                       th:value="${waitingSettings.waitingPeople}">
+                                <input type="number" class="form-control" id="waitingPeople" placeholder="인원수 입력">
+
                             </div>
                             <div class="form-group">
                                 <label class="mt-4">웨이팅 추가</label>
                                 <div class="custom-control custom-switch">
-                                    <input type="checkbox" class="custom-control-input" id="waitingToggle"
-                                           th:value="${waitingSettings.waitingToggle}">
+                                    <input type="checkbox" class="custom-control-input" id="waitingToggle">
                                     <label class="custom-control-label" for="waitingToggle">ON/OFF</label>
                                 </div>
                             </div>

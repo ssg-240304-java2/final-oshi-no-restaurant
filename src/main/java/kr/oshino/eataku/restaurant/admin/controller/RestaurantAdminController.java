@@ -8,6 +8,7 @@ import kr.oshino.eataku.common.enums.HashTag;
 import kr.oshino.eataku.member.model.dto.CustomMemberDetails;
 import kr.oshino.eataku.restaurant.admin.entity.ReservationSetting;
 import kr.oshino.eataku.restaurant.admin.entity.RestaurantInfo;
+import kr.oshino.eataku.restaurant.admin.entity.WaitingSetting;
 import kr.oshino.eataku.restaurant.admin.model.dto.ReservSettingDTO;
 import kr.oshino.eataku.restaurant.admin.model.dto.RestaurantInfoDTO;
 import kr.oshino.eataku.restaurant.admin.model.dto.TemporarySaveDTO;
@@ -215,18 +216,36 @@ public class RestaurantAdminController {
         return "restaurant/main";
     }
 
-    @GetMapping("/waitingSetting")
-    public ResponseEntity<WaitingSettingDTO> selectWaitingByDate(@PathVariable Date waitingDate){
+    /***
+     * 등록된 웨이팅 세팅 조회
+     * @param waitingDate
+     * @return
+     */
+    @GetMapping("/waitingSetting/{waitingDate}")
+    public ResponseEntity<WaitingSettingDTO> selectWaitingByDate(@PathVariable String waitingDate){
+        log.info("🍎waitingDate: {}", waitingDate);
 
         CustomMemberDetails member = (CustomMemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long loginedRestaurantNo = member.getRestaurantNo();
 
-        WaitingSettingDTO waitings = restaurantAdminService.findWaitingSettingByDate(waitingDate, loginedRestaurantNo);
+        WaitingSettingDTO waitingSettings = restaurantAdminService.findWaitingSettingByDate(Date.valueOf(waitingDate), loginedRestaurantNo);
 
-        return ResponseEntity.ok(waitings);
+        log.info("🍎waitingSettings : {}", waitingSettings);
+
+        if(waitingSettings != null) {
+            return ResponseEntity.ok(waitingSettings);
+        } else {
+            return ResponseEntity.noContent().build();
+        }
     }
 
+    /***
+     *  웨이팅 세팅 등록
+     * @param newSetting
+     * @return
+     */
     @PostMapping("/waitingSetting")
+    @ResponseBody
     public WaitingSettingDTO waitingRegister(@RequestBody WaitingSettingDTO newSetting){
 
         CustomMemberDetails member = (CustomMemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -234,7 +253,12 @@ public class RestaurantAdminController {
 
         log.info("\uD83C\uDF4E newSetting : {}", newSetting);
 
+        newSetting.setRestaurantNo(loginedRestaurantNo);
+        newSetting = restaurantAdminService.insertNewWaiting(newSetting, loginedRestaurantNo);
+
         return newSetting;
     }
+
+
 
 }
