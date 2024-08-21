@@ -38,6 +38,7 @@ public class SmsUtil {
 
         message.setFrom(number);
         message.setTo(to);
+        message.setSubject("[EATAKU]");
         String formattedText = messageType.format(args);
 
         log.info("formattedText: {}", formattedText);
