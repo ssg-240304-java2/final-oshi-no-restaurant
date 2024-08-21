@@ -1,4 +1,4 @@
-package kr.oshino.eataku.review.user.model.repository;
+package kr.oshino.eataku.review.user.repository;
 
 import kr.oshino.eataku.member.entity.Member;
 import kr.oshino.eataku.restaurant.admin.entity.RestaurantInfo;

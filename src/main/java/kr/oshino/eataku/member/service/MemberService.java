@@ -14,7 +14,7 @@ import kr.oshino.eataku.member.model.repository.MemberRepository;
 import kr.oshino.eataku.reservation.user.entity.Reservation;
 import kr.oshino.eataku.reservation.user.repository.ReservationRepository;
 import kr.oshino.eataku.restaurant.admin.model.repository.AccountInfoRepository;
-import kr.oshino.eataku.review.user.model.repository.ReviewRepository;
+import kr.oshino.eataku.review.user.repository.ReviewRepository;
 import kr.oshino.eataku.waiting.entity.Waiting;
 import kr.oshino.eataku.waiting.repository.WaitingRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +29,6 @@ import java.io.IOException;
 import java.sql.Date;
 import java.sql.Time;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -235,8 +234,7 @@ public class MemberService {
                 waitingInfoDTO.setRestaurantName(waiting.getRestaurantInfo().getRestaurantName());
                 waitingInfoDTO.setRestaurantAddress(waiting.getRestaurantInfo().getRestaurantAddress());
                 waitingInfoDTO.setPartySize(waiting.getPartySize());
-                int waitingNumber = waitingRepository.findRowNumberByRestaurantNoAndMemberNoAndWaitingStatus(waitingInfoDTO.getRestaurantNo(),logginedMemberNo);
-                waitingInfoDTO.setWaitingNumber(waitingNumber);
+                waitingInfoDTO.setWaitingNumber(waiting.getSequenceNumber());
                 waitingInfo.add(waitingInfoDTO);
             }
         }
