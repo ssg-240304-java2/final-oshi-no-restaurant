@@ -18,7 +18,6 @@ public interface RestaurantRepository extends JpaRepository<RestaurantInfo, Long
     RestaurantInfo findByAccountInfoId(String username);
 
     boolean existsByAccountInfoId(String account);
-
     RestaurantInfo save(RestaurantInfo restaurantInfo);
 
     @Query(value = "SELECT r.restaurant_no, " +

@@ -1,6 +1,8 @@
 package kr.oshino.eataku.restaurant.admin.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,6 +13,8 @@ import java.sql.Time;
 @Data
 @Entity
 @Table(name = "tbl_reservation_setting")
+@Builder
+@AllArgsConstructor
 public class ReservationSetting {
 
     @Id

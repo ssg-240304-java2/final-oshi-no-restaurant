@@ -110,7 +110,7 @@
     }
 
     // SSE 연결을 설정하여 서버에서 전송하는 실시간 이벤트를 수신
-    const eventSource = new EventSource(`/admin/waiting/stream/${restaurantNo}`);
+    let eventSource = new EventSource(`/admin/waiting/stream/${restaurantNo}`);
 
     eventSource.onmessage = function(event) {
         fetchWaiting();
@@ -118,6 +118,12 @@
 
     eventSource.onerror = function(error) {
         console.error("SSE 수신 받는데 오류가 생겼습니다.", error);
+
+        // 연결을 다시 시도하려면 eventSource.close() 후 다시 연결 시도
+        eventSource.close();
+        setTimeout(() => {
+            eventSource = new EventSource(`/admin/waiting/stream/${restaurantNo}`);
+        }, 3000); // 3초 후에 다시 연결 시도
     };
 
 
