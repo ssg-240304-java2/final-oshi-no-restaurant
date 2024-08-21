@@ -9,6 +9,7 @@ import kr.oshino.eataku.reservation.user.repository.ReservationRepository;
 import kr.oshino.eataku.restaurant.admin.entity.ReservationSetting;
 import kr.oshino.eataku.restaurant.admin.entity.RestaurantInfo;
 import kr.oshino.eataku.restaurant.admin.model.repository.RestaurantRepository;
+import kr.oshino.eataku.review.user.model.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -16,9 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -30,6 +29,8 @@ public class ReservationUserService {
     private final ReservationRepository reservationRepository;
     private final MemberRepository memberRepository;
     private final RestaurantRepository restaurantRepository;
+    private final ReviewRepository reviewRepository;
+
 
     @Transactional
     public CreateReservationUserResponseDto registerReservation(CreateReservationUserRequestDto createReservationUserRequestDto) {
@@ -215,5 +216,15 @@ public class ReservationUserService {
     @Transactional
     public List<ReviewDetails> getReviewDetails(Long restaurantNo) {
         return reservationRepository.getReviewDetails(restaurantNo);
+    }
+
+    /***
+     * 태그 횟수 가져오기
+     * @param restaurantNo
+     * @return
+     */
+    @Transactional
+    public List<String> getCountTags(Long restaurantNo) {
+        return  reservationRepository.getCountTags(restaurantNo);
     }
 }
