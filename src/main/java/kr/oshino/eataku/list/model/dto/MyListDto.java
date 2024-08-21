@@ -9,11 +9,11 @@ import lombok.*;
 @ToString
 public class MyListDto {
 
-    private int listNo;
+    private Integer listNo;
 
-    private int listShare;
+    private Long listShare;
 
-    private int memberNo;
+    private Long memberNo;
 
     private String listName;
 
