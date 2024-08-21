@@ -4,7 +4,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalTime;
+import java.sql.Date;
+import java.sql.Time;
 
 @NoArgsConstructor
 @Data
@@ -13,6 +14,10 @@ import java.time.LocalTime;
 public class WaitingSetting {       // 웨이팅 설정
 
     @Id
+    @Column(name = "waiting_no")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long waitingNo;     // 웨이팅 고유 번호(pk)
+
     @ManyToOne()
     @JoinColumn(name = "restaurant_no")
     private RestaurantInfo restaurantNo;        // 식당 고유 번호(fk)
@@ -24,8 +29,11 @@ public class WaitingSetting {       // 웨이팅 설정
     private int waitingPeople;      // 웨이팅 인원
 
     @Column(name = "start_time")
-    private LocalTime startTime;        // 웨이팅 시작 시간
+    private Time startTime;        // 웨이팅 시작 시간
 
     @Column(name = "end_time")
-    private LocalTime endTime;      // 웨이팅 마감 시간
+    private Time endTime;      // 웨이팅 마감 시간
+
+    @Column(name = "waiting_date")
+    private Date waitingDate;      // 웨이팅 날짜
 }
