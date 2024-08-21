@@ -78,7 +78,4 @@ public interface WaitingRepository extends JpaRepository<Waiting, Long> {
     // 다음 웨이팅 번호를 결정하기 위한 쿼리문
     @Query("SELECT MAX(w.sequenceNumber) FROM Waiting w WHERE w.restaurantInfo = :restaurantInfo AND DATE(w.createdAt) = :date")
     Integer findMaxSequenceNumberByRestaurantAndDate(@Param("restaurantInfo") RestaurantInfo restaurantInfo, @Param("date") LocalDate date);
-
-
-
 }

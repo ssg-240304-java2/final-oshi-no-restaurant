@@ -9,8 +9,8 @@ import kr.oshino.eataku.member.entity.Member;
 import kr.oshino.eataku.member.model.repository.MemberRepository;
 import kr.oshino.eataku.restaurant.admin.entity.RestaurantInfo;
 import kr.oshino.eataku.restaurant.admin.model.repository.RestaurantRepository;
+import kr.oshino.eataku.sse.service.SseService;
 import kr.oshino.eataku.waiting.entity.Waiting;
-import kr.oshino.eataku.waiting.event.WaitingCreatedEvent;
 import kr.oshino.eataku.waiting.model.dto.requestDto.CreateWaitingRequestDto;
 import kr.oshino.eataku.waiting.model.dto.requestDto.ReadWaitingRequestDto;
 import kr.oshino.eataku.waiting.model.dto.requestDto.UpdateWaitingRequestDto;
@@ -22,7 +22,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.nurigo.sdk.message.response.SingleMessageSentResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,10 +37,12 @@ public class WaitingService {
     private final WaitingRepository waitingRepository;
     private final MemberRepository memberRepository;
     private final RestaurantRepository restaurantRepository;
-    private final ApplicationEventPublisher eventPublisher;
 
     @Autowired
     private final SmsUtil smsUtil;
+
+    @Autowired
+    private final SseService sseService;
 
 
 
@@ -79,10 +80,15 @@ public class WaitingService {
                                         .waitingStatus(StatusType.대기중)
                                         .build());
 
-        eventPublisher.publishEvent(new WaitingCreatedEvent(this, waitingRepository.findWaitingByWaitingNo(waiting.getWaitingNo())));
+        Long restaurantNo = waiting.getRestaurantInfo().getRestaurantNo();
+
+        log.info("restaurantNo: {}", restaurantNo);
+
+        sseService.sendWaitingRegisterEvent(restaurantNo);
 
         return new CreateWaitingResponseDto(200, "웨이팅이 등록되었습니다!", member.getMemberNo());
     }
+
 
 
 
@@ -165,6 +171,14 @@ public class WaitingService {
     }
 
 
+
+
+
+
+
+
+
+    // ----------------------------------------------------------------------------------------------------------------
 
 
     /**

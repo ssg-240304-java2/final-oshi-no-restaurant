@@ -1,6 +1,5 @@
 package kr.oshino.eataku.waiting.controller;
 
-import kr.oshino.eataku.waiting.event.WaitingCreatedEvent;
 import kr.oshino.eataku.waiting.model.dto.requestDto.ReadWaitingRequestDto;
 import kr.oshino.eataku.waiting.model.dto.requestDto.UpdateWaitingRequestDto;
 import kr.oshino.eataku.waiting.model.dto.responseDto.ReadWaitingResponseDto;
@@ -10,20 +9,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.nurigo.sdk.message.response.SingleMessageSentResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.event.EventListener;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Sinks;
-
-import java.time.Duration;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+
 
 @Slf4j
 @Controller
@@ -33,7 +25,6 @@ public class WaitingAdminController {
     // 관리자 전용 컨트롤러
 
     private final WaitingService waitingService;
-    private final Map<Long, Sinks.Many<Long>> waitingSinks;
 
 
 
@@ -47,7 +38,7 @@ public class WaitingAdminController {
     public String waitingManagementPage(Model model) {
 
         // 나중에 세션으로 변경해야 함
-        Long restaurantNo = 3L;
+        Long restaurantNo = 1L;
         model.addAttribute("restaurantNo", restaurantNo);
 
         return "restaurant/waitingStatus";
@@ -69,8 +60,6 @@ public class WaitingAdminController {
 
         ReadWaitingRequestDto readWaitingRequestDto =
                 ReadWaitingRequestDto.builder().restaurantNo(restaurantNo).build();
-
-        log.info("readWaitingRequestDto: {}", readWaitingRequestDto);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(waitingService.getWaitingListByRestaurantNo(readWaitingRequestDto));
@@ -134,28 +123,4 @@ public class WaitingAdminController {
 
 
 
-
-
-    @EventListener
-    public void handleWaitingCreatedEvent(WaitingCreatedEvent event) {
-        Long restaurantNo = event.getRestaurantNo();
-
-        Sinks.Many<Long> sink = waitingSinks.get(restaurantNo);
-        if (sink != null) {
-            sink.tryEmitNext(restaurantNo);
-        }
-    }
-
-
-
-    /**
-     * 실시간 웨이팅 스트림
-     * @return
-     */
-    @GetMapping(value = "/waiting/stream/{restaurantNo}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    @ResponseBody
-    public Flux<Long> streamWaiting(@PathVariable Long restaurantNo) {
-        waitingSinks.putIfAbsent(restaurantNo, Sinks.many().multicast().onBackpressureBuffer());
-        return waitingSinks.get(restaurantNo).asFlux();
-    }
 }
