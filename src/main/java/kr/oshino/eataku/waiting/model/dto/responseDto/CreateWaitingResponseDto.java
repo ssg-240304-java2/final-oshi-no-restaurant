@@ -13,5 +13,6 @@ public class CreateWaitingResponseDto {
 
     private Integer httpCode;
     private String message;
+    private Long waitingNo;
     private Long memberNo;
 }

@@ -82,11 +82,9 @@ public class WaitingService {
 
         Long restaurantNo = waiting.getRestaurantInfo().getRestaurantNo();
 
-        log.info("restaurantNo: {}", restaurantNo);
-
         sseService.sendWaitingRegisterEvent(restaurantNo);
 
-        return new CreateWaitingResponseDto(200, "웨이팅이 등록되었습니다!", member.getMemberNo());
+        return new CreateWaitingResponseDto(200, "웨이팅이 등록되었습니다!", waiting.getWaitingNo(), member.getMemberNo());
     }
 
 

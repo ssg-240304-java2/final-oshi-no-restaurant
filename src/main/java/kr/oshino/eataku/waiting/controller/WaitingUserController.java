@@ -111,6 +111,7 @@ public class WaitingUserController {
      * @return
      */
     @PostMapping("/waiting/sendOne/{waitingNo}")
+    @ResponseBody
     public SingleMessageSentResponse sendRegisterMessage(@PathVariable Long waitingNo) {
         return waitingService.sendWaitingRegisterMessage(waitingNo);
     }
