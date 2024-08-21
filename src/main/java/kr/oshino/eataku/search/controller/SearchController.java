@@ -57,20 +57,27 @@ public class SearchController {
     }
 
     @GetMapping("/map")
-    public String map(@RequestParam(value = "latitude", defaultValue = "0") Double latitude, @RequestParam(value = "longitude", defaultValue = "0") Double longitude, Model model) {
+    public String map() {
+        return "search/mapSearchPage";
+    }
+
+    @GetMapping("/map/coordinate")
+    @ResponseBody
+    public List<SearchResultDTO> mapSearch(
+            @RequestParam(value = "latitude", defaultValue = "0") Double latitude
+            , @RequestParam(value = "longitude", defaultValue = "0") Double longitude
+            , @RequestParam("query") String keyword) {
 
         log.info("🚀🚀 [ SearchController ] latitude : {} longitude : {} 🚀🚀", latitude, longitude);
         List<SearchResultDTO> restaurantLists = new ArrayList<>();
 
         if (latitude != 0 && longitude != 0) {
-            restaurantLists = searchService.selectQueryBylatitudeAndlongitude(latitude, longitude);
+            restaurantLists = searchService.selectQueryBylatitudeAndlongitude(latitude, longitude, keyword);
             if (!restaurantLists.isEmpty()) {
                 log.info("🚀🚀 [ SearchController ] restaurantLists[0] : {} 🚀🚀", restaurantLists.get(0));
             }
         }
 
-        model.addAttribute("restaurantLists", restaurantLists);
-
-        return "search/mapSearchPage";
+        return restaurantLists;
     }
 }

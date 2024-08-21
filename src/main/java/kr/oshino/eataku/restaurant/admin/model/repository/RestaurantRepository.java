@@ -85,9 +85,17 @@ public interface RestaurantRepository extends JpaRepository<RestaurantInfo, Long
             "LEFT JOIN tbl_menu m ON m.restaurant_no = r.restaurant_no " +
             "LEFT JOIN tbl_hash_tag ht ON ht.restaurant_no = r.restaurant_no " +
             "LEFT JOIN tbl_average_rating ar ON ar.restaurant_no = r.restaurant_no " +
+            "WHERE ( r.restaurant_name LIKE CONCAT('%',:keyword,'%') " +
+            "OR r.restaurant_address LIKE CONCAT('%',:keyword,'%') " +
+            "OR r.description LIKE CONCAT('%',:keyword,'%') " +
+            "OR ft.food_type LIKE CONCAT('%',:keyword,'%') " +
+            "OR m.menu_name LIKE CONCAT('%',:keyword,'%') " +
+            "OR m.description LIKE CONCAT('%',:keyword,'%') " +
+            "OR ht.hash_tag LIKE CONCAT('%',:keyword,'%') ) " +
             "GROUP BY r.restaurant_no, r.restaurant_name, r.restaurant_address, ar.rating " +
             "HAVING distance <= 0.5 " +
-            "ORDER BY ar.rating DESC ) result ",
+            "ORDER BY ar.rating DESC ) result " +
+            "LIMIT 30 ",
             nativeQuery = true)
-    List<Object[]> selectQueryBylatitudeAndlongitude(@Param("lat") Double latitude,@Param("lng") Double longitude);
+    List<Object[]> selectQueryBylatitudeAndlongitude(@Param("lat") Double latitude,@Param("lng") Double longitude, @Param("keyword") String keyword);
 }

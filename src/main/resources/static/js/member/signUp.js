@@ -170,7 +170,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const email = $('#email').val();
         $.ajax({
-            url: 'signUp/sendEmailVerifCode',
+            url: '/signUp/sendEmailVerifCode',
             type: 'post',
             contentType: 'application/json',
             dataType: 'json',
