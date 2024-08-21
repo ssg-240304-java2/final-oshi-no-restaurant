@@ -3,3 +3,4 @@ spring:
     name: eataku
   profiles:
     include: local
+    default: local
