@@ -235,8 +235,7 @@ public class MemberService {
                 waitingInfoDTO.setRestaurantName(waiting.getRestaurantInfo().getRestaurantName());
                 waitingInfoDTO.setRestaurantAddress(waiting.getRestaurantInfo().getRestaurantAddress());
                 waitingInfoDTO.setPartySize(waiting.getPartySize());
-                int waitingNumber = waitingRepository.findRowNumberByRestaurantNoAndMemberNoAndWaitingStatus(waitingInfoDTO.getRestaurantNo(),logginedMemberNo);
-                waitingInfoDTO.setWaitingNumber(waitingNumber);
+                waitingInfoDTO.setWaitingNumber(waiting.getSequenceNumber());
                 waitingInfo.add(waitingInfoDTO);
             }
         }
