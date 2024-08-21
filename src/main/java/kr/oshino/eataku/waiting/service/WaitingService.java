@@ -81,9 +81,6 @@ public class WaitingService {
 
         eventPublisher.publishEvent(new WaitingCreatedEvent(this, waitingRepository.findWaitingByWaitingNo(waiting.getWaitingNo())));
 
-        // 카카오톡 알림 메세지 전송
-
-
         return new CreateWaitingResponseDto(200, "웨이팅이 등록되었습니다!", member.getMemberNo());
     }
 
@@ -180,5 +177,22 @@ public class WaitingService {
         ReadWaitingResponseDto waitingData = waitingRepository.findWaitingByWaitingNo(waitingNo);
         return smsUtil.sendWaitingMessage(waitingData.getPhone(), SmsMessageType.WAITING_ENTRY_MESSAGE,
                 waitingData.getSequenceNumber(), waitingData.getRestaurantName(), waitingData.getPartySize());
+    }
+
+
+
+
+
+
+    /**
+     * 웨이팅 등록 메세지 전송
+     * @param waitingNo
+     * @return
+     */
+    public SingleMessageSentResponse sendWaitingRegisterMessage(Long waitingNo) {
+
+        ReadWaitingResponseDto waitingData = waitingRepository.findWaitingByWaitingNo(waitingNo);
+        return smsUtil.sendWaitingMessage(waitingData.getPhone(), SmsMessageType.WAITING_REGISTER_MESSAGE,
+                waitingData.getRestaurantName(), waitingData.getSequenceNumber(), waitingData.getPartySize());
     }
 }
