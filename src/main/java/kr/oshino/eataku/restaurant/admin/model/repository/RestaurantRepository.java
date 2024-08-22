@@ -98,4 +98,11 @@ public interface RestaurantRepository extends JpaRepository<RestaurantInfo, Long
             "LIMIT 30 ",
             nativeQuery = true)
     List<Object[]> selectQueryBylatitudeAndlongitude(@Param("lat") Double latitude,@Param("lng") Double longitude, @Param("keyword") String keyword);
+
+
+    @Query("SELECT new kr.oshino.eataku.search.model.dto.SearchResultDTO(r.restaurantNo, r.restaurantName, r.restaurantAddress, r.xCoordinate, r.yCoordinate, r.imgUrl, ar.rating ) " +
+            "FROM RestaurantInfo r LEFT JOIN AverageRating ar ON r.restaurantNo = ar.restaurantNo.restaurantNo " +
+            "WHERE r.restaurantNo IN :popularList")
+    List<SearchResultDTO> findPopularRestaurantsWithRatings(@Param("popularList") List<Long> popularList);
+
 }
