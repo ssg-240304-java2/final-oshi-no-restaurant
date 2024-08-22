@@ -30,6 +30,10 @@ jobs:
         spring.datasource.username: ${{ secrets.DB_USERNAME }} 
         spring.datasource.password: ${{ secrets.DB_PASSWORD }} 
         spring.datasource.driver-class-name: com.mysql.cj.jdbc.Driver
+        spring.jpa.hibernate.ddl-auto: validate
+        spring.jpa.show-sql: true
+        spring.jpa.database: mysql
+        spring.jpa.properties.hibernate.format_sql: true
         spring.mail.host: smtp.gmail.com
         spring.mail.port: 587
         spring.mail.username: ${{secrets.GMAIL_ACCOUNT}}

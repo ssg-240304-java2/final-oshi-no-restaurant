@@ -1,13 +1,15 @@
 package kr.oshino.eataku.list.controller;
 
 import kr.oshino.eataku.list.entity.MyList;
-import kr.oshino.eataku.list.model.dto.MyListDto;
+import kr.oshino.eataku.list.model.dto.FollowListDto;
 import kr.oshino.eataku.list.model.service.MyListService;
 import kr.oshino.eataku.list.model.vo.RestaurantList;
+import kr.oshino.eataku.member.model.dto.CustomMemberDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -118,13 +120,6 @@ public class MyListController {
         }
     }
 
-    // 내 쩝쩝 리스트 페이지를 띄우는 메소드
-    @GetMapping("/tsktskLists")
-    public String showMyLists(Model model) {
-        List<MyList> myLists = myListService.getAllMyLists();
-        model.addAttribute("myLists", myLists);
-        return "list/tsktskList";
-    }
 
     // ajax 로 특정 리스트의 식당 정보를 가져오는 메소드
     @GetMapping("/tsktskLists/{listNo}/restaurants")
@@ -162,21 +157,26 @@ public class MyListController {
         }
     }
 
-    // 팔로우한 사람 리스트 가져오기
-    @PostMapping("/tsktskLists")
-    public String followingLists(Model model, @RequestParam("listNo") Integer listNo) {
 
-        log.info("⭐⭐ [ MyListController ] Request listId: {} ⭐⭐", listNo);
+    // 내 쩝쩝 리스트 페이지를 띄우는 메소드 + 팔로우 리스트
+    @GetMapping("/tsktskLists")
+    public String showMyLists(Model model) {
+        CustomMemberDetails member = (CustomMemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long loginedMemberNo = member.getMemberNo();
 
-        // listId에 해당하는 팔로우한 사람의 리스트 가져오기
-        List<MyList> followingLists = myListService.getFollowingLists(listNo);
+        List<MyList> myLists = myListService.getAllMyLists();
+        model.addAttribute("myLists", myLists);
 
-        // 모델에 리스트 추가
+        // 팔로잉 리스트 추가
+        List<MyList> followingLists = myListService.getFollowingLists(loginedMemberNo);
         model.addAttribute("followingLists", followingLists);
 
-        // 리다이렉트할 경로
-        return "redirect:/list/tsktskList";
+        log.info("⭐⭐ [ 값 주나? ] Request followingLists: {} ⭐⭐", followingLists);
+
+        return "list/tsktskList";
     }
+
+
 
 }
 
