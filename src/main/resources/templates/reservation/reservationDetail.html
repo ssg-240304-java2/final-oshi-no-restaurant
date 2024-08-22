@@ -70,14 +70,15 @@
                 <span class="text-warning" th:text="${review.scope.getStars()}"></span>
             </p>
 
-
-
-
-
             <!-- 리뷰 내용 -->
             <p th:text="${review.reviewContent}">Review content goes here</p>
         </div>
     </div>
+<div class="more-button-container">
+    <button class="more-button" id="more-button">더 보기</button>
+</div>
+
+
 
     <div th:replace="~{fragment/footer.html :: footer}" class="footer"></div>
 
@@ -92,8 +93,8 @@
 
     var mapContainer = document.getElementById("map");
 
-    var x_coordinate = [[${position.xCoordinate}]];
-    var y_coordinate = [[${position.yCoordinate}]];
+    var x_coordinate = [[${position[0].x_coordinate}]];
+    var y_coordinate = [[${position[0].y_coordinate}]];
 
     console.log(x_coordinate + " " + y_coordinate)
 
@@ -103,23 +104,15 @@
     // 지도 초기화
     var map = new naver.maps.Map(mapContainer, {
         center: position, // LatLng 객체 사용
-        zoom: 15
+        zoom: 20
     });
 
     // 마커 추가
     var marker = new naver.maps.Marker({
         position: position,
-        map: map
+        map: map,
+        fillColor: '#FA4A54'
     });
 
-
-    // // 마커 생성
-    // var marker = new naver.maps.Marker({
-    //     map: map,
-    //     position: position,
-    //     icon: {
-    //         url: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png'
-    //     }
-    // });
 </script>
 </html>
