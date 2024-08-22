@@ -200,16 +200,16 @@ $('#signUpBtn').on('click', function () {
     if (
         // 유효값 체크
         !$('#userId').hasClass('is-valid') ||
-        !$('#password').hasClass('is-valid') ||
-        !$('#confirmPassword').hasClass('is-valid') ||
-        !$('#email').hasClass('is-valid') ||
-        !$('#authCode').hasClass('is-valid') ||
+        // !$('#password').hasClass('is-valid') ||
+        // !$('#confirmPassword').hasClass('is-valid') ||
+        // !$('#email').hasClass('is-valid') ||
+        // !$('#authCode').hasClass('is-valid') ||
         // null값 체크
         $('#userId').val() == ""
-        $('#password').val() == "" ||
-        $('#confirmPassword').val() == "" ||
-        $('#email').val() == "" ||
-        $('#authCode').val() == ""
+        // $('#password').val() == "" ||
+        // $('#confirmPassword').val() == "" ||
+        // $('#email').val() == "" ||
+        // $('#authCode').val() == ""
     ) {
         alert("모든 정보를 입력하고 검증받아야 회원가입 가능합니다.");
     } else {

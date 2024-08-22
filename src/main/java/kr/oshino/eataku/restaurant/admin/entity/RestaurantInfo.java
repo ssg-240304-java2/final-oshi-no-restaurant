@@ -59,9 +59,6 @@ public class RestaurantInfo {
     @Column(name = "contact")
     private String contact;         // 연락처
 
-    @Column(name = "post_number")
-    private String postNumber;      // 우편번호     // 없애야 함!!!!!!!!
-
     @Column(name = "img_url")
     private String imgUrl;      // 식당 메인 사진
 
@@ -96,7 +93,7 @@ public class RestaurantInfo {
     @OneToOne(mappedBy = "restaurantNo", cascade = CascadeType.ALL)
     private AccountInfo accountInfo;        // 계정 정보
 
-    public RestaurantInfo(Long restaurantNo, String restaurantName, String description, String restaurantAddress, String postCode, String address, String detailAddress, String extraAddress, Time openingTime, Time closingTime, String contact, String postNumber, String imgUrl, Double xCoordinate, Double yCoordinate, Set<FoodType> foodTypes, Set<HashTag> hashTags) {
+    public RestaurantInfo(Long restaurantNo, String restaurantName, String description, String restaurantAddress, String postCode, String address, String detailAddress, String extraAddress, Time openingTime, Time closingTime, String contact, String imgUrl, Double xCoordinate, Double yCoordinate, Set<FoodType> foodTypes, Set<HashTag> hashTags) {
         this.restaurantNo = restaurantNo;
         this.restaurantName = restaurantName;
         this.description = description;
@@ -108,7 +105,6 @@ public class RestaurantInfo {
         this.openingTime = openingTime;
         this.closingTime = closingTime;
         this.contact = contact;
-        this.postNumber = postNumber;
         this.imgUrl = imgUrl;
         this.xCoordinate = xCoordinate;
         this.yCoordinate = yCoordinate;

@@ -5,10 +5,7 @@ import jakarta.servlet.http.HttpSession;
 import kr.oshino.eataku.common.util.FileUploadUtil;
 import kr.oshino.eataku.reservation.user.entity.Reservation;
 import kr.oshino.eataku.restaurant.admin.entity.*;
-import kr.oshino.eataku.restaurant.admin.model.dto.ReservSettingDTO;
-import kr.oshino.eataku.restaurant.admin.model.dto.RestaurantInfoDTO;
-import kr.oshino.eataku.restaurant.admin.model.dto.TemporarySaveDTO;
-import kr.oshino.eataku.restaurant.admin.model.dto.WaitingSettingDTO;
+import kr.oshino.eataku.restaurant.admin.model.dto.*;
 import kr.oshino.eataku.restaurant.admin.model.repository.ReservationSettingRepository;
 import kr.oshino.eataku.restaurant.admin.model.repository.RestaurantRepository;
 import kr.oshino.eataku.restaurant.admin.model.repository.TemporarySaveRepository;
@@ -416,5 +413,11 @@ public class RestaurantAdminService {
 
         waitingSettingRepository.delete(waitingSetting);
         log.info("\uD83C\uDF4E date: {} and restaurant: {}", waitingDate, loginedRestaurantNo);
+    }
+
+    public MenuDTO selectMenu(Long loginedRestaurantNo) {
+
+        MenuDTO menu = new MenuDTO();
+        return menu;
     }
 }
