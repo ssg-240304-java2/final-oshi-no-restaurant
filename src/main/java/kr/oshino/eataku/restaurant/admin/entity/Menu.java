@@ -17,7 +17,7 @@ public class Menu {
 
     @ManyToOne()
     @JoinColumn(name = "restaurant_no")
-    private RestaurantInfo restaurantInfoNo;
+    private RestaurantInfo restaurantNo;
 
     @Column(name = "menu_name")
     private String menuName;
@@ -26,5 +26,5 @@ public class Menu {
     private String description;
 
     @Column(name = "photo_url")
-    private String photoUrl;
+    private String imgUrl;
 }

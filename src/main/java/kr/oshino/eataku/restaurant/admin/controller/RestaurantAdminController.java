@@ -9,10 +9,7 @@ import kr.oshino.eataku.member.model.dto.CustomMemberDetails;
 import kr.oshino.eataku.restaurant.admin.entity.ReservationSetting;
 import kr.oshino.eataku.restaurant.admin.entity.RestaurantInfo;
 import kr.oshino.eataku.restaurant.admin.entity.WaitingSetting;
-import kr.oshino.eataku.restaurant.admin.model.dto.ReservSettingDTO;
-import kr.oshino.eataku.restaurant.admin.model.dto.RestaurantInfoDTO;
-import kr.oshino.eataku.restaurant.admin.model.dto.TemporarySaveDTO;
-import kr.oshino.eataku.restaurant.admin.model.dto.WaitingSettingDTO;
+import kr.oshino.eataku.restaurant.admin.model.dto.*;
 import kr.oshino.eataku.restaurant.admin.model.repository.RestaurantRepository;
 import kr.oshino.eataku.restaurant.admin.model.repository.WaitingSettingRepository;
 import kr.oshino.eataku.restaurant.admin.service.RestaurantAdminService;
@@ -78,19 +75,19 @@ public class RestaurantAdminController {
 
     /***
      * 회원가입 시 식당 정보 등록
-     * @param newInfo
+     * @param newRestaurant
      * @param session
      * @return
      */
     @PostMapping("/infoRegister")
-    public ResponseEntity<String> infoRegister(@RequestPart("newInfo") RestaurantInfoDTO newInfo,
+    public ResponseEntity<String> infoRegister(@RequestPart("newRestaurant") RestaurantInfoDTO newRestaurant,
                                                @RequestPart(value = "file", required = false) MultipartFile file,
                                                HttpSession session) {
 
         String account = (String) session.getAttribute("id");
-        log.info("\uD83C\uDF4E\uD83C\uDF4E\uD83C\uDF4E newInfo : {}, account : {}, file: {}", newInfo, account, file);
+        log.info("\uD83C\uDF4E\uD83C\uDF4E\uD83C\uDF4E newInfo : {}, account : {}, file: {}", newRestaurant, account, file);
 
-        restaurantAdminService.insertNewInfo(newInfo, session, file);
+        restaurantAdminService.insertNewInfo(newRestaurant, session, file);
 
         return ResponseEntity.ok("/restaurant/main");
 
@@ -278,6 +275,11 @@ public class RestaurantAdminController {
         return "redirect:/restaurant/infoUpdate";
     }
 
+    /***
+     * 웨이팅 데이터 삭제
+     * @param waitingDate
+     * @return
+     */
     @DeleteMapping("/deleteWaitingSetting/{waitingDate}")
     public ResponseEntity<String> deleteWaitingSetting(@PathVariable String waitingDate) {
 
@@ -290,4 +292,25 @@ public class RestaurantAdminController {
 
         return ResponseEntity.ok("삭제되었습니다.");
     }
+
+    /***
+     * 메뉴 페이지 조회
+     * @param model
+     * @return
+     */
+    @GetMapping("/menuView")
+    public String selectMenu(Model model){
+
+        CustomMemberDetails member = (CustomMemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long loginedRestaurantNo = member.getRestaurantNo();
+
+        MenuDTO menu = restaurantAdminService.selectMenu(loginedRestaurantNo);
+        model.addAttribute("menu", menu);
+
+        log.info("\uD83C\uDF4E menu: {}", menu);
+
+        return "restaurant/menu";
+    }
+
+    // 등록된 메뉴 조회 메서드도 필요
 }

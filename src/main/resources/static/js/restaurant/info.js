@@ -95,7 +95,7 @@ function handleRestaurantInfo(actionUrl) {
     console.log(formData);
 
     $.ajax({
-        type:'put',
+        type:'post',
         url: actionUrl,
         contentType: false,
         processData: false,
