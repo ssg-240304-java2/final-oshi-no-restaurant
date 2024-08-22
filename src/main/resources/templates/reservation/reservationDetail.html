@@ -26,9 +26,8 @@
             <button class="btn btn-outline-custom">쩝쩝예약</button>
         </div>
     </div>
-
+<div>
     <div class="info-section text-center">
-        <div>
             <img th:src="@{/images/reservation/Map pin.png}"/>
             <span th:text="${restaurant.restaurantAddress}"></span>
         </div>
@@ -40,7 +39,6 @@
         </div>
     </div>
 </div>
-
 
 <div class="rating-section">
     <h2>이용내역 ★</h2>
@@ -62,7 +60,7 @@
 
             <!-- 리뷰어 이름 -->
             <p>
-                <strong th:text="${review.name}">Reviewer Name</strong>
+                <strong th:text="${review.name}">이름</strong>
                 <!-- 날짜는 기본값이나 임시값으로 설정 (예: '2024.07.31') -->
                 <span>2024.07.31</span>
             </p>
@@ -89,4 +87,39 @@
     <script  th:src="@{/js/fragment/navbar.js}"></script>
     <script  th:src="@{/js/reservation/reservationDetail.js}"></script>
 </body>
+<script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=4iq0sfkqpd"></script>
+<script>
+
+    var mapContainer = document.getElementById("map");
+
+    var x_coordinate = [[${position.xCoordinate}]];
+    var y_coordinate = [[${position.yCoordinate}]];
+
+    console.log(x_coordinate + " " + y_coordinate)
+
+    // 위치 생성
+    var position = new naver.maps.LatLng(x_coordinate, y_coordinate);
+
+    // 지도 초기화
+    var map = new naver.maps.Map(mapContainer, {
+        center: position, // LatLng 객체 사용
+        zoom: 15
+    });
+
+    // 마커 추가
+    var marker = new naver.maps.Marker({
+        position: position,
+        map: map
+    });
+
+
+    // // 마커 생성
+    // var marker = new naver.maps.Marker({
+    //     map: map,
+    //     position: position,
+    //     icon: {
+    //         url: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png'
+    //     }
+    // });
+</script>
 </html>
