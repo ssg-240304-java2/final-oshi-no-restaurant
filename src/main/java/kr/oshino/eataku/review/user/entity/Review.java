@@ -14,10 +14,6 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@SecondaryTables({
-        @SecondaryTable(name= "tbl_restaurant_info", pkJoinColumns = @PrimaryKeyJoinColumn(name = "restaurant_no")),
-        @SecondaryTable(name= "tbl_member", pkJoinColumns = @PrimaryKeyJoinColumn(name = "member_no"))
-})
 public class Review {
 
     /* 리뷰 번호 */
