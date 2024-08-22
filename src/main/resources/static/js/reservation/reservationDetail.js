@@ -37,9 +37,9 @@ document.addEventListener("DOMContentLoaded", function () {
 // ];
 // let currentIndexes = [0, 1, 2, 3];
 
-// document.getElementById('arrow-button').addEventListener('click', function () {
-//     currentIndexes = currentIndexes.map(index => (index + 1) % images.length);
-//     currentIndexes.forEach((index, i) => {
-//         document.getElementById(`card-${i}`).querySelector('.img-placeholder').style.backgroundImage = `url(${images[index]})`;
-//     });
-// });
+document.getElementById('arrow-button').addEventListener('click', function () {
+    currentIndexes = currentIndexes.map(index => (index + 1) % images.length);
+    currentIndexes.forEach((index, i) => {
+        document.getElementById(`card-${i}`).querySelector('.img-placeholder').style.backgroundImage = `url(${images[index]})`;
+    });
+});

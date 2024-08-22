@@ -130,7 +130,7 @@ public interface ReservationRepository extends JpaRepository<Reservation,Integer
      * 상세정보
      */
     @Query("SELECT new kr.oshino.eataku.reservation.user.model.dto.responseDto.RestaurantInfoDetails(" +
-            "r.restaurantName, r.restaurantAddress,r.imgUrl ) " +
+            "r.restaurantName, r.restaurantAddress,r.imgUrl,r.restaurantNo ) " +
             "FROM RestaurantInfo r " +
             "WHERE r.restaurantNo = :restaurantNo")
     Optional<RestaurantInfoDetails> findRestaurantDetailsByReservationNo(@Param("restaurantNo") Long restaurantNo);
