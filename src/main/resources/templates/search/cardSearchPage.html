@@ -88,8 +88,8 @@
                     <p class="card-text" th:text="'주소: ' + ${restaurant.restaurantAddress}">주소: 서울시 강남구</p>
                     <button class="btn btn-custom btn-sm toggle-actions">+</button>
                     <div class="action-buttons">
-                        <button class="btn btn-info btn-sm">예약</button>
-                        <button class="btn btn-warning btn-sm">웨이팅</button>
+                        <button class="btn btn-info btn-sm" th:onclick="|location.href='/reservation/' + ${restaurant.restaurantNo}|">예약</button>
+                        <button class="btn btn-warning btn-sm" th:onclick="|location.href='/users/waitingForm/' + ${restaurant.restaurantNo}|">웨이팅</button>
                     </div>
                 </div>
             </div>

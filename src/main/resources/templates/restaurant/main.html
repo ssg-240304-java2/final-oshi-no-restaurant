@@ -13,11 +13,11 @@
     <div th:replace="~{fragment/navbar.html :: navbar}" class="navbar"></div>
         <div class="container content">
             <div class="nav-buttons">
-                <button type="button" class="btn btn-danger" onclick="window.location.href='/main.html'">판매 내역</button>
-                <button type="button" class="btn btn-danger" onclick="window.location.href='reservationCheck.html'">예약 확인</button>
-                <button type="button" class="btn btn-danger" onclick="window.location.href='reservationStatus.html'">예약 상태</button>
-                <button type="button" class="btn btn-danger" onclick="window.location.href='waitingStatus.html'">웨이팅 상태</button>
-                <button type="button" class="btn btn-danger" onclick="window.location.href='reviewList.html'">매장 리뷰</button>
+                <button type="button" class="btn btn-danger" onclick="window.location.href='/restaurant/main'">판매 내역</button>
+                <button type="button" class="btn btn-danger" onclick="window.location.href='/restaurant/check'">예약 확인</button>
+                <button type="button" class="btn btn-danger" onclick="window.location.href='/restaurant/status'">예약 상태</button>
+                <button type="button" class="btn btn-danger" onclick="window.location.href='/admin/waitingList'">웨이팅 상태</button>
+                <button type="button" class="btn btn-danger" onclick="window.location.href='/restaurant/review'">매장 리뷰</button>
                 <div class="btn-group float-right">
                     <button type="button" class="btn-setting btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <img th:src="@{/images/setting.png}" alt="설정" class="glyphicon glyphicon-cog" aria-hidden="true">
