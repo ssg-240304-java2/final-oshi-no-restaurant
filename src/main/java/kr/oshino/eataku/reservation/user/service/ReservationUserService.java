@@ -227,4 +227,15 @@ public class ReservationUserService {
     public List<String> getCountTags(Long restaurantNo) {
         return  reservationRepository.getCountTags(restaurantNo);
     }
+
+    /***
+     * 식당 지도 위치 가져오기
+     * @param restaurantNo
+     * @return
+     */
+    @Transactional
+    public List<MapDto> getMapLocation(Long restaurantNo) {
+        return reservationRepository.getMapLocation(restaurantNo);
+
+    }
 }

@@ -1,20 +1,20 @@
 package kr.oshino.eataku.reservation.user.controller;
-import kr.oshino.eataku.common.enums.Scope;
+import kr.oshino.eataku.member.model.dto.CustomMemberDetails;
 import kr.oshino.eataku.reservation.user.model.dto.requestDto.CreateReservationUserRequestDto;
 import kr.oshino.eataku.reservation.user.model.dto.responseDto.*;
 import kr.oshino.eataku.reservation.user.service.ReservationUserService;
-import kr.oshino.eataku.review.user.controller.ReviewUserController;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +36,14 @@ public class ReservationUserController {
      */
     @GetMapping("/reservation/{restaurantNo}")
     public String reservation(@PathVariable String restaurantNo, Model model) {
+
+
+
+        CustomMemberDetails member = (CustomMemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long memberNo = member.getMemberNo();
+
+        model.addAttribute("memberNo", memberNo);
+        System.out.println("memberNo= ---------------" + memberNo);
 
         model.addAttribute("restaurantNo", restaurantNo);
         System.out.println("restaurantNo = " + restaurantNo);
@@ -207,6 +215,12 @@ public class ReservationUserController {
         Map<String, Integer> tagCountMap = new LinkedHashMap<>();
         System.out.println("tagCountMap = " + tagCountMap);
 
+        // 식당 지도 위치 정보
+       List<MapDto> position = reservationUserService.getMapLocation(restaurantNo);
+
+
+
+
         for (String tagCounts : tagCount) {
             String[] parts = tagCounts.split(",");
             if (parts.length == 2) {
@@ -220,12 +234,18 @@ public class ReservationUserController {
         }
 
         model.addAttribute("tagCountMap", tagCountMap);
+        model.addAttribute("position",  position);
 
         System.out.println("reviewDetails = " + reviewDetails);
         System.out.println("restaurant = " + restaurant);
         System.out.println("tagCountMap = " + tagCountMap);
+        System.out.println("tagCountMap = " + tagCountMap);
+        System.out.println("position = " + position);
+
+
         return "reservation/reservationDetail";
     }
+
 
 }
 

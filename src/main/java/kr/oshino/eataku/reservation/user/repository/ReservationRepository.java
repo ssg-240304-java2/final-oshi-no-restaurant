@@ -5,6 +5,7 @@ import jakarta.transaction.Transactional;
 import kr.oshino.eataku.common.enums.ReservationStatus;
 
 import kr.oshino.eataku.reservation.user.entity.Reservation;
+import kr.oshino.eataku.reservation.user.model.dto.responseDto.MapDto;
 import kr.oshino.eataku.reservation.user.model.dto.responseDto.ReadReservationResponseDto;
 import kr.oshino.eataku.reservation.user.model.dto.responseDto.RestaurantInfoDetails;
 import kr.oshino.eataku.reservation.user.model.dto.responseDto.ReviewDetails;
@@ -163,6 +164,18 @@ public interface ReservationRepository extends JpaRepository<Reservation,Integer
             nativeQuery = true)
     List<String> getCountTags( @Param("restaurantNo") Long restaurantNo);
 
+
+    /***
+     * 지도 상세 위치 가져오기
+     * @param restaurantNo
+     * @return
+     */
+
+
+    @Query("SELECT new kr.oshino.eataku.reservation.user.model.dto.responseDto.MapDto(a.xCoordinate ,a.yCoordinate)"+
+            "FROM RestaurantInfo a " +
+            "WHERE a.restaurantNo = :restaurantNo")
+    List<MapDto> getMapLocation(@Param("restaurantNo") Long restaurantNo);
 }
 
 
