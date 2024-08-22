@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpSession;
 import kr.oshino.eataku.common.enums.FoodType;
 import kr.oshino.eataku.common.enums.HashTag;
 import kr.oshino.eataku.member.model.dto.CustomMemberDetails;
+import kr.oshino.eataku.restaurant.admin.entity.Menu;
 import kr.oshino.eataku.restaurant.admin.entity.ReservationSetting;
 import kr.oshino.eataku.restaurant.admin.entity.RestaurantInfo;
 import kr.oshino.eataku.restaurant.admin.entity.WaitingSetting;
@@ -94,7 +95,7 @@ public class RestaurantAdminController {
     }
 
     /***
-     * 식당 정보 페이지 조회
+     * 등록된 식당 정보 페이지 조회
      * @param model
      * @return
      */
@@ -203,13 +204,11 @@ public class RestaurantAdminController {
      */
     @GetMapping("/main")
     public String main(HttpServletRequest request) {
-        String method = request.getMethod();
-        log.info("\uD83C\uDF4E main Request method : {} ", method);
         return "restaurant/main";
     }
 
     /***
-     * 등록된 웨이팅 세팅 조회
+     * 날짜 클릭 시 등록된 웨이팅 세팅 조회
      * @param waitingDate
      * @return
      */
@@ -294,23 +293,40 @@ public class RestaurantAdminController {
     }
 
     /***
-     * 메뉴 페이지 조회
-     * @param model
+     * 메뉴 등록
+     * @param newMenu
+     * @param file
      * @return
      */
-    @GetMapping("/menuView")
-    public String selectMenu(Model model){
+    @PostMapping("/menuRegister")
+    @ResponseBody
+    public ResponseEntity<String> menuRegister(@RequestPart("newMenu") MenuDTO newMenu,
+                                @RequestPart(value = "file", required = false) MultipartFile file){
 
         CustomMemberDetails member = (CustomMemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long loginedRestaurantNo = member.getRestaurantNo();
 
-        MenuDTO menu = restaurantAdminService.selectMenu(loginedRestaurantNo);
-        model.addAttribute("menu", menu);
+        log.info("\uD83C\uDF4E newMenu: {} and file: {}", newMenu, file);
 
-        log.info("\uD83C\uDF4E menu: {}", menu);
+        newMenu.setRestaurantNo(loginedRestaurantNo);
+        restaurantAdminService.insertNewMenu(newMenu, file, loginedRestaurantNo);
+
+        return ResponseEntity.ok("/restaurant/menu");
+    }
+
+    // 등록된 메뉴 조회
+    @GetMapping("/menu")
+    public String selectMenu(Model model) {
+
+        CustomMemberDetails member = (CustomMemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long loginedRestaurantNo = member.getRestaurantNo();
+
+        List<MenuDTO> registeredMenu = restaurantAdminService.selectAllMenus(loginedRestaurantNo);
+
+        model.addAttribute("registeredMenu", registeredMenu);
+
+        log.info("\uD83C\uDF4E cont menu: {}", registeredMenu);
 
         return "restaurant/menu";
     }
-
-    // 등록된 메뉴 조회 메서드도 필요
 }

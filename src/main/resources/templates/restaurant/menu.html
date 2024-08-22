@@ -2,10 +2,11 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <title>메뉴 등록 및 관리</title>
         <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
         <link rel="stylesheet" th:href="@{/css/fragment/navbar.css}">
@@ -22,9 +23,18 @@
                 <button type="button" class="btn">예약 상태</button>
                 <button type="button" class="btn">웨이팅 상태</button>
                 <button type="button" class="btn">매장 리뷰</button>
-                <img th:src="@{/images/setting.png}" alt="설정" class="glyphicon glyphicon-cog" aria-hidden="true">
-                    <img src="img/setting.png" alt="설정" aria-hidden="true">
-                </button>
+                <div class="btn-group float-right">
+                    <button type="button" class="btn-setting btn-secondary dropdown-toggle" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                        <img th:src="@{/images/setting.png}" alt="설정" class="glyphicon glyphicon-cog"
+                             aria-hidden="true">
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <a class="dropdown-item" href="/restaurant/infoUpdate">매장 정보 수정</a>
+                        <a class="dropdown-item" href="/restaurant/menu">메뉴 수정</a>
+                        <button class="dropdown-item" type="button">화면 보기</button>
+                    </div>
+                </div>
             </div>
 
             <div class="form-section">
@@ -33,10 +43,16 @@
                     <div class="form-row">
                         <div class="form-group col-md-3 text-center">
                             <!-- <label for="menuImage" class="d-block">사진첨부</label> -->
-                            <div class="image-placeholder" onclick="document.getElementById('fileInput').click();">
-                                <button type="button" class="btn-image btn-outline-secondary">사진 첨부</button>
+                            <div class="image-placeholder">
+                                <button type="button" class="btn-image btn-outline-secondary"
+                                        onclick="document.getElementById('imgUrl').click()">사진 첨부
+                                </button>
                             </div>
-                            <input type="file" id="menuImage" class="file-input" accept="image/*">
+                            <input type="file" id="imgUrl" class="file-input" accept="image/*" onchange="previewImage(event)">
+                            <div class="mt-3">
+                                <img id="imagePreview" src="#" alt="이미지 미리보기"
+                                     style="display:none; max-width: 100%; height: auto;">
+                            </div>
                         </div>
                         <div class="form-group-info col-md-9">
                             <label for="menuName">메뉴명</label>
@@ -44,7 +60,7 @@
                             <label for="menuDescription" class="mt-3">메뉴 설명</label>
                             <input type="text" class="form-control" id="menuDescription"
                                    placeholder="메뉴에 대한 설명을 입력해주세요.">
-                            <button type="submit" class="btn btn-primary mt-3 float-right" id="menuBtn">등록하기</button>
+                            <button type="button" class="btn btn-primary mt-3 float-right" id="menuBtn">등록하기</button>
                         </div>
                     </div>
                 </form>
@@ -52,34 +68,22 @@
 
             <div class="menu-list-section">
                 <h4>등록된 메뉴</h4>
-                <div class="menu-item">
-                    <img src="img/dish1.jpg" alt="메뉴 이미지">
+                <div class="menu-item" th:each="menu : ${registeredMenu}">
+                    <img th:src="@{${menu.imgUrl}}" alt="메뉴 이미지">
                     <div class="menu-info">
-                        <h5>화산 마라 전골</h5>
-                        <p>화산 모양의 마라 전골</p>
+                        <h5 th:text="${menu.menuName}"></h5>
+                        <p th:text="${menu.description}"></p>
                     </div>
                     <div>
-                        <button class="btn-modify btn-secondary btn-sm">메뉴 수정</button>
-                        <button class="btn-remove btn-danger btn-sm">메뉴 삭제</button>
+                        <button class="btn-modify btn-secondary btn-sm" th:data-id="${menu.menuNo}">메뉴 수정</button>
+                        <button type="button" class="btn-modify btn-secondary btn-sm" th:data-id="${menu.menuNo}">삭제</button>
                     </div>
                 </div>
-                <div class="menu-item">
-                    <img src="img/dish2.jpg" alt="메뉴 이미지">
-                    <div class="menu-info">
-                        <h5>짬뽕 우삼겹 볶음</h5>
-                        <p>짬뽕을 볶은 요리</p>
-                    </div>
-                    <div>
-                        <button class="btn-modify btn-secondary btn-sm">메뉴 수정</button>
-                        <button class="btn-remove btn-danger btn-sm">메뉴 삭제</button>
-                    </div>
-                </div>
-                <!-- 추가 메뉴 항목을 여기에 추가 -->
             </div>
         </div>
         <div th:replace="~{fragment/footer.html :: footer}" class="footer"></div>
 
-        <script type="text/javascript" th:src="@{js/fragment/navbar.js}"></script>
+        <script type="text/javascript" th:src="@{/js/fragment/navbar.js}"></script>
         <script type="text/javascript" th:src="@{/js/restaurant/menu.js}"></script>
 
     </body>

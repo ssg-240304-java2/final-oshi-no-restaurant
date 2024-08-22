@@ -6,10 +6,7 @@ import kr.oshino.eataku.common.util.FileUploadUtil;
 import kr.oshino.eataku.reservation.user.entity.Reservation;
 import kr.oshino.eataku.restaurant.admin.entity.*;
 import kr.oshino.eataku.restaurant.admin.model.dto.*;
-import kr.oshino.eataku.restaurant.admin.model.repository.ReservationSettingRepository;
-import kr.oshino.eataku.restaurant.admin.model.repository.RestaurantRepository;
-import kr.oshino.eataku.restaurant.admin.model.repository.TemporarySaveRepository;
-import kr.oshino.eataku.restaurant.admin.model.repository.WaitingSettingRepository;
+import kr.oshino.eataku.restaurant.admin.model.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +35,7 @@ public class RestaurantAdminService {
     private final RestaurantRepository restaurantRepository;
     private final ReservationSettingRepository reservationSettingRepository;
     private final WaitingSettingRepository waitingSettingRepository;
+    private final MenuRepository menuRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
@@ -415,9 +413,62 @@ public class RestaurantAdminService {
         log.info("\uD83C\uDF4E date: {} and restaurant: {}", waitingDate, loginedRestaurantNo);
     }
 
-    public MenuDTO selectMenu(Long loginedRestaurantNo) {
+    /***
+     * 메뉴 등록
+     * @param newMenu
+     * @param file
+     * @param loginedRestaurantNo
+     * @return
+     */
+    public MenuDTO insertNewMenu(MenuDTO newMenu, MultipartFile file, Long loginedRestaurantNo) {
 
-        MenuDTO menu = new MenuDTO();
-        return menu;
+        String uploadImgUrl = "";
+
+        if (file != null && !file.isEmpty()) {
+            try {
+                uploadImgUrl = fileUploadUtil.uploadFile(file);
+            } catch (IOException e) {
+                throw new RuntimeException("File upload failed. Please try again.", e);
+            }
+        }
+
+        RestaurantInfo restaurantInfo = restaurantRepository.findById(loginedRestaurantNo)
+                .orElseThrow(() -> new EntityNotFoundException("Restaurant not found with id: " + loginedRestaurantNo));
+
+        Menu menu = Menu.builder()
+                .menuName(newMenu.getMenuName())
+                .description(newMenu.getDescription())
+                .restaurantNo(restaurantInfo)
+                .imgUrl(uploadImgUrl)
+                .build();
+
+        menuRepository.save(menu);
+
+        log.info("\uD83C\uDF4E service menu: {}", menu);
+
+        newMenu.setMenuNo(menu.getMenuNo());
+        return newMenu;
+    }
+
+    // 등록된 메뉴 조회
+    public List<MenuDTO> selectAllMenus(Long loginedRestaurantNo) {
+
+        RestaurantInfo restaurantInfo = restaurantRepository.findById(loginedRestaurantNo)
+                .orElseThrow(() -> new EntityNotFoundException("Restaurant not found with id: " + loginedRestaurantNo));
+
+        List<Menu> menus = menuRepository.findByRestaurantNo(restaurantInfo);
+
+        return menus.stream().map(menu -> {
+            MenuDTO menuDTO = new MenuDTO();
+            menuDTO.setRestaurantNo(loginedRestaurantNo);
+            menuDTO.setMenuName(menu.getMenuName());
+            menuDTO.setDescription(menu.getDescription());
+            menuDTO.setImgUrl(menu.getImgUrl());
+
+            log.info("🍎service menuDTO: {}", menuDTO);
+            return menuDTO;
+        }).collect(Collectors.toList());
     }
 }
+
+
