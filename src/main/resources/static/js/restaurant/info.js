@@ -69,39 +69,46 @@ function handleRestaurantInfo(actionUrl) {
     });
 
     const storeIntro = $("#storeIntro").val();
-    const storeImage = $("#storeImage").val();
+    const storeImage = $("#storeImage")[0].files[0];
+
+    const formData = new FormData();
+
+    const newRestaurant = {
+        "restaurantName": storeName,
+        "contact": storePhone,
+        "restaurantAddress": businessAddress,
+        "postCode": postCode,
+        "address": address,
+        "detailAddress": detailAddress,
+        "extraAddress": extraAddress,
+        "foodTypes": foodType,
+        "openingTime": openingHoursStart,
+        "closingTime": openingHoursEnd,
+        "hashTags": tagType,
+        "description": storeIntro
+    };
+
+    formData.append('file', storeImage);
+    formData.append('newRestaurant', new Blob([JSON.stringify(newRestaurant)], {type: 'application/json'}));
 
     console.log(storeName, foodType, tagType);
+    console.log(formData);
 
     $.ajax({
-        type: 'post',
+        type:'put',
         url: actionUrl,
-        contentType: 'application/json',
-        dataType: 'text',
-        data: JSON.stringify({
-            "restaurantName": storeName,
-            "contact": storePhone,
-            "restaurantAddress": businessAddress,
-            "postCode": postCode,
-            "address": address,
-            "detailAddress": detailAddress,
-            "extraAddress": extraAddress,
-            "foodTypes": foodType,
-            "openingTime": openingHoursStart,
-            "closingTime": openingHoursEnd,
-            "hashTags": tagType,
-            "description": storeIntro,
-            "imgUrl": storeImage
-        }),
+        contentType: false,
+        processData: false,
+        data: formData,
         success: function (result) {
-            console.log("success");
-            window.location.href = result;
+            console.log("success", result);
+            window.location.href = '/restaurant/main';
         },
         error: function (e) {
-            console.log("failed");
-            console.log(e);
+            console.log("failed", e)
         }
-    });
+    })
+
 }
 
 // 데이트픽
@@ -307,7 +314,7 @@ function handleWaitingSetting(actionUrl) {
                 alert("등록에 실패했습니다.");
             }
         });
-    } else if(!isWaitingOn && waitingDate) {
+    } else if (!isWaitingOn && waitingDate) {
         // off일 때 삭제
         $.ajax({
             type: 'DELETE',
@@ -321,7 +328,7 @@ function handleWaitingSetting(actionUrl) {
                 $('#waitingPeople').val('');
                 $('#waitingToggle').prop('checked', false);
             },
-            error: function (error){
+            error: function (error) {
                 console.log('error', error);
                 alert("삭제에 실패했습니다.");
             }

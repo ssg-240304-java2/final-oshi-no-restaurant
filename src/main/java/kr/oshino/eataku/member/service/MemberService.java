@@ -171,7 +171,6 @@ public class MemberService {
         // (+) 뱃지 조회
         String badge = memberRepository.findBadgeByMemberNo(member.getMemberNo());
         member.setBadge(badge);
-        // (-) 뱃지 조회
 
         return member;
     }

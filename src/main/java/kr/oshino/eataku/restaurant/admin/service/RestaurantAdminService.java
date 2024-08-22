@@ -2,6 +2,7 @@ package kr.oshino.eataku.restaurant.admin.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpSession;
+import kr.oshino.eataku.common.util.FileUploadUtil;
 import kr.oshino.eataku.reservation.user.entity.Reservation;
 import kr.oshino.eataku.restaurant.admin.entity.*;
 import kr.oshino.eataku.restaurant.admin.model.dto.ReservSettingDTO;
@@ -14,15 +15,18 @@ import kr.oshino.eataku.restaurant.admin.model.repository.TemporarySaveRepositor
 import kr.oshino.eataku.restaurant.admin.model.repository.WaitingSettingRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
@@ -39,23 +43,36 @@ public class RestaurantAdminService {
     private final WaitingSettingRepository waitingSettingRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    @Autowired
+    FileUploadUtil fileUploadUtil;
 
     /***
      * 사업자 등록 인증
-     * @param newRestaurant
+     * @param jsonData
      */
-    public void insertNewCertification(TemporarySaveDTO newRestaurant) {
+    public void insertNewCertification(TemporarySaveDTO jsonData, MultipartFile file) {
+
+        String uploadImgUrl = "";
+
+        if (file != null && !file.isEmpty()) {
+            try {
+                uploadImgUrl = fileUploadUtil.uploadFile(file);
+            } catch (IOException e) {
+                throw new RuntimeException("File upload failed. Please try again.", e);
+            }
+        }
 
         TemporarySave temporarySave = TemporarySave.builder()
-                .companyNo(newRestaurant.getCompanyNo())
-                .businessAddress(newRestaurant.getBusinessAddress())
-                .companyName(newRestaurant.getCompanyName())
-                .representativeName(newRestaurant.getRepresentativeName())
-                .imgUrl(newRestaurant.getImgUrl())
-                .account(newRestaurant.getAccount())
+                .companyNo(jsonData.getCompanyNo())
+                .businessAddress(jsonData.getBusinessAddress())
+                .companyName(jsonData.getCompanyName())
+                .representativeName(jsonData.getRepresentativeName())
+                .imgUrl(uploadImgUrl)
+                .account(jsonData.getAccount())
                 .build();
 
         temporarySaveRepository.save(temporarySave);
+
 
         log.info("\uD83C\uDF4E\uD83C\uDF4E\uD83C\uDF4E temporarySave : {}", temporarySave);
     }
@@ -65,25 +82,37 @@ public class RestaurantAdminService {
      * @param newInfo
      * @param session
      */
-    public void insertNewInfo(RestaurantInfoDTO newInfo, HttpSession session) {
+    public void insertNewInfo(RestaurantInfoDTO newInfo, HttpSession session, MultipartFile file) {
+
+        String uploadImgUrl = "";
+
+        if (file != null && !file.isEmpty()) {
+            try {
+                uploadImgUrl = fileUploadUtil.uploadFile(file);
+            } catch (IOException e) {
+                throw new RuntimeException("File upload failed. Please try again.", e);
+            }
+        }
 
         TemporarySave certificationDTO = temporarySaveRepository.findByAccount((String) session.getAttribute("id"));
 
+        // 사업자 등록증 등록
         Certification certification = Certification.builder()
                 .businessAddress(certificationDTO.getBusinessAddress())
                 .companyName(certificationDTO.getCompanyName())
                 .representativeName(certificationDTO.getRepresentativeName())
-                .imgUrl(certificationDTO.getImgUrl())
+                .imgUrl(uploadImgUrl)
                 .companyNo(certificationDTO.getCompanyNo())
                 .build();
-        // 여기까지 사업자등록증
 
+        // 계정 등록
         AccountInfo accountInfo = AccountInfo.builder()
                 .id((String) session.getAttribute("id"))
                 .email((String) session.getAttribute("email"))
                 .password(bCryptPasswordEncoder.encode((String) session.getAttribute("password")))
                 .build();
 
+        // 식당 정보 등록
         RestaurantInfo registerInfo = RestaurantInfo.builder()
                 .restaurantName(newInfo.getRestaurantName())
                 .contact(newInfo.getContact())
@@ -97,7 +126,6 @@ public class RestaurantAdminService {
                 .closingTime(Time.valueOf(newInfo.getClosingTime()))
                 .hashTags(newInfo.getHashTags())
                 .description(newInfo.getDescription())
-                // 여기까지 restaurantInfo
                 .build();
 
         restaurantRepository.save(registerInfo);
@@ -380,7 +408,7 @@ public class RestaurantAdminService {
 
         WaitingSetting waitingSetting = waitingSettingRepository.findByWaitingDateAndRestaurantNo(waitingDate, restaurantInfo);
 
-        if(waitingSetting == null) {
+        if (waitingSetting == null) {
             log.warn("No waiting settings found for date: {} and restaurant id: {}", waitingDate, loginedRestaurantNo);
             throw new EntityNotFoundException("No waiting settings found for the specified date and restaurant.");
         }

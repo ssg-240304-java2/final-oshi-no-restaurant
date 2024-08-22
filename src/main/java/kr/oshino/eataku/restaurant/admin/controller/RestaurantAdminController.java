@@ -43,46 +43,61 @@ public class RestaurantAdminController {
     private final RestaurantAdminService restaurantAdminService;
 
     /***
-     * 사업자 등록증 등록
+     * 사업자 등록증 페이지 조회
      */
     @GetMapping("/certification")
     public void businessView() {
     }
 
+    /***
+     * 사업자 등록증 등록
+     * @param jsonData
+     * @param session
+     * @return
+     */
     @PostMapping("/certification")
-    public ResponseEntity<String> businessRegister(@RequestBody TemporarySaveDTO newRestaurant, HttpSession session) {
+    public ResponseEntity<String> businessRegister(@RequestPart(value = "file", required = false) MultipartFile file,
+                                                   @RequestPart("jsonData") TemporarySaveDTO jsonData,
+                                                   HttpSession session) {
 
-        newRestaurant.setAccount((String) session.getAttribute("id"));
+        jsonData.setAccount((String) session.getAttribute("id"));
 
-        log.info("\uD83C\uDF4E\uD83C\uDF4E\uD83C\uDF4E newRestaurant : {} ", newRestaurant);
+        log.info("\uD83C\uDF4E\uD83C\uDF4E\uD83C\uDF4E file : {} and newRestaurant : {} ", file.isEmpty(), jsonData);
 
-        restaurantAdminService.insertNewCertification(newRestaurant);
+        restaurantAdminService.insertNewCertification(jsonData, file);
 
         return ResponseEntity.ok("/restaurant/infoRegister");
     }
 
     /***
-     * 회원가입 시 식당 정보 등록
-     * @return
+     * 식당 정보 등록 페이지 조회
      */
     @GetMapping("/infoRegister")
     public void info() {
     }
 
+    /***
+     * 회원가입 시 식당 정보 등록
+     * @param newInfo
+     * @param session
+     * @return
+     */
     @PostMapping("/infoRegister")
-    public ResponseEntity<String> infoRegister(@RequestBody RestaurantInfoDTO newInfo, HttpSession session) {
+    public ResponseEntity<String> infoRegister(@RequestPart("newInfo") RestaurantInfoDTO newInfo,
+                                               @RequestPart(value = "file", required = false) MultipartFile file,
+                                               HttpSession session) {
 
         String account = (String) session.getAttribute("id");
-        log.info("\uD83C\uDF4E\uD83C\uDF4E\uD83C\uDF4E newInfo : {}, account : {}", newInfo, account);
+        log.info("\uD83C\uDF4E\uD83C\uDF4E\uD83C\uDF4E newInfo : {}, account : {}, file: {}", newInfo, account, file);
 
-        restaurantAdminService.insertNewInfo(newInfo, session);
+        restaurantAdminService.insertNewInfo(newInfo, session, file);
 
         return ResponseEntity.ok("/restaurant/main");
 
     }
 
     /***
-     * 식당 정보 조회
+     * 식당 정보 페이지 조회
      * @param model
      * @return
      */
@@ -121,32 +136,12 @@ public class RestaurantAdminController {
      * @return
      */
     @PostMapping("/infoUpdate")
-    public String infoUpdate(@RequestBody RestaurantInfoDTO updateInfo
-//                             @RequestParam("storeImage")MultipartFile imageFile
-    ) {
+    public String infoUpdate(@RequestBody RestaurantInfoDTO updateInfo) {
 
         CustomMemberDetails member = (CustomMemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long loginedRestaurantNo = member.getRestaurantNo();
 
         log.info("\uD83C\uDF4E\uD83C\uDF4E\uD83C\uDF4E updateInfo : {}", updateInfo);
-
-//        if(!imageFile.isEmpty()){
-//            try{
-//                String uploadDir = "/uploads/images/";
-//                String fileName = imageFile.getOriginalFilename();
-//                Path filePath = Paths.get(uploadDir + fileName);
-//
-//                Files.copy(imageFile.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-//
-//                String imgUrl = uploadDir + fileName;
-//                updateInfo.setImgUrl(imgUrl);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//                log.error("이미지 업로드 실패 : {}", e.getMessage());
-//
-//                return "redirect:/restaurant/infoUpdate/" + updateInfo.getRestaurantNo() + "?error";
-//            }
-//        }
 
         updateInfo.setRestaurantNo(loginedRestaurantNo);
         restaurantAdminService.updateRestaurant(updateInfo);
