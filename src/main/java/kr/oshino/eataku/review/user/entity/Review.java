@@ -11,7 +11,6 @@ import java.util.Set;
 @Entity
 @Table(name = "tbl_review")
 @Data
-@Setter(AccessLevel.PRIVATE)
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
