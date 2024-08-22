@@ -1,4 +1,6 @@
 package kr.oshino.eataku.review.user.controller;
+import kr.oshino.eataku.member.model.dto.CustomMemberDetails;
+import kr.oshino.eataku.review.user.entity.Review;
 import kr.oshino.eataku.review.user.model.vo.CreateReviewUserRequestDto;
 import kr.oshino.eataku.review.user.model.vo.CreateReviewUserResponseDto;
 import kr.oshino.eataku.review.user.service.ReviewUserService;
@@ -7,8 +9,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.List;
 
 @Slf4j
 @Controller
@@ -21,6 +28,11 @@ public class ReviewUserController {
     /**
      * 리뷰 페이지 이동
      * @return
+     *
+     * 로그인 정보
+     * CustomMemberDetails member = (CustomMemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+     *         Long loginedRestaurantNo = member.getRestaurantNo();
+     *
      */
     @GetMapping("/reviewPage")
     public String reviewPage() {
@@ -40,4 +52,44 @@ public class ReviewUserController {
 
     }
 
+    // 내 리뷰 보기
+    @GetMapping("/myInfo/review")
+    public String myReviewPage(Model model){
+        // 로그안 멤버 넘버
+        CustomMemberDetails member = (CustomMemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+              Long loginedMemberNo = member.getMemberNo();
+
+
+        List<CreateReviewUserRequestDto> myReview =
+                reviewUserService.getAllReviewByMember(loginedMemberNo);
+        model.addAttribute("myReview", myReview);
+        System.out.println("My Review: " + myReview);
+        // 리스트에 null이 포함되어 있는지 확인
+        for (CreateReviewUserRequestDto review : myReview) {
+            System.out.println(review);
+        }
+
+        return "review/myReview";
+    }
+
+    // 리뷰 삭제
+    @PostMapping("/deleteReview")
+    @ResponseBody
+    public String deleteReview(@RequestParam("reviewNo") int reviewNo){
+        reviewUserService.deleteReview(reviewNo);
+        return "";
+    }
+
+    // 리뷰 수정
+    @PostMapping("/modifyReview")
+    @ResponseBody
+    public String modifyReview(@RequestParam("reviewNo") int reviewNo,
+                               @RequestParam("newReviewContent") String newReviewContent) {
+        reviewUserService.modifyReview(reviewNo, newReviewContent);
+        return "";
+    }
+
+
+
 }
+

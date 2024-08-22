@@ -16,12 +16,12 @@ public class CreateReviewUserRequestDto {
     private int reviewNo;
     private Long restaurantNo;
     private String reviewContent;
-    private String scope;
+    private Scope scope;
     private Set<String> reviewTags;
 
 
-    public Scope getScopeEnum() {
-        return Scope.valueOf(scope);    // Enum으로 변환
-    }
+//    public Scope getScopeEnum() {
+//        return Scope.valueOf(scope);    // Enum으로 변환
+//    }
 
 }
