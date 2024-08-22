@@ -141,12 +141,28 @@ public interface ReservationRepository extends JpaRepository<Reservation,Integer
      * @return
      */
     @Query("SELECT new kr.oshino.eataku.reservation.user.model.dto.responseDto.ReviewDetails( "  +
-            "m.name , re.reviewContent ) " +
+            "m.name , re.reviewContent ,m.imgUrl,re.scope) " +
             "FROM Review re " +
             "JOIN re.member m " +
             "JOIN re.restaurantInfo r " +
             "WHERE r.restaurantNo= :restaurantNo")
     List<ReviewDetails> getReviewDetails(@Param("restaurantNo") Long restaurantNo);
+
+
+    /***
+     * 태그 횟수 가져오기
+     * @param restaurantNo
+     * @return
+     */
+    @Query(value = "SELECT a.review_tag AS reviewTag, COUNT(*) AS tagCount " +
+            "FROM tbl_tags a " +
+            "JOIN tbl_review b ON a.review_no = b.review_no " +
+            "JOIN tbl_restaurant_info c ON b.restaurant_no = c.restaurant_no " +
+            "WHERE c.restaurant_no = :restaurantNo " +
+            "GROUP BY a.review_tag",
+            nativeQuery = true)
+    List<String> getCountTags( @Param("restaurantNo") Long restaurantNo);
+
 }
 
 

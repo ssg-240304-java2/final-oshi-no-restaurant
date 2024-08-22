@@ -210,7 +210,9 @@
                             <li th:each="reservSettings : ${reservSetting}"
                                 class="list-group-item d-flex justify-content-between align-items-center">
                                 <span th:text="${reservSettings.reservationTime} + ' - ' + ${reservSettings.reservationPeople} + ' 명'"></span>
-                                <button type="button" class="btn btn-danger btn-sm reservationRmvBtn" th:data-id="${reservSettings.reservationNo}">삭제</button>
+                                <button type="button" class="btn btn-danger btn-sm reservationRmvBtn"
+                                        th:data-id="${reservSettings.reservationNo}">삭제
+                                </button>
                             </li>
                         </ul>
                     </div>
@@ -222,7 +224,8 @@
                 <div class="form-row">
                     <div class="col-md-6">
                         <label for="waitingDate">날짜 선택</label>
-                        <input type="text" id="waitingDate" class="form-control mb-2" placeholder="웨이팅 날짜 선택" placeholder="웨이팅 날짜 선택">
+                        <input type="text" id="waitingDate" class="form-control mb-2" placeholder="웨이팅 날짜 선택"
+                               th:value="${waitingSettings.waitingDate}">
                     </div>
                     <div class="col-md-6">
                         <h5>웨이팅 정보 추가</h5>
@@ -231,21 +234,25 @@
                                 <label class="mt-4">웨이팅 시작 및 마감 시간</label>
                                 <div class="form-row">
                                     <div class="col-md-6">
-                                        <input type="time" class="form-control" id="waitingStartTime" value="00:00">
+                                        <input type="time" class="form-control" id="waitingStartTime"
+                                               th:value="${waitingSettings.waitingStartTime}">
                                     </div>
                                     <div class="col-md-6">
-                                        <input type="time" class="form-control" id="waitingEndTime" value="00:00">
+                                        <input type="time" class="form-control" id="waitingEndTime"
+                                               th:value="${waitingSettings.waitingEndTime}">
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="waitingPeople">인원</label>
-                                <input type="number" class="form-control" id="waitingPeople" placeholder="인원수 입력">
+                                <input type="number" class="form-control" id="waitingPeople" placeholder="인원수 입력"
+                                       th:value="${waitingSettings.waitingPeople}">
                             </div>
                             <div class="form-group">
                                 <label class="mt-4">웨이팅 추가</label>
                                 <div class="custom-control custom-switch">
-                                    <input type="checkbox" class="custom-control-input" id="waitingToggle">
+                                    <input type="checkbox" class="custom-control-input" id="waitingToggle"
+                                           th:value="${waitingSettings.waitingToggle}">
                                     <label class="custom-control-label" for="waitingToggle">ON/OFF</label>
                                 </div>
                             </div>

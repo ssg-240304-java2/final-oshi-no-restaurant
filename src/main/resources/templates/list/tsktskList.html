@@ -25,7 +25,7 @@
             </div>
             <div class="menu-title" id="favorite-list" onclick="showFavoriteList()">내 쩝쩝 리스트</div>
             <div class="separator"></div>
-            <div class="list-title" id="follow-list" onclick="showFollowingList()">팔로잉 리스트</div>
+            <div class="list-title" id="follow-list" onclick="customshowFollowingList()">팔로잉 리스트</div>
         </div>
         <div class="list-count custom-margin" id="total-list-count">전체 리스트 개수 3</div>
         <div class="content-section active" id="favorite-content">
@@ -34,7 +34,7 @@
                     <!-- 리스트 이름을 버튼으로 표시 -->
                     <button type="button" class="btn btn-custom"
                             th:text="${list.listName}"
-                            th:onclick="toggleRestaurants('[[${list.listNo}]]', this)"></button>
+                            th:onclick="'toggleRestaurants('+${list.listNo}+',this)'"></button>
 
                     <!-- listNo를 서버로 전송하기 위해 hidden 필드 추가 -->
                     <input type="hidden" name="listNo" th:value="${list.listNo}">
@@ -50,7 +50,8 @@
 
                             <!-- 식당 삭제 체크 박스 -->
                             <div th:each="restaurant : ${list.restaurantList}" class="restaurant-item">
-                                <input type="checkbox" name="restaurantNos" th:value="${restaurant.restaurantNo}" class="delete-checkbox" style="display:none;">
+                                <input type="checkbox" name="restaurantNos" th:value="${restaurant.restaurantNo}"
+                                       class="delete-checkbox" style="display:none;">
                                 <div class="restaurant-info">
                                     <h5 th:text="${restaurant.restaurantName}"></h5>
                                     <p th:text="${restaurant.restaurantAddress}"></p>
@@ -64,21 +65,21 @@
         </div>
 
 
-
         <div class="content-section" id="following-list">
             <div class="table-responsive">
                 <table class="table table-hover">
                     <thead>
                     <tr>
                         <th scope="col">팔로워</th>
-                        <th scope="col">리스트 수</th>
+                        <th scope="col">리스트 이름</th>
                         <th scope="col"></th>
                     </tr>
                     </thead>
                     <tbody>
-                    <!-- 기존의 팔로워 데이터가 반복되는 부분 -->
-                    <tr th:each="list : ${followingLists}" onclick="showFollowerList('[[${list.member.name}]]', [[${list.listNo}]])">
+                    <!-- 팔로우한 사람의 리스트를 반복하여 출력 -->
+                    <tr th:each="list : ${followingLists}" >
                         <td>
+                            <!-- 팔로워의 프로필 이미지와 이름 -->
                             <img th:src="${list.member.imgUrl}" class="rounded-circle" width="30" alt="avatar">
                             <span th:text="${list.member.name}">Follower Name</span>
                         </td>
@@ -89,13 +90,14 @@
                 </table>
             </div>
         </div>
+
         <div class="restaurant-list content-section" id="restaurant-list"></div>
         <div class="follower-restaurant-list content-section" id="follower-restaurant-list"></div>
         <div class="follower-restaurant-items content-section" id="follower-restaurant-items"></div>
     </nav>
-        </div>
-    <span class="toggle-btn" onclick="toggleSidebar()">&lt;</span>
-    <div id="restaurant-info-window" class="restaurant-info-window"></div>
+</div>
+<span class="toggle-btn" onclick="toggleSidebar()">&lt;</span>
+<div id="restaurant-info-window" class="restaurant-info-window"></div>
 </div>
 
 <div th:replace="~{fragment/footer.html :: footer}" class="footer"></div>
@@ -129,7 +131,7 @@
             $.ajax({
                 url: `/tsktskLists/${listNo}/restaurants`,
                 type: 'get',
-                success: function(data) {
+                success: function (data) {
                     console.log('---->', data);
                     restaurantListDiv.innerHTML = "";
 
@@ -169,7 +171,7 @@
                             });
 
                             // 마커 클릭 시 정보 창 표시 및 닫기 기능 추가
-                            naver.maps.Event.addListener(marker, 'click', function() {
+                            naver.maps.Event.addListener(marker, 'click', function () {
                                 if (infoWindow.getMap()) {
                                     // 정보 창이 이미 열려 있다면 닫음
                                     infoWindow.close();
@@ -190,7 +192,7 @@
                         restaurantListDiv.style.display = "block";
                     }
                 },
-                error: function(error) {
+                error: function (error) {
                     console.log(error);
                 }
             });
@@ -219,7 +221,12 @@
         });
     }
 
-</script>
+    // 팔로우 리스트 확인
+    function customshowFollowingList(name, listNo) {
+        console.log("name:", name);
+        console.log("List No:", listNo);
+    }
 
+</script>
 </body>
 </html>

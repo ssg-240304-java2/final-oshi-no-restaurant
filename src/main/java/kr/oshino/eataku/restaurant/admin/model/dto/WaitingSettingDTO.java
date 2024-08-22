@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 
 @NoArgsConstructor
@@ -15,13 +16,17 @@ import java.time.LocalTime;
 @Data
 public class WaitingSettingDTO {
 
+    private Long waitingNo;
+
     private Long restaurantNo;
 
     private String waitingStatus;
 
-    private int onOff;
+    private int waitingPeople;
 
     private LocalTime startTime;
 
     private LocalTime endTime;
+
+    private LocalDate waitingDate;
 }
