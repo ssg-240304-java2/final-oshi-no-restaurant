@@ -8,11 +8,13 @@ import kr.oshino.eataku.common.enums.HashTag;
 import kr.oshino.eataku.member.model.dto.CustomMemberDetails;
 import kr.oshino.eataku.restaurant.admin.entity.ReservationSetting;
 import kr.oshino.eataku.restaurant.admin.entity.RestaurantInfo;
+import kr.oshino.eataku.restaurant.admin.entity.WaitingSetting;
 import kr.oshino.eataku.restaurant.admin.model.dto.ReservSettingDTO;
 import kr.oshino.eataku.restaurant.admin.model.dto.RestaurantInfoDTO;
 import kr.oshino.eataku.restaurant.admin.model.dto.TemporarySaveDTO;
 import kr.oshino.eataku.restaurant.admin.model.dto.WaitingSettingDTO;
 import kr.oshino.eataku.restaurant.admin.model.repository.RestaurantRepository;
+import kr.oshino.eataku.restaurant.admin.model.repository.WaitingSettingRepository;
 import kr.oshino.eataku.restaurant.admin.service.RestaurantAdminService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,49 +41,63 @@ import java.util.Set;
 public class RestaurantAdminController {
 
     private final RestaurantAdminService restaurantAdminService;
-    private final RestaurantRepository restaurantRepository;
 
     /***
-     * 사업자 등록증 등록
+     * 사업자 등록증 페이지 조회
      */
     @GetMapping("/certification")
     public void businessView() {
     }
 
+    /***
+     * 사업자 등록증 등록
+     * @param jsonData
+     * @param session
+     * @return
+     */
     @PostMapping("/certification")
-    public ResponseEntity<String> businessRegister(@RequestBody TemporarySaveDTO newRestaurant, HttpSession session) {
+    public ResponseEntity<String> businessRegister(@RequestPart(value = "file", required = false) MultipartFile file,
+                                                   @RequestPart("jsonData") TemporarySaveDTO jsonData,
+                                                   HttpSession session) {
 
-        newRestaurant.setAccount((String) session.getAttribute("id"));
+        jsonData.setAccount((String) session.getAttribute("id"));
 
-        log.info("\uD83C\uDF4E\uD83C\uDF4E\uD83C\uDF4E newRestaurant : {} ", newRestaurant);
+        log.info("\uD83C\uDF4E\uD83C\uDF4E\uD83C\uDF4E file : {} and newRestaurant : {} ", file.isEmpty(), jsonData);
 
-        restaurantAdminService.insertNewCertification(newRestaurant);
+        restaurantAdminService.insertNewCertification(jsonData, file);
 
         return ResponseEntity.ok("/restaurant/infoRegister");
     }
 
     /***
-     * 회원가입 시 식당 정보 등록
-     * @return
+     * 식당 정보 등록 페이지 조회
      */
     @GetMapping("/infoRegister")
     public void info() {
     }
 
+    /***
+     * 회원가입 시 식당 정보 등록
+     * @param newInfo
+     * @param session
+     * @return
+     */
     @PostMapping("/infoRegister")
-    public ResponseEntity<String> infoRegister(@RequestBody RestaurantInfoDTO newInfo, HttpSession session) {
+    public ResponseEntity<String> infoRegister(@RequestPart("newInfo") RestaurantInfoDTO newInfo,
+                                               @RequestPart(value = "file", required = false) MultipartFile file,
+                                               HttpSession session) {
 
         String account = (String) session.getAttribute("id");
-        log.info("\uD83C\uDF4E\uD83C\uDF4E\uD83C\uDF4E newInfo : {}, account : {}", newInfo, account);
+        log.info("\uD83C\uDF4E\uD83C\uDF4E\uD83C\uDF4E newInfo : {}, account : {}, file: {}", newInfo, account, file);
 
-        restaurantAdminService.insertNewInfo(newInfo, session);
+        restaurantAdminService.insertNewInfo(newInfo, session, file);
 
         return ResponseEntity.ok("/restaurant/main");
 
     }
 
     /***
-     * 식당 정보 조회
+     * 식당 정보 페이지 조회
      * @param model
      * @return
      */
@@ -91,9 +107,9 @@ public class RestaurantAdminController {
         CustomMemberDetails member = (CustomMemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long loginedRestaurantNo = member.getRestaurantNo();
 
-        RestaurantInfoDTO restaurant = restaurantAdminService.selectMyRestaurant(loginedRestaurantNo);
-        List<ReservSettingDTO> reservSettings = restaurantAdminService.selectReservSetting(loginedRestaurantNo);
-        WaitingSettingDTO waitingSettings = restaurantAdminService.selectWaitingSetting(loginedRestaurantNo);
+        RestaurantInfoDTO restaurant = restaurantAdminService.selectMyRestaurant(loginedRestaurantNo);      // 식당 정보 조회
+        List<ReservSettingDTO> reservSettings = restaurantAdminService.selectReservSetting(loginedRestaurantNo);            // 예약 페이지 조회
+        WaitingSettingDTO waitingSettings = restaurantAdminService.selectWaitingSetting(loginedRestaurantNo);       // 웨이팅 페이지 조회
 
         Set<FoodType> foodTypes = restaurant.getFoodTypes();
         Set<HashTag> hashTags = restaurant.getHashTags();
@@ -120,32 +136,12 @@ public class RestaurantAdminController {
      * @return
      */
     @PostMapping("/infoUpdate")
-    public String infoUpdate(@RequestBody RestaurantInfoDTO updateInfo
-//                             @RequestParam("storeImage")MultipartFile imageFile
-    ) {
+    public String infoUpdate(@RequestBody RestaurantInfoDTO updateInfo) {
 
         CustomMemberDetails member = (CustomMemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long loginedRestaurantNo = member.getRestaurantNo();
 
         log.info("\uD83C\uDF4E\uD83C\uDF4E\uD83C\uDF4E updateInfo : {}", updateInfo);
-
-//        if(!imageFile.isEmpty()){
-//            try{
-//                String uploadDir = "/uploads/images/";
-//                String fileName = imageFile.getOriginalFilename();
-//                Path filePath = Paths.get(uploadDir + fileName);
-//
-//                Files.copy(imageFile.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-//
-//                String imgUrl = uploadDir + fileName;
-//                updateInfo.setImgUrl(imgUrl);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//                log.error("이미지 업로드 실패 : {}", e.getMessage());
-//
-//                return "redirect:/restaurant/infoUpdate/" + updateInfo.getRestaurantNo() + "?error";
-//            }
-//        }
 
         updateInfo.setRestaurantNo(loginedRestaurantNo);
         restaurantAdminService.updateRestaurant(updateInfo);
@@ -215,18 +211,36 @@ public class RestaurantAdminController {
         return "restaurant/main";
     }
 
-    @GetMapping("/waitingSetting")
-    public ResponseEntity<WaitingSettingDTO> selectWaitingByDate(@PathVariable Date waitingDate){
+    /***
+     * 등록된 웨이팅 세팅 조회
+     * @param waitingDate
+     * @return
+     */
+    @GetMapping("/waitingSetting/{waitingDate}")
+    public ResponseEntity<WaitingSettingDTO> selectWaitingByDate(@PathVariable String waitingDate){
+        log.info("🍎waitingDate: {}", waitingDate);
 
         CustomMemberDetails member = (CustomMemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long loginedRestaurantNo = member.getRestaurantNo();
 
-        WaitingSettingDTO waitings = restaurantAdminService.findWaitingSettingByDate(waitingDate, loginedRestaurantNo);
+        WaitingSettingDTO waitingSettings = restaurantAdminService.findWaitingSettingByDate(Date.valueOf(waitingDate), loginedRestaurantNo);
 
-        return ResponseEntity.ok(waitings);
+        log.info("🍎waitingSettings : {}", waitingSettings);
+
+        if(waitingSettings != null) {
+            return ResponseEntity.ok(waitingSettings);
+        } else {
+            return ResponseEntity.noContent().build();
+        }
     }
 
+    /***
+     *  웨이팅 세팅 등록
+     * @param newSetting
+     * @return
+     */
     @PostMapping("/waitingSetting")
+    @ResponseBody
     public WaitingSettingDTO waitingRegister(@RequestBody WaitingSettingDTO newSetting){
 
         CustomMemberDetails member = (CustomMemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -234,7 +248,46 @@ public class RestaurantAdminController {
 
         log.info("\uD83C\uDF4E newSetting : {}", newSetting);
 
+        newSetting.setRestaurantNo(loginedRestaurantNo);
+        newSetting = restaurantAdminService.insertNewWaiting(newSetting, loginedRestaurantNo);
+
         return newSetting;
     }
 
+    /***
+     * 웨이팅 세팅 수정
+     * @param updateSetting
+     * @return
+     */
+    @PostMapping("/waitingUpdate")
+    public String waitingUpdate(@RequestBody WaitingSettingDTO updateSetting) {
+
+        CustomMemberDetails member = (CustomMemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long loginedRestaurantNo = member.getRestaurantNo();
+
+        log.info("\uD83C\uDF4E updateSetting: {}", updateSetting);
+
+        updateSetting.setRestaurantNo(loginedRestaurantNo);
+
+        if("N".equals(updateSetting.getWaitingStatus())){
+            restaurantAdminService.deleteWaitingByDateAndRestaurantNo(updateSetting.getWaitingDate(), loginedRestaurantNo);
+        } else {
+            restaurantAdminService.updateWaiting(updateSetting, loginedRestaurantNo);
+        }
+
+        return "redirect:/restaurant/infoUpdate";
+    }
+
+    @DeleteMapping("/deleteWaitingSetting/{waitingDate}")
+    public ResponseEntity<String> deleteWaitingSetting(@PathVariable String waitingDate) {
+
+        CustomMemberDetails member = (CustomMemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long loginedRestaurantNo = member.getRestaurantNo();
+
+        log.info("delete for date : {}", waitingDate);
+
+        restaurantAdminService.deleteWaitingSetting(Date.valueOf(waitingDate), loginedRestaurantNo);
+
+        return ResponseEntity.ok("삭제되었습니다.");
+    }
 }

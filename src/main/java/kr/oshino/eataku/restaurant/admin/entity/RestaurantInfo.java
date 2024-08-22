@@ -19,6 +19,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Data
 @Builder
+@ToString(exclude = {"certification","accountInfo"})
 public class RestaurantInfo {
 
     @Id

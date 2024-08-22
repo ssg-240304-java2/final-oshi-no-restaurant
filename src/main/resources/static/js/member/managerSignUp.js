@@ -205,7 +205,7 @@ $('#signUpBtn').on('click', function () {
         !$('#email').hasClass('is-valid') ||
         !$('#authCode').hasClass('is-valid') ||
         // null값 체크
-        $('#userId').val() == "" ||
+        $('#userId').val() == ""
         $('#password').val() == "" ||
         $('#confirmPassword').val() == "" ||
         $('#email').val() == "" ||

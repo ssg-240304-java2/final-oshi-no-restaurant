@@ -1,10 +1,7 @@
 package kr.oshino.eataku.restaurant.admin.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.sql.Date;
 import java.sql.Time;
@@ -15,6 +12,7 @@ import java.sql.Time;
 @Table(name = "tbl_reservation_setting")
 @Builder
 @AllArgsConstructor
+@ToString(exclude = {"restaurantNo"})
 public class ReservationSetting {
 
     @Id

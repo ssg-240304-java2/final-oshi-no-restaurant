@@ -69,39 +69,46 @@ function handleRestaurantInfo(actionUrl) {
     });
 
     const storeIntro = $("#storeIntro").val();
-    const storeImage = $("#storeImage").val();
+    const storeImage = $("#storeImage")[0].files[0];
+
+    const formData = new FormData();
+
+    const newRestaurant = {
+        "restaurantName": storeName,
+        "contact": storePhone,
+        "restaurantAddress": businessAddress,
+        "postCode": postCode,
+        "address": address,
+        "detailAddress": detailAddress,
+        "extraAddress": extraAddress,
+        "foodTypes": foodType,
+        "openingTime": openingHoursStart,
+        "closingTime": openingHoursEnd,
+        "hashTags": tagType,
+        "description": storeIntro
+    };
+
+    formData.append('file', storeImage);
+    formData.append('newRestaurant', new Blob([JSON.stringify(newRestaurant)], {type: 'application/json'}));
 
     console.log(storeName, foodType, tagType);
+    console.log(formData);
 
     $.ajax({
-        type: 'post',
+        type:'put',
         url: actionUrl,
-        contentType: 'application/json',
-        dataType: 'text',
-        data: JSON.stringify({
-            "restaurantName": storeName,
-            "contact": storePhone,
-            "restaurantAddress": businessAddress,
-            "postCode": postCode,
-            "address": address,
-            "detailAddress": detailAddress,
-            "extraAddress": extraAddress,
-            "foodTypes": foodType,
-            "openingTime": openingHoursStart,
-            "closingTime": openingHoursEnd,
-            "hashTags": tagType,
-            "description": storeIntro,
-            "imgUrl": storeImage
-        }),
+        contentType: false,
+        processData: false,
+        data: formData,
         success: function (result) {
-            console.log("success");
-            window.location.href = result;
+            console.log("success", result);
+            window.location.href = '/restaurant/main';
         },
         error: function (e) {
-            console.log("failed");
-            console.log(e);
+            console.log("failed", e)
         }
-    });
+    })
+
 }
 
 // 데이트픽
@@ -173,7 +180,7 @@ $('#reservationBtn').on('click', function () {
                     <button type="button" class="btn btn-danger btn-sm reservationRmvBtn" data-id="${reservation.reservationNo}">삭제</button>
                 </li>`;
             $('#reservationList').append(listItem);
-            $('#reservationList').css({"display":"block"});
+            $('#reservationList').css({"display": "block"});
         },
         error: function (e) {
             alert("등록에 실패했습니다.");
@@ -239,8 +246,8 @@ $(document).on('click', '.reservationRmvBtn', function () {
                 alert('삭제되었습니다.');
 
                 $.ajax({
-                    type:'GET',
-                    url:'/restaurant/reservationSetting/' + selectedDate,
+                    type: 'GET',
+                    url: '/restaurant/reservationSetting/' + selectedDate,
                     contentType: 'application/json',
                     success: function (reservations) {
                         console.log("success", reservations);
@@ -248,7 +255,7 @@ $(document).on('click', '.reservationRmvBtn', function () {
                         const reservationList = $('#reservationList');
                         reservationList.empty();
 
-                        if(reservations.length > 0) {
+                        if (reservations.length > 0) {
                             reservations.forEach(function (reservSettings) {
                                 const listItem = `
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
@@ -276,42 +283,99 @@ $(document).on('click', '.reservationRmvBtn', function () {
     }
 });
 
-// 웨이팅 정보 등록
+// 웨이팅 메서드
+function handleWaitingSetting(actionUrl) {
+    const waitingDate = $('#waitingDate').val();
+    const waitingStartTime = $('#waitingStartTime').val();
+    const waitingEndTime = $('#waitingEndTime').val();
+    const waitingPeople = $('#waitingPeople').val();
+    const isWaitingOn = $('#waitingToggle').prop('checked');
+
+    console.log(waitingDate, waitingStartTime, waitingEndTime, waitingPeople, isWaitingOn);
+
+    if (isWaitingOn && waitingDate) {
+        $.ajax({
+            type: 'post',
+            url: actionUrl,
+            contentType: 'application/json',
+            data: JSON.stringify({
+                "waitingDate": waitingDate,
+                "startTime": waitingStartTime,
+                "endTime": waitingEndTime,
+                "waitingPeople": waitingPeople,
+                "waitingStatus": isWaitingOn ? "Y" : "N"
+            }),
+            success: function (response) {
+                alert("등록되었습니다.");
+                console.log('success', response);
+            },
+            error: function (error) {
+                console.log('error', error);
+                alert("등록에 실패했습니다.");
+            }
+        });
+    } else if (!isWaitingOn && waitingDate) {
+        // off일 때 삭제
+        $.ajax({
+            type: 'DELETE',
+            url: '/restaurant/deleteWaitingSetting/' + waitingDate,
+            success: function (response) {
+                alert("삭제되었습니다.");
+                console.log('deleted', response);
+
+                $('#waitingStartTime').val('00:00');
+                $('#waitingEndTime').val('00:00');
+                $('#waitingPeople').val('');
+                $('#waitingToggle').prop('checked', false);
+            },
+            error: function (error) {
+                console.log('error', error);
+                alert("삭제에 실패했습니다.");
+            }
+        });
+    } else {
+        alert("웨이팅 정보 등록을 위해 날짜를 선택하고 ON으로 설정해주세요.")
+    }
+}
+
+// 날짜에 따른 웨이팅 정보 조회
 $(document).ready(function () {
-    $('#waitingSaveBtn').on('click', function () {
-        const waitingDate = $('#waitingDate').val();
-        const waitingStartTime = $('#waitingStartTime').val();
-        const waitingEndTime = $('#waitingEndTime').val();
-        const waitingPeople = $('#waitingPeople').val();
-        const isWaitingOn = $('#waitingToggle').val();
+    $('#waitingDate').on('change', function () {
+        let dateText = $('#waitingDate').val();
 
-        console.log(waitingDate, waitingStartTime, waitingPeople, isWaitingOn);
-
-        if(isWaitingOn && waitingDate) {
-            $.ajax({
-                type: 'post',
-                url: '/restaurant/waitingSetting',
-                contentType: 'application/json',
-                data: JSON.stringify({
-                    "waitingDate" : waitingDate,
-                    "waitingStartTime" : waitingStartTime,
-                    "waitingEndTime" : waitingEndTime,
-                    "waitingPeople" : waitingPeople,
-                }),
-                success: function (response) {
-                    alert("등록되었습니다.");
-                    console.log('success', response);
-                },
-                error: function (error) {
-                    console.log('error', error);
-                    alert("등록에 실패했습니다.");
+        $.ajax({
+            url: '/restaurant/waitingSetting/' + dateText,
+            method: 'GET',
+            success: function (data) {
+                if (data) {
+                    $('#waitingStartTime').val(data.startTime);
+                    $('#waitingEndTime').val(data.endTime);
+                    $('#waitingPeople').val(data.waitingPeople);
+                    $('#waitingToggle').prop('checked', data.waitingStatus);
+                } else {
+                    $('#waitingStartTime').val('00:00');
+                    $('#waitingEndTime').val('00:00');
+                    $('#waitingPeople').val('');
+                    $('#waitingToggle').prop('checked', false);
                 }
-            });
-        } else {
-            alert("웨이팅 정보 등록을 위해 날짜를 선택하고 ON으로 설정해주세요.")
-        }
+            },
+            error: function (error) {
+                console.log('Error fetching waiting setting: ', error);
+                $('#waitingStartTime').val('00:00');
+                $('#waitingEndTime').val('00:00');
+                $('#waitingPeople').val('');
+                $('#waitingToggle').prop('checked', false);
+            }
+        });
+    });
+    // 웨이팅 정보 등록 및 수정
+    $('#waitingSaveBtn').on('click', function () {
+        const actionUrl = $(this).data('action-url') || '/restaurant/waitingSetting';
+        handleWaitingSetting(actionUrl);
     });
 });
+
+
 
 
 
