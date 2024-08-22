@@ -24,6 +24,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
+
 // const images = [
 //     'https://via.placeholder.com/150?text=Image+1',
 //     'https://via.placeholder.com/150?text=Image+2',

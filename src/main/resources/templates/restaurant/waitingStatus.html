@@ -17,24 +17,30 @@
     <div class="container waiting-container">
         <div class="nav-buttons">
 <!--            이 부분에서 요청 url 변경해야 한다.       -->
-            <a th:href="@{waitingList}">
-                <button type="button" class="btn">판매 내역</button>
-            </a>
-            <a th:href="@{waitingList}">
-                <button type="button" class="btn">예약 확인</button>
-            </a>
-            <a th:href="@{waitingList}">
-                <button type="button" class="btn">예약 상태</button>
-            </a>
-            <a th:href="@{waitingList}">
-                <button type="button" class="btn">웨이팅 상태</button>
-            </a>
-            <a th:href="@{waitingList}">
-                <button type="button" class="btn">매장 리뷰</button>
-            </a>
+<!--            <a th:href="@{waitingList}">-->
+<!--                <button type="button" class="btn">판매 내역</button>-->
+<!--            </a>-->
+<!--            <a th:href="@{waitingList}">-->
+<!--                <button type="button" class="btn">예약 확인</button>-->
+<!--            </a>-->
+<!--            <a th:href="@{waitingList}">-->
+<!--                <button type="button" class="btn">예약 상태</button>-->
+<!--            </a>-->
+<!--            <a th:href="@{/users/waitingList}">-->
+<!--                <button type="button" class="btn">웨이팅 상태</button>-->
+<!--            </a>-->
+<!--            <a th:href="@{waitingList}">-->
+<!--                <button type="button" class="btn">매장 리뷰</button>-->
+<!--            </a>-->
+
+            <button type="button" class="btn btn-danger" onclick="window.location.href='/restaurant/main'">판매 내역</button>
+            <button type="button" class="btn btn-danger" onclick="window.location.href='/restaurant/check'">예약 확인</button>
+            <button type="button" class="btn btn-danger" onclick="window.location.href='/restaurant/status'">예약 상태</button>
+            <button type="button" class="btn btn-danger" onclick="window.location.href='/admin/waitingList'">웨이팅 상태</button>
+            <button type="button" class="btn btn-danger" onclick="window.location.href='/restaurant/review'">매장 리뷰</button>
 
             <button type="button" class="btn-setting btn-secondary float-right">
-                <img src="img/setting.png" alt="설정" aria-hidden="true">
+                <img th:src="@{images/setting.png}" alt="설정" class="glyphicon glyphicon-cog" aria-hidden="true">
             </button>
         </div>
 

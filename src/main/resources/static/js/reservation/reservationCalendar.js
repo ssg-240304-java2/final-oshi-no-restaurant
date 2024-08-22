@@ -4,10 +4,14 @@ $(document).ready(function() {
     var partySize = 1;
     var reservationDate = today.toISOString().split('T')[0];
     var reservationTime;
-    // var restaurantNo =1;
+    var memberNo = $('#reservation-info').data('memberno');
+    var restaurantNo = $[[{restaurantNo}]];
+
+    console.log(memberNo);
+
+    // var restaurantNo = 1;
     var availableDates = [];
 
-    console.log(restaurantNo);
 
     // URL에서 restaurantNo 추출
     var url = window.location.pathname;
@@ -167,7 +171,7 @@ $(document).ready(function() {
             console.log("모든 값이 설정됨, AJAX 요청 준비 중...");
 
             var requestData = {
-                memberNo: 1,
+                memberNo: memberNo,
                 restaurantNo: restaurantNo,
                 partySize: partySize,
                 reservationDate: reservationDate,
