@@ -29,6 +29,7 @@ public class MyListController {
     // 리스트 관리 페이지 이동
     @GetMapping("/myInfo/list")
     public String showLists(Model model) {
+        // 로그인 정보 넣기
         model.addAttribute("myLists", myListService.getLists());
         return "member/myList";
     }
@@ -122,7 +123,7 @@ public class MyListController {
 
 
     // ajax 로 특정 리스트의 식당 정보를 가져오는 메소드
-    @GetMapping("/tsktskLists/{listNo}/restaurants")
+    @GetMapping("/zzupList/{listNo}/restaurants")
     @ResponseBody
     public List<RestaurantList> getRestaurantLists(@PathVariable Integer listNo) {
         log.info("리스트 번호: " + listNo + "의 식당 정보를 가져옵니다.");
@@ -138,7 +139,7 @@ public class MyListController {
 //    }
 
     // 식당 삭제 메소드
-    @PostMapping("/tsktskLists/deleteRestaurants")
+    @PostMapping("/zzupList/deleteRestaurants")
     public String deleteRestaurants(@RequestParam(value = "restaurantNos", required = false) List<Long> restaurantNos,
                                     @RequestParam("listNo") Integer listNo,
                                     RedirectAttributes redirectAttributes) {
@@ -159,7 +160,7 @@ public class MyListController {
 
 
     // 내 쩝쩝 리스트 페이지를 띄우는 메소드 + 팔로우 리스트
-    @GetMapping("/tsktskLists")
+    @GetMapping("/zzupList")
     public String showMyLists(Model model) {
         CustomMemberDetails member = (CustomMemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long loginedMemberNo = member.getMemberNo();
