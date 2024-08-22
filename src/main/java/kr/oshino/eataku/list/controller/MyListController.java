@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-@RequestMapping
 @RequiredArgsConstructor
 @Slf4j
 public class MyListController {
