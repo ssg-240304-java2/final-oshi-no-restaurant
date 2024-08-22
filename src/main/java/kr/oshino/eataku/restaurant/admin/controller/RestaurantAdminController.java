@@ -78,19 +78,19 @@ public class RestaurantAdminController {
 
     /***
      * 회원가입 시 식당 정보 등록
-     * @param newInfo
+     * @param newRestaurant
      * @param session
      * @return
      */
     @PostMapping("/infoRegister")
-    public ResponseEntity<String> infoRegister(@RequestPart("newInfo") RestaurantInfoDTO newInfo,
+    public ResponseEntity<String> infoRegister(@RequestPart("newRestaurant") RestaurantInfoDTO newRestaurant,
                                                @RequestPart(value = "file", required = false) MultipartFile file,
                                                HttpSession session) {
 
         String account = (String) session.getAttribute("id");
-        log.info("\uD83C\uDF4E\uD83C\uDF4E\uD83C\uDF4E newInfo : {}, account : {}, file: {}", newInfo, account, file);
+        log.info("\uD83C\uDF4E\uD83C\uDF4E\uD83C\uDF4E newInfo : {}, account : {}, file: {}", newRestaurant, account, file);
 
-        restaurantAdminService.insertNewInfo(newInfo, session, file);
+        restaurantAdminService.insertNewInfo(newRestaurant, session, file);
 
         return ResponseEntity.ok("/restaurant/main");
 

@@ -60,7 +60,7 @@ public class RestaurantInfo {
     private String contact;         // 연락처
 
     @Column(name = "post_number")
-    private String postNumber;      // 우편번호
+    private String postNumber;      // 우편번호     // 없애야 함!!!!!!!!
 
     @Column(name = "img_url")
     private String imgUrl;      // 식당 메인 사진

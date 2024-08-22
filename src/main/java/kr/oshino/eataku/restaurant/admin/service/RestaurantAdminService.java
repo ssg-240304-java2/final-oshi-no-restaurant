@@ -126,6 +126,7 @@ public class RestaurantAdminService {
                 .closingTime(Time.valueOf(newInfo.getClosingTime()))
                 .hashTags(newInfo.getHashTags())
                 .description(newInfo.getDescription())
+                .imgUrl(uploadImgUrl)
                 .build();
 
         restaurantRepository.save(registerInfo);
