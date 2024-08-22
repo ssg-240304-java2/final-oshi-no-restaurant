@@ -7,56 +7,7 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/fragment/navbar.css}">
     <link rel="stylesheet" th:href="@{/css/fragment/footer.css}">
-
-    <style>
-        body {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            min-height: 100vh;
-            background-color: #f8f9fa;
-        }
-        .main-content {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-grow: 1;
-        }
-        .counter {
-            display: flex;
-            align-items: center;
-        }
-        .counter button {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            border: 1px solid #ddd;
-            background-color: #fff;
-            font-size: 1.5em;
-            outline: none;
-            cursor: pointer;
-        }
-        .counter span {
-            width: 80px;
-            text-align: center;
-            font-size: 2em;
-            margin: 0 20px;
-        }
-        .register-button {
-            margin-top: 30px;
-            width: 220px;
-            font-size: 1.2em;
-            background-color: #FB3F4A;
-            border-color: #FB3F4A;
-            color: white;
-            cursor: pointer;
-        }
-        .register-button:disabled {
-            background-color: #ccc;
-            border-color: #ccc;
-            cursor: not-allowed;
-        }
-    </style>
+    <link rel="stylesheet" th:href="@{/css/waiting/waitingFormPage.css}">
 </head>
 
 <body>
@@ -75,83 +26,16 @@
 
 <div th:replace="~{fragment/footer.html :: footer}" class="footer"></div>
 
-<script type="text/javascript" th:src="@{/js/fragment/navbar.js}"></script>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script type="text/javascript" th:src="@{/js/fragment/navbar.js}"></script>
 
-<script>
-    $(document).ready(function() {
-        let partySize = 0;
-
-        let memberNo = [[${memberNo}]];
-        let restaurantNo = [[${restaurantNo}]];
-
-        const maxPeople = 8; // 최대 인원수 설정
-
-        const $partySizeSpan = $('#partySize');
-        const $decreaseButton = $('#decrease');
-        const $increaseButton = $('#increase');
-        const $registerButton = $('#register');
-
-        $decreaseButton.on('click', function() {
-            if (partySize > 0) {
-                partySize--;
-                updatePartySize();
-            }
-        });
-
-        $increaseButton.on('click', function() {
-            if (partySize < maxPeople) {
-                partySize++;
-                updatePartySize();
-            }
-        });
-
-        $registerButton.on('click', function() {
-            if (partySize === 0) {
-                alert('0명은 등록할 수 없습니다!');
-                return;
-            }
-
-            // 서버로 데이터 전송
-            $.ajax({
-                url: '/users/waiting',
-                type: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify({
-                    restaurantNo: restaurantNo,
-                    memberNo: memberNo,
-                    partySize: partySize }),
-                success: function(data) {
-
-                        alert(data.message);
-
-                        let waitingNo = data.waitingNo;
-                        console.log(waitingNo);
-
-                        // 중첩 ajax로 웨이팅 등록 시 메세지 전송 요청
-                        $.ajax({
-                            url: '/users/waiting/sendOne/' + waitingNo,
-                            type: 'POST',
-                            success: function(response) {
-                                window.location.href = '../../'; // 인덱스 페이지로 이동
-                            },
-                            error: function(error) {
-                                alert("메세지 전송에 실패했습니다.");
-                            }
-                        });
-                },
-                error: function(xhr, status, error) {
-                    let response = JSON.parse(xhr.responseText);
-                    alert(response.message);
-                }
-            });
-        });
-
-        function updatePartySize() {
-            $partySizeSpan.text(partySize);
-            $registerButton.prop('disabled', partySize === 0);
-        }
-    });
+<script type="text/javascript">
+    const memberNo = [[${memberNo}]];
+    const restaurantNo = [[${restaurantNo}]];
 </script>
+
+<script type="text/javascript" th:src="@{/js/waiting/waitingFormPage.js}"></script>
 </body>
 </html>
