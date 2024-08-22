@@ -9,8 +9,9 @@ import java.util.List;
 
 
 @Repository
-public interface ReviewRepository extends JpaRepository<Review, Long> {
-    void deleteByReviewNo(int reviewNo);
+public interface ReviewRepository extends JpaRepository<Review, Integer> {
+
+    void deleteByReviewNo(Integer reviewNo);
 
     int countByMember(Member toMember);
 
