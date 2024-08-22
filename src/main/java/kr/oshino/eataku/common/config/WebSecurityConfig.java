@@ -42,7 +42,7 @@ public class WebSecurityConfig {
                         // 모든 사용자가 접근 가능한 URL
                         .requestMatchers("/search/**","/signUp/checkDupAccount","/signUp/checkDupNickname","/signUp/checkEmailVerifCode","/signUp/sendEmailVerifCode").permitAll()
                         .requestMatchers("/restaurant/**").permitAll()
-                        .requestMatchers("/admin/waiting/stream/**").permitAll()
+                        .requestMatchers("/sse/waiting/**").permitAll()
 
                         // 비로그인 사용자만 접근 가능한 URL
                         .requestMatchers("/login/**", "/signUp/**", "/managerLogin/**", "/managerLogin").anonymous()

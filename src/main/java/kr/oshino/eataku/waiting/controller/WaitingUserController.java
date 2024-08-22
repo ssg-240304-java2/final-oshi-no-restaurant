@@ -11,6 +11,7 @@ import kr.oshino.eataku.waiting.model.dto.responseDto.UpdateWaitingResponseDto;
 import kr.oshino.eataku.waiting.service.WaitingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.nurigo.sdk.message.response.SingleMessageSentResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -62,8 +63,6 @@ public class WaitingUserController {
     public ResponseEntity<CreateWaitingResponseDto> registerWaiting(
             @RequestBody CreateWaitingRequestDto createWaitingRequestDto) {
 
-        log.info("createWaitingRequestDto: {}", createWaitingRequestDto);
-
         return ResponseEntity.status(HttpStatus.OK)
                 .body(waitingService.registerWaiting(createWaitingRequestDto));
     }
@@ -104,6 +103,20 @@ public class WaitingUserController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(waitingService.cancelWaitingByWaitingNo(updateWaitingRequestDto));
     }
+
+
+    /**
+     * 웨이팅 등록 메세지 전송
+     * @param waitingNo
+     * @return
+     */
+    @PostMapping("/waiting/sendOne/{waitingNo}")
+    @ResponseBody
+    public SingleMessageSentResponse sendRegisterMessage(@PathVariable Long waitingNo) {
+        return waitingService.sendWaitingRegisterMessage(waitingNo);
+    }
+
+
 
     // 웨이팅 미루기
 }

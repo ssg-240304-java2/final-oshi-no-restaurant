@@ -42,42 +42,23 @@
 </div>
 
 
-    <div class="rating-section">
-        <h2>이용내역 <img th:src="@{/images/reservation/Vector.png}"/>
-            <div class="rating-details">
-                <div class="detail">
-                    <p>맛있어요</p>
-                    <div class="line"></div>
-                    <span class="count">N</span>
-                </div>
-                <div class="detail">
-                    <p>친절해요</p>
-                    <div class="line"></div>
-                    <span class="count">N</span>
-                </div>
-                <div class="detail">
-                    <p>쾌적해요</p>
-                    <div class="line"></div>
-                    <span class="count">N</span>
-                </div>
-                <div class="detail">
-                    <p>다시 갈래요</p>
-                    <div class="line"></div>
-                    <span class="count">N</span>
-                </div>
-                <div class="detail">
-                    <p>분위기가 좋아요</p>
-                    <div class="line"></div>
-                    <span class="count">N</span>
-                </div>
-            </div>
+<div class="rating-section">
+    <h2>이용내역 ★</h2>
+    <div class="rating-details">
+        <div th:each="entry : ${tagCountMap}" class="detail">
+            <p th:text="${entry.key}"></p>
+            <div class="line" th:style="'width:' + (${entry.value} * 2) + 'px'"></div>
+            <span class="count" th:text="${entry.value}"></span>
+        </div>
     </div>
+</div>
 
     <div class="review-section">
         <!-- 리뷰 리스트를 반복문을 통해 출력 -->
         <div th:each="review : ${ReviewDetails}" class="review">
+
             <!-- 이미지 부분은 placeholder로 설정 -->
-            <img src="https://via.placeholder.com/80" alt="Reviewer Image">
+            <img th:src="@{${review.imgURL}}" alt="Reviewer Image" style="width: 100%; height: 100%; object-fit: cover; max-width: 50px; max-height: 50px;">
 
             <!-- 리뷰어 이름 -->
             <p>
@@ -86,12 +67,14 @@
                 <span>2024.07.31</span>
             </p>
 
-            <!-- 별점은 고정된 기본값을 사용 (예: 5개의 별) -->
+            <!-- 별점  -->
             <p class="star-rating">
-            <span class="text-warning">
-                &#9733;&#9733;&#9733;&#9733;&#9733;
-            </span>
+                <span class="text-warning" th:text="${review.scope.getStars()}"></span>
             </p>
+
+
+
+
 
             <!-- 리뷰 내용 -->
             <p th:text="${review.reviewContent}">Review content goes here</p>
@@ -103,7 +86,7 @@
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
-    <script type="text/javascript" th:src="@{js/fragment/navbar.js}"></script>
-    <script type="text/javascript" th:src="@{js/reservation/reservationDetail.js}"></script>
+    <script  th:src="@{/js/fragment/navbar.js}"></script>
+    <script  th:src="@{/js/reservation/reservationDetail.js}"></script>
 </body>
 </html>

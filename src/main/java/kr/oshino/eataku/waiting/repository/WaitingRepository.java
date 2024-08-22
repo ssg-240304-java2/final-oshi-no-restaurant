@@ -61,24 +61,21 @@ public interface WaitingRepository extends JpaRepository<Waiting, Long> {
     List<Waiting> findWaitingByMember_MemberNoAndWaitingStatus(Long logginedMemberNo, StatusType statusType);
 
 
-    @Query(value = "SELECT row_num FROM ( " +
-            "SELECT w.member_no, @rownum := @rownum + 1 AS row_num " +
-            "FROM tbl_waiting w ,(SELECT @rownum := 0) AS w " +
-            "WHERE w.restaurant_no = :restaurantNo " +
-            "AND w.waiting_status = '대기중' " +
-            "ORDER BY w.created_at " +
-            ") AS numbered_waiting " +
-            "WHERE member_no = :memberNo",
-    nativeQuery = true)
-    int findRowNumberByRestaurantNoAndMemberNoAndWaitingStatus(@Param("restaurantNo") Long restaurantNo,
-                                                                   @Param("memberNo") Long memberNo);
+//    @Query(value = "SELECT row_num FROM ( " +
+//            "SELECT w.member_no, @rownum := @rownum + 1 AS row_num " +
+//            "FROM tbl_waiting w ,(SELECT @rownum := 0) AS w " +
+//            "WHERE w.restaurant_no = :restaurantNo " +
+//            "AND w.waiting_status = '대기중' " +
+//            "ORDER BY w.created_at " +
+//            ") AS numbered_waiting " +
+//            "WHERE member_no = :memberNo",
+//    nativeQuery = true)
+//    int findRowNumberByRestaurantNoAndMemberNoAndWaitingStatus(@Param("restaurantNo") Long restaurantNo,
+//                                                                   @Param("memberNo") Long memberNo);
 
 
 
     // 다음 웨이팅 번호를 결정하기 위한 쿼리문
     @Query("SELECT MAX(w.sequenceNumber) FROM Waiting w WHERE w.restaurantInfo = :restaurantInfo AND DATE(w.createdAt) = :date")
     Integer findMaxSequenceNumberByRestaurantAndDate(@Param("restaurantInfo") RestaurantInfo restaurantInfo, @Param("date") LocalDate date);
-
-
-
 }
