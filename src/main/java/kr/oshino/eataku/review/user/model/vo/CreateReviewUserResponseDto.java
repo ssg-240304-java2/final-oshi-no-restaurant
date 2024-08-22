@@ -1,4 +1,4 @@
-package kr.oshino.eataku.waiting.model.dto.responseDto;
+package kr.oshino.eataku.review.user.model.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,10 +9,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateWaitingResponseDto {
+public class CreateReviewUserResponseDto {
 
     private Integer httpCode;
     private String message;
-    private Long waitingNo;
     private Long memberNo;
 }

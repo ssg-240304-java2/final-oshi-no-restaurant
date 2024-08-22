@@ -1,7 +1,9 @@
 package kr.oshino.eataku.reservation.user.controller;
+import kr.oshino.eataku.common.enums.Scope;
 import kr.oshino.eataku.reservation.user.model.dto.requestDto.CreateReservationUserRequestDto;
 import kr.oshino.eataku.reservation.user.model.dto.responseDto.*;
 import kr.oshino.eataku.reservation.user.service.ReservationUserService;
+import kr.oshino.eataku.review.user.controller.ReviewUserController;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,6 +28,7 @@ import java.util.Map;
 public class ReservationUserController {
 
     private final ReservationUserService reservationUserService;
+
 
 
     /***
@@ -187,12 +192,38 @@ public class ReservationUserController {
      */
     @GetMapping("/detail/{restaurantNo}/detailPage")
     public String detailPage(@PathVariable Long restaurantNo, Model model) {
+
+        // 식당 상세 정보
         RestaurantInfoDetails restaurant = reservationUserService.getRestaurantDetailsByReservation(restaurantNo);
         model.addAttribute("restaurant", restaurant);
+
+
+        // 리뷰 상세 정보
         List<ReviewDetails> reviewDetails = reservationUserService.getReviewDetails(restaurantNo);
         model.addAttribute("ReviewDetails", reviewDetails);
+
+        // 태그 횟수 정보
+        List<String> tagCount = reservationUserService.getCountTags(restaurantNo);
+        Map<String, Integer> tagCountMap = new LinkedHashMap<>();
+        System.out.println("tagCountMap = " + tagCountMap);
+
+        for (String tagCounts : tagCount) {
+            String[] parts = tagCounts.split(",");
+            if (parts.length == 2) {
+                String tag = parts[0].trim();  // 태그 부분
+                Integer count = Integer.parseInt(parts[1].trim());  // 횟수 부분
+                tagCountMap.put(tag, count);
+            } else {
+                // 태그나 횟수가 올바른 형식이 아닐 경우를 처리
+                System.err.println(" 올바른 형식이이 아님 " + tagCount);
+            }
+        }
+
+        model.addAttribute("tagCountMap", tagCountMap);
+
         System.out.println("reviewDetails = " + reviewDetails);
         System.out.println("restaurant = " + restaurant);
+        System.out.println("tagCountMap = " + tagCountMap);
         return "reservation/reservationDetail";
     }
 
