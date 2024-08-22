@@ -75,9 +75,10 @@ public class ReviewUserController {
     // 리뷰 삭제
     @PostMapping("/deleteReview")
     @ResponseBody
-    public String deleteReview(@RequestParam("reviewNo") int reviewNo){
+    public void deleteReview(@RequestParam("reviewNo") Integer reviewNo){
+        System.out.println("reviewNo = " + reviewNo);
         reviewUserService.deleteReview(reviewNo);
-        return "";
+
     }
 
     // 리뷰 수정

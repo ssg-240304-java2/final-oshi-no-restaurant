@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -84,14 +85,14 @@ public class ReviewUserService {
     // 리뷰 삭제
     @Transactional
     public void deleteReview(int reviewNo) {
-        reviewRepository.deleteByReviewNo(reviewNo);
+        reviewRepository.deleteById(reviewNo);
     }
 
 
     // 리뷰 수정
     @Transactional
     public void modifyReview(int reviewNo, String newReviewContent) {
-        Review review = reviewRepository.findById((long) reviewNo)
+        Review review = reviewRepository.findById(reviewNo)
                 .orElseThrow(() -> new IllegalArgumentException("리뷰를 찾을 수 없습니다: " + reviewNo));
 
         review.setReviewContent(newReviewContent);
