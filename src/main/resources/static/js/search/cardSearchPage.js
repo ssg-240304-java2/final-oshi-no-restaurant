@@ -1,6 +1,6 @@
 $(document).ready(function () {
     // Toggle action buttons on clicking the plus button
-    $('.toggle-actions').click(function () {
+    $(document).on('click', '.toggle-actions', function () {
         $(this).closest('.card').toggleClass('show-actions');
     });
 
@@ -58,8 +58,8 @@ $(document).ready(function () {
                         <p class="card-text">주소: ${restaurant.restaurantAddress}</p>
                         <button class="btn btn-custom btn-sm toggle-actions">+</button>
                         <div class="action-buttons">
-                            <button class="btn btn-info btn-sm">예약</button>
-                            <button class="btn btn-warning btn-sm">웨이팅</button>
+                            <button class="btn btn-info btn-sm" onclick="location.href='/reservation/' + ${restaurant.restaurantNo}">예약</button>
+                        <button class="btn btn-warning btn-sm" onclick="location.href='/users/waitingForm/' + ${restaurant.restaurantNo}">웨이팅</button>
                         </div>
                     </div>
                 </div>

@@ -1,6 +1,7 @@
 package kr.oshino.eataku.search.service;
 
 import kr.oshino.eataku.member.model.repository.MemberRepository;
+import kr.oshino.eataku.restaurant.admin.entity.RestaurantInfo;
 import kr.oshino.eataku.restaurant.admin.model.repository.RestaurantRepository;
 import kr.oshino.eataku.search.model.dto.SearchResultDTO;
 import lombok.RequiredArgsConstructor;
@@ -10,9 +11,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static java.time.LocalTime.now;
 
 @Service
 @RequiredArgsConstructor
@@ -63,10 +66,43 @@ public class SearchService {
     public void restaurantStat(){
 
         log.info("⏳⏳ [ SearchService ] Scheduler  \uFE0F\uFE0F");
-//        memberRepository.truncateBusiestRestaurant();
-//        memberRepository.updateBusiestRestaurant();
-//
-//        memberRepository.truncateListAddRestaurant();
-//        memberRepository.updateListAddRestaurant();
+        memberRepository.truncateBusiestRestaurant();
+        memberRepository.updateBusiestRestaurant();
+
+        memberRepository.truncateListAddRestaurant();
+        memberRepository.updateListAddRestaurant();
+
+        memberRepository.truncateDirectRestaurant();
+        memberRepository.updateDirectRestaurant();
+    }
+
+    public List<SearchResultDTO> selectPopularLists() {
+
+        List<Long> popularList = memberRepository.selectPopularRestaurants();
+        List<SearchResultDTO> entityList = new ArrayList<>();
+        if (!popularList.isEmpty()) {
+            entityList = restaurantRepository.findPopularRestaurantsWithRatings(popularList);
+        }
+        return entityList;
+    }
+
+    public List<SearchResultDTO> selectBusiestLists() {
+
+        List<Long> busiestList = memberRepository.selectBusiestRestaurants();
+        List<SearchResultDTO> entityList = new ArrayList<>();
+        if (!busiestList.isEmpty()) {
+            entityList = restaurantRepository.findPopularRestaurantsWithRatings(busiestList);
+        }
+        return entityList;
+    }
+
+    public List<SearchResultDTO> selectDirectLists() {
+
+        List<Long> directList = memberRepository.selectDirectRestaurants();
+        List<SearchResultDTO> entityList = new ArrayList<>();
+        if (!directList.isEmpty()) {
+            entityList = restaurantRepository.findPopularRestaurantsWithRatings(directList);
+        }
+        return entityList;
     }
 }
