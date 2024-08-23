@@ -314,7 +314,11 @@ public class RestaurantAdminController {
         return ResponseEntity.ok("/restaurant/menu");
     }
 
-    // 등록된 메뉴 조회
+    /***
+     * 메뉴 등록
+     * @param model
+     * @return
+     */
     @GetMapping("/menu")
     public String selectMenu(Model model) {
 
@@ -329,4 +333,21 @@ public class RestaurantAdminController {
 
         return "restaurant/menu";
     }
+
+    /***
+     * 메뉴 수정
+     * @param updatedMenu
+     * @param file
+     * @return
+     */
+    @PostMapping("/updateMenu")
+    public ResponseEntity<String> updateMenu(
+            @RequestPart("updatedMenu") MenuDTO updatedMenu,
+            @RequestPart(value = "file", required = false) MultipartFile file) {
+
+        restaurantAdminService.updateMenu(updatedMenu, file);
+
+        return ResponseEntity.ok("메뉴가 성공적으로 수정되었습니다.");
+    }
+
 }

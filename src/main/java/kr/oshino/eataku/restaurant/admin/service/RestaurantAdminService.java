@@ -469,6 +469,10 @@ public class RestaurantAdminService {
             return menuDTO;
         }).collect(Collectors.toList());
     }
+
+    public void updateMenu(MenuDTO updatedMenu, MultipartFile file) {
+
+    }
 }
 
 
