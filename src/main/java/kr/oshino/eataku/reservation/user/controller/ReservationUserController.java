@@ -6,6 +6,9 @@ import kr.oshino.eataku.reservation.user.service.ReservationUserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -199,7 +202,7 @@ public class ReservationUserController {
      * 특정 식당의 상세 정보 가져오기
      */
     @GetMapping("/detail/{restaurantNo}/detailPage")
-    public String detailPage(@PathVariable Long restaurantNo, Model model) {
+    public String detailPage(@PathVariable Long restaurantNo, Model model,@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
 
         // 식당 상세 정보
         RestaurantInfoDetails restaurant = reservationUserService.getRestaurantDetailsByReservation(restaurantNo);
@@ -217,7 +220,6 @@ public class ReservationUserController {
 
         // 식당 지도 위치 정보
        List<MapDto> position = reservationUserService.getMapLocation(restaurantNo);
-
 
 
 

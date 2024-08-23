@@ -22,8 +22,8 @@
         <h2 th:text="${restaurant.restaurantName}">이름</h2>
         <div class="circle-buttons">
             <button class="btn btn-outline-custom">쩝쩝채팅</button>
-            <button class="btn btn-outline-custom">쩝쩝웨이팅</button>
-            <button class="btn btn-outline-custom">쩝쩝예약</button>
+            <button class="btn btn-outline-custom" th:onclick="|location.href='/users/waitingForm/' + ${restaurant.restaurantNo}|">쩝쩝웨이팅</button>
+            <button class="btn btn-outline-custom" th:onclick="|location.href='/reservation/' + ${restaurant.restaurantNo}|">쩝쩝예약</button>
         </div>
     </div>
 <div>
@@ -40,16 +40,49 @@
     </div>
 </div>
 
-<div class="rating-section">
-    <h2>이용내역 ★</h2>
-    <div class="rating-details">
-        <div th:each="entry : ${tagCountMap}" class="detail">
-            <p th:text="${entry.key}"></p>
-            <div class="line" th:style="'width:' + (${entry.value} * 2) + 'px'"></div>
-            <span class="count" th:text="${entry.value}"></span>
-        </div>
-    </div>
-</div>
+            <div class="rating-section">
+                <h2>이용내역 ★</h2>
+                <div class="rating-details">
+                    <div th:each="entry : ${tagCountMap}" class="detail">
+                        <p th:text="${entry.key}"></p>
+                        <div class="line" th:style="'width:' + (${entry.value} * 2) + 'px'"></div>
+                        <span class="count" th:text="${entry.value}"></span>
+                    </div>
+                </div>
+            </div>
+
+
+            <!--  리뷰 사진 -->
+
+            <div class="card-container" id="card-container">
+                <div class="card" id="card-0">
+                    <div class="img-placeholder" style="background-color: #ddd; width: 150px; height: 150px;"></div>
+                    <div class="card-body">
+                    </div>
+                </div>
+                <div class="card" id="card-1">
+                    <div class="img-placeholder" style="background-color: #ddd; width: 150px; height: 150px;"></div>
+                    <div class="card-body">
+                    </div>
+                </div>
+                <div class="card" id="card-2">
+                    <div class="img-placeholder" style="background-color: #ddd; width: 150px; height: 150px;"></div>
+                    <div class="card-body">
+                    </div>
+                </div>
+                <div class="card" id="card-3">
+                    <div class="img-placeholder" style="background-color: #ddd; width: 150px; height: 150px;"></div>
+                    <div class="card-body">
+                    </div>
+                </div>
+
+                <div class="arrow-button" id="arrow-button">
+                    <button class="custom-arrow-button">
+                        <img src="/picture/next%20arrow.png" alt="Next">
+                    </button>
+                </div>
+            </div>
+
 
     <div class="review-section">
         <!-- 리뷰 리스트를 반복문을 통해 출력 -->
