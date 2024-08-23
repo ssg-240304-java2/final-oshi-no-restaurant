@@ -19,4 +19,14 @@ public class SearchResultDTO {
     private String foodType;
     private String hashTag;
     private Double rating;
+
+    public SearchResultDTO(Long restaurantNo, String restaurantName, String restaurantAddress, Double xCoordinate, Double yCoordinate, String imgUrl, Double rating) {
+        this.restaurantNo = restaurantNo;
+        this.restaurantName = restaurantName;
+        this.restaurantAddress = restaurantAddress;
+        this.xCoordinate = xCoordinate;
+        this.yCoordinate = yCoordinate;
+        this.imgUrl = imgUrl;
+        this.rating = rating;
+    }
 }
