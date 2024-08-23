@@ -44,11 +44,19 @@ public class ReviewUserController {
      * 리뷰 등록
      */
     @PostMapping("/reviewPage")
-    public ResponseEntity<CreateReviewUserResponseDto> insertReview(@RequestBody CreateReviewUserRequestDto CreateReviewUserRequestDto){
-        System.out.println("createReviewUserResponseDto 확인~~~@!@= " + CreateReviewUserRequestDto);
+    public ResponseEntity<CreateReviewUserResponseDto> insertReview(@RequestBody CreateReviewUserRequestDto createReviewUserRequestDto){
+        // 로그인 멤버 넘버
+        CustomMemberDetails member = (CustomMemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long loginedMemberNo = member.getMemberNo();
+
+        createReviewUserRequestDto.setMemberNo(loginedMemberNo);
+
+        System.out.println("createReviewUserResponseDto 확인~~~@!@= " + createReviewUserRequestDto);
+        System.out.println("loginedMemberNo = " + loginedMemberNo);
+
 
         return ResponseEntity.status(HttpStatus.OK)
-                .body(reviewUserService.insertReview(CreateReviewUserRequestDto));
+                .body(reviewUserService.insertReview(createReviewUserRequestDto));
 
     }
 
