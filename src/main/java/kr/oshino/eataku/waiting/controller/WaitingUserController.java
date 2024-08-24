@@ -105,6 +105,9 @@ public class WaitingUserController {
     }
 
 
+
+
+
     /**
      * 웨이팅 등록 메세지 전송
      * @param waitingNo

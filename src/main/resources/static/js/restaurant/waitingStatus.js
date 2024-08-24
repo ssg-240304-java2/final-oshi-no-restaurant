@@ -12,6 +12,9 @@ function fetchWaiting() {
 
                 let createdAt = new Date(waiting.createdAt);
                 let now = new Date(); // --> 9시간 +
+
+                console.log(now);
+
                 let minutesElapsed = Math.floor((now - createdAt) / (1000 * 60));
 
                 const waitingCard = `
