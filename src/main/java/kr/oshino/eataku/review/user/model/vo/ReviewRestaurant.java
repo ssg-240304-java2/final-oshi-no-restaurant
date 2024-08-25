@@ -3,7 +3,6 @@ package kr.oshino.eataku.review.user.model.vo;
 import lombok.*;
 
 @Data
-@Setter(AccessLevel.PRIVATE)
 @NoArgsConstructor
 @AllArgsConstructor
 

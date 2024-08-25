@@ -21,9 +21,10 @@ $(document).ready(function () {
         var scope = 'STAR' + rating;  // Enum 이름 생성
 
         // 바꿔야함 @@@
-        var memberNo = 1;  // 임시 값
-        var reviewNo = 123;  // 임시 값
-        var restaurantNo = 456;  // 임시 값
+        // var memberNo = 1;  // 임시 값
+        // var reviewNo = 123;  // 임시 값
+        var restaurantNo = window.location.href.split('/')[window.location.href.split('/').length-1];  // 임시 값
+
 
         // 선택된 태그 수집
         var reviewTags = [];
@@ -31,20 +32,29 @@ $(document).ready(function () {
             reviewTags.push($(this).text());
         });
 
-        // 리뷰 데이터 객체 생성
-        var requestDataReview = {
-            memberNo: memberNo,
-            reviewNo: reviewNo,
+        var jsonData = {
+            // memberNo: memberNo,
+            // reviewNo: reviewNo,
             reviewTags: reviewTags, // 배열로 전송
             restaurantNo: restaurantNo,
             reviewContent: reviewContent,
             scope: scope  // 서버로 Enum 이름 전송
         };
+        var file = $('#file')[0].files[0];
+
+        // 리뷰 데이터 객체 생성
+        var requestDataReview = new FormData ();
+
+        requestDataReview.append('jsonData',new Blob([JSON.stringify(jsonData)], { type: 'application/json'}));
+        requestDataReview.append('file',file);
 
         console.log(requestDataReview);
 
         // AJAX 요청 전송
         insertReview(requestDataReview);
+
+        // 이전 페이지로 돌아가는 로직 추가
+
     });
 });
 
@@ -52,8 +62,10 @@ function insertReview(requestDataReview) {
     $.ajax({
         url: '/reviewPage',
         method: 'POST',
-        data: JSON.stringify(requestDataReview),
-        contentType: 'application/json',
+        contentType: false,
+        processData: false,
+        data: requestDataReview,
+        // contentType: 'application/json',
         success: function (response) {
             console.log('성공');
             alert('리뷰가 성공적으로 등록되었습니다.');
