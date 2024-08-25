@@ -126,6 +126,7 @@
 <body>
 
 <div th:replace="~{fragment/navbar.html :: navbar}" class="navbar"></div>
+<a href="/reviewPage?restaurantNo=123">리뷰 페이지로 이동</a>
 
 <div class="sidebar">
   <div class="sidebar-content">
@@ -141,12 +142,19 @@
   <div class="review-container">
     <!-- 추가적인 리뷰 카드가 이와 같은 형식으로 추가될 수 있음 -->
     <div th:each="review : ${myReview}" class="review-card">
-<!--      <img th:src="${review.restaurantImgUrl}" alt="이미지">-->
+      <img th:src="${review.imgUrl}" alt="이미지">
       <div class="info">
         <div class="d-flex align-items-center">
-<!--          <span class="rating" th:text="'★ ' + ${review.scope}">★ 5.0</span>-->
+          <!--          식당명 넣기-->
+          <h3 th:text="${review.restaurantName}">식당 이름</h3>
             <span class="rating" th:text="${review.scope.stars}">★★★★★</span>
           <p th:text="${review.reviewContent ?: '리뷰 내용이 없습니다.'}">리뷰 내용</p>
+          <label for="tags" class="mr-3 mb-0" style="font-size: 1.5rem;"></label>
+          <div id="tags">
+            <div th:each="tag : ${review.reviewTags}">
+              <button type="button" class="btn btn-outline-danger tag-btn" th:text="${tag}"></button>
+            </div>
+          </div>
         </div>
       </div>
       <button class="edit-btn" th:onclick="'modifyReview(' + ${review.reviewNo} + ')'">✏️</button>
@@ -170,7 +178,7 @@
           reviewNo: reviewNo
         },
         success: function (response) {
-          alert(response);
+          alert("리뷰 삭제에 성공했습니다");
           location.reload();
         },
         error: function (error) {
@@ -183,15 +191,19 @@
     function modifyReview(reviewNo) {
     // 새로운 리뷰 내용을 사용자에게 입력받습니다.
     var newReviewContent = prompt("새로운 리뷰 내용을 입력하세요:");
+    var newScope = prompt("새로운 별점을 입력하세요 (예: STAR1, STAR2, ... STAR5):"); // 별점 수정
+    var newReviewTags = prompt("새로운 태그를 입력하세요 (맛있어요, 친절해요, 쾌적해요, 다시갈래요, 분위기가_좋아요):"); // 태그 수정
 
-    if (newReviewContent != null) {
+    if (newReviewContent != null && newScope != null && newReviewTags != null) {
     // AJAX 요청을 통해 리뷰 내용을 서버로 전송합니다.
     $.ajax({
     url: '/modifyReview',
     type: 'POST',
     data: {
-    reviewNo: reviewNo,
-    newReviewContent: newReviewContent
+        reviewNo: reviewNo,
+        newReviewContent: newReviewContent,
+        newScope: newScope,
+        newReviewTags: newReviewTags
   },
     success: function(response) {
     alert('리뷰 내용이 성공적으로 수정되었습니다.');

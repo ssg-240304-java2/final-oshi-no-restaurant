@@ -1,8 +1,12 @@
 package kr.oshino.eataku.review.user.controller;
+import jakarta.servlet.http.HttpSession;
 import kr.oshino.eataku.member.model.dto.CustomMemberDetails;
+import kr.oshino.eataku.restaurant.admin.entity.RestaurantInfo;
+import kr.oshino.eataku.restaurant.admin.model.repository.RestaurantRepository;
 import kr.oshino.eataku.review.user.entity.Review;
 import kr.oshino.eataku.review.user.model.vo.CreateReviewUserRequestDto;
 import kr.oshino.eataku.review.user.model.vo.CreateReviewUserResponseDto;
+import kr.oshino.eataku.review.user.repository.ReviewRepository;
 import kr.oshino.eataku.review.user.service.ReviewUserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,30 +17,46 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Controller
+@RequiredArgsConstructor
 //@RequestMapping("/")
-@RequiredArgsConstructor(onConstructor_ = {@Autowired})
+//@RequiredArgsConstructor(onConstructor_ = {@Autowired})
 public class ReviewUserController {
 
     private final ReviewUserService reviewUserService;
+    private final ReviewRepository reviewRepository;
+    private final RestaurantRepository restaurantRepository;
+
 
     /**
      * 리뷰 페이지 이동
      * @return
      *
-     * 로그인 정보
-     * CustomMemberDetails member = (CustomMemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-     *         Long loginedRestaurantNo = member.getRestaurantNo();
      *
      */
-    @GetMapping("/reviewPage")
-    public String reviewPage() {
+    @GetMapping("/reviewPage/{restaurantNo}")
+    public String reviewPage(Model model, @PathVariable("restaurantNo" ) Long restaurantNo) {
+
+        // 수정 하기
+        RestaurantInfo restaurantInfo = restaurantRepository.findById(restaurantNo)
+                        .orElseThrow(() -> new IllegalArgumentException("식당 번호가 다릅니다 " + restaurantNo));
+
+        model.addAttribute("restaurantName", restaurantInfo.getRestaurantName());
+
         System.out.println("리뷰페이지 등장");
+        System.out.println("restaurantNo = " + restaurantNo);
+        System.out.println("restaurantInfo = " + restaurantInfo.getRestaurantName());
+
+
     return "review/review";
     }
 
@@ -44,21 +64,26 @@ public class ReviewUserController {
      * 리뷰 등록
      */
     @PostMapping("/reviewPage")
-    public ResponseEntity<CreateReviewUserResponseDto> insertReview(@RequestBody CreateReviewUserRequestDto createReviewUserRequestDto){
+    @ResponseBody
+    public ResponseEntity<CreateReviewUserResponseDto> insertReview(@RequestPart(value = "jsonData") CreateReviewUserRequestDto createReviewUserRequestDto,
+                                                                    @RequestPart(value = "file", required = false) MultipartFile file,
+                                                                    HttpSession session){
         // 로그인 멤버 넘버
         CustomMemberDetails member = (CustomMemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long loginedMemberNo = member.getMemberNo();
-
         createReviewUserRequestDto.setMemberNo(loginedMemberNo);
 
         System.out.println("createReviewUserResponseDto 확인~~~@!@= " + createReviewUserRequestDto);
         System.out.println("loginedMemberNo = " + loginedMemberNo);
+        System.out.println("file = " + file);
+
+        CreateReviewUserResponseDto response = reviewUserService.insertReview(createReviewUserRequestDto, file);
 
 
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(reviewUserService.insertReview(createReviewUserRequestDto));
+        return ResponseEntity.status(HttpStatus.OK).body(response);
 
     }
+
 
     // 내 리뷰 보기
     @GetMapping("/myInfo/review")
@@ -70,6 +95,9 @@ public class ReviewUserController {
 
         List<CreateReviewUserRequestDto> myReview =
                 reviewUserService.getAllReviewByMember(loginedMemberNo);
+
+        // n
+
         model.addAttribute("myReview", myReview);
         System.out.println("My Review: " + myReview);
         // 리스트에 null이 포함되어 있는지 확인
@@ -93,8 +121,24 @@ public class ReviewUserController {
     @PostMapping("/modifyReview")
     @ResponseBody
     public String modifyReview(@RequestParam("reviewNo") int reviewNo,
-                               @RequestParam("newReviewContent") String newReviewContent) {
-        reviewUserService.modifyReview(reviewNo, newReviewContent);
+                               @RequestParam("newReviewContent") String newReviewContent,
+                               @RequestParam("newScope") String newScope,
+                               @RequestParam("newReviewTags") String newReviewTags) {
+
+
+        System.out.println("Received modifyReview request:");
+        System.out.println("reviewNo: " + reviewNo);
+        System.out.println("newReviewContent: " + newReviewContent);
+        System.out.println("newScope: " + newScope);
+        System.out.println("newReviewTags: " + newReviewTags);
+
+    // 문자열을 Set으로 변환
+    Set<String> tagsSet = Arrays.stream(newReviewTags.split(","))
+            .map(String::trim)
+            .collect(Collectors.toSet());
+
+
+        reviewUserService.modifyReview(reviewNo, newReviewContent,newScope,tagsSet);
         return "";
     }
 

@@ -16,9 +16,11 @@ public class CreateReviewUserRequestDto {
     private Long memberNo;
     private int reviewNo;
     private Long restaurantNo;
+    private String restaurantName;
     private String reviewContent;
     private Scope scope;
     private Set<String> reviewTags;
+    private String imgUrl;
 
 
 //    public Scope getScopeEnum() {
