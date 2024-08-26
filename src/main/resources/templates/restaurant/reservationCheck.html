@@ -1,51 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>예약 관리</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.9.0/main.min.css' rel='stylesheet'/>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>예약 관리</title>
 
-    <link rel="stylesheet" th:href="@{/css/fragment/navbar.css}">
-    <link rel="stylesheet" th:href="@{/css/fragment/footer.css}">
-    <link rel="stylesheet" th:href="@{/css/restaurant/reservationCheck.css}">
-</head>
-<body>
+        <!-- css 파일 -->
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+        <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.9.0/main.min.css' rel='stylesheet'/>
+        <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <link rel="stylesheet" th:href="@{/css/fragment/navbar.css}">
+        <link rel="stylesheet" th:href="@{/css/fragment/footer.css}">
+        <link rel="stylesheet" th:href="@{/css/restaurant/reservationCheck.css}">
 
-<div th:replace="~{fragment/navbar.html :: navbar}" class="navbar"></div>
+        <!-- script 파일 -->
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+        <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.9.0/main.min.js'></script>
 
-<div class="container">
-    <div class="nav-buttons">
-        <button type="button" class="btn btn-danger">판매 내역</button>
-        <button type="button" class="btn btn-danger">예약 확인</button>
-        <button type="button" class="btn btn-danger">예약 상태</button>
-        <button type="button" class="btn btn-danger">웨이팅 상태</button>
-        <button type="button" class="btn btn-danger">매장 리뷰</button>
-        <button type="button" class="btn-setting btn-secondary float-right">
-            <img src="img/setting.png" alt="설정" class="glyphicon glyphicon-cog" aria-hidden="true">
-        </button>
-    </div>
-    <div class="card-date p-3">
-        <div class="form-row align-items-center">
-            <div class="col-auto">
-                <label for="datePicker">일자</label>
+    </head>
+    <body>
+
+        <div th:replace="~{fragment/navbar.html :: navbar}" class="navbar"></div>
+
+        <div class="container">
+            <div class="nav-buttons">
+                <button type="button" class="btn btn-danger">판매 내역</button>
+                <button type="button" class="btn btn-danger">예약 확인</button>
+                <button type="button" class="btn btn-danger">예약 상태</button>
+                <button type="button" class="btn btn-danger">웨이팅 상태</button>
+                <button type="button" class="btn btn-danger">매장 리뷰</button>
+                <button type="button" class="btn-setting btn-secondary float-right">
+                    <img th:src="@{/images/setting.png}" alt="설정" class="glyphicon glyphicon-cog" aria-hidden="true">
+                </button>
             </div>
-            <div class="col-auto">
-                <input type="date" class="form-control mb-2" id="datePicker" value="2024-06-19">
+            <div class="card-date p-3">
+                <div class="form-row align-items-center">
+                    <div class="col-auto">
+                        <label for="reservationDate">일자</label>
+                    </div>
+                    <div class="col-auto">
+                        <input type="text" class="form-control mb-2" id="reservationDate" placeholder="날짜 선택">
+                    </div>
+                </div>
             </div>
+            <div class="calendar mt-4" id="reservationCalendar"></div>
         </div>
-    </div>
-    <div class="calendar mt-4" id="calendar"></div>
-</div>
+        <div th:replace="~{fragment/footer.html :: footer}" class="footer"></div>
 
-<div th:replace="~{fragment/footer.html :: footer}" class="footer"></div>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.9.0/main.min.js'></script>
-<script type="text/javascript" th:src="@{js/fragment/navbar.js}"></script>
-<script type="text/javascript" th:src="@{js/management/reservationCheck.js}"></script>
-</body>
+
+        <script type="text/javascript" th:src="@{/js/reservation/admin/reservationCheck.js}"></script>
+        <script type="text/javascript" th:src="@{/js/fragment/navbar.js}"></script>
+    </body>
 </html>
