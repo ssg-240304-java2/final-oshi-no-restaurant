@@ -141,8 +141,8 @@ public interface ReservationRepository extends JpaRepository<Reservation,Integer
      * @param restaurantNo
      * @return
      */
-    @Query("SELECT new kr.oshino.eataku.reservation.user.model.dto.responseDto.ReviewDetails( "  +
-            "m.name , re.reviewContent ,m.imgUrl,re.scope) " +
+    @Query("SELECT new kr.oshino.eataku.reservation.user.model.dto.responseDto.ReviewDetails ( "  +
+            "m.name , re.reviewContent , m.imgUrl, re.scope) " +
             "FROM Review re " +
             "JOIN re.member m " +
             "JOIN re.restaurantInfo r " +
@@ -200,5 +200,16 @@ public interface ReservationRepository extends JpaRepository<Reservation,Integer
             LocalDate reservationDate,
             LocalTime reservationTime
     );
+
+    /***
+     * 식당 리뷰 사진
+     * @param restaurantNo
+     * @return
+     */
+    @Query("SELECT new kr.oshino.eataku.reservation.user.model.dto.responseDto.ReviewImgDto(re.imgUrl)" +
+            "FROM Review re " +
+            "WHERE  re.restaurantInfo.restaurantNo = :restaurantNo AND re.imgUrl IS NOT NULL ")
+    List<ReviewImgDto> getImg(Long restaurantNo);
+
 }
 
