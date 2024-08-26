@@ -14,6 +14,4 @@ public class ReviewDetails {
     private String reviewContent;
     private String imgURL;
     private Scope scope;
-
-
 }
