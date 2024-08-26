@@ -19,6 +19,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -71,10 +73,12 @@ public class ReviewUserService {
                 .scope(createReviewUserRequestDto.getScope())
                 .reviewNo(createReviewUserRequestDto.getReviewNo())
                 .imgUrl(uploadImgUrl)
+                .reviewDate(LocalDateTime.now())
                 .build();
 
         System.out.println("review = " + review);
         System.out.println("uploadImgUrl = " + uploadImgUrl);
+
 
         reviewRepository.save(review);
 
@@ -98,6 +102,7 @@ public class ReviewUserService {
                         .scope(review.getScope())
                         .reviewTags(review.getReviewTags())
                         .imgUrl(review.getImgUrl())
+                        .reviewDate(LocalDateTime.now())
                         .build())
                 .collect(Collectors.toList());
 
