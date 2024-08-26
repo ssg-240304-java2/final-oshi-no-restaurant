@@ -1,12 +1,14 @@
 body {
-    margin-top: 120px;
+    margin-top: 170px;
     background-color: #e0e0e0;
+    height: 100%;
 }
-
 .nav-buttons {
-    margin-bottom: 50px;
+    margin-bottom: 30px;
 }
-
+.content {
+    min-height: calc(100% - 393px);
+}
 .nav-buttons .btn {
     background-color: #FA4A54;
     border: none;
@@ -14,7 +16,6 @@ body {
     margin-right: 10px;
     margin-bottom: 10px;
 }
-
 .btn-setting {
     background-color: transparent;
     border: none;
@@ -22,19 +23,23 @@ body {
     margin-right: 10px;
     margin-bottom: 5px;
 }
-
+.btn-setting:hover,
+.btn-setting:focus,
+.btn-setting:active {
+    background-color: transparent !important;
+    outline: none;
+    box-shadow: none;
+}
 .nav-buttons .btn:hover {
     background-color: #d14045;
 }
-
-.btn-secondary {
+.nav-buttons .btn-secondary {
     border: none;
 }
-
-.btn-secondary:hover {
-    background-color: #d14045;
+.nav-buttons .btn-secondary:hover {
+    background-color: transparent;
+    border: none;
 }
-
 .btn-secondary img {
     width: 25px;
     height: 25px;

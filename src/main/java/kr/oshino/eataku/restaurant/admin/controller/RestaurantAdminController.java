@@ -1,18 +1,11 @@
 package kr.oshino.eataku.restaurant.admin.controller;
 
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import kr.oshino.eataku.common.enums.FoodType;
 import kr.oshino.eataku.common.enums.HashTag;
 import kr.oshino.eataku.member.model.dto.CustomMemberDetails;
-import kr.oshino.eataku.restaurant.admin.entity.Menu;
-import kr.oshino.eataku.restaurant.admin.entity.ReservationSetting;
-import kr.oshino.eataku.restaurant.admin.entity.RestaurantInfo;
-import kr.oshino.eataku.restaurant.admin.entity.WaitingSetting;
 import kr.oshino.eataku.restaurant.admin.model.dto.*;
-import kr.oshino.eataku.restaurant.admin.model.repository.RestaurantRepository;
-import kr.oshino.eataku.restaurant.admin.model.repository.WaitingSettingRepository;
 import kr.oshino.eataku.restaurant.admin.service.RestaurantAdminService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,11 +16,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.sql.Date;
 import java.util.List;
 import java.util.Set;
@@ -315,7 +303,7 @@ public class RestaurantAdminController {
     }
 
     /***
-     * 메뉴 등록
+     * 메뉴 조회
      * @param model
      * @return
      */
