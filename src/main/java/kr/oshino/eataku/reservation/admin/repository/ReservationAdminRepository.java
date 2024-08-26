@@ -13,8 +13,8 @@ import java.util.List;
 @Repository
 public interface ReservationAdminRepository extends JpaRepository<Reservation, Integer> {
 
-    @Query("SELECT r.reservationDate" +
-            ", COUNT(r.reservationNo) " +
+    @Query("SELECT new kr.oshino.eataku.reservation.admin.model.dto.ReservationCountDTO(r.reservationDate " +
+            ", COUNT(r.reservationNo) ) " +
             "FROM Reservation r " +
             "WHERE r.restaurantInfo.restaurantNo = :restaurantNo " +
             "AND MONTH(r.reservationDate) = :month " +

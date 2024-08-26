@@ -13,14 +13,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.*;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -33,23 +30,34 @@ public class ReservationAdminController {
 
     // 예약 조회
     @GetMapping("/reservationCheck")
-    public List<ReservationCountDTO> getReservationsCount(@RequestParam(value = "date", required = false) String date) {
+    public String getReservationsCount() {
+        return "restaurant/reservationCheck";
+    }
+
+    @PostMapping("/reservationCheck")
+    @ResponseBody
+    public List<ReservationCountDTO> getReservationInfo(@RequestParam(value = "date", defaultValue = "") String date) {
 
         CustomMemberDetails member = (CustomMemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long loginedRestaurantNo = member.getRestaurantNo();
 
-        LocalDate parseData;
+        Date parseData;
 
-        if(date == null || date == "") {
-            parseData = LocalDate.now();
+        if(date == null || date.equals("")) {
+            log.info("\uD83C\uDF4E controller date is null !!: {}", date);
+            parseData = Date.valueOf(LocalDate.now());
         }
         else {
-            parseData = LocalDate.parse(date);
+            log.info("\uD83C\uDF4E controller do parsing: {}", date);
+            parseData = Date.valueOf(date);
         }
 
         log.info("\uD83C\uDF4E controller date: {}", parseData);
 
-        return reservationAdminService.getReservationsCount(parseData, loginedRestaurantNo);
+        List<ReservationCountDTO> result = reservationAdminService.getReservationsCount(parseData, loginedRestaurantNo);
+        log.info("\uD83C\uDF4E controller result: {}", result);
+
+        return result;
     }
 
 }
