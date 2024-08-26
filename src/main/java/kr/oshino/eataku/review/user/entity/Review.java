@@ -35,6 +35,10 @@ public class Review {
     @Enumerated(EnumType.STRING)
     private Scope scope;
 
+    /* 사진 */
+    @Column(name = "imgUrl")
+    private String imgUrl;
+
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(
             name="tbl_tags",
