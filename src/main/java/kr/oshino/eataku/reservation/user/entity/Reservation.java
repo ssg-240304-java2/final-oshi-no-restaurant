@@ -75,9 +75,8 @@ public class Reservation {
 
 
     /* 버전 (낙관적 락을 위한 필드) */
-//    @Version
-//    @Column(name = "version")
-//    private Integer version;
-
+    @Version
+    @Column(name = "version")
+    private Integer version;
 
 }

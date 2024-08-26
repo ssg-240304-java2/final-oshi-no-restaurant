@@ -214,7 +214,6 @@ public class ReservationUserController {
         List<MenuDto> menu = reservationUserService.getMenu(restaurantNo);
         model.addAttribute("menu", menu);
 
-
         // 리뷰 상세 정보
         List<ReviewDetails> reviewDetails = reservationUserService.getReviewDetails(restaurantNo);
         model.addAttribute("ReviewDetails", reviewDetails);
@@ -227,7 +226,9 @@ public class ReservationUserController {
         // 식당 지도 위치 정보
        List<MapDto> position = reservationUserService.getMapLocation(restaurantNo);
 
-
+        // 식당 리뷰 사진
+        List<ReviewImgDto> reviewImgDto = reservationUserService.getImg(restaurantNo);
+        model.addAttribute("reviewImgDto", reviewImgDto);
 
         for (String tagCounts : tagCount) {
             String[] parts = tagCounts.split(",");
@@ -250,6 +251,7 @@ public class ReservationUserController {
         System.out.println("tagCountMap = " + tagCountMap);
         System.out.println("tagCountMap = " + tagCountMap);
         System.out.println("position = " + position);
+        System.out.println("reviewImgDto = " + reviewImgDto);
 
 
         return "reservation/reservationDetail";

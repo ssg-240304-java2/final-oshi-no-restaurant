@@ -199,6 +199,7 @@ $(document).ready(function() {
         }
     });
 
+
     // 모달 콘텐츠를 불러오기 위한 함수
     function fetchModalContent(restaurantNo) {
         $.ajax({
