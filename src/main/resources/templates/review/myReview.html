@@ -154,6 +154,9 @@
             <div th:each="tag : ${review.reviewTags}">
               <button type="button" class="btn btn-outline-danger tag-btn" th:text="${tag}"></button>
             </div>
+              <div class="review-date">
+                <small th:text="${#temporals.format(review.reviewDate, 'yyyy-MM-dd')}">리뷰 날짜</small>
+              </div>
           </div>
         </div>
       </div>

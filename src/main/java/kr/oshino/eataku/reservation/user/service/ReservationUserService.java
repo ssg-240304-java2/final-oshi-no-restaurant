@@ -12,6 +12,7 @@ import kr.oshino.eataku.restaurant.admin.model.repository.RestaurantRepository;
 import kr.oshino.eataku.review.user.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
@@ -35,29 +36,46 @@ public class ReservationUserService {
     @Transactional
     public CreateReservationUserResponseDto registerReservation(CreateReservationUserRequestDto createReservationUserRequestDto) {
 
-        // 예약 가능 여부 확인하기
-
-
+        // 중복 예약 확인
         Member member = memberRepository.findById((long) createReservationUserRequestDto.getMemberNo())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid memberNo: " + createReservationUserRequestDto.getMemberNo()));
 
         RestaurantInfo restaurantInfo = restaurantRepository.findById((long) createReservationUserRequestDto.getRestaurantNo())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid restaurantNo: " + createReservationUserRequestDto.getRestaurantNo()));
 
+        boolean exists = reservationRepository.existsByMember_MemberNoAndRestaurantInfo_RestaurantNoAndReservationDateAndReservationTime(
+                member.getMemberNo(),
+                restaurantInfo.getRestaurantNo(),
+                createReservationUserRequestDto.getReservationDate(),
+                createReservationUserRequestDto.getReservationTime()
+        );
 
-        Reservation reservation = Reservation.builder()
-                .member(member)
-                .restaurantInfo(restaurantInfo)
-                .partySize(createReservationUserRequestDto.getPartySize())
-                .reservationDate(createReservationUserRequestDto.getReservationDate())
-                .reservationTime(createReservationUserRequestDto.getReservationTime())
-                .reservationStatus(ReservationStatus.예약완료)
-                .build();
 
-        reservationRepository.save(reservation);
+        if (exists) {
+            // 중복 예약이 존재하는 경우
+            return new CreateReservationUserResponseDto(409, "이미 동일한 시간에 예약이 존재합니다.", -1);
+        }
 
-        // 수정 필요
-        return new CreateReservationUserResponseDto(200, "예약 완료", 1);
+        System.out.println("exists = " + exists);
+        try {
+            Reservation reservation = Reservation.builder()
+                    .member(member)
+                    .restaurantInfo(restaurantInfo)
+                    .partySize(createReservationUserRequestDto.getPartySize())
+                    .reservationDate(createReservationUserRequestDto.getReservationDate())
+                    .reservationTime(createReservationUserRequestDto.getReservationTime())
+                    .reservationStatus(ReservationStatus.예약완료)
+                    .build();
+
+            reservationRepository.save(reservation);
+
+            return new CreateReservationUserResponseDto(200, "예약 완료", reservation.getReservationNo());
+
+        } catch (ObjectOptimisticLockingFailureException e) {
+            // 낙관적 락 충돌이 발생했을 경우 처리
+            log.error("낙관적 락 실패 ", e);
+            return new CreateReservationUserResponseDto(409, "동시에 다른 사용자가 동일한 리소스를 예약하려고 시도했습니다. 다시 시도해주세요.", -1);
+        }
     }
 
 
@@ -131,6 +149,7 @@ public class ReservationUserService {
 
 
     /**
+     * 방문 완료
      * 예약 조회 (회원)
      *
      * @param readReservationResponseDto
@@ -159,6 +178,8 @@ public class ReservationUserService {
      */
     @Transactional
     public boolean cancelReservation(int reservationNo) {
+
+        try {
         return reservationRepository.findById(reservationNo).map(reservation -> {
             LocalDate reservationDate = reservation.getReservationDate(); // 예약 날짜 가져오기
             LocalTime reservationTime = reservation.getReservationTime(); // 예약 시간 가져오기
@@ -169,7 +190,7 @@ public class ReservationUserService {
             // 현재 날짜와 예약 날짜의 차이를 계산
             long daysUntilReservation = ChronoUnit.DAYS.between(currentDate, reservationDate);
 
-            if (daysUntilReservation > 0 || (daysUntilReservation == 0 && currentTime.isBefore(reservationTime.minusHours(24)))) {
+            if (daysUntilReservation > 1 || (daysUntilReservation == 1 && currentTime.isBefore(reservationTime.minusHours(24)))) {
                 // 예약 취소 처리
                 reservationRepository.delete(reservation);
 
@@ -182,7 +203,11 @@ public class ReservationUserService {
                 return false;
             }
         }).orElse(false); // 해당 예약이 없는 경우
+    } catch (ObjectOptimisticLockingFailureException e) {
+        log.error("Optimistic locking failure while canceling reservation", e);
+        return false;
     }
+}
 
 
     /**
@@ -236,6 +261,22 @@ public class ReservationUserService {
     @Transactional
     public List<MapDto> getMapLocation(Long restaurantNo) {
         return reservationRepository.getMapLocation(restaurantNo);
+
+    }
+
+    /**
+     * 식당 메뉴 사진
+     * @param restaurantNo
+     * @return
+     */
+
+
+    @Transactional
+    public List<MenuDto> getMenu(Long restaurantNo) {
+
+        RestaurantInfo restaurantInfo =restaurantRepository.findById(restaurantNo)
+                .orElseThrow(() -> new IllegalArgumentException("없는 식당: " + restaurantNo));
+        return reservationRepository.getMenu(restaurantInfo.getRestaurantNo());
 
     }
 }

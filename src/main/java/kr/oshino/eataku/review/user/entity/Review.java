@@ -6,6 +6,8 @@ import kr.oshino.eataku.member.entity.Member;
 import kr.oshino.eataku.restaurant.admin.entity.RestaurantInfo;
 import lombok.*;
 
+
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
@@ -36,8 +38,12 @@ public class Review {
     private Scope scope;
 
     /* 사진 */
-    @Column(name = "imgUrl")
+    @Column(name = "img_url")
     private String imgUrl;
+
+    /* 작성 일자 */
+    @Column(name = "review_date")
+    private LocalDateTime reviewDate;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(

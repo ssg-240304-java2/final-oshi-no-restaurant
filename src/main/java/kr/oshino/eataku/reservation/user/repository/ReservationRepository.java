@@ -4,12 +4,11 @@ import jakarta.transaction.Transactional;
 
 import kr.oshino.eataku.common.enums.ReservationStatus;
 
+import kr.oshino.eataku.member.entity.Member;
 import kr.oshino.eataku.reservation.user.entity.Reservation;
-import kr.oshino.eataku.reservation.user.model.dto.responseDto.MapDto;
-import kr.oshino.eataku.reservation.user.model.dto.responseDto.ReadReservationResponseDto;
-import kr.oshino.eataku.reservation.user.model.dto.responseDto.RestaurantInfoDetails;
-import kr.oshino.eataku.reservation.user.model.dto.responseDto.ReviewDetails;
+import kr.oshino.eataku.reservation.user.model.dto.responseDto.*;
 import kr.oshino.eataku.restaurant.admin.entity.ReservationSetting;
+import kr.oshino.eataku.restaurant.admin.entity.RestaurantInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -99,7 +98,7 @@ public interface ReservationRepository extends JpaRepository<Reservation,Integer
             "FROM Reservation r " +
             "JOIN r.member m " +
             "JOIN r.restaurantInfo ri " +
-            "WHERE m.memberNo = :memberNo")
+            "WHERE m.memberNo = :memberNo AND r.reservationStatus='방문완료'")
     List<ReadReservationResponseDto> findReservationByMemberNo(Long memberNo);
 
 
@@ -130,10 +129,11 @@ public interface ReservationRepository extends JpaRepository<Reservation,Integer
      * 상세정보
      */
     @Query("SELECT new kr.oshino.eataku.reservation.user.model.dto.responseDto.RestaurantInfoDetails(" +
-            "r.restaurantName, r.restaurantAddress,r.imgUrl,r.restaurantNo ) " +
+            "r.restaurantName, r.restaurantAddress, r.imgUrl, r.restaurantNo,r.contact,r.description) " +
             "FROM RestaurantInfo r " +
             "WHERE r.restaurantNo = :restaurantNo")
     Optional<RestaurantInfoDetails> findRestaurantDetailsByReservationNo(@Param("restaurantNo") Long restaurantNo);
+
 
 
     /**
@@ -176,7 +176,29 @@ public interface ReservationRepository extends JpaRepository<Reservation,Integer
             "FROM RestaurantInfo a " +
             "WHERE a.restaurantNo = :restaurantNo")
     List<MapDto> getMapLocation(@Param("restaurantNo") Long restaurantNo);
+
+
+    /***
+     * 메뉴 정보 가져오기
+     *
+     * @return
+     */
+    @Query("SELECT new kr.oshino.eataku.reservation.user.model.dto.responseDto.MenuDto(m.imgUrl,m.description,m.menuName) " +
+            "FROM Menu m WHERE m.restaurantNo.restaurantNo = :restaurantNo")
+    List<MenuDto> getMenu(@Param("restaurantNo") Long restaurantNo);
+
+    /**
+     * 예약가능한지 여부 확인하기
+     * @param
+     * @param reservationDate
+     * @param reservationTime
+     * @return
+     */
+    boolean existsByMember_MemberNoAndRestaurantInfo_RestaurantNoAndReservationDateAndReservationTime(
+            Long memberNo,
+            Long restaurantNo,
+            LocalDate reservationDate,
+            LocalTime reservationTime
+    );
 }
-
-
 

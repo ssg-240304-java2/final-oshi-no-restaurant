@@ -6,16 +6,12 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalTime;
-
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreateReservationUserResponseDto {
-
-    private int httpCode;
-    private String message;
-    private int memberNo;
-
+    public int httpCode;
+    public String message;
+    public int memberNo;
 }

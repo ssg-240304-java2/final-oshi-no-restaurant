@@ -309,21 +309,21 @@ $(document).ready(function () {
     $('#btn-submit').on('click', function () {
 
         // ID 체크
-        const account = $('#userId').val();
-        if( account !== $('#userId').data('initial-value') ){
-
-            if( account === "" ){
-                alert('아이디를 입력해주세요.');
-                $('.account-before').removeClass('hidden');
-                $('#userId').addClass('is-invalid');
-                return;
-            }
-
-            if( !$('#userId').hasClass('is-valid') ){
-                alert('아이디 변경 시 중복확인 필수 입니다 !');
-                return;
-            }
-        }
+        // const account = $('#userId').val();
+        // if( account !== $('#userId').data('initial-value') ){
+        //
+        //     if( account === "" ){
+        //         alert('아이디를 입력해주세요.');
+        //         $('.account-before').removeClass('hidden');
+        //         $('#userId').addClass('is-invalid');
+        //         return;
+        //     }
+        //
+        //     if( !$('#userId').hasClass('is-valid') ){
+        //         alert('아이디 변경 시 중복확인 필수 입니다 !');
+        //         return;
+        //     }
+        // }
 
         // PWD 체크
         const password = $('#password').val();
@@ -379,14 +379,14 @@ $(document).ready(function () {
         const gender = $('#gender').val()
 
         // 이메일 체크
-        const email = $('#email').val()
-        if( email !== $('#email').data('initial-value') ){
-
-            if( $('#email').hasClass('is-invalid') || $('#authCode').hasClass('is-invalid') ){
-                alert('이메일 인증 후 변경가능합니다.')
-                return;
-            }
-        }
+        // const email = $('#email').val()
+        // if( email !== $('#email').data('initial-value') ){
+        //
+        //     if( $('#email').hasClass('is-invalid') || $('#authCode').hasClass('is-invalid') ){
+        //         alert('이메일 인증 후 변경가능합니다.')
+        //         return;
+        //     }
+        // }
 
         // 전화번호 체크
         const phone = $('#phone').val();
@@ -406,13 +406,11 @@ $(document).ready(function () {
         const formData = new FormData();
 
         const jsonData = {
-            "account": account,
             "password": password,
             "name": name,
             "nickname": nickname,
             "birthday": birthday,
             "gender": gender,
-            "email": email,
             "phone": phone,
             "introduction": introduce
         }
