@@ -18,7 +18,10 @@ public class MailService {
     private final JavaMailSender mailSender;
     private final EmailVerifCodeRepository emailVerifCodeRepository;
 
-    public int sendEmailVerifCode(String email, @Value("${spring.mail.username}") String senderEmail) {
+    @Value("${spring.mail.username}")
+    private String senderEmail;
+
+    public int sendEmailVerifCode(String email) {
 
         int number = (int) (Math.random() * (90000)) + 100000;
         log.info("🛠️🛠️ MailService VerifCode Create : {} 🛠️🛠️", number);
@@ -67,5 +70,52 @@ public class MailService {
 
         log.info("🛠️🛠️ MailService Check Verif Email : {} , reqVerifCode : {}, result : {} 🛠️🛠️", email, reqVerifCode, isMatch);
         return isMatch;
+    }
+
+    public boolean sendEmailFindId(String email, String account) {
+
+        log.info("🛠️🛠️ MailService Send to email : {}, account : {} 🛠️🛠️", email, account);
+        MimeMessage message = mailSender.createMimeMessage();
+
+        try {
+            message.setFrom(senderEmail);
+            message.setRecipients(MimeMessage.RecipientType.TO, email);
+            message.setSubject("아이디 찾기");
+            String body = "";
+            body += "<h3>" + "고객님이 가입하신 ID는" + "</h3>";
+            body += "<h1>" + account + "</h1>";
+            body += "<h3>" + "입니다. 감사합니다." + "</h3>";
+            message.setText(body, "UTF-8", "html");
+        } catch (MessagingException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        mailSender.send(message);
+        return true;
+    }
+
+    public boolean sendEmailFindPw(String email, String tempPassword) {
+
+        log.info("🛠️🛠️ MailService Send to email : {}, tempPassword : {} 🛠️🛠️", email, tempPassword);
+        MimeMessage message = mailSender.createMimeMessage();
+
+        try {
+            message.setFrom(senderEmail);
+            message.setRecipients(MimeMessage.RecipientType.TO, email);
+            message.setSubject("비밀번호 찾기");
+            String body = "";
+            body += "<h3>" + "고객님의 임시비밀번호는 " + "</h3>";
+            body += "<h1>" + tempPassword + "</h1>";
+            body += "<h3>" + "입니다. 감사합니다." + "</h3>";
+            message.setText(body, "UTF-8", "html");
+        } catch (MessagingException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        mailSender.send(message);
+
+        return true;
     }
 }

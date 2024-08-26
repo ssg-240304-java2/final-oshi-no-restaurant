@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Date;
 import java.util.List;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
@@ -21,7 +20,8 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     "WHEN a.cnt < 10 THEN '쩝쩝학생' " +
             "WHEN a.cnt < 50 THEN '쩝쩝학사'" +
             "WHEN a.cnt < 100 THEN '쩝쩝석사'" +
-            "ELSE '쩝쩝박사' END " +
+            "WHEN a.cnt >= 100 THEN '쩝쩝박사'" +
+            "ELSE '쩝쩝학생' END " +
             "FROM " +
             "( SELECT SUM(l.listShare) AS cnt " +
             "FROM Member m " +
@@ -121,4 +121,10 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     @Query(value = "SELECT restaurant_no " +
             "FROM tbl_direct_restaurant ", nativeQuery = true)
     List<Long> selectDirectRestaurants();
+
+    Member findByNameAndEmail(String name, String email);
+
+    Member findByMemberLoginInfoAccountAndNameAndEmail(String id, String name, String email);
+
+    boolean existsByMemberLoginInfoAccountAndNameAndEmail(String id, String name, String email);
 }

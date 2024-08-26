@@ -26,11 +26,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.security.SecureRandom;
 import java.sql.Date;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Service
 @RequiredArgsConstructor
@@ -46,6 +48,9 @@ public class MemberService {
     private final MyListRepository myListRepository;
     private final ReservationRepository reservationRepository;
     private final WaitingRepository waitingRepository;
+
+    // 메일 전송을 위한 메일서비스
+    private final MailService mailService;
 
     @Autowired
     FileUploadUtil fileUploadUtil;
@@ -278,14 +283,12 @@ public class MemberService {
             if( !memberInfo.getNickname().equals(member.getNickname()) ) {memberInfo.setName(member.getNickname());}
             if( !memberInfo.getBirthday().equals(member.getBirthday()) ) {memberInfo.setBirthday(member.getBirthday());}
             if( !memberInfo.getGender().equals(member.getGender()) ) {memberInfo.setGender(member.getGender());}
-            if( !memberInfo.getEmail().equals(member.getEmail()) ) {memberInfo.setEmail(member.getEmail());}
             if( !memberInfo.getPhone().equals(member.getPhone()) ) {memberInfo.setPhone(member.getPhone());}
             if( !memberInfo.getIntroduction().equals(member.getIntroduction()) ) {memberInfo.setIntroduction(member.getIntroduction());}
 
             // 계정정보
             MemberLoginInfo tempLoginInfo = memberInfo.getMemberLoginInfo();
-            if( !memberInfo.getMemberLoginInfo().getAccount().equals(member.getAccount()) ) {tempLoginInfo.setAccount(member.getAccount());}
-            if( !bCryptPasswordEncoder.matches(member.getPassword(), tempLoginInfo.getPassword()) && !member.getPassword().isEmpty() ) {tempLoginInfo.setPassword(bCryptPasswordEncoder.encode(member.getPassword()));}
+            if( !bCryptPasswordEncoder.matches(member.getPassword(), tempLoginInfo.getPassword()) && !(member.getPassword() == "")) {tempLoginInfo.setPassword(bCryptPasswordEncoder.encode(member.getPassword()));}
             memberInfo.setMemberLoginInfo(tempLoginInfo);
 
             memberRepository.save(memberInfo);
@@ -293,5 +296,67 @@ public class MemberService {
         }
 
         return isSuccess;
+    }
+
+    public boolean findAccountByNameAndEmail(String name, String email) {
+
+        Member member = memberRepository.findByNameAndEmail(name, email);
+
+        if( member != null && member.getMemberLoginInfo() != null && member.getMemberLoginInfo().getAccount() != null) {
+
+            return mailService.sendEmailFindId(email, member.getMemberLoginInfo().getAccount() );
+        }
+
+        return false;
+    }
+
+    public boolean findPasswordByIdAndNameAndEmail(String id, String name, String email) {
+
+        Member member = memberRepository.findByMemberLoginInfoAccountAndNameAndEmail(id,name,email);
+
+        if( member != null && member.getMemberLoginInfo() != null) {
+
+            String tempPassword = generateRandomMixAll(8);
+
+            MemberLoginInfo changePasswordInfo = member.getMemberLoginInfo();
+            changePasswordInfo.setPassword(bCryptPasswordEncoder.encode(tempPassword));
+            member.setMemberLoginInfo(changePasswordInfo);
+
+            memberRepository.save(member);
+
+            return mailService.sendEmailFindPw(email, tempPassword );
+        }
+
+        return false;
+    }
+
+    public String generateRandomMixAll(int length) {
+        SecureRandom secureRandom = new SecureRandom();
+        /*
+         * 1. 특수문자의 범위 33 ~ 47, 58 ~ 64, 91 ~ 96
+         * 2. 숫자의 범위 : 48 ~ 57
+         * 3. 대문자의 범위: 65 ~ 90
+         * 4. 소문자의 범위: 97 ~ 122
+         */
+        String charNSpecialChar =
+                IntStream.concat(
+                                IntStream.concat(
+                                        IntStream.rangeClosed(48, 57),
+                                        IntStream.rangeClosed(65,90)),
+                                IntStream.concat(
+                                        IntStream.rangeClosed(97, 122),
+                                        "!@#$%^&*=+".chars()))
+                        .mapToObj(i -> String.valueOf((char) i))
+                        .collect(Collectors.joining());
+
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < length; i++) {
+            builder.append(charNSpecialChar.charAt(secureRandom.nextInt(charNSpecialChar.length())));
+        }
+        return builder.toString();
+    }
+
+    public boolean selectSignUpByIdAndNameAndEmail(String id, String name, String email) {
+        return memberRepository.existsByMemberLoginInfoAccountAndNameAndEmail(id,name,email);
     }
 }

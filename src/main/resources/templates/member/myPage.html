@@ -17,7 +17,7 @@
             <div class="sidebar-content">
             <h2>마이페이지</h2>
             <a href="/myInfo">개인정보수정</a>
-            <a href="#badge">내 뱃지 보기</a>
+            <a href="#badge" id="showBadge">내 뱃지 보기</a>
             <a href="/myInfo/review">내 리뷰 보기</a>
             <a href="/myInfo/history">이용내역조회</a>
             <a href="/myInfo/list">내 리스트 관리</a>
@@ -40,6 +40,9 @@
                     </div>
                 </div>
                 <p th:text="${member.nickname}+'님은 '+${member.weight}+'kg입니다.'" class="col-md-8">OOO님은 150,000kg입니다.</p>
+            </div>
+            <div class="rank">
+                <h4>내 등급은 <span th:text="${member.badge}" class="badge-rank">쩝쩝박사</span> 입니다.</h4>
             </div>
             <div class="reservation" th:each="waitingInfo : ${member.waitingInfo}">
                 <div>
@@ -73,14 +76,35 @@
 
 
             </div>
-            <div class="rank">
-                <h4>내 등급은 <span th:text="${member.badge}" class="badge-rank">쩝쩝박사</span> 입니다.</h4>
+
+            <!-- 뱃지 팝업 -->
+            <div id="badgePopup" class="popup">
+                <div class="badge-container">
+                    <div th:if="${member.badge} eq '쩝쩝학생'" class="badge" id="student">
+                        <img src="/images/badge/none.png" alt="학생">
+                        <p>쩝쩝학생</p>
+                    </div>
+                    <div th:unless="${member.badge eq '쩝쩝학생'}" class="badge" id="bachelor">
+                        <img src="/images/badge/bronze.png" alt="학사">
+                        <p>쩝쩝학사</p>
+                    </div>
+                    <div th:unless="${member.badge eq '쩝쩝학생' or member.badge eq '쩝쩝학사'}" class="badge" id="master">
+                        <img src="/images/badge/silver.png" alt="석사">
+                        <p>쩝쩝석사</p>
+                    </div>
+                    <div th:unless="${member.badge eq '쩝쩝학생' or member.badge eq '쩝쩝학사' or member.badge eq '쩝쩝석사'}" class="badge" id="doctor">
+                        <img src="/images/badge/gold.png" alt="박사">
+                        <p>쩝쩝박사</p>
+                    </div>
+                </div>
             </div>
         </div>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
         <script type="text/javascript" th:src="@{/js/fragment/navbar.js}"></script>
+        <script type="text/javascript" th:src="@{/js/reservation/reservationCalendar.js}"></script>
+        <script type="text/javascript" th:src="@{/js/member/myPage.js}"></script>
         <script type="text/javascript" th:src="@{/js/reservation/user/reservationCalendar.js}"></script>
 
 

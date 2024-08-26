@@ -13,6 +13,7 @@ import kr.oshino.eataku.member.service.MemberService;
 import kr.oshino.eataku.restaurant.admin.model.dto.RestaurantAccountInfoDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -31,16 +32,32 @@ import java.util.Map;
 @Slf4j
 public class MemberController {
 
+    @Value("${kakao.client_id}")
+    private String kakaoClientId;
+
+    @Value("${kakao.redirect_uri}")
+    private String kakaoRedirectUri;
+
     private final MemberService memberService;
     private final MailService mailService;
 
     @GetMapping("/login")
-    public String login() {
+    public String login(Model model) {
+
+        String location = "https://kauth.kakao.com/oauth/authorize?response_type=code&client_id="+kakaoClientId+"&redirect_uri="+kakaoRedirectUri;
+        model.addAttribute("location", location);
+
         return "member/login";
     }
 
     @GetMapping("/managerLogin")
-    public String managerLogin() { return "member/managerLogin"; }
+    public String managerLogin(Model model) {
+
+        String location = "https://kauth.kakao.com/oauth/authorize?response_type=code&client_id="+kakaoClientId+"&redirect_uri="+kakaoRedirectUri;
+        model.addAttribute("location", location);
+
+        return "member/managerLogin";
+    }
 
     @GetMapping("/logout")
     public String logout(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -82,7 +99,7 @@ public class MemberController {
     public ResponseEntity<Boolean> sendEmailVerifCode(@RequestBody MemberDTO member) {
         log.info("⭐️⭐️ [ MemberController ] Send to Email : {} ⭐️⭐️", member.getEmail());
 
-        int verifCode = mailService.sendEmailVerifCode(member.getEmail(), null);
+        int verifCode = mailService.sendEmailVerifCode(member.getEmail());
         log.info("⭐️⭐️ [ MemberController ] Email Send verifCode T/F : {} ⭐️⭐️", verifCode);
 
         return ResponseEntity.ok(true);
@@ -180,5 +197,57 @@ public class MemberController {
         }
 
         return ResponseEntity.ok(false);
+    }
+
+    // 찾기
+    @GetMapping("/find")
+    public String find() {
+        return "member/find";
+    }
+    @GetMapping("/find/id")
+    public String findId() {
+        return "member/findId";
+    }
+    @GetMapping("/find/pw")
+    public String findPw() {
+        return "member/findPw";
+    }
+
+    @PostMapping("/find/id")
+    @ResponseBody
+    public ResponseEntity<Boolean> findIdProc(@RequestParam(value = "name") String name,@RequestParam String email){
+
+        log.info("⭐️⭐️ [ MemberController ] find id By name : {}, email : {} ⭐️⭐️", name , email);
+
+        boolean isSuccess = false;
+
+        if ( name != null && !name.isEmpty()  && email != null && !email.isEmpty() ){
+            isSuccess = memberService.findAccountByNameAndEmail(name,email);
+        }
+
+        if(isSuccess){
+            return ResponseEntity.ok(true);
+        }
+
+        return ResponseEntity.badRequest().body(false);
+    }
+
+    @PostMapping("/find/pw")
+    @ResponseBody
+    public ResponseEntity<Boolean> findPwProc(@RequestParam String id, @RequestParam String name,@RequestParam String email){
+
+        log.info("⭐️⭐️ [ MemberController ] find pw By id : {}, name : {}, email : {} ⭐️⭐️", id, name , email);
+
+        boolean isSuccess = false;
+
+        if ( id != null && !id.isEmpty() && name != null && !name.isEmpty()  && email != null && !email.isEmpty() ){
+            isSuccess = memberService.findPasswordByIdAndNameAndEmail(id,name,email);
+        }
+
+        if(isSuccess){
+            return ResponseEntity.ok(true);
+        }
+
+        return ResponseEntity.badRequest().body(false);
     }
 }
