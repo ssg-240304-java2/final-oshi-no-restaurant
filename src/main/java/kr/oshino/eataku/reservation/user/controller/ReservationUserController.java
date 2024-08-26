@@ -6,9 +6,6 @@ import kr.oshino.eataku.reservation.user.service.ReservationUserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,7 +14,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +22,6 @@ import java.util.Map;
 
 @Slf4j
 @Controller
-//@RequestMapping("/user")
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
 public class ReservationUserController {
 
@@ -47,9 +42,9 @@ public class ReservationUserController {
 
         model.addAttribute("memberNo", memberNo);
         System.out.println("memberNo= ---------------" + memberNo);
-
         model.addAttribute("restaurantNo", restaurantNo);
         System.out.println("restaurantNo = " + restaurantNo);
+
         System.out.println("예약 페이지 접속");
         return "reservation/reservationCalendar";
     }
@@ -146,7 +141,7 @@ public class ReservationUserController {
 
 
     /***
-     * 예약 조회
+     * 방문완료 예약 조회
      */
     @GetMapping("/reservation")
     @ResponseBody
@@ -164,6 +159,9 @@ public class ReservationUserController {
 
     public String cancelReservations() {
 
+//        model.addAttribute("reservationNo",reservationNo);
+
+
         return "reservation/updateReservation";
     }
 
@@ -175,9 +173,13 @@ public class ReservationUserController {
 
     @PostMapping("/reservation/{reservationNo}/cancel")
     @ResponseBody
-    public ResponseEntity<?> cancelReservation(@PathVariable int reservationNo) {
+    public ResponseEntity<?> cancelReservation(@PathVariable int reservationNo, Model model) {
+
         boolean isCancelled = reservationUserService.cancelReservation(reservationNo);
         System.out.println("isCancelled = " + isCancelled);
+        model.addAttribute("reservationNo",reservationNo);
+        System.out.println("reservationNo" + reservationNo);
+
 
         if (isCancelled) {
             return ResponseEntity.ok().body(Map.of("success", true, "message", "예약이 성공적으로 취소되었습니다."));
@@ -202,11 +204,15 @@ public class ReservationUserController {
      * 특정 식당의 상세 정보 가져오기
      */
     @GetMapping("/detail/{restaurantNo}/detailPage")
-    public String detailPage(@PathVariable Long restaurantNo, Model model,@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+    public String detailPage(@PathVariable Long restaurantNo, Model model) {
 
         // 식당 상세 정보
         RestaurantInfoDetails restaurant = reservationUserService.getRestaurantDetailsByReservation(restaurantNo);
         model.addAttribute("restaurant", restaurant);
+
+        // 식당 메뉴 정보
+        List<MenuDto> menu = reservationUserService.getMenu(restaurantNo);
+        model.addAttribute("menu", menu);
 
 
         // 리뷰 상세 정보
@@ -234,6 +240,7 @@ public class ReservationUserController {
                 System.err.println(" 올바른 형식이이 아님 " + tagCount);
             }
         }
+        System.out.println("menu = " + menu);
 
         model.addAttribute("tagCountMap", tagCountMap);
         model.addAttribute("position",  position);

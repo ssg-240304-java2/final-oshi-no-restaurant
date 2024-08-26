@@ -13,4 +13,6 @@ public class RestaurantInfoDetails {
     private String restaurantAddress;
     private String imgUrl;
     private Long restaurantNo;
+    private String contact;
+    private String description;
 }

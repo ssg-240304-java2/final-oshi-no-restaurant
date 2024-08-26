@@ -69,7 +69,9 @@
                         <span th:text="${reservationInfo.restaurantNo}">양식</span> <span>•</span> <span th:text="${reservationInfo.restaurantAddress}">강남구</span>
                     </div>
                 </div>
-                <button class="btn btn-cancel">예약 취소</button>
+                <button type="button" class="btn btn-cancel" th:data-reservation-no="${reservationInfo.reservationNo}" data-toggle="modal" data-target="#cancelModal">예약 취소</button>
+
+
             </div>
             <div class="rank">
                 <h4>내 등급은 <span th:text="${member.badge}" class="badge-rank">쩝쩝박사</span> 입니다.</h4>
@@ -79,6 +81,79 @@
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
         <script type="text/javascript" th:src="@{/js/fragment/navbar.js}"></script>
-        <script type="text/javascript" th:src="@{/js/reservation/reservationCalendar.js}"></script>
+        <script type="text/javascript" th:src="@{/js/reservation/user/reservationCalendar.js}"></script>
+
+
+
+
+        <!-- 모달 구조 -->
+        <div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="cancelModalLabel">예약취소</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- 예약 취소 내용 -->
+                        <div class="reservation-cancel text-center">
+                            <div class="icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#ff6f61" width="80" height="80">
+                                    <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm-1 17.93l-5-5 1.41-1.41L11 14.93l7.59-7.59L20 8.34l-9 9z"/>
+                                </svg>
+                            </div>
+                            <h3>예약을 취소하시겠습니까?</h3>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+                        <button type="button" class="btn btn-danger" id="confirmCancel">취소하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+        <!-- 예약 취소 처리를 위한 스크립트 -->
+        <script>
+            $(document).ready(function() {
+                var reservationNo;
+
+                $('#cancelModal').on('show.bs.modal', function (event) {
+                    var button = $(event.relatedTarget); // 모달을 트리거한 버튼
+                    reservationNo = button.data('reservation-no'); // data-reservation-no 속성에서 reservationNo 가져오기
+                    console.log("Reservation No: ", reservationNo); // 예약 번호를 콘솔에 출력하여 확인
+                });
+
+
+                $('#confirmCancel').click(function() {
+                    $.ajax({
+                        url: '/reservation/' + reservationNo + '/cancel',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        success: function(response) {
+                            if (response.success) {
+                                alert(response.message);
+                                $('#cancelModal').modal('hide'); // 모달을 닫습니다.
+                                window.location.href = '/myPage';
+                                // 예약 목록을 새로 고침하거나 업데이트하는 로직을 추가할 수 있습니다.
+                            } else {
+                                alert(response.message);
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Error:', error);
+                            alert('예약 취소 중 오류가 발생하였습니다.');
+                        }
+                    });
+                });
+            });
+        </script>
+
     </body>
 </html>

@@ -5,27 +5,20 @@ $(document).ready(function() {
     var reservationDate = today.toISOString().split('T')[0];
     var reservationTime;
     var memberNo = $('#reservation-info').data('memberno');
-    var restaurantNo = $[[{restaurantNo}]];
-
-    console.log(memberNo);
-
-    // var restaurantNo = 1;
-    var availableDates = [];
-
 
     // URL에서 restaurantNo 추출
     var url = window.location.pathname;
     var restaurantNo = url.substring(url.lastIndexOf('/') + 1);
 
+    console.log("MemberNo:", memberNo);
     console.log("RestaurantNo:", restaurantNo);
-
 
     // 서버에서 예약 가능한 날짜 데이터를 가져옴
     $.ajax({
         url: `/reservation/${restaurantNo}/available-dates`,
         method: 'POST',
         success: function(data) {
-            availableDates = data.map(date => {
+            var availableDates = data.map(date => {
                 var d = new Date(date);
                 d.setHours(0, 0, 0, 0); // 시간을 00:00:00으로 설정
                 return d;
@@ -33,17 +26,14 @@ $(document).ready(function() {
             console.log("예약 가능한 날짜들:", availableDates);
 
             // Pikaday 초기화 (AJAX 성공 후)
-            initializeDatePicker();
+            initializeDatePicker(availableDates);
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.error('예약 가능한 날짜를 가져오는 데 실패했습니다.', textStatus, errorThrown);
         }
     });
 
-
-
-
-    function initializeDatePicker() {
+    function initializeDatePicker(availableDates) {
         var picker = new Pikaday({
             field: document.createElement('div'),
             container: document.getElementById('datepicker-container'),
@@ -97,9 +87,6 @@ $(document).ready(function() {
         updateAvailableTimeSlots();
     }
 
-
-
-
     function updateAvailableTimeSlots() {
         if (reservationDate && partySize) {
             $.ajax({
@@ -139,9 +126,6 @@ $(document).ready(function() {
         }
     }
 
-
-
-
     // 인원 선택 버튼 처리
     $(document).on('click', '.people .btn', function(){
         $('.people .btn').removeClass('selected');
@@ -152,10 +136,6 @@ $(document).ready(function() {
         // 인원수 선택 후 시간대 업데이트
         updateAvailableTimeSlots();
     });
-
-
-
-
 
     // 예약 버튼 클릭 이벤트
     $('#reserve-button').on('click', function() {
@@ -189,10 +169,24 @@ $(document).ready(function() {
                 success: function(response) {
                     console.log('서버 응답:', response);
 
-                    fetchModalContent(requestData.restaurantNo);
-                    $('#reservationModal').modal('show');
-
-                    subtractPartySize(requestData.restaurantNo, partySize, reservationTime);
+                    // 중복 예약 시 서버에서 409 응답을 받으면 alert 창을 띄움
+                    if (response.httpCode === 409) {
+                        console.log('409 응답 감지됨');
+                        if (response.message === '이미 동일한 시간에 예약이 존재합니다.') {
+                            alert('이미 동일한 시간에 예약이 존재합니다.');
+                        } else if (response.message === '동시에 다른 사용자가 동일한 리소스를 예약하려고 시도했습니다. 다시 시도해주세요.') {
+                            alert('다른 사용자가 동일한 리소스를 예약하려고 시도 중입니다. 잠시 후 다시 시도해주세요.');
+                        } else {
+                            alert('예약 중 오류가 발생했습니다. 다시 시도해주세요.');
+                        }
+                    } else if (response.httpCode === 200) {
+                        console.log('예약 성공, 모달 창 띄우기');
+                        fetchModalContent(requestData.restaurantNo);
+                        $('#reservationModal').modal('show');
+                        subtractPartySize(requestData.restaurantNo, partySize, reservationTime);
+                    } else {
+                        console.error('예상치 못한 서버 응답 코드:', response.httpCode);
+                    }
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     alert('예약에 실패했습니다. 다시 시도해주세요.');
@@ -204,10 +198,6 @@ $(document).ready(function() {
             alert('날짜, 인원수, 시간 모두를 선택해주세요.');
         }
     });
-
-
-
-
 
     // 모달 콘텐츠를 불러오기 위한 함수
     function fetchModalContent(restaurantNo) {
@@ -234,9 +224,6 @@ $(document).ready(function() {
             }
         });
     }
-
-
-
 
     // 인원수 차감 처리 함수
     function subtractPartySize(reservationNo, partySize, time) {
