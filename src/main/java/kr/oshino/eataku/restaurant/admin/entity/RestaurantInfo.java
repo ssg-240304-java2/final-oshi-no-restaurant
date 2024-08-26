@@ -111,5 +111,7 @@ public class RestaurantInfo {
         this.foodTypes = foodTypes;
         this.hashTags = hashTags;
     }
+
+
 }
 
