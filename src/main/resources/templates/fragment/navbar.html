@@ -5,7 +5,8 @@
             <div class="container">
                 <!-- 홈 버튼 -->
                 <div class="nav-content">
-                    <a class="navbar-brand d-flex align-items-left" href="/">
+                    <a class="navbar-brand d-flex align-items-left"
+                       th:href="${#authorization.expression('hasRole(''ROLE_MANAGER'')') ? '/restaurant/main' : '/'}">
                         <img th:src="@{/images/navbar/honeyJar.png}" width="30" height="30"
                              class="d-inline-block align-top mx-2" alt="홈 아이콘">
                     </a>
@@ -13,7 +14,8 @@
 
                 <!-- 중앙 요소 -->
                 <div class="nav-content">
-                    <a class="navbar-brand d-flex align-items-center" href="/">
+                    <a class="navbar-brand d-flex align-items-center"
+                       th:href="${#authorization.expression('hasRole(''ROLE_MANAGER'')') ? '/restaurant/main' : '/'}">
                         <span class="brand-text">식덕후</span>
                         <img th:src="@{/images/oku.png}" class="d-inline-block align-top mx-2" alt="홈 아이콘">
                         <span class="brand-text">EATAKU</span>
@@ -24,7 +26,7 @@
                 <div class="nav-content">
                     <div class="d-flex align-items-right">
                         <button sec:authorize="!isAuthenticated()" class="btn btn-login" type="button" onclick="location.href='/login'">로그인</button>
-                        <div sec:authorize="isAuthenticated()" class="dropdown ml-3">
+                        <div sec:authorize="isAuthenticated() and  hasRole('ROLE_GENERAL')" class="dropdown ml-3">
                             <button class="btn btn-notify" type="button">
                                 <img th:src="@{/images/navbar/notiBell.png}" alt="알림종">
                             </button>
@@ -79,7 +81,7 @@
                             <div class="dropdown-wrapper">
                                 <div class="dropdown-arrow"></div>
                                 <div id="userMenuDropdown" class="dropdown-menu dropdown-menu-right">
-                                    <a th:href="@{/myPage}">
+                                    <a th:href="${#authorization.expression('hasRole(''ROLE_MANAGER'')') ? '/restaurant/main' : '/myPage'}">
                                         <div class="user-menu">마이페이지</div>
                                     </a>
                                     <a th:href="@{/logout}">
