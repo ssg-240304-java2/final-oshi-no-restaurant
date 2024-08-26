@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,13 +18,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ReservationAdminService {
 
-    ReservationAdminRepository reservationAdminRepository;
+    private final ReservationAdminRepository reservationAdminRepository;
 
     // 캘린더 조회
-    public List<ReservationCountDTO> getReservationsCount(LocalDate date, Long loginedRestaurantNo) {
+    public List<ReservationCountDTO> getReservationsCount(Date date, Long loginedRestaurantNo) {
 
-        int month = date.getMonthValue();
-        int year = date.getYear();
+        int month = date.toLocalDate().getMonthValue();
+        int year = date.toLocalDate().getYear();
 
         log.info("🍎service month: {}, year : {}, restaurantNo : {} ", month, year, loginedRestaurantNo);
 
