@@ -2,6 +2,7 @@ package kr.oshino.eataku.review.user.model.vo;
 import kr.oshino.eataku.common.enums.Scope;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 
@@ -21,6 +22,7 @@ public class CreateReviewUserRequestDto {
     private Scope scope;
     private Set<String> reviewTags;
     private String imgUrl;
+    private LocalDateTime reviewDate;
 
 
 //    public Scope getScopeEnum() {
