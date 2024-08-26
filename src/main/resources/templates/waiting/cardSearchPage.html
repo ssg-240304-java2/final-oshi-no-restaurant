@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Search</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" th:href="@{/css/fragment/navbar.css}">
+    <link rel="stylesheet" th:href="@{/css/fragment/footer.css}">
+    <link rel="stylesheet" th:href="@{/css/waiting/cardSearchPage.css}">
+</head>
+<body>
+
+<div th:replace="~{fragment/navbar.html :: navbar}" class="navbar"></div>
+
+<div class="card-container text-center">
+    <!-- Search Form -->
+    <form action="/users/search" method="GET" class="search-container">
+        <div class="d-flex justify-content-center align-items-center mb-3">
+            <input type="text" name="query" class="form-control d-inline-block" placeholder="Search..." style="width: 300px;">
+            <button type="submit" class="btn btn-custom ms-2">검색</button>
+        </div>
+
+        <!-- Category checkboxes -->
+        <div class="category-container d-flex justify-content-center flex-wrap">
+            <!-- 첫 번째 줄 -->
+            <div class="d-flex flex-wrap justify-content-center">
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" name="categories" id="category1" value="한식">
+                    <label class="form-check-label" for="category1">한식</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" name="categories" id="category2" value="양식">
+                    <label class="form-check-label" for="category2">양식</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" name="categories" id="category3" value="중식">
+                    <label class="form-check-label" for="category3">중식</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" name="categories" id="category4" value="일식">
+                    <label class="form-check-label" for="category4">일식</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" name="categories" id="category5" value="고깃집">
+                    <label class="form-check-label" for="category5">고깃집</label>
+                </div>
+            </div>
+            <!-- 두 번째 줄 -->
+            <div class="d-flex flex-wrap justify-content-center">
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" name="categories" id="category6" value="면요리">
+                    <label class="form-check-label" for="category6">면요리</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" name="categories" id="category7" value="분식">
+                    <label class="form-check-label" for="category7">분식</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" name="categories" id="category8" value="태국">
+                    <label class="form-check-label" for="category8">태국</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" name="categories" id="category9" value="베트남">
+                    <label class="form-check-label" for="category9">베트남</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" name="categories" id="category10" value="이탈리안">
+                    <label class="form-check-label" for="category10">이탈리안</label>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <!-- Cards -->
+    <div class="row card-deck-container mt-4 gx-4 gy-4">
+        <!-- Example card with Thymeleaf -->
+        <!-- Thymeleaf template iteration -->
+        <div th:each="restaurant : ${restaurants}" class="col-lg-4 col-md-6 d-flex align-items-stretch mb-4">
+            <div class="card h-100">
+                <img th:src="${restaurant.imageUrl}" class="card-img-top" alt="Restaurant Image">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${restaurant.name}">가게 이름</h5>
+                    <p class="card-text" th:text="'평점: ' + ${restaurant.rating} + ' ★'">평점: 4.5 ★</p>
+                    <p class="card-text" th:text="'카테고리: ' + ${restaurant.category}">카테고리: 한식</p>
+                    <p class="card-text" th:text="'주소: ' + ${restaurant.address}">주소: 서울시 강남구</p>
+                    <button class="btn btn-custom btn-sm toggle-actions">+</button>
+                    <div class="action-buttons">
+                        <button class="btn btn-info btn-sm">예약</button>
+                        <button class="btn btn-warning btn-sm">웨이팅</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{fragment/footer.html :: footer}" class="footer"></div>
+
+<!-- jQuery and Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript" th:src="@{js/fragment/navbar.js}"></script>
+<script type="text/javascript" th:src="@{js/search/cardSearchPage.js}"></script>
+</body>
+</html>
