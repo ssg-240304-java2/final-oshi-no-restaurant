@@ -9,7 +9,6 @@ public enum Scope {
     STAR5(5, "★★★★★");
 
 
-
     private final int value;
     private final String stars;
 
@@ -25,7 +24,6 @@ public enum Scope {
     public String getStars() {
         return stars;
     }
-
 
     @Override
     public String toString() {
