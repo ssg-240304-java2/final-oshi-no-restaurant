@@ -224,10 +224,11 @@ public interface ReservationRepository extends JpaRepository<Reservation,Integer
      * @return
      */
     @Lock(LockModeType.PESSIMISTIC_WRITE)
-    Optional<Reservation> findFirstByRestaurantInfoAndReservationDateAndReservationTime(
+    Optional<Reservation> findFirstByRestaurantInfoAndReservationDateAndReservationTimeAndMember(
             RestaurantInfo restaurantInfo,
             LocalDate reservationDate,
-            LocalTime reservationTime);
+            LocalTime reservationTime,
+            Member member);
 
 }
 
