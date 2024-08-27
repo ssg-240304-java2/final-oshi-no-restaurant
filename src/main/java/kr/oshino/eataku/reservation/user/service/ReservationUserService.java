@@ -1,4 +1,5 @@
 package kr.oshino.eataku.reservation.user.service;
+import jakarta.persistence.LockModeType;
 import kr.oshino.eataku.common.enums.ReservationStatus;
 import kr.oshino.eataku.member.entity.Member;
 import kr.oshino.eataku.member.model.repository.MemberRepository;
@@ -30,53 +31,50 @@ public class ReservationUserService {
     private final ReservationRepository reservationRepository;
     private final MemberRepository memberRepository;
     private final RestaurantRepository restaurantRepository;
-    private final ReviewRepository reviewRepository;
 
 
     @Transactional
     public CreateReservationUserResponseDto registerReservation(CreateReservationUserRequestDto createReservationUserRequestDto) {
 
-        // 중복 예약 확인
         Member member = memberRepository.findById((long) createReservationUserRequestDto.getMemberNo())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid memberNo: " + createReservationUserRequestDto.getMemberNo()));
 
         RestaurantInfo restaurantInfo = restaurantRepository.findById((long) createReservationUserRequestDto.getRestaurantNo())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid restaurantNo: " + createReservationUserRequestDto.getRestaurantNo()));
 
-        boolean exists = reservationRepository.existsByMember_MemberNoAndRestaurantInfo_RestaurantNoAndReservationDateAndReservationTime(
-                member.getMemberNo(),
-                restaurantInfo.getRestaurantNo(),
+        // 비관적 락을 사용하여 동일 시간대에 다른 사용자가 이미 예약했는지 확인
+        Optional<Reservation> existingReservation = reservationRepository.findFirstByRestaurantInfoAndReservationDateAndReservationTime(
+                restaurantInfo,
                 createReservationUserRequestDto.getReservationDate(),
                 createReservationUserRequestDto.getReservationTime()
         );
 
 
-        if (exists) {
-            // 중복 예약이 존재하는 경우
+        if (existingReservation.isPresent()) {
+            // 이미 예약이 존재하는 경우, 실패 메시지 반환
             return new CreateReservationUserResponseDto(409, "이미 동일한 시간에 예약이 존재합니다.", -1);
         }
 
-        System.out.println("exists = " + exists);
-        try {
-            Reservation reservation = Reservation.builder()
-                    .member(member)
-                    .restaurantInfo(restaurantInfo)
-                    .partySize(createReservationUserRequestDto.getPartySize())
-                    .reservationDate(createReservationUserRequestDto.getReservationDate())
-                    .reservationTime(createReservationUserRequestDto.getReservationTime())
-                    .reservationStatus(ReservationStatus.예약완료)
-                    .build();
+        try {  // 새로운 예약 생성
+        Reservation reservation = Reservation.builder()
+                .member(member)
+                .restaurantInfo(restaurantInfo)
+                .partySize(createReservationUserRequestDto.getPartySize())
+                .reservationDate(createReservationUserRequestDto.getReservationDate())
+                .reservationTime(createReservationUserRequestDto.getReservationTime())
+                .reservationStatus(ReservationStatus.예약완료)
+                .build();
 
-            reservationRepository.save(reservation);
+        reservationRepository.save(reservation);
 
-            return new CreateReservationUserResponseDto(200, "예약 완료", reservation.getReservationNo());
+        return new CreateReservationUserResponseDto(200, "예약 완료", reservation.getReservationNo());
 
-        } catch (ObjectOptimisticLockingFailureException e) {
-            // 낙관적 락 충돌이 발생했을 경우 처리
-            log.error("낙관적 락 실패 ", e);
-            return new CreateReservationUserResponseDto(409, "동시에 다른 사용자가 동일한 리소스를 예약하려고 시도했습니다. 다시 시도해주세요.", -1);
-        }
+    } catch (ObjectOptimisticLockingFailureException e) {
+        // 락 충돌이 발생했을 때 처리
+        return new CreateReservationUserResponseDto(409, "동시에 다른 사용자가 동일한 예약하려고 시도했습니다. 다시 시도해주세요.", -1);
     }
+}
+
 
 
     /***
@@ -179,7 +177,7 @@ public class ReservationUserService {
     @Transactional
     public boolean cancelReservation(int reservationNo) {
 
-        try {
+
         return reservationRepository.findById(reservationNo).map(reservation -> {
             LocalDate reservationDate = reservation.getReservationDate(); // 예약 날짜 가져오기
             LocalTime reservationTime = reservation.getReservationTime(); // 예약 시간 가져오기
@@ -203,12 +201,8 @@ public class ReservationUserService {
                 return false;
             }
         }).orElse(false); // 해당 예약이 없는 경우
-    } catch (ObjectOptimisticLockingFailureException e) {
-        log.error("Optimistic locking failure while canceling reservation", e);
-        return false;
-    }
-}
 
+    }
 
     /**
      * 취소한 인원 만큼 증가하기
