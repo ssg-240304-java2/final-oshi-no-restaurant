@@ -1,5 +1,6 @@
 package kr.oshino.eataku.reservation.user.repository;
 
+import jakarta.persistence.LockModeType;
 import jakarta.transaction.Transactional;
 
 import kr.oshino.eataku.common.enums.ReservationStatus;
@@ -10,6 +11,7 @@ import kr.oshino.eataku.reservation.user.model.dto.responseDto.*;
 import kr.oshino.eataku.restaurant.admin.entity.ReservationSetting;
 import kr.oshino.eataku.restaurant.admin.entity.RestaurantInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -142,7 +144,7 @@ public interface ReservationRepository extends JpaRepository<Reservation,Integer
      * @return
      */
     @Query("SELECT new kr.oshino.eataku.reservation.user.model.dto.responseDto.ReviewDetails ( "  +
-            "m.name , re.reviewContent , m.imgUrl, re.scope) " +
+            "m.name , re.reviewContent , m.imgUrl, re.scope, re.reviewDate) " +
             "FROM Review re " +
             "JOIN re.member m " +
             "JOIN re.restaurantInfo r " +
@@ -210,6 +212,22 @@ public interface ReservationRepository extends JpaRepository<Reservation,Integer
             "FROM Review re " +
             "WHERE  re.restaurantInfo.restaurantNo = :restaurantNo AND re.imgUrl IS NOT NULL ")
     List<ReviewImgDto> getImg(Long restaurantNo);
+
+
+    /**
+     * 예약 등록에서 비관적 락 사용
+     *
+     * @param
+     * @param restaurantInfo
+     * @param reservationDate
+     * @param reservationTime
+     * @return
+     */
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    Optional<Reservation> findFirstByRestaurantInfoAndReservationDateAndReservationTime(
+            RestaurantInfo restaurantInfo,
+            LocalDate reservationDate,
+            LocalTime reservationTime);
 
 }
 
