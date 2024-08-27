@@ -361,7 +361,9 @@ body {
 }
 
 .no-data-page p {
-    font-size: 1.2rem;
-    color: #666;
-    margin: 0;
+    text-align: center;
+    color: #555;
+    font-size: 30px;
+    padding: 20px;
+    font-weight: bold;
 }

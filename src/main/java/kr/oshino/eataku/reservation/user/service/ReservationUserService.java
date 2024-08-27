@@ -223,7 +223,7 @@ public class ReservationUserService {
                         .build();
 
                 notificationService.insertNotification(notification);
-                // 알림등록 (-)
+//                // 알림등록 (-)
 
                 return true;
             } else {
