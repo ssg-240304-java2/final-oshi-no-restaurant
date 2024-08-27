@@ -37,6 +37,10 @@ public class Review {
     @Enumerated(EnumType.STRING)
     private Scope scope;
 
+    public int getScopeValue(){
+        return scope.getValue();
+    }
+
     /* 사진 */
     @Column(name = "img_url")
     private String imgUrl;

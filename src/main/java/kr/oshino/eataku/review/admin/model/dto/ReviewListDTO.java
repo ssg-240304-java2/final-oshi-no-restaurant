@@ -1,14 +1,11 @@
 package kr.oshino.eataku.review.admin.model.dto;
 
 import kr.oshino.eataku.common.enums.Scope;
-import kr.oshino.eataku.restaurant.admin.entity.RestaurantInfo;
-import kr.oshino.eataku.review.user.entity.ReviewTag;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Set;
 

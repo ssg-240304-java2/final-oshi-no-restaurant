@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.sound.sampled.ReverbType;
 import java.util.List;
 
+import static java.lang.Integer.parseInt;
+
 @Controller
 @Slf4j
 @RequestMapping("/restaurant")
@@ -36,13 +38,37 @@ public class ReviewAdminController {
 
         List<ReviewListDTO> reviews = reviewAdminService.selectReviewList(loginedRestaurantNo);
 
-        model.addAttribute("reviews", reviews);
+        // 별점 통계
+        double averageRating = reviews.stream()
+                .mapToInt(review -> review.getScope().getValue())
+                .average()
+                .orElse(0.0);
 
-        log.info("\uD83C\uDF4E controller review: {}", reviews);
+        String formattedAverageRating = String.format("%.2f", averageRating);
+
+        long[] ratingCounts = new long[5];
+        for(ReviewListDTO review: reviews) {
+            int ratingIndex = review.getScope().getValue() - 1;
+            if(ratingIndex >= 0 && ratingIndex < 5){
+                ratingCounts[ratingIndex]++;
+            }
+        }
+
+        model.addAttribute("reviews", reviews);
+        model.addAttribute("formattedAverageRating", formattedAverageRating);
+        model.addAttribute("ratingCounts", ratingCounts);
+
+        log.info("\uD83C\uDF4E controller review: {}, formattedAverageRating: {}, ratingCounts: {}", reviews, formattedAverageRating, ratingCounts);
 
         return "restaurant/reviewList";
     }
 
+    /***
+     * 리뷰 신고
+     * @param reviewId
+     * @param reason
+     * @return
+     */
     @PostMapping("/report")
     public ResponseEntity<String> reviewReport(@RequestParam("reviewId") Long reviewId,
                                                @RequestParam("reason") String reason){
@@ -51,4 +77,5 @@ public class ReviewAdminController {
         return ResponseEntity.ok("신고가 접수되었습니다.");
 
     }
+
 }

@@ -43,6 +43,17 @@
                 </div>
             </div>
             <h3>리뷰 내역</h3>
+            <div class="rating-summary">
+                <h4>별점 통계</h4>
+                <p>평균 별점: <span th:text="${formattedAverageRating}">0.0</span> / 5.0</p>
+                <ul>
+                    <li>★★★★★: <span th:text="${ratingCounts[4]}">0</span></li>
+                    <li>★★★★☆: <span th:text="${ratingCounts[3]}">0</span></li>
+                    <li>★★★☆☆: <span th:text="${ratingCounts[2]}">0</span></li>
+                    <li>★★☆☆☆: <span th:text="${ratingCounts[1]}">0</span></li>
+                    <li>★☆☆☆☆: <span th:text="${ratingCounts[0]}">0</span></li>
+                </ul>
+            </div>
             <div class="table-responsive">
                 <table class="table table-bordered">
                     <thead class="thead-dark">
@@ -71,7 +82,8 @@
                             <td th:text="${review.reviewDate}"></td>
                             <td>
                                 <button class="btn btn-danger btn-sm"
-                                        th:onclick="|openReportModal(${review.reviewNo})|">신고</button>
+                                        th:onclick="|openReportModal(${review.reviewNo})|">신고
+                                </button>
                             </td>
                         </tr>
                     </tbody>
