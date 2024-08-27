@@ -308,4 +308,14 @@ public class ReservationUserService {
         return reservationRepository.getMenu(restaurantInfo.getRestaurantNo());
 
     }
+
+    /***
+     * 식당 리뷰 사진 가져오기
+     * @param restaurantNo
+     * @return
+     */
+    @Transactional
+    public List<ReviewImgDto> getImg(Long restaurantNo) {
+        return reservationRepository.getImg(restaurantNo);
+    }
 }

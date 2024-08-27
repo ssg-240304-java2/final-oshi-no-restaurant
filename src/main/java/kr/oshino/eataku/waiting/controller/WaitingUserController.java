@@ -73,12 +73,15 @@ public class WaitingUserController {
 
     /**
      * 웨이팅 조회
-     * @param readWaitingRequestDto
+     * @param memberNo
      */
-    @GetMapping("/waiting")
+    @GetMapping("/waiting/{memberNo}")
     @ResponseBody
     public ResponseEntity<List<ReadWaitingResponseDto>> getMyWaitingList(
-            ReadWaitingRequestDto readWaitingRequestDto) {
+            @PathVariable Long memberNo) {
+
+        ReadWaitingRequestDto readWaitingRequestDto = ReadWaitingRequestDto.builder()
+                .memberNo(memberNo).build();
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(waitingService.getWaitingListByMemberNo(readWaitingRequestDto));
