@@ -4,6 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpSession;
 import kr.oshino.eataku.common.util.FileUploadUtil;
 import kr.oshino.eataku.reservation.user.entity.Reservation;
+import kr.oshino.eataku.reservation.user.model.dto.responseDto.RestaurantInfoDetails;
 import kr.oshino.eataku.restaurant.admin.entity.*;
 import kr.oshino.eataku.restaurant.admin.model.dto.*;
 import kr.oshino.eataku.restaurant.admin.model.repository.*;
@@ -36,6 +37,7 @@ public class RestaurantAdminService {
     private final ReservationSettingRepository reservationSettingRepository;
     private final WaitingSettingRepository waitingSettingRepository;
     private final MenuRepository menuRepository;
+
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
@@ -174,9 +176,19 @@ public class RestaurantAdminService {
      * @param updateInfo
      */
     @Transactional
-    public void updateRestaurant(RestaurantInfoDTO updateInfo) {
+    public void updateRestaurant(RestaurantInfoDTO updateInfo, MultipartFile file) {
 
         Optional<RestaurantInfo> restaurantInfoOpt = restaurantRepository.findById(updateInfo.getRestaurantNo());
+
+        String uploadImgUrl = "";
+
+        if (file != null && !file.isEmpty()) {
+            try {
+                uploadImgUrl = fileUploadUtil.uploadFile(file);
+            } catch (IOException e) {
+                throw new RuntimeException("File upload failed. Please try again.", e);
+            }
+        }
 
         if (restaurantInfoOpt.isPresent()) {
             RestaurantInfo restaurantInfo = restaurantInfoOpt.get();
@@ -191,14 +203,15 @@ public class RestaurantAdminService {
             restaurantInfo.setClosingTime(Time.valueOf(updateInfo.getClosingTime()));
             restaurantInfo.setHashTags(updateInfo.getHashTags());
             restaurantInfo.setDescription(updateInfo.getDescription());
+            restaurantInfo.setImgUrl(uploadImgUrl);
 
             if (updateInfo.getImgUrl() != null) {
-                restaurantInfo.setImgUrl(updateInfo.getImgUrl());
+                restaurantInfo.setImgUrl(uploadImgUrl);
             }
 
             restaurantRepository.save(restaurantInfo);
 
-            log.info("\uD83C\uDF4E restaurant : {}", restaurantInfo);
+            log.info("\uD83C\uDF4E restaurant : {} file: {}", restaurantInfo, file);
         } else {
             throw new EntityNotFoundException("Restaurant not found with id: " + updateInfo.getRestaurantNo());
         }
