@@ -1,4 +1,4 @@
-package kr.oshino.eataku.review.user.entity;
+package kr.oshino.eataku.common.enums;
 
 public enum ReviewTag {
 

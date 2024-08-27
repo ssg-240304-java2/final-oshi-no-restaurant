@@ -88,8 +88,24 @@ function handleRestaurantInfo(actionUrl) {
         "description": storeIntro
     };
 
+    const updateInfo = {
+        "restaurantName": storeName,
+        "contact": storePhone,
+        "restaurantAddress": businessAddress,
+        "postCode": postCode,
+        "address": address,
+        "detailAddress": detailAddress,
+        "extraAddress": extraAddress,
+        "foodTypes": foodType,
+        "openingTime": openingHoursStart,
+        "closingTime": openingHoursEnd,
+        "hashTags": tagType,
+        "description": storeIntro
+    };
+
     formData.append('file', storeImage);
     formData.append('newRestaurant', new Blob([JSON.stringify(newRestaurant)], {type: 'application/json'}));
+    formData.append('updateInfo', new Blob([JSON.stringify(updateInfo)], {type: 'application/json'}));
 
     console.log(storeName, foodType, tagType);
     console.log(formData);
