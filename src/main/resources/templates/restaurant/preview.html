@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>식당 상세 페이지</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <link rel="stylesheet" th:href="@{/css/fragment/navbar.css}">
+        <link rel="stylesheet" th:href="@{/css/fragment/footer.css}">
+        <link rel="stylesheet" th:href="@{/css/restaurant/preview.css}">
+    </head>
+    <body>
+
+        <div th:replace="~{fragment/navbar.html :: navbar}" class="navbar"></div>
+
+        <div class="container">
+            <div class="section-content text-center">
+                <div id="main-img" class="img-placeholder"
+                     style="background-color: #ddd; width: 100%; max-width: 500px; height: 500px; margin: auto;">
+                    <img th:src="@{${restaurant.imgUrl}}" alt="Restaurant Image"
+                         style="width: 100%; height: 100%; object-fit: cover; max-width: 500px; max-height: 500px;">
+                </div>
+
+                <h2 th:text="${restaurant.restaurantName}">이름</h2>
+                <div class="circle-buttons">
+                    <button class="btn btn-outline-custom preview-button">쩝쩝채팅</button>
+                    <button class="btn btn-outline-custom preview-button">쩝쩝웨이팅</button>
+                    <button class="btn btn-outline-custom preview-button">쩝쩝예약</button>
+                </div>
+            </div>
+
+            <div class="info-section text-center">
+                <img th:src="@{/images/reservation/Map pin.png}" class="spaced-image"/>
+                <span th:text="${restaurant.restaurantAddress}"></span><br>
+                <img th:src="@{/images/reservation/Phone.png}" class="spaced-image"/><br>
+                <span th:text="${restaurant.contact}"/></span>
+                <img th:src="@{/images/reservation/Info.png}"/><br>
+            </div>
+
+            <div class="menu-container">
+                <div class="menu-item" th:each="menu : ${menu}">
+                    <img th:src="${menu.photoUrl}" alt="Menu Image">
+                    <p class="menu-name" th:text="${menu.menuName}">메뉴 이름</p>
+                    <p class="menu-description" th:text="${menu.description}">메뉴 설명</p>
+                </div>
+            </div>
+
+            <div class="map-container" id="map-container">
+                <div id="map" style="width:100%;height:400px;">
+                    <div class="img-placeholder"
+                         style="background-color: #ddd; width: 100%; height: 400px; margin: auto;"></div>
+                </div>
+            </div>
+
+            <div class="rating-section">
+                <h2>이용내역 ★</h2>
+                <div class="rating-details">
+                    <div th:each="entry : ${tagCountMap}" class="detail">
+                        <p th:text="${entry.key}"></p>
+                        <div class="line" th:style="'width:' + (${entry.value} * 2) + 'px'"></div>
+                        <span class="count" th:text="${entry.value}"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 리뷰 사진 -->
+            <div class="card-container" id="card-container">
+                <div th:each="review, iterStat : ${reviewImgDto}" class="card" th:id="'card-' + ${iterStat.index}">
+                    <div class="img-placeholder" style=" width: 150px; height: 150px;">
+                        <img th:if="${review.imgUrl != null}" th:src="${review.imgUrl}" alt="Review Image"
+                             style="width: 100%; height: 100%; object-fit: cover;"/>
+                    </div>
+                    <div class="card-body">
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="review-section">
+                <!-- 리뷰 리스트를 반복문을 통해 출력 -->
+                <div th:each="review : ${ReviewDetails}" class="review">
+
+                    <!-- 이미지 부분은 placeholder로 설정 -->
+                    <img th:src="@{${review.imgURL}}" alt="Reviewer Image"
+                         style="width: 100%; height: 100%; object-fit: cover; max-width: 50px; max-height: 50px;">
+
+                    <!-- 리뷰어 이름 -->
+                    <p>
+                        <strong th:text="${review.name}">이름</strong>
+                        <!-- 날짜는 기본값이나 임시값으로 설정 (예: '2024.07.31') -->
+                        <span>2024.07.31</span>
+                    </p>
+
+                    <!-- 별점  -->
+                    <p class="star-rating">
+                        <span class="text-warning" th:text="${review.scope.getStars()}"></span>
+                    </p>
+
+                    <!-- 리뷰 내용 -->
+                    <p th:text="${review.reviewContent}">Review content goes here</p>
+                </div>
+            </div>
+
+            <div class="more-button-container">
+                <button class="more-button" id="more-button">더 보기</button>
+            </div>
+
+        </div> <!-- Closing the main container div -->
+
+        <div th:replace="~{fragment/footer.html :: footer}" class="footer"></div>
+
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+        <script th:src="@{/js/fragment/navbar.js}"></script>
+        <script th:src="@{/js/restaurant/preview.js}"></script>
+    </body>
+    <script type="text/javascript"
+            src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=4iq0sfkqpd"></script>
+    <script>
+        var mapContainer = document.getElementById("map");
+        var x_coordinate = [[${position[0].x_coordinate}]];
+        var y_coordinate = [[${position[0].y_coordinate}]];
+        console.log(x_coordinate + " " + y_coordinate)
+
+        // 위치 생성
+        var position = new naver.maps.LatLng(x_coordinate, y_coordinate);
+
+        // 지도 초기화
+        var map = new naver.maps.Map(mapContainer, {
+            center: position, // LatLng 객체 사용
+            zoom: 20
+        });
+
+        // 마커 추가
+        var marker = new naver.maps.Marker({
+            position: position,
+            map: map,
+            fillColor: '#FA4A54'
+        });
+    </script>
+</html>

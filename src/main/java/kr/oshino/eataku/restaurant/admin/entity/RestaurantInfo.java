@@ -7,6 +7,8 @@ import jakarta.persistence.*;
 import kr.oshino.eataku.common.enums.FoodType;
 import kr.oshino.eataku.common.enums.HashTag;
 import kr.oshino.eataku.restaurant.admin.service.RestaurantAdminService;
+import kr.oshino.eataku.review.admin.entity.AverageRating;
+import kr.oshino.eataku.review.user.entity.Review;
 import lombok.*;
 
 import java.sql.Time;
