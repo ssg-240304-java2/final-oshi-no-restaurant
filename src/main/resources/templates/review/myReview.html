@@ -146,7 +146,7 @@
       <div class="info">
         <div class="d-flex align-items-center">
           <!--          식당명 넣기-->
-          <h3 th:text="${review.restaurantName}">식당 이름</h3>
+          <h3 th:text="${review.restaurantName ?: '식당 이름 없음'}">식당 이름</h3>
             <span class="rating" th:text="${review.scope.stars}">★★★★★</span>
           <p th:text="${review.reviewContent ?: '리뷰 내용이 없습니다.'}">리뷰 내용</p>
           <label for="tags" class="mr-3 mb-0" style="font-size: 1.5rem;"></label>
@@ -160,7 +160,8 @@
           </div>
         </div>
       </div>
-      <button class="edit-btn" th:onclick="'modifyReview(' + ${review.reviewNo} + ')'">✏️</button>
+<!--      <button class="edit-btn" th:onclick="'modifyReview(' + ${review.reviewNo} + ')'">✏️</button>-->
+      <button class="edit-btn" th:onclick="'location.href=\'/reviewModify?reviewNo=' + ${review.reviewNo} + '\''">✏️ 수정</button>
       <button class="delete-btn" th:onclick="'deleteReview(' + ${review.reviewNo} + ')'">❌</button>
     </div>
   </div>
@@ -191,34 +192,67 @@
       });
     }
   }
-    function modifyReview(reviewNo) {
-    // 새로운 리뷰 내용을 사용자에게 입력받습니다.
-    var newReviewContent = prompt("새로운 리뷰 내용을 입력하세요:");
-    var newScope = prompt("새로운 별점을 입력하세요 (예: STAR1, STAR2, ... STAR5):"); // 별점 수정
-    var newReviewTags = prompt("새로운 태그를 입력하세요 (맛있어요, 친절해요, 쾌적해요, 다시갈래요, 분위기가_좋아요):"); // 태그 수정
-
-    if (newReviewContent != null && newScope != null && newReviewTags != null) {
-    // AJAX 요청을 통해 리뷰 내용을 서버로 전송합니다.
-    $.ajax({
-    url: '/modifyReview',
-    type: 'POST',
-    data: {
-        reviewNo: reviewNo,
-        newReviewContent: newReviewContent,
-        newScope: newScope,
-        newReviewTags: newReviewTags
-  },
-    success: function(response) {
-    alert('리뷰 내용이 성공적으로 수정되었습니다.');
-    location.reload(); // 페이지를 새로고침하여 수정된 내용을 반영합니다.
-  },
-    error: function(error) {
-    alert('리뷰 내용 수정에 실패했습니다.');
-    console.error(error);
-  }
-  });
-  }
-  }
+  //   function modifyReview(reviewNo) {
+  //   // 새로운 리뷰 내용을 사용자에게 입력받습니다.
+  //   var newReviewContent = prompt("새로운 리뷰 내용을 입력하세요:");
+  //   var newScope = prompt("새로운 별점을 입력하세요 (예: STAR1, STAR2, ... STAR5):"); // 별점 수정
+  //   var newReviewTags = prompt("새로운  태그를 입력하세요 (맛있어요, 친절해요, 쾌적해요, 다시갈래요, 분위기가_좋아요):"); // 태그 수정
+  //
+  //   if (newReviewContent != null && newScope != null && newReviewTags != null) {
+  //   // AJAX 요청을 통해 리뷰 내용을 서버로 전송합니다.
+  //   $.ajax({
+  //   url: '/modifyReview',
+  //   type: 'POST',
+  //   data: {
+  //       reviewNo: reviewNo,
+  //       newReviewContent: newReviewContent,
+  //       newScope: newScope,
+  //       newReviewTags: newReviewTags
+  // },
+  //   success: function(response) {
+  //   alert('리뷰 내용이 성공적으로 수정되었습니다.');
+  //   location.reload(); // 페이지를 새로고침하여 수정된 내용을 반영합니다.
+  // },
+  //   error: function(error) {
+  //   alert('리뷰 내용 수정에 실패했습니다.');
+  //   console.error(error);
+  // }
+  // });
+  // }
+  // }
+  // $(document).ready(function() {
+  //   $('.btn-register').click(function(e) {
+  //     e.preventDefault(); // 폼의 기본 제출 동작을 방지
+  //
+  //     var reviewNo = /*[[${reviewNo}]]*/ 0;
+  //     var newReviewContent = $('#review-content').val();
+  //     var newScope = $('input[name="rating"]:checked').val(); // 선택된 별점 값
+  //     var newReviewTags = $('#selectedTags').val(); // 선택된 태그들
+  //
+  //     var formData = new FormData();
+  //     formData.append('reviewNo', reviewNo);
+  //     formData.append('newReviewContent', newReviewContent);
+  //     formData.append('newScope', newScope);
+  //     formData.append('newReviewTags', newReviewTags);
+  //     formData.append('file', $('#file')[0].files[0]); // 파일도 같이 전송
+  //
+  //     $.ajax({
+  //       url: '/reviewModify',
+  //       type: 'POST',
+  //       data: formData,
+  //       processData: false,
+  //       contentType: false,
+  //       success: function(response) {
+  //         alert('리뷰가 성공적으로 수정되었습니다.');
+  //         window.location.href = '/myInfo/review'; // 수정 후 리뷰 목록 페이지로 이동
+  //       },
+  //       error: function(error) {
+  //         alert('리뷰 수정에 실패했습니다.');
+  //         console.error(error);
+  //       }
+  //     });
+  //   });
+  // });
 </script>
 
 </body>
