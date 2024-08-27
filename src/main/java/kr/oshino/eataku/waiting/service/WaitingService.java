@@ -219,7 +219,7 @@ public class WaitingService {
 
         log.info("nextWaiting: {}", nextWaiting);
 
-        // 3순위 회원에게
+        // 3순위 회원에게 메세지 전송
         if(nextWaiting.isPresent()) {
             Waiting notificationWaiting = nextWaiting.get();
             smsUtil.sendWaitingMessage(notificationWaiting.getMember().getPhone(), SmsMessageType.WAITING_NOTIFICATION,

@@ -120,7 +120,4 @@ public class WaitingAdminController {
     public SingleMessageSentResponse sendEntryMessage(@PathVariable Long waitingNo) {
         return waitingService.sendWaitingEntryMessage(waitingNo);
     }
-
-
-
 }
