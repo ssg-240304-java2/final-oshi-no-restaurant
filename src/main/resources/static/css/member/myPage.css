@@ -134,3 +134,10 @@ body {
     width: 100px;
     height: 100px;
 }
+.no-data {
+    text-align: center;
+    color: #555;
+    font-size: 30px;
+    padding: 20px;
+    font-weight: bold;
+}
