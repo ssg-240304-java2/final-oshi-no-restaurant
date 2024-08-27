@@ -71,7 +71,6 @@ public class ReservationUserService {
 
         reservationRepository.save(reservation);
 
-        return new CreateReservationUserResponseDto(200, "예약 완료", reservation.getReservationNo());
             // 알림등록 (+)
             Notification notification = Notification.builder()
                     .toMember(reservation.getMember().getMemberNo())
