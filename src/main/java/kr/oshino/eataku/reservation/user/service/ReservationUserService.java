@@ -46,14 +46,15 @@ public class ReservationUserService {
         RestaurantInfo restaurantInfo = restaurantRepository.findById((long) createReservationUserRequestDto.getRestaurantNo())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid restaurantNo: " + createReservationUserRequestDto.getRestaurantNo()));
 
-        // 비관적 락을 사용하여 동일 시간대에 다른 사용자가 이미 예약했는지 확인
-        Optional<Reservation> existingReservation = reservationRepository.findFirstByRestaurantInfoAndReservationDateAndReservationTime(
+        // 비관적 락을 사용하여 동일 시간대에 내가 이미 예약했는지 확인하는 방법
+        Optional<Reservation> existingReservation = reservationRepository.findFirstByRestaurantInfoAndReservationDateAndReservationTimeAndMember(
                 restaurantInfo,
                 createReservationUserRequestDto.getReservationDate(),
-                createReservationUserRequestDto.getReservationTime()
+                createReservationUserRequestDto.getReservationTime(),
+                member
         );
 
-
+        System.out.println("existingReservation = " + existingReservation);
         if (existingReservation.isPresent()) {
             // 이미 예약이 존재하는 경우, 실패 메시지 반환
             return new CreateReservationUserResponseDto(409, "이미 동일한 시간에 예약이 존재합니다.", -1);
