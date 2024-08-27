@@ -49,6 +49,14 @@ public class Review {
     @Column(name = "review_date")
     private LocalDateTime reviewDate;
 
+    /* 예약 타입 */
+    @Column
+    private String type;
+
+    /* 예약 번호 */
+    @Column(name = "reference_number")
+    private Long referenceNumber;
+
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(
             name="tbl_tags",

@@ -127,4 +127,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     Member findByMemberLoginInfoAccountAndNameAndEmail(String id, String name, String email);
 
     boolean existsByMemberLoginInfoAccountAndNameAndEmail(String id, String name, String email);
+
+    @Query("SELECT m.name FROM Member m WHERE m.memberNo = :referenceNo")
+    String findNameByMemberNo(@Param("referenceNo") Long referenceNo);
 }

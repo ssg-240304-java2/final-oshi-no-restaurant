@@ -105,4 +105,6 @@ public interface RestaurantRepository extends JpaRepository<RestaurantInfo, Long
             "WHERE r.restaurantNo IN :popularList")
     List<SearchResultDTO> findPopularRestaurantsWithRatings(@Param("popularList") List<Long> popularList);
 
+    @Query("SELECT r.restaurantName FROM RestaurantInfo r WHERE r.restaurantNo = :referenceNo")
+    String findRestaurantNameByRestaurantNo(@Param("referenceNo") Long referenceNo);
 }
