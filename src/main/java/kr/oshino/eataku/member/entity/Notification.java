@@ -2,6 +2,7 @@ package kr.oshino.eataku.member.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -13,6 +14,7 @@ import java.sql.Timestamp;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 
 public class Notification {
 
@@ -30,8 +32,11 @@ public class Notification {
 
     private String message;
 
-    @Column(name = "review_no")
-    private Long reviewNo;
+    @Column(name = "service_type")
+    private String serviceType;
+
+    @Column(name = "service_no")
+    private Long serviceNo;
 
     @CreationTimestamp
     @Column(name = "created_at")

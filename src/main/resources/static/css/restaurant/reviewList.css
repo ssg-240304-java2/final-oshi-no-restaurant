@@ -1,10 +1,15 @@
 body {
-    margin-top: 120px;
+    margin-top: 170px;
     background-color: #e0e0e0;
+    height: 100%;
 }
 
 .nav-buttons {
-    margin-bottom: 50px;
+    margin-bottom: 30px;
+}
+
+.content {
+    min-height: calc(100% - 393px);
 }
 
 .nav-buttons .btn {
@@ -23,16 +28,25 @@ body {
     margin-bottom: 5px;
 }
 
+.btn-setting:hover,
+.btn-setting:focus,
+.btn-setting:active {
+    background-color: transparent !important;
+    outline: none;
+    box-shadow: none;
+}
+
 .nav-buttons .btn:hover {
     background-color: #d14045;
 }
 
-.btn-secondary {
+.nav-buttons .btn-secondary {
     border: none;
 }
 
-.btn-secondary:hover {
-    background-color: #d14045;
+.nav-buttons .btn-secondary:hover {
+    background-color: transparent;
+    border: none;
 }
 
 .btn-secondary img {
@@ -55,4 +69,55 @@ body {
 .star-rating {
     color: #ffc107;
     text-align: center;
+}
+
+.rating-summary {
+    background-color: #ffffff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.rating-summary h4 {
+    margin-bottom: 20px;
+    color: #333333;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.rating-summary p {
+    font-size: 1.2rem;
+    color: #555555;
+    margin-bottom: 15px;
+}
+
+.rating-summary ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 1rem;
+}
+
+.rating-summary ul li {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 10px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.rating-summary ul li:last-child {
+    border-bottom: none;
+}
+
+.rating-summary ul li span {
+    font-weight: bold;
+    color: #555555;
+}
+
+.rating-summary ul li::before {
+    content: '\2605'; /* 별 모양 */
+    color: #ffc107;
+    margin-right: 5px;
 }
