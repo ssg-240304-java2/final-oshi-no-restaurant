@@ -30,6 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -73,10 +74,16 @@ public class WaitingService {
             throw new WaitingException(WaitingExceptionInfo.DUPLICATED_WAITING);
         }
 
+
+
         // 매장의 웨이팅 정보 유무 판별 & 설정한 웨이팅 타임 판별
-        if(waitingSetting == null) throw new WaitingException(WaitingExceptionInfo.WAITING_CLOSED);
-        else if(!basicUtil.isCurrentTimeWithinSchedule(waitingSetting.getStartTime(), waitingSetting.getEndTime()))
+        if(waitingSetting == null)
             throw new WaitingException(WaitingExceptionInfo.WAITING_CLOSED);
+        else if (!waitingSetting.getWaitingStatus().equals("Y"))
+            throw new WaitingException(WaitingExceptionInfo.WAITING_CLOSED);
+        else if(!basicUtil.isCurrentTimeWithinSchedule(waitingSetting.getStartTime(), waitingSetting.getEndTime()))
+            throw new WaitingException(WaitingExceptionInfo.RESTAURANT_CLOSED);
+
 
 
 
@@ -149,7 +156,9 @@ public class WaitingService {
     public UpdateWaitingResponseDto cancelWaitingByWaitingNo(UpdateWaitingRequestDto updateWaitingRequestDto) {
 
         Long waitingNo = updateWaitingRequestDto.getWaitingNo();
-        Waiting waiting = waitingRepository.findById(waitingNo).orElseThrow(() -> new RuntimeException("해당하는 웨이팅 정보가 없습니다!"));
+        Waiting waiting = waitingRepository.findById(waitingNo).orElseThrow(()
+                -> new WaitingException(WaitingExceptionInfo.NO_DATA_FOUND));
+
         waiting.cancel();
         waitingRepository.save(waiting);
 
@@ -170,18 +179,30 @@ public class WaitingService {
     @Transactional
     public UpdateWaitingResponseDto updateWaitingByWaitingNo(UpdateWaitingRequestDto updateWaitingRequestDto) {
         Long waitingNo = updateWaitingRequestDto.getWaitingNo();
-        Waiting waiting = waitingRepository.findById(waitingNo).orElseThrow(() -> new RuntimeException("해당하는 웨이팅 정보가 없습니다!"));
+        Waiting waiting = waitingRepository.findById(waitingNo).orElseThrow(()
+                -> new WaitingException(WaitingExceptionInfo.NO_DATA_FOUND));
+
         waiting.visit();
         waiting.getMember().increaseWeight(3.0);
         waitingRepository.save(waiting);
 
+        Optional<Waiting> nextWaiting = waitingRepository.findFirstByRestaurantInfoAndSequenceNumberAndWaitingStatus(
+                waiting.getRestaurantInfo(), waiting.getSequenceNumber() + 4, StatusType.대기중);
 
+        log.info("nextWaiting: {}", nextWaiting);
+
+        // 3순위 회원에게
+        if(nextWaiting.isPresent()) {
+            Waiting notificationWaiting = nextWaiting.get();
+            smsUtil.sendWaitingMessage(notificationWaiting.getMember().getPhone(), SmsMessageType.WAITING_NOTIFICATION,
+                    notificationWaiting.getRestaurantInfo().getRestaurantName(), notificationWaiting.getSequenceNumber());
+        }
 
         return new UpdateWaitingResponseDto(200, "웨이팅 대기가 방문 처리 되었습니다!");
     }
 
 
-    // ----------------------------------------------------------------------------------------------------------------
+
 
 
     /**
@@ -195,7 +216,6 @@ public class WaitingService {
         return smsUtil.sendWaitingMessage(waitingData.getPhone(), SmsMessageType.WAITING_ENTRY_MESSAGE,
                 waitingData.getSequenceNumber(), waitingData.getRestaurantName(), waitingData.getPartySize());
     }
-
 
 
 

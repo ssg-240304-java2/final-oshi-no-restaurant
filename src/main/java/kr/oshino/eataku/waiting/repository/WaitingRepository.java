@@ -66,4 +66,5 @@ public interface WaitingRepository extends JpaRepository<Waiting, Long> {
     Integer findMaxSequenceNumberByRestaurantAndDate(@Param("restaurantInfo") RestaurantInfo restaurantInfo, @Param("date") LocalDate date);
 
 
+    Optional<Waiting> findFirstByRestaurantInfoAndSequenceNumberAndWaitingStatus(RestaurantInfo restaurantInfo, int sequenceNumber, StatusType statusType);
 }
