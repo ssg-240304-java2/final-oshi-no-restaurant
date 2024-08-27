@@ -172,7 +172,6 @@ $(document).ready(function() {
                     // 중복 예약 시 서버에서 409 응답을 받으면 alert 창을 띄움
                     if (response.httpCode === 409) {
                         console.log('409 응답 감지됨');
-
                         if (response.message === '이미 동일한 시간에 예약이 존재합니다.') {
                             alert('이미 동일한 시간에 예약이 존재합니다.');
                         } else if (response.message === '동시에 다른 사용자가 동일한 예약하려고 시도했습니다. 다시 시도해주세요.') {
