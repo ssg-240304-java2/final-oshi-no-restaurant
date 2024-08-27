@@ -1,6 +1,7 @@
 package kr.oshino.eataku.member.model.repository;
 
 import kr.oshino.eataku.member.entity.Member;
+import kr.oshino.eataku.member.model.dto.HistoryDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -130,4 +131,40 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     @Query("SELECT m.name FROM Member m WHERE m.memberNo = :referenceNo")
     String findNameByMemberNo(@Param("referenceNo") Long referenceNo);
+
+    @Query(value = "SELECT history.restaurant_name, " +
+            "history.restaurant_no, " +
+            "history.img_url, " +
+            "history.restaurant_address, " +
+            "history.update_at, " +
+            "history.service_type, " +
+            "history.service_no, " +
+            "history.status " +
+            "FROM ( " +
+            "    SELECT r.restaurant_name, r.restaurant_no, r.img_url, r.restaurant_address, rv.updated_time as update_at, '예약' AS service_type, " +
+            "           rv.reservation_no AS service_no, " +
+            "           IF(rv.reservation_status = '방문완료', IFNULL((SELECT '리뷰완료' " +
+            "                                                     FROM tbl_review rw " +
+            "                                                    WHERE rw.type = 'reservation' " +
+            "                                                      AND rw.reference_number = rv.reservation_no), '리뷰쓰기'), " +
+            "              rv.reservation_status) AS status " +
+            "      FROM tbl_reservation rv " +
+            "           JOIN tbl_restaurant_info r ON rv.restaurant_no = r.restaurant_no " +
+            "      WHERE rv.member_no = :memberNo " +
+            "        AND rv.reservation_status NOT IN ('예약대기', '예약완료') " +
+            "    UNION ALL " +
+            "    SELECT r.restaurant_name, r.restaurant_no, r.img_url, r.restaurant_address, wt.updated_at as update_at, '웨이팅' as service_type, " +
+            "           wt.waiting_no as service_no, " +
+            "           IF(wt.waiting_status = '방문완료', IFNULL((SELECT '리뷰완료' " +
+            "                                                     FROM tbl_review rw " +
+            "                                                    WHERE rw.type = 'waiting' AND rw.reference_number = wt.waiting_no), " +
+            "                                               '리뷰쓰기'), wt.waiting_status) AS status " +
+            "      FROM tbl_waiting wt " +
+            "           JOIN tbl_restaurant_info r ON wt.restaurant_no = r.restaurant_no " +
+            "      WHERE wt.member_no = :memberNo " +
+            "      AND wt.waiting_status <> '대기중' " +
+            ") history " +
+            "ORDER BY update_at DESC",
+            nativeQuery = true)
+    List<Object[]> selectHistory(@Param("memberNo") Long logginedMemberNo);
 }

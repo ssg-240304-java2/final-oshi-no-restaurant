@@ -105,13 +105,13 @@ $(document).ready(function(){
 
         switch (index){
             case 0:
-                window.location.href = '/myPage/review';
+                window.location.href = '/myInfo/review';
                 break;
             case 1:
-                window.location.href = '/myPage/list';
+                window.location.href = '/myInfo/list';
                 break;
             case 2:
-                window.location.href = '/myPage/history';
+                window.location.href = '/myInfo/history';
                 break;
             default:
                 alert("잘못된 접근 입니다 !!")

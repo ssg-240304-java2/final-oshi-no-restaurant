@@ -1,12 +1,17 @@
 package kr.oshino.eataku.member.service;
 
 import kr.oshino.eataku.member.entity.Notification;
+import kr.oshino.eataku.member.model.dto.NotificationDTO;
 import kr.oshino.eataku.member.model.repository.MemberRepository;
 import kr.oshino.eataku.member.model.repository.NotificationRepository;
 import kr.oshino.eataku.restaurant.admin.model.repository.RestaurantRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -48,5 +53,31 @@ public class NotificationService {
         }
 
         return msg;
+    }
+
+    public List<NotificationDTO> selectNotification(Long memberNo) {
+
+        List<Notification> notifications = notificationRepository.findAllByToMemberAndCreatedAtAfterOrderByCreatedAtDesc(memberNo, LocalDateTime.now().minusDays(14));
+        List<NotificationDTO> result = new ArrayList<>();
+
+        for (Notification notification : notifications) {
+            NotificationDTO notiDTO = new NotificationDTO();
+
+            notiDTO.setType(notification.getType());
+            if (notification.getType().equals("follow") || notification.getType().equals("list")) {
+                notiDTO.setReferenceName(memberRepository.findNameByMemberNo(notification.getReferenceNumber()));
+            }
+            else if (notification.getType().equals("reservation") || notification.getType().equals("waiting")) {
+                notiDTO.setReferenceName(restaurantRepository.findRestaurantNameByRestaurantNo(notification.getReferenceNumber()));
+            }
+            notiDTO.setDate(notification.getCreatedAt());
+            notiDTO.setMessage(notification.getMessage());
+            notiDTO.setServiceType(notification.getServiceType());
+            notiDTO.setServiceNo(notification.getServiceNo());
+
+            result.add(notiDTO);
+        }
+
+        return result;
     }
 }
