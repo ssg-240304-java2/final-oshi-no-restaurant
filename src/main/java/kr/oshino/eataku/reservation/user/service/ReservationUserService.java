@@ -1,7 +1,9 @@
 package kr.oshino.eataku.reservation.user.service;
 import kr.oshino.eataku.common.enums.ReservationStatus;
 import kr.oshino.eataku.member.entity.Member;
+import kr.oshino.eataku.member.entity.Notification;
 import kr.oshino.eataku.member.model.repository.MemberRepository;
+import kr.oshino.eataku.member.service.NotificationService;
 import kr.oshino.eataku.reservation.user.entity.Reservation;
 import kr.oshino.eataku.reservation.user.model.dto.requestDto.CreateReservationUserRequestDto;
 import kr.oshino.eataku.reservation.user.model.dto.responseDto.*;
@@ -31,6 +33,7 @@ public class ReservationUserService {
     private final MemberRepository memberRepository;
     private final RestaurantRepository restaurantRepository;
     private final ReviewRepository reviewRepository;
+    private final NotificationService notificationService;
 
 
     @Transactional
@@ -68,6 +71,19 @@ public class ReservationUserService {
                     .build();
 
             reservationRepository.save(reservation);
+
+            // 알림등록 (+)
+            Notification notification = Notification.builder()
+                    .toMember(reservation.getMember().getMemberNo())
+                    .type("reservation")
+                    .referenceNumber(reservation.getRestaurantInfo().getRestaurantNo())
+                    .message(notificationService.createNotificationMessage(
+                            reservation.getRestaurantInfo().getRestaurantNo(),
+                            "reservation"))
+                    .build();
+
+            notificationService.insertNotification(notification);
+            // 알림등록 (-)
 
             return new CreateReservationUserResponseDto(200, "예약 완료", reservation.getReservationNo());
 
@@ -196,6 +212,19 @@ public class ReservationUserService {
 
                 // 취소한 인원수를 reservation_setting 테이블에 다시 추가
                 updateAvailableSeats(reservation.getReservationNo(), reservation.getPartySize());
+
+                // 알림등록 (+)
+                Notification notification = Notification.builder()
+                        .toMember(reservation.getMember().getMemberNo())
+                        .type("reservationCancel")
+                        .referenceNumber(reservation.getRestaurantInfo().getRestaurantNo())
+                        .message(notificationService.createNotificationMessage(
+                                reservation.getRestaurantInfo().getRestaurantNo(),
+                                "reservationCancel"))
+                        .build();
+
+                notificationService.insertNotification(notification);
+                // 알림등록 (-)
 
                 return true;
             } else {
