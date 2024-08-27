@@ -7,7 +7,9 @@ import kr.oshino.eataku.common.exception.info.WaitingExceptionInfo;
 import kr.oshino.eataku.common.util.BasicUtil;
 import kr.oshino.eataku.common.util.SmsUtil;
 import kr.oshino.eataku.member.entity.Member;
+import kr.oshino.eataku.member.entity.Notification;
 import kr.oshino.eataku.member.model.repository.MemberRepository;
+import kr.oshino.eataku.member.service.NotificationService;
 import kr.oshino.eataku.restaurant.admin.entity.RestaurantInfo;
 import kr.oshino.eataku.restaurant.admin.entity.WaitingSetting;
 import kr.oshino.eataku.restaurant.admin.model.repository.RestaurantRepository;
@@ -41,6 +43,7 @@ public class WaitingService {
     private final MemberRepository memberRepository;
     private final RestaurantRepository restaurantRepository;
     private final WaitingSettingRepository waitingSettingRepository;
+    private final NotificationService notificationService;
 
     private final SmsUtil smsUtil;
     private final BasicUtil basicUtil;
@@ -95,6 +98,18 @@ public class WaitingService {
         Long restaurantNo = waiting.getRestaurantInfo().getRestaurantNo();
 
         sseService.sendWaitingRegisterEvent(restaurantNo);
+
+        // 알림등록
+        Notification notification = Notification.builder()
+                .toMember(waiting.getMember().getMemberNo())
+                .type("waiting")
+                .referenceNumber(waiting.getRestaurantInfo().getRestaurantNo())
+                .message(notificationService.createNotificationMessage(
+                        waiting.getRestaurantInfo().getRestaurantNo(),
+                        "waiting"))
+                .build();
+
+        notificationService.insertNotification(notification);
 
         return new CreateWaitingResponseDto(200, "웨이팅이 등록되었습니다!", waiting.getWaitingNo(), member.getMemberNo());
     }
@@ -155,6 +170,18 @@ public class WaitingService {
 
         // 여기서 카카오톡 알림 메세지 전송
 
+        // 알림등록
+        Notification notification = Notification.builder()
+                .toMember(waiting.getMember().getMemberNo())
+                .type("waitingCancel")
+                .referenceNumber(waiting.getRestaurantInfo().getRestaurantNo())
+                .message(notificationService.createNotificationMessage(
+                        waiting.getRestaurantInfo().getRestaurantNo(),
+                        "waiting"))
+                .build();
+
+        notificationService.insertNotification(notification);
+
         return new UpdateWaitingResponseDto(200, "웨이팅 대기가 취소되었습니다!");
     }
 
@@ -175,7 +202,20 @@ public class WaitingService {
         waiting.getMember().increaseWeight(3.0);
         waitingRepository.save(waiting);
 
+        // 알림등록 (+)
+        Notification notification = Notification.builder()
+                .toMember(waiting.getMember().getMemberNo())
+                .type("review")
+                .referenceNumber(waiting.getRestaurantInfo().getRestaurantNo())
+                .serviceType("waiting")
+                .serviceNo(waiting.getWaitingNo())
+                .message(notificationService.createNotificationMessage(
+                        waiting.getRestaurantInfo().getRestaurantNo(),
+                        "review"))
+                .build();
 
+        notificationService.insertNotification(notification);
+        // 알림등록 (-)
 
         return new UpdateWaitingResponseDto(200, "웨이팅 대기가 방문 처리 되었습니다!");
     }
