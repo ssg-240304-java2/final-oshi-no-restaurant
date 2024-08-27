@@ -89,7 +89,7 @@ document.addEventListener("DOMContentLoaded", function() {
             const selectedTags = Array.from(document.querySelectorAll(".tag-btn.selected"))
                 .map(btn => btn.getAttribute("data-tag"));
 
-            selectedTagsInput.value = selectedTags.join(",");
+            // selectedTagsInput.value = selectedTags.join(",");
             console.log(selectedTags);
         });
     });

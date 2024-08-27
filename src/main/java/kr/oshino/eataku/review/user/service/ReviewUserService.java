@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -90,7 +91,6 @@ public class ReviewUserService {
     public List<CreateReviewUserRequestDto> getAllReviewByMember(Long loginedMemberNo) {
 
 
-
         return reviewRepository.findAllByMember_MemberNo(loginedMemberNo)
                 .stream()
                 .map(review -> CreateReviewUserRequestDto.builder()
@@ -116,20 +116,84 @@ public class ReviewUserService {
     }
 
 
-    // 리뷰 수정
-    @Transactional
-    public void modifyReview(int reviewNo, String newReviewContent, String newScope, Set<String> newReviewTags) {
+    // 리뷰 수정(prompt)
+//    @Transactional
+//    public void modifyReview(int reviewNo, String newReviewContent, String newScope, Set<String> newReviewTags) {
+//        Review review = reviewRepository.findById(reviewNo)
+//                .orElseThrow(() -> new IllegalArgumentException("리뷰를 찾을 수 없습니다: " + reviewNo));
+//
+//        review.setReviewContent(newReviewContent);
+//        review.setScope(Scope.valueOf(newScope));
+//        review.setReviewTags(newReviewTags);
+//
+//        reviewRepository.save(review);
+//    }
+
+    // 리뷰 수정 2트
+//    @Transactional
+//    public void reviewModify(int reviewNo, String newReviewContent, String newScope, String newReviewTags, MultipartFile newFile) throws IOException {
+//
+//       // 기존 리뷰 가져오기
+//        Review review = reviewRepository .findById(reviewNo)
+//                .orElseThrow(() -> new IllegalArgumentException("리뷰를 찾을 수 없네요~" + reviewNo));
+//
+//        // 리뷰 내용 업데이트
+//        if (newReviewContent != null && !newReviewContent.isEmpty()) {
+//        review.setReviewContent(newReviewContent);
+//
+//        }
+//        // 리뷰 별점 업데이트
+//        if (newScope != null && !newScope.isEmpty()) {
+//            review.setScope(Scope.valueOf(newScope));
+//        }
+//
+//        // 리뷰 태그 업데이트
+//        if (newReviewTags != null && !newReviewTags.isEmpty()) {
+//            Set<String> tagsSet = Arrays.stream(newReviewTags.split(","))
+//                    .map(String::trim)
+//                    .collect(Collectors.toSet());
+//            review.setReviewTags(tagsSet);
+//        }
+//        // 파일 업데이트
+//        if (newFile != null && !newFile.isEmpty()) {
+//            String uploadImgUrl = fileUploadUtil.uploadFile(newFile);
+//            review.setImgUrl(uploadImgUrl);
+//        }
+
+        // 수정된 리뷰 저장
+//        reviewRepository.save(review);
+
+
+    // 리뷰 수정 3트
+    @Transactional(readOnly = true)
+    public CreateReviewUserRequestDto getReviewById(int reviewNo) {
         Review review = reviewRepository.findById(reviewNo)
                 .orElseThrow(() -> new IllegalArgumentException("리뷰를 찾을 수 없습니다: " + reviewNo));
 
-        review.setReviewContent(newReviewContent);
-        review.setScope(Scope.valueOf(newScope));
-        review.setReviewTags(newReviewTags);
-
-        reviewRepository.save(review);
+        return new CreateReviewUserRequestDto(review);
     }
 
+    public void reviewModify(int reviewNo, String reviewContent, Scope scope, Set<String> reviewTags, MultipartFile newFile) throws IOException {
+        Review review = reviewRepository.findById(reviewNo)
+                .orElseThrow(() -> new IllegalArgumentException("리뷰를 찾을 수 없습니다" + reviewNo));
 
+        // 리뷰 수정 내용
+        review.setReviewContent(reviewContent);
+        review.setScope(scope);
+        review.setReviewTags(reviewTags);
 
+        // 파일 업로드
+        String uploadImgUrl = "";
+
+        // 파일 저장 로직 추가
+        if (newFile != null && !newFile.isEmpty()) {
+            try {
+                uploadImgUrl = fileUploadUtil.uploadFile(newFile);
+            } catch (IOException e) {
+                throw new RuntimeException("File upload failed. Please try again.", e);
+            }
+
+            reviewRepository.save(review);
+        }
+    }
 }
-
