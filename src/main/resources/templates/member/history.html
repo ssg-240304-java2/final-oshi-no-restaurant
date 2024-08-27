@@ -1,5 +1,5 @@
-!DOCTYPE html>
-<html lang="ko">
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -34,22 +34,23 @@
             </div>
             <div class="row" id="reservationData">
                 <!-- 예약 내역 데이터 -->
-                <div class="col-md-6 reservation-item" data-type="예약 내역">
+                <div class="col-md-6 reservation-item" data-type="예약 내역" th:each="history : ${historyList}">
                     <div class="card reservation-card">
                         <div class="card-body">
                             <div class="reservation-info">
-                                <img src="https://via.placeholder.com/80" class="img-fluid" alt="도치피자 강남점">
+                                <img th:src="${history.imgUrl}" class="img-fluid" alt="img">
                                 <div class="reservation-details">
-                                    <span>도치피자 강남점</span>
-                                    <span>양식 • 강남구</span>
-                                    <span class="badge badge-custom">예약</span>
-                                    <span>18:30 예약</span>
+                                    <span th:text="${history.restaurantName}"></span>
+                                    <span th:text="${history.restaurantAddress}">양식 • 강남구</span>
+                                    <span class="badge badge-custom" th:text="${history.serviceType}">예약</span>
+                                    <span  th:text="${history.updateAt}">18:30 예약</span>
                                 </div>
                             </div>
-                            <button class="btn btn-outline-danger">예약 취소</button>
+                            <button class="btn btn-outline-danger" th:text="${history.status}">예약 취소</button>
                         </div>
                     </div>
                 </div>
+                <!-- 예약 데이터 -->
                 <div class="col-md-6 reservation-item" data-type="웨이팅 내역">
                     <div class="card reservation-card">
                         <div class="card-body">

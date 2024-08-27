@@ -54,6 +54,7 @@ body {
     padding: 5px 10px;
     border-radius: 10px;
     margin-bottom: 5px;
+    width: 60px;
 }
 .reservation-card .card-body {
     display: flex;
@@ -86,4 +87,7 @@ body {
 }
 #selectMenu{
     margin-left: -245px;
+}
+.img-fluid {
+    width: 80px;
 }
