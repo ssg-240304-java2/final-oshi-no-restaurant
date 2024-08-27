@@ -1,6 +1,5 @@
 spring:
   application:
     name: eataku
-
   profiles:
     default: local

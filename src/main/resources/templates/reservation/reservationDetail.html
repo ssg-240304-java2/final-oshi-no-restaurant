@@ -29,8 +29,8 @@
 
     <div class="info-section text-center">
         <img th:src="@{/images/reservation/Map pin.png}" class="spaced-image"/>
-        <span th:text="${restaurant.restaurantAddress}"></span><br>
-        <img th:src="@{/images/reservation/Phone.png}" class="spaced-image"/><br>
+        <span th:text="${restaurant.restaurantAddress}"></span><br><br><br>
+        <img th:src="@{/images/reservation/Phone.png}" class="spaced-image"/><br><br><br>
         <span th:text="${restaurant.contact}"/></span>
         <img th:src="@{/images/reservation/Info.png}"/><br>
     </div>
@@ -86,6 +86,15 @@
 
 
     <div class="review-section">
+        <!--     리뷰가 없을 때       -->
+        <div th:if="${#lists.isEmpty(ReviewDetails)}">
+            <div class="no-data-page text-center">
+                <p class="text-muted">등록 된 리뷰가 없습니다.</p>
+            </div>
+        </div>
+
+
+
         <!-- 리뷰 리스트를 반복문을 통해 출력 -->
         <div th:each="review : ${ReviewDetails}" class="review">
 
@@ -96,7 +105,7 @@
             <p>
                 <strong th:text="${review.name}">이름</strong>
                 <!-- 날짜는 기본값이나 임시값으로 설정 (예: '2024.07.31') -->
-                <span>2024.07.31</span>
+                <span th:text="${#temporals.format(review.reviewDate,'yyyy-MM-dd')}"></span>
             </p>
 
             <!-- 별점  -->

@@ -46,6 +46,11 @@
             </div>
             <div class="reservation" th:each="waitingInfo : ${member.waitingInfo}">
                 <div>
+
+
+<!--웨이팅-->
+<!--                    <div th:if="${!#lists.isEmpty(member.waitingInfo)}" th:each="waitingInfo : ${member.waitingInfo}">-->
+<!--                        <div>-->
                     <h5 class="d-inline">현재 예약 정보</h5>
                     <span class="badge-reservation mx-2">웨이팅</span>
                     <span th:text="${waitingInfo.waitingNumber} + '번째 순번'" class="card-time">N명 N번째 순번</span>
@@ -61,6 +66,12 @@
             </div>
             <div class="reservation" th:each="reservationInfo : ${member.reservationInfo}">
                 <div>
+
+
+                    <!-- 예약 정보가 있는 경우 -->
+<!--                    <div th:if="${!#lists.isEmpty(member.reservationInfo)}" th:each="reservationInfo : ${member.reservationInfo}">-->
+<!--                        <div>-->
+
                     <h5 class="d-inline">현재 예약 정보</h5>
                     <span class="badge-reservation mx-2">예약</span>
                     <span th:text="${reservationInfo.reservationDate} + ' ' + ${reservationInfo.reservationTime} + ' 예약'" class="card-time">YYYY/MM/DD HH:mm 예약</span>
