@@ -55,24 +55,22 @@
                                         <tr>
                                             <th>판매일</th>
                                             <th>인원수</th>
-                                            <th>예약 시간</th>
+                                            <th>이용 시간</th>
                                             <th>이용 방식</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>2024-06-01</td>
-                                            <td>4</td>
-                                            <td>18:00</td>
-                                            <td>웨이팅</td>
+                                    <tbody id="salesTableBody">
+                                        <tr th:each="sale:${sales}" class="tableData">
+                                            <input type="hidden" th:value="${sale.customerName}">
+                                            <input type="hidden" th:value="${sale.customerContact}">
+                                            <input type="hidden" th:value="${sale.usageType}">
+                                            <input type="hidden" th:value="${sale.numberOfPeople}">
+                                            <input type="hidden" th:value="${sale.usageCount}">
+                                            <td th:text="${sale.salesDate}"></td>
+                                            <td th:text="${sale.numberOfPeople}"></td>
+                                            <td th:text="${sale.usageTime}"></td>
+                                            <td th:text="${sale.usageType}"></td>
                                         </tr>
-                                        <tr>
-                                            <td>2024-06-01</td>
-                                            <td>2</td>
-                                            <td>18:00</td>
-                                            <td>예약</td>
-                                        </tr>
-                                        <!-- Add more rows as needed -->
                                     </tbody>
                                 </table>
                             </div>
@@ -80,14 +78,14 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="customer-info">
+                    <div class="customer-info" id="customerInfo">
                         <div class="card">
                             <h5 class="card-title">고객 정보</h5>
-                            <p>고객명: 홍길동</p>
-                            <p>연락처: 010-0000-0000</p>
-                            <p>이용방식: 웨이팅</p>
-                            <p>인원수: 4</p>
-                            <p>이용횟수: 1</p>
+                            <p id="customerName">고객명: </p>
+                            <p id="customerContact">연락처: </p>
+                            <p id="usageType">이용방식: </p>
+                            <p id="numberOfPeople">인원수: </p>
+                            <p id="usageCount">이용횟수: </p>
                         </div>
                     </div>
                 </div>
@@ -96,9 +94,10 @@
         <div th:replace="~{fragment/footer.html :: footer}" class="footer"></div>
 
 
-        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
         <script type="text/javascript" th:src="@{/js/fragment/navbar.js}"></script>
+        <script type="text/javascript" th:src="@{/js/restaurant/main.js}"></script>
     </body>
 </html>

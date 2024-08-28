@@ -5,9 +5,12 @@ import jakarta.servlet.http.HttpSession;
 import kr.oshino.eataku.common.util.FileUploadUtil;
 import kr.oshino.eataku.reservation.user.entity.Reservation;
 import kr.oshino.eataku.reservation.user.model.dto.responseDto.RestaurantInfoDetails;
+import kr.oshino.eataku.reservation.user.repository.ReservationRepository;
 import kr.oshino.eataku.restaurant.admin.entity.*;
 import kr.oshino.eataku.restaurant.admin.model.dto.*;
 import kr.oshino.eataku.restaurant.admin.model.repository.*;
+import kr.oshino.eataku.waiting.entity.Waiting;
+import kr.oshino.eataku.waiting.repository.WaitingRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +23,7 @@ import java.io.IOException;
 import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -37,6 +41,8 @@ public class RestaurantAdminService {
     private final ReservationSettingRepository reservationSettingRepository;
     private final WaitingSettingRepository waitingSettingRepository;
     private final MenuRepository menuRepository;
+    private final ReservationRepository reservationRepository;
+    private final WaitingRepository waitingRepository;
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -486,6 +492,34 @@ public class RestaurantAdminService {
     public void updateMenu(MenuDTO updatedMenu, MultipartFile file) {
 
     }
+
+    public List<SalesDTO> selectSalesReport(LocalDateTime startDate, LocalDateTime endDate, Long loginedRestaurantNo) {
+
+        List<SalesDTO> sales = new ArrayList<>();
+        List<Waiting> waitings = waitingRepository.findByRestaurantInfo_RestaurantNoAndUpdatedAtBetween(loginedRestaurantNo,startDate, endDate);
+
+        for(Waiting waiting : waitings) {
+            SalesDTO salesDTO = new SalesDTO();
+            salesDTO.setSalesDate(waiting.getUpdatedAt().toLocalDate());        // 날짜 + 이용시간 한번에 나타내기
+            salesDTO.setNumberOfPeople(waiting.getPartySize());
+            salesDTO.setUsageType("웨이팅");
+            sales.add(salesDTO);
+        }
+
+        List<Reservation> reservations = reservationRepository.findByRestaurantInfo_RestaurantNoAndUpdatedTimeBetween(loginedRestaurantNo,startDate, endDate);
+
+        for(Reservation reservation : reservations) {
+            SalesDTO salesDTO = new SalesDTO();
+            salesDTO.setNumberOfPeople(reservation.getPartySize());
+            salesDTO.setUsageTime(reservation.getCreatedTime().toLocalTime());
+            salesDTO.setUsageType("예약");
+            sales.add(salesDTO);
+        }
+        log.info("\uD83C\uDF4E startDate: {}, endDate: {}, restaurantNo: {}", startDate, endDate, loginedRestaurantNo);
+
+        return sales;
+    }
+
 }
 
 
