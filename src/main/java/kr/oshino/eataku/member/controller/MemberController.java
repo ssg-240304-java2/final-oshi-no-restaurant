@@ -186,7 +186,7 @@ public class MemberController {
         CustomMemberDetails logginedMember = (CustomMemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long logginedMemberNo = logginedMember.getMemberNo();
 
-        log.info("⭐️⭐️ [ MemberController ] modifyProfile file : {}, member : {} ⭐️⭐️", file.isEmpty() , member);
+        log.info("⭐️⭐️ [ MemberController ] modifyProfile file : {}, member : {} ⭐️⭐️", file , member);
 
         boolean isSuccess = memberService.updateProfile(file, member, logginedMemberNo);
 

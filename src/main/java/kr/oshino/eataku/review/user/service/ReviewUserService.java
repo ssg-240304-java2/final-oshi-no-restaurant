@@ -1,4 +1,5 @@
 package kr.oshino.eataku.review.user.service;
+
 import kr.oshino.eataku.common.enums.Scope;
 import kr.oshino.eataku.common.util.FileUploadUtil;
 import kr.oshino.eataku.member.entity.Member;
@@ -7,8 +8,7 @@ import kr.oshino.eataku.reservation.user.repository.ReservationRepository;
 import kr.oshino.eataku.restaurant.admin.entity.RestaurantInfo;
 import kr.oshino.eataku.restaurant.admin.model.repository.RestaurantRepository;
 import kr.oshino.eataku.review.user.entity.Review;
-import kr.oshino.eataku.review.user.model.vo.CreateReviewUserRequestDto;
-import kr.oshino.eataku.review.user.model.vo.CreateReviewUserResponseDto;
+import kr.oshino.eataku.review.user.model.vo.ReviewDTO;
 import kr.oshino.eataku.review.user.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,8 +19,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -42,11 +40,10 @@ public class ReviewUserService {
 
     /***
      * 리뷰 등록
-     * @param createReviewUserRequestDto
      * @return
      */
     @Transactional
-    public CreateReviewUserResponseDto insertReview(CreateReviewUserRequestDto createReviewUserRequestDto, MultipartFile file) {
+    public boolean insertReview(Long loginedMemberNo,ReviewDTO review, MultipartFile file) {
 
         String uploadImgUrl = "";
 
@@ -59,50 +56,62 @@ public class ReviewUserService {
             }
         }
 
-        Member member = memberRepository.findById(createReviewUserRequestDto.getMemberNo())
-                .orElseThrow(() -> new IllegalArgumentException("없는 회원 :" + createReviewUserRequestDto.getMemberNo()));
+        Member member = memberRepository.findById(loginedMemberNo)
+                .orElseThrow(() -> new IllegalArgumentException("없는 회원 :" + loginedMemberNo));
 
-        RestaurantInfo restaurantInfo = restaurantRepository.findById((long) createReviewUserRequestDto.getRestaurantNo())
-                .orElseThrow(() -> new IllegalArgumentException("없는 식당" + createReviewUserRequestDto.getRestaurantNo()));
+        RestaurantInfo restaurantInfo = restaurantRepository.findById(review.getRestaurantNo())
+                .orElseThrow(() -> new IllegalArgumentException("없는 식당" + review.getRestaurantNo()));
 
-
-        Review review = Review.builder()
-                .member(member)
-                .restaurantInfo(restaurantInfo)
-                .reviewContent(createReviewUserRequestDto.getReviewContent())
-                .reviewTags(createReviewUserRequestDto.getReviewTags())
-                .scope(createReviewUserRequestDto.getScope())
-                .reviewNo(createReviewUserRequestDto.getReviewNo())
-                .imgUrl(uploadImgUrl)
-                .reviewDate(LocalDateTime.now())
-                .build();
+        Review reviewEntity;
+        if (review.getReviewNo() != null && review.getReviewNo() > 0) {
+            reviewEntity = reviewRepository.findByReviewNo(Math.toIntExact(review.getReviewNo()));
+            reviewEntity.setReviewContent(review.getReviewContent());
+            reviewEntity.setReviewTags(review.getReviewTags());
+            reviewEntity.setScope(review.getScope());
+            reviewEntity.setImgUrl(uploadImgUrl);
+            reviewEntity.setReviewDate(LocalDateTime.now());
+        } else {
+            reviewEntity = Review.builder()
+                    .member(member)
+                    .restaurantInfo(restaurantInfo)
+                    .reviewContent(review.getReviewContent())
+                    .reviewTags(review.getReviewTags())
+                    .scope(review.getScope())
+                    .imgUrl(uploadImgUrl)
+                    .reviewDate(LocalDateTime.now())
+                    .type(review.getType())
+                    .referenceNumber(review.getServiceNo())
+                    .build();
+        }
 
         System.out.println("review = " + review);
         System.out.println("uploadImgUrl = " + uploadImgUrl);
 
 
-        reviewRepository.save(review);
+        reviewRepository.save(reviewEntity);
 
-        return new CreateReviewUserResponseDto(200, "리뷰 작성 완료", 1L);
+        return true;
 
     }
 
 
-    public List<CreateReviewUserRequestDto> getAllReviewByMember(Long loginedMemberNo) {
+    public List<ReviewDTO> getAllReviewByMember(Long loginedMemberNo) {
 
 
         return reviewRepository.findAllByMember_MemberNo(loginedMemberNo)
                 .stream()
-                .map(review -> CreateReviewUserRequestDto.builder()
+                .map(review -> ReviewDTO.builder()
                         .memberNo(review.getMember().getMemberNo())
-                        .reviewNo(review.getReviewNo())
+                        .reviewNo((long) review.getReviewNo())
                         .restaurantName(review.getRestaurantInfo().getRestaurantName())
                         .reviewContent(review.getReviewContent())
                         .restaurantNo(review.getRestaurantInfo().getRestaurantNo())
                         .scope(review.getScope())
                         .reviewTags(review.getReviewTags())
                         .imgUrl(review.getImgUrl())
-                        .reviewDate(LocalDateTime.now())
+                        .reviewDate(review.getReviewDate())
+                        .serviceNo(review.getReferenceNumber())
+                        .type(review.getType())
                         .build())
                 .collect(Collectors.toList());
 
@@ -160,18 +169,18 @@ public class ReviewUserService {
 //            review.setImgUrl(uploadImgUrl);
 //        }
 
-        // 수정된 리뷰 저장
+    // 수정된 리뷰 저장
 //        reviewRepository.save(review);
 
 
     // 리뷰 수정 3트
-    @Transactional(readOnly = true)
-    public CreateReviewUserRequestDto getReviewById(int reviewNo) {
-        Review review = reviewRepository.findById(reviewNo)
-                .orElseThrow(() -> new IllegalArgumentException("리뷰를 찾을 수 없습니다: " + reviewNo));
-
-        return new CreateReviewUserRequestDto(review);
-    }
+//    @Transactional(readOnly = true)
+//    public CreateReviewUserRequestDto getReviewById(int reviewNo) {
+//        Review review = reviewRepository.findById(reviewNo)
+//                .orElseThrow(() -> new IllegalArgumentException("리뷰를 찾을 수 없습니다: " + reviewNo));
+//
+//        return new CreateReviewUserRequestDto(review);
+//    }
 
     public void reviewModify(int reviewNo, String reviewContent, Scope scope, Set<String> reviewTags, MultipartFile newFile) throws IOException {
         Review review = reviewRepository.findById(reviewNo)
@@ -195,5 +204,16 @@ public class ReviewUserService {
 
             reviewRepository.save(review);
         }
+    }
+
+    public Review selectReview(Long restaurantNo, String serviceType, Long serviceNo) {
+        Review review = reviewRepository.findByRestaurantInfo_RestaurantNoAndTypeAndReferenceNumber(restaurantNo, serviceType, serviceNo);
+
+        if (review == null) {
+            review = new Review();
+            review.setRestaurantInfo(restaurantRepository.findByRestaurantNo(restaurantNo));
+        }
+
+        return review;
     }
 }

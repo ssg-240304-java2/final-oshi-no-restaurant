@@ -486,6 +486,28 @@ public class RestaurantAdminService {
     public void updateMenu(MenuDTO updatedMenu, MultipartFile file) {
 
     }
+
+    public List<SalesDTO> selectSalesStatistics(Long loginedRestaurantNo, LocalDate startDay, LocalDate endDay) {
+        List<Object[]> results = restaurantRepository.findTotalStatisticsByRestaurantNo(loginedRestaurantNo, startDay, endDay);
+        List<SalesDTO> sales = new ArrayList<>();
+
+        for (Object[] result : results) {
+            SalesDTO dto = new SalesDTO(
+                    result[0] != null ? ((Number) result[0]).longValue() : null,       // serviceNo
+                    result[1] != null ? result[1].toString() : null,                   // serviceType
+                    result[2] != null ? (Integer) result[2] : 0,                       // partySize
+                    result[3] != null ? LocalDate.parse(result[3].toString()) : null,  // date
+                    result[4] != null ? LocalTime.parse(result[4].toString()) : null,  // time
+                    result[5] != null ? result[5].toString() : null,                   // name
+                    result[6] != null ? result[6].toString() : null,                   // contact
+                    result[7] != null ? ((Number) result[7]).intValue() : 0            // count
+            );
+            sales.add(dto);
+        }
+
+        return sales;
+
+    }
 }
 
 

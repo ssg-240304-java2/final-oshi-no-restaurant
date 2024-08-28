@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -59,19 +59,26 @@
                                             <th>이용 방식</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>2024-06-01</td>
-                                            <td>4</td>
-                                            <td>18:00</td>
-                                            <td>웨이팅</td>
+                                    <tbody id="tableBody">
+                                        <tr class="tableRow"
+                                            th:each="sale : ${sales}"
+                                            th:data-name="${sale.name}"
+                                            th:data-contact="${sale.contact}"
+                                            th:data-service="${sale.serviceType}"
+                                            th:data-size="${sale.partySize}"
+                                            th:data-count="${sale.count}"
+                                        >
+                                            <td th:text="${sale.date}">2024-06-01</td>
+                                            <td th:text="${sale.partySize}">4</td>
+                                            <td th:text="${sale.time}">18:00</td>
+                                            <td th:text="${sale.serviceType}">웨이팅</td>
                                         </tr>
-                                        <tr>
-                                            <td>2024-06-01</td>
-                                            <td>2</td>
-                                            <td>18:00</td>
-                                            <td>예약</td>
-                                        </tr>
+<!--                                        <tr>-->
+<!--                                            <td>2024-06-01</td>-->
+<!--                                            <td>2</td>-->
+<!--                                            <td>18:00</td>-->
+<!--                                            <td>예약</td>-->
+<!--                                        </tr>-->
                                         <!-- Add more rows as needed -->
                                     </tbody>
                                 </table>
@@ -83,11 +90,11 @@
                     <div class="customer-info">
                         <div class="card">
                             <h5 class="card-title">고객 정보</h5>
-                            <p>고객명: 홍길동</p>
-                            <p>연락처: 010-0000-0000</p>
-                            <p>이용방식: 웨이팅</p>
-                            <p>인원수: 4</p>
-                            <p>이용횟수: 1</p>
+                            <p>고객명: <span id="clientName"></span></p>
+                            <p>연락처: <span id="clientContact"></span></p>
+                            <p>이용방식: <span id="clientServiceType"></span></p>
+                            <p>인원수: <span id="clientPartySize"></span></p>
+                            <p>이용횟수: <span id="clientCount"></span></p>
                         </div>
                     </div>
                 </div>
@@ -96,9 +103,74 @@
         <div th:replace="~{fragment/footer.html :: footer}" class="footer"></div>
 
 
-        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
         <script type="text/javascript" th:src="@{/js/fragment/navbar.js}"></script>
+        <script>
+            $('#tableBody').on('click', '.tableRow', function () {
+                $('#clientName').text($(this).data('name'))
+                $('#clientContact').text($(this).data('contact'))
+                $('#clientServiceType').text($(this).data('service'))
+                $('#clientPartySize').text($(this).data('size'))
+                $('#clientCount').text($(this).data('count'))
+
+                $('.tableRow').each(function (){
+                    $(this).css({
+                        backgroundColor: "#FFF"
+                    })
+                })
+
+                $(this).css({
+                    backgroundColor: "#999999"
+                })
+            });
+
+            $('#startDate').on('change', reloadSales);
+            $('#endDate').on('change', reloadSales);
+
+            function reloadSales() {
+                const startDate = $('#startDate').val()
+                const endDate = $('#endDate').val()
+
+                $.ajax({
+                    url: '/restaurant/main',
+                    type: 'post',
+                    data: {
+                        startDay: startDate,
+                        endDay: endDate
+                    },
+                    success: function (result){
+                        reloadSalesHTML(result);
+                    },
+                    error: function (e){
+                        console.log(e);
+                    }
+                });
+            }
+
+            function reloadSalesHTML(sales) {
+                const container = $('#tableBody')
+                container.empty();
+                sales.forEach(function (data) {
+                    let inner = `
+                        <tr class="tableRow"
+                            data-name="${data.name}"
+                            data-contact="${data.contact}"
+                            data-service="${data.serviceType}"
+                            data-size="${data.partySize}"
+                            data-count="${data.count}"
+                        >
+                            <td>${data.date}</td>
+                            <td>${data.partySize}</td>
+                            <td>${data.time}</td>
+                            <td>${data.serviceType}</td>
+                        </tr>
+                        `;
+                    container.append(inner);
+                });
+            };
+
+        </script>
     </body>
 </html>

@@ -145,7 +145,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
             "           rv.reservation_no AS service_no, " +
             "           IF(rv.reservation_status = '방문완료', IFNULL((SELECT '리뷰완료' " +
             "                                                     FROM tbl_review rw " +
-            "                                                    WHERE rw.type = 'reservation' " +
+            "                                                    WHERE rw.type = '예약' " +
             "                                                      AND rw.reference_number = rv.reservation_no), '리뷰쓰기'), " +
             "              rv.reservation_status) AS status " +
             "      FROM tbl_reservation rv " +
@@ -157,7 +157,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
             "           wt.waiting_no as service_no, " +
             "           IF(wt.waiting_status = '방문완료', IFNULL((SELECT '리뷰완료' " +
             "                                                     FROM tbl_review rw " +
-            "                                                    WHERE rw.type = 'waiting' AND rw.reference_number = wt.waiting_no), " +
+            "                                                    WHERE rw.type = '웨이팅' AND rw.reference_number = wt.waiting_no), " +
             "                                               '리뷰쓰기'), wt.waiting_status) AS status " +
             "      FROM tbl_waiting wt " +
             "           JOIN tbl_restaurant_info r ON wt.restaurant_no = r.restaurant_no " +

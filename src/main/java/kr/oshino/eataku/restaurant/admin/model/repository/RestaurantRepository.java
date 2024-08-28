@@ -2,6 +2,7 @@ package kr.oshino.eataku.restaurant.admin.model.repository;
 
 import kr.oshino.eataku.restaurant.admin.entity.RestaurantInfo;
 
+import kr.oshino.eataku.restaurant.admin.model.dto.SalesDTO;
 import kr.oshino.eataku.search.model.dto.SearchResultDTO;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -9,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.time.LocalDate;
 import java.util.List;
 import org.springframework.stereotype.Repository;
 
@@ -107,4 +109,53 @@ public interface RestaurantRepository extends JpaRepository<RestaurantInfo, Long
 
     @Query("SELECT r.restaurantName FROM RestaurantInfo r WHERE r.restaurantNo = :referenceNo")
     String findRestaurantNameByRestaurantNo(@Param("referenceNo") Long referenceNo);
+
+    RestaurantInfo findByRestaurantNo(Long restaurantNo);
+
+    @Query(value = "SELECT total.restaurant_no as restaurantNo, " +
+            "total.serviceType as serviceType, " +
+            "total.party_size as partySize, " +
+            "total.date as date, " +
+            "total.time as time, " +
+            "total.name as name, " +
+            "total.contact as contact, " +
+            "total.count as count " +
+            "FROM (" +
+            "   SELECT rv.restaurant_no, " +
+            "          '예약' as serviceType, " +
+            "          rv.party_size, " +
+            "          DATE_FORMAT(rv.updated_time, '%Y-%m-%d') as date, " +
+            "          DATE_FORMAT(rv.updated_time, '%H:%i') as time, " +
+            "          (SELECT m.name FROM tbl_member m WHERE rv.member_no = m.member_no) as name, " +
+            "          (SELECT m.phone FROM tbl_member m WHERE rv.member_no = m.member_no) as contact, " +
+            "          (SELECT ( " +
+            "              (SELECT COUNT(*) FROM tbl_reservation cnt WHERE cnt.member_no = rv.member_no AND cnt.restaurant_no = :restaurantNo) " +
+            "              + " +
+            "              (SELECT COUNT(*) FROM tbl_waiting cnt WHERE cnt.member_no = rv.member_no AND cnt.restaurant_no = :restaurantNo) " +
+            "          )) as count " +
+            "     FROM tbl_reservation rv " +
+            "    WHERE rv.restaurant_no = :restaurantNo " +
+            "      AND rv.updated_time BETWEEN :startDay and :endDay " +
+            "    UNION ALL " +
+            "    SELECT wt.restaurant_no, " +
+            "           '웨이팅' as serviceType, " +
+            "           wt.party_size, " +
+            "           DATE_FORMAT(wt.updated_at, '%Y-%m-%d') as date, " +
+            "           DATE_FORMAT(wt.updated_at, '%H:%i') as time, " +
+            "           (SELECT m.name FROM tbl_member m WHERE wt.member_no = m.member_no) as name, " +
+            "           (SELECT m.phone FROM tbl_member m WHERE wt.member_no = m.member_no) as contact, " +
+            "           (SELECT ( " +
+            "              (SELECT COUNT(*) FROM tbl_reservation cnt WHERE cnt.member_no = wt.member_no AND cnt.restaurant_no = :restaurantNo) " +
+            "              + " +
+            "              (SELECT COUNT(*) FROM tbl_waiting cnt WHERE cnt.member_no = wt.member_no AND cnt.restaurant_no = :restaurantNo) " +
+            "           )) as count " +
+            "     FROM tbl_waiting wt " +
+            "    WHERE wt.restaurant_no = :restaurantNo " +
+            "      AND wt.updated_at BETWEEN :startDay and :endDay " +
+            ") total " +
+            "ORDER BY total.date DESC, total.time DESC",
+            nativeQuery = true)
+    List<Object[]> findTotalStatisticsByRestaurantNo(@Param("restaurantNo") Long loginedRestaurantNo,
+                                                     @Param("startDay") LocalDate startDay,
+                                                     @Param("endDay") LocalDate endDay);
 }
