@@ -1,7 +1,7 @@
-package kr.oshino.eataku.restaurant.admin.model.repository;
+package kr.oshino.eataku.ws.repository;
 
 import jakarta.annotation.PostConstruct;
-import kr.oshino.eataku.restaurant.admin.model.dto.ChatRoomDTO;
+import kr.oshino.eataku.ws.dto.ChatRoomDTO;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;

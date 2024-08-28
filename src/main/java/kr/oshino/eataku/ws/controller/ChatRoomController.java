@@ -1,7 +1,7 @@
-package kr.oshino.eataku.restaurant.admin.controller;
+package kr.oshino.eataku.ws.controller;
 
-import kr.oshino.eataku.restaurant.admin.model.dto.ChatRoomDTO;
-import kr.oshino.eataku.restaurant.admin.model.repository.ChatRoomRepository;
+import kr.oshino.eataku.ws.dto.ChatRoomDTO;
+import kr.oshino.eataku.ws.repository.ChatRoomRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;

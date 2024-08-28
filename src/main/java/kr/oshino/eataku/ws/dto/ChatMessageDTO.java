@@ -1,4 +1,4 @@
-package kr.oshino.eataku.restaurant.admin.model.dto;
+package kr.oshino.eataku.ws.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
