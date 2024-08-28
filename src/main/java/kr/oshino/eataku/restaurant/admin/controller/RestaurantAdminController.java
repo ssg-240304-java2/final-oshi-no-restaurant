@@ -198,14 +198,49 @@ public class RestaurantAdminController {
 
     /***
      * 메인 페이지 조회
-     * @param request
      * @return
      */
-//    @GetMapping("/main")
-//    public String main(HttpServletRequest request) {
-//        return "restaurant/main";
-//    }
+    @GetMapping("/main")
+    public String main(@RequestParam(value = "startDay", defaultValue = "") LocalDate startDay,
+                       @RequestParam(value = "endDay", defaultValue = "") LocalDate endDay,
+                       Model model) {
 
+        CustomMemberDetails member = (CustomMemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long loginedRestaurantNo = member.getRestaurantNo();
+
+        if (startDay == null || endDay == null) {
+            startDay = LocalDate.now().with(TemporalAdjusters.firstDayOfMonth());
+            endDay = LocalDate.now().with(TemporalAdjusters.lastDayOfMonth());
+        }
+
+        List<SalesDTO> sales = restaurantAdminService.selectSalesStatistics(loginedRestaurantNo, startDay, endDay); // gpt가 작명해줌
+
+        model.addAttribute("sales", sales);
+        log.info("🍎sales: {}", sales);
+
+        return "restaurant/main";
+    }
+
+    @PostMapping("/main")
+    public ResponseEntity<List<SalesDTO>> mainReload(@RequestParam(value = "startDay", defaultValue = "") LocalDate startDay,
+                       @RequestParam(value = "endDay", defaultValue = "") LocalDate endDay) {
+
+        CustomMemberDetails member = (CustomMemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long loginedRestaurantNo = member.getRestaurantNo();
+
+        if (startDay == null ) {
+            startDay = LocalDate.now().with(TemporalAdjusters.firstDayOfMonth());
+        }
+        if (endDay == null) {
+            endDay = LocalDate.now().with(TemporalAdjusters.lastDayOfMonth());
+        }
+
+        List<SalesDTO> sales = restaurantAdminService.selectSalesStatistics(loginedRestaurantNo, startDay, endDay); // gpt가 작명해줌
+
+        log.info("🍎sales: {}", sales);
+
+        return ResponseEntity.ok(sales);
+    }
     /***
      * 날짜 클릭 시 등록된 웨이팅 세팅 조회
      * @param waitingDate

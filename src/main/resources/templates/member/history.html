@@ -39,8 +39,8 @@
                         <div class="card-body">
                             <div class="reservation-info">
                                 <div class="reservation-img">
-                                    <span th:if="${history.status} eq '리뷰쓰기'">방문완료</span>
-                                    <span th:unless="${history.status} eq '리뷰쓰기'" th:text="${history.status}"></span>
+                                    <span th:if="${history.status} eq '리뷰쓰기' or ${history.status} eq '리뷰완료'">방문완료</span>
+                                    <span th:unless="${history.status} eq '리뷰쓰기' or ${history.status} eq '리뷰완료'" th:text="${history.status}"></span>
                                     <img th:src="${history.imgUrl}" class="img-fluid" alt="img">
                                 </div>
                                 <div class="reservation-details">

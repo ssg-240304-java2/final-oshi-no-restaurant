@@ -493,32 +493,54 @@ public class RestaurantAdminService {
 
     }
 
-    public List<SalesDTO> selectSalesReport(LocalDateTime startDate, LocalDateTime endDate, Long loginedRestaurantNo) {
-
+    public List<SalesDTO> selectSalesStatistics(Long loginedRestaurantNo, LocalDate startDay, LocalDate endDay) {
+        List<Object[]> results = restaurantRepository.findTotalStatisticsByRestaurantNo(loginedRestaurantNo, startDay, endDay);
         List<SalesDTO> sales = new ArrayList<>();
-        List<Waiting> waitings = waitingRepository.findByRestaurantInfo_RestaurantNoAndUpdatedAtBetween(loginedRestaurantNo,startDate, endDate);
 
-        for(Waiting waiting : waitings) {
-            SalesDTO salesDTO = new SalesDTO();
-            salesDTO.setSalesDate(waiting.getUpdatedAt().toLocalDate());        // 날짜 + 이용시간 한번에 나타내기
-            salesDTO.setNumberOfPeople(waiting.getPartySize());
-            salesDTO.setUsageType("웨이팅");
-            sales.add(salesDTO);
+        for (Object[] result : results) {
+            SalesDTO dto = new SalesDTO(
+                    result[0] != null ? ((Number) result[0]).longValue() : null,       // serviceNo
+                    result[1] != null ? result[1].toString() : null,                   // serviceType
+                    result[2] != null ? (Integer) result[2] : 0,                       // partySize
+                    result[3] != null ? LocalDate.parse(result[3].toString()) : null,  // date
+                    result[4] != null ? LocalTime.parse(result[4].toString()) : null,  // time
+                    result[5] != null ? result[5].toString() : null,                   // name
+                    result[6] != null ? result[6].toString() : null,                   // contact
+                    result[7] != null ? ((Number) result[7]).intValue() : 0            // count
+            );
+            sales.add(dto);
         }
-
-        List<Reservation> reservations = reservationRepository.findByRestaurantInfo_RestaurantNoAndUpdatedTimeBetween(loginedRestaurantNo,startDate, endDate);
-
-        for(Reservation reservation : reservations) {
-            SalesDTO salesDTO = new SalesDTO();
-            salesDTO.setNumberOfPeople(reservation.getPartySize());
-            salesDTO.setUsageTime(reservation.getCreatedTime().toLocalTime());
-            salesDTO.setUsageType("예약");
-            sales.add(salesDTO);
-        }
-        log.info("\uD83C\uDF4E startDate: {}, endDate: {}, restaurantNo: {}", startDate, endDate, loginedRestaurantNo);
 
         return sales;
+
     }
+
+//     public List<SalesDTO> selectSalesReport(LocalDateTime startDate, LocalDateTime endDate, Long loginedRestaurantNo) {
+
+//         List<SalesDTO> sales = new ArrayList<>();
+//         List<Waiting> waitings = waitingRepository.findByRestaurantInfo_RestaurantNoAndUpdatedAtBetween(loginedRestaurantNo,startDate, endDate);
+
+//         for(Waiting waiting : waitings) {
+//             SalesDTO salesDTO = new SalesDTO();
+//             salesDTO.setSalesDate(waiting.getUpdatedAt().toLocalDate());        // 날짜 + 이용시간 한번에 나타내기
+//             salesDTO.setNumberOfPeople(waiting.getPartySize());
+//             salesDTO.setUsageType("웨이팅");
+//             sales.add(salesDTO);
+//         }
+
+//         List<Reservation> reservations = reservationRepository.findByRestaurantInfo_RestaurantNoAndUpdatedTimeBetween(loginedRestaurantNo,startDate, endDate);
+
+//         for(Reservation reservation : reservations) {
+//             SalesDTO salesDTO = new SalesDTO();
+//             salesDTO.setNumberOfPeople(reservation.getPartySize());
+//             salesDTO.setUsageTime(reservation.getCreatedTime().toLocalTime());
+//             salesDTO.setUsageType("예약");
+//             sales.add(salesDTO);
+//         }
+//         log.info("\uD83C\uDF4E startDate: {}, endDate: {}, restaurantNo: {}", startDate, endDate, loginedRestaurantNo);
+
+//         return sales;
+//     }
 
 }
 

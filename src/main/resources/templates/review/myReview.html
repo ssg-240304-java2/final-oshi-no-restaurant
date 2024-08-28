@@ -161,7 +161,11 @@
         </div>
       </div>
 <!--      <button class="edit-btn" th:onclick="'modifyReview(' + ${review.reviewNo} + ')'">✏️</button>-->
-      <button class="edit-btn" th:onclick="'location.href=\'/reviewModify?reviewNo=' + ${review.reviewNo} + '\''">✏️ 수정</button>
+      <button class="edit-btn"
+      th:data-restaurant-No="${review.restaurantNo}"
+      th:data-service-No="${review.serviceNo}"
+      th:data-service-Type="${review.type}"
+      >✏️ 수정</button>
       <button class="delete-btn" th:onclick="'deleteReview(' + ${review.reviewNo} + ')'">❌</button>
     </div>
   </div>
@@ -173,6 +177,14 @@
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script>
+    $('.edit-btn').on('click', function (){
+      const restaurantNo = $(this).data('restaurant-no');
+      const serviceNo = $(this).data('service-no');
+      const serviceType = $(this).data('service-type');
+
+      window.location.href = '/reviewPage?restaurantNo='+restaurantNo+'&serviceType='+serviceType+'&serviceNo='+serviceNo;
+    });
+
   function deleteReview(reviewNo) {
     if (confirm("정말 이 리뷰를 삭제하시겠습니까?")) {
       $.ajax({

@@ -80,3 +80,8 @@ body {
 .btn {
     margin-bottom: 5px;
 }
+.btn-kakao {
+    background-color: #FEE500;
+    color: rgba(0,0,0,0.8);
+    border: 1px #FEE500 solid;
+}

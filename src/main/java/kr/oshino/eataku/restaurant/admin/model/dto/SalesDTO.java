@@ -8,18 +8,17 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
-@Builder
 public class SalesDTO {
 
-    private LocalDate salesDate;
-    private int numberOfPeople;
-    private LocalTime usageTime;
-    private String usageType;
-
-    private String customerName;
-    private String customerContact;
-    private int usageCount;
+    private Long ServiceNo;
+    private String ServiceType;
+    private int partySize;
+    private LocalDate date;
+    private LocalTime time;
+    private String name;
+    private String contact;
+    private int count;
 }
