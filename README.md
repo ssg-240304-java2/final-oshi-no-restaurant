@@ -1,5 +1,8 @@
 # 최애의 식당
-
+![Project Introduction](readmeImages/intro.png)
+- 배포 URL :  https://eataku.kr/
+- Test ID : test
+- Test PW : 1234
 
 
 # 프로젝트 소개
