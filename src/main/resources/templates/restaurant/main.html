@@ -55,10 +55,11 @@
                                         <tr>
                                             <th>판매일</th>
                                             <th>인원수</th>
-                                            <th>예약 시간</th>
+                                            <th>이용 시간</th>
                                             <th>이용 방식</th>
                                         </tr>
                                     </thead>
+
                                     <tbody id="tableBody">
                                         <tr class="tableRow"
                                             th:each="sale : ${sales}"
@@ -80,6 +81,20 @@
 <!--                                            <td>예약</td>-->
 <!--                                        </tr>-->
                                         <!-- Add more rows as needed -->
+
+<!--                                     <tbody id="salesTableBody">
+                                        <tr th:each="sale:${sales}" class="tableData">
+                                            <input type="hidden" th:value="${sale.customerName}">
+                                            <input type="hidden" th:value="${sale.customerContact}">
+                                            <input type="hidden" th:value="${sale.usageType}">
+                                            <input type="hidden" th:value="${sale.numberOfPeople}">
+                                            <input type="hidden" th:value="${sale.usageCount}">
+                                            <td th:text="${sale.salesDate}"></td>
+                                            <td th:text="${sale.numberOfPeople}"></td>
+                                            <td th:text="${sale.usageTime}"></td>
+                                            <td th:text="${sale.usageType}"></td>
+                                        </tr> -->
+
                                     </tbody>
                                 </table>
                             </div>
@@ -87,14 +102,14 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="customer-info">
+                    <div class="customer-info" id="customerInfo">
                         <div class="card">
                             <h5 class="card-title">고객 정보</h5>
-                            <p>고객명: <span id="clientName"></span></p>
-                            <p>연락처: <span id="clientContact"></span></p>
-                            <p>이용방식: <span id="clientServiceType"></span></p>
-                            <p>인원수: <span id="clientPartySize"></span></p>
-                            <p>이용횟수: <span id="clientCount"></span></p>
+                            <p id="customerName">고객명: </p>
+                            <p id="customerContact">연락처: </p>
+                            <p id="usageType">이용방식: </p>
+                            <p id="numberOfPeople">인원수: </p>
+                            <p id="usageCount">이용횟수: </p>
                         </div>
                     </div>
                 </div>
