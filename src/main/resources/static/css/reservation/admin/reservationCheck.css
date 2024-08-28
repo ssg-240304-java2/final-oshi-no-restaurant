@@ -58,3 +58,17 @@ body {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     margin-bottom: 50px;
 }
+
+.reservation-container {
+    min-width: 83vw;
+}
+
+#reservation-row {
+    height: 500px;
+    overflow-y: auto;
+    width: 100%;
+}
+
+.card {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
