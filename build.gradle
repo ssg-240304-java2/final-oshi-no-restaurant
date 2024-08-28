@@ -55,6 +55,9 @@ dependencies {
     // sendingMessage
     implementation 'net.nurigo:sdk:4.3.0'
 
+    // webSocket
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
+
     // test
     implementation("org.hibernate.orm:hibernate-core:6.3.1.Final")
 
@@ -74,3 +77,7 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+//repositories {
+//    mavenCentral()
+//}
