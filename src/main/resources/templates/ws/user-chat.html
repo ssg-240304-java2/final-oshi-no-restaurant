@@ -17,7 +17,9 @@
                 <img src="/images/logo.png" alt="icon">
                 <input type="text" id="messageInput" placeholder="메세지를 입력해주세요." maxlength="1000" oninput="updateCharCount()">
                 <span class="char-count" id="charCount">0/1000</span>
-                <button onclick="sendMessage()">전송</button>
+                <button th:onclick="sendMessage([[${roomId}]])">전송</button>
+                <input type="hidden" id="roomId" th:data-roomId="${roomId}">
+                <input type="hidden" id="sender" th:data-sender="${userType}">
             </div>
         </div>
 
