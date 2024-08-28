@@ -53,8 +53,10 @@ public class ReservationAdminService {
         Reservation reservation = reservationAdminRepository.findById(reservationNo)
                 .orElseThrow(() -> new RuntimeException("해당하는 예약 정보가 없습니다!"));
 
-        reservation.cancel();
-        reservationAdminRepository.save(reservation);
+//        reservation.cancel();
+//        reservationAdminRepository.save(reservation);
+
+        reservationAdminRepository.deleteById(reservationNo);
 
         return "예약이 취소되었습니다!";
     }
