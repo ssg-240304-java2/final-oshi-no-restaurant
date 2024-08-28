@@ -4,10 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import kr.oshino.eataku.member.entity.Member;
-import kr.oshino.eataku.member.model.dto.CustomMemberDetails;
-import kr.oshino.eataku.member.model.dto.MemberDTO;
-import kr.oshino.eataku.member.model.dto.MemberProfileDTO;
-import kr.oshino.eataku.member.model.dto.MyInfoDTO;
+import kr.oshino.eataku.member.model.dto.*;
 import kr.oshino.eataku.member.service.MailService;
 import kr.oshino.eataku.member.service.MemberService;
 import kr.oshino.eataku.restaurant.admin.model.dto.RestaurantAccountInfoDTO;
@@ -23,6 +20,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -188,7 +186,7 @@ public class MemberController {
         CustomMemberDetails logginedMember = (CustomMemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long logginedMemberNo = logginedMember.getMemberNo();
 
-        log.info("⭐️⭐️ [ MemberController ] modifyProfile file : {}, member : {} ⭐️⭐️", file.isEmpty() , member);
+        log.info("⭐️⭐️ [ MemberController ] modifyProfile file : {}, member : {} ⭐️⭐️", file , member);
 
         boolean isSuccess = memberService.updateProfile(file, member, logginedMemberNo);
 
@@ -249,5 +247,17 @@ public class MemberController {
         }
 
         return ResponseEntity.badRequest().body(false);
+    }
+
+    @GetMapping("/myInfo/history")
+    public String history(Model model) {
+        CustomMemberDetails logginedMember = (CustomMemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long logginedMemberNo = logginedMember.getMemberNo();
+
+        List<HistoryDTO> historyList = memberService.selectHistory(logginedMemberNo);
+
+        model.addAttribute("historyList", historyList);
+
+        return "member/history";
     }
 }

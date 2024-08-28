@@ -37,7 +37,7 @@ body {
 .content {
     margin-left: 280px; /* 사이드바 너비 + 여백 */
     padding: 20px;
-    margin-top: 50px;
+    margin-top: 60px;
 }
 .reservation-card {
     border: 1px solid #FB3F4A;
@@ -54,6 +54,7 @@ body {
     padding: 5px 10px;
     border-radius: 10px;
     margin-bottom: 5px;
+    width: 60px;
 }
 .reservation-card .card-body {
     display: flex;
@@ -84,6 +85,13 @@ body {
     box-shadow: none;
     border-color: #FB3F4A;
 }
-#selectMenu{
-    margin-left: -245px;
+.img-fluid {
+    width: 80px;
+    min-width: 80px;
+    white-space: nowrap;
+}
+.reservation-img {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
 }

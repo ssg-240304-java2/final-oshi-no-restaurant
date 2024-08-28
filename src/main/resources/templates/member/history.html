@@ -1,5 +1,5 @@
-!DOCTYPE html>
-<html lang="ko">
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,7 +23,7 @@
             </div>
         </div>
         <div class="content">
-            <div class="container mt-5">
+            <div class="container">
                 <div class="form-group">
                     <select class="custom-select" id="selectMenu" onchange="filterData()">
                         <option value="전체 내역">전체 내역</option>
@@ -34,70 +34,34 @@
             </div>
             <div class="row" id="reservationData">
                 <!-- 예약 내역 데이터 -->
-                <div class="col-md-6 reservation-item" data-type="예약 내역">
+                <div class="col-md-6 reservation-item" data-type="예약 내역" th:each="history : ${historyList}">
                     <div class="card reservation-card">
                         <div class="card-body">
                             <div class="reservation-info">
-                                <img src="https://via.placeholder.com/80" class="img-fluid" alt="도치피자 강남점">
+                                <div class="reservation-img">
+                                    <span th:if="${history.status} eq '리뷰쓰기' or ${history.status} eq '리뷰완료'">방문완료</span>
+                                    <span th:unless="${history.status} eq '리뷰쓰기' or ${history.status} eq '리뷰완료'" th:text="${history.status}"></span>
+                                    <img th:src="${history.imgUrl}" class="img-fluid" alt="img">
+                                </div>
                                 <div class="reservation-details">
-                                    <span>도치피자 강남점</span>
-                                    <span>양식 • 강남구</span>
-                                    <span class="badge badge-custom">예약</span>
-                                    <span>18:30 예약</span>
+                                    <span th:text="${history.restaurantName}"></span>
+                                    <span th:text="${history.restaurantAddress}">양식 • 강남구</span>
+                                    <span class="badge badge-custom" th:text="${history.serviceType}">예약</span>
+                                    <span th:text="${history.updateAt}">18:30 예약</span>
                                 </div>
                             </div>
-                            <button class="btn btn-outline-danger">예약 취소</button>
+
+                            <button th:if="${history.status} eq '리뷰쓰기'" class="btn btn-outline-danger"
+                                    th:data-serviceNo="${history.serviceNo}"
+                                    th:data-serviceType="${history.serviceType}"
+                                    th:data-restaurantNo="${history.restaurantNo}"
+                            style="white-space: nowrap">
+                                리뷰 쓰기
+                            </button>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6 reservation-item" data-type="웨이팅 내역">
-                    <div class="card reservation-card">
-                        <div class="card-body">
-                            <div class="reservation-info">
-                                <img src="https://via.placeholder.com/80" class="img-fluid" alt="도치피자 강남점">
-                                <div class="reservation-details">
-                                    <span>도치피자 강남점</span>
-                                    <span>양식 • 강남구</span>
-                                    <span class="badge badge-custom">웨이팅중</span>
-                                    <span>N번째 순번</span>
-                                </div>
-                            </div>
-                            <button class="btn btn-outline-danger">대기 취소</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 reservation-item" data-type="예약 내역">
-                    <div class="card reservation-card">
-                        <div class="card-body">
-                            <div class="reservation-info">
-                                <img src="https://via.placeholder.com/80" class="img-fluid" alt="도치피자 강남점">
-                                <div class="reservation-details">
-                                    <span>도치피자 강남점</span>
-                                    <span>양식 • 강남구</span>
-                                    <span class="badge badge-custom">방문완료</span>
-                                    <span>YYYY/MM/DD HH:MM</span>
-                                </div>
-                            </div>
-                            <button class="btn btn-outline-danger">리뷰 쓰기</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 reservation-item" data-type="예약 내역">
-                    <div class="card reservation-card">
-                        <div class="card-body">
-                            <div class="reservation-info">
-                                <img src="https://via.placeholder.com/80" class="img-fluid" alt="도치피자 강남점">
-                                <div class="reservation-details">
-                                    <span>도치피자 강남점</span>
-                                    <span>양식 • 강남구</span>
-                                    <span class="badge badge-custom">예약취소</span>
-                                    <span>18:30 예약</span>
-                                </div>
-                            </div>
-                            <button class="btn btn-outline-danger">노쇼</button>
-                        </div>
-                    </div>
-                </div>
+                <!-- 예약 데이터 -->
             </div>
         </div>
         <div th:replace="~{fragment/footer.html :: footer}" class="footer"></div>
@@ -107,5 +71,6 @@
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
         <script type="text/javascript" th:src="@{/js/fragment/navbar.js}"></script>
+        <script type="text/javascript" th:src="@{/js/member/history.js}"></script>
     </body>
 </html>

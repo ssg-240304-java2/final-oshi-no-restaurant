@@ -29,8 +29,11 @@ import java.io.IOException;
 import java.security.SecureRandom;
 import java.sql.Date;
 import java.sql.Time;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -277,18 +280,20 @@ public class MemberService {
         // 바뀐 정보만 바꾸기
         if( memberInfo != null && memberInfo.getMemberNo().equals(logginedMemberNo) ) {
 
+            log.info("👀👀 [ MemberService ] modify to member : {} 👀👀", memberInfo);
+            log.info("👀👀 [ MemberService ] modify from member : {} 👀👀", member);
             // 기본 회원정보
-            if( !uploadImgUrl.isEmpty()) {memberInfo.setImgUrl(uploadImgUrl);}
+            if( !uploadImgUrl.isEmpty() ) {memberInfo.setImgUrl(uploadImgUrl);}
             if( !memberInfo.getName().equals(member.getName()) ) {memberInfo.setName(member.getName());}
-            if( !memberInfo.getNickname().equals(member.getNickname()) ) {memberInfo.setName(member.getNickname());}
-            if( !memberInfo.getBirthday().equals(member.getBirthday()) ) {memberInfo.setBirthday(member.getBirthday());}
-            if( !memberInfo.getGender().equals(member.getGender()) ) {memberInfo.setGender(member.getGender());}
-            if( !memberInfo.getPhone().equals(member.getPhone()) ) {memberInfo.setPhone(member.getPhone());}
-            if( !memberInfo.getIntroduction().equals(member.getIntroduction()) ) {memberInfo.setIntroduction(member.getIntroduction());}
+            if( !memberInfo.getNickname().equals(member.getNickname()) ) {memberInfo.setNickname(member.getNickname());}
+            if( !Objects.equals(memberInfo.getBirthday(),member.getBirthday()) ) {memberInfo.setBirthday(member.getBirthday());}
+            if( !Objects.equals(memberInfo.getGender(),member.getGender()) ) {memberInfo.setGender(member.getGender());}
+            if( !Objects.equals(memberInfo.getPhone(),member.getPhone()) ) {memberInfo.setPhone(member.getPhone());}
+            if( !Objects.equals(memberInfo.getIntroduction(),member.getIntroduction()) ) {memberInfo.setIntroduction(member.getIntroduction());}
 
             // 계정정보
             MemberLoginInfo tempLoginInfo = memberInfo.getMemberLoginInfo();
-            if( !bCryptPasswordEncoder.matches(member.getPassword(), tempLoginInfo.getPassword()) && !(member.getPassword() == "")) {tempLoginInfo.setPassword(bCryptPasswordEncoder.encode(member.getPassword()));}
+            if( !bCryptPasswordEncoder.matches(member.getPassword(), tempLoginInfo.getPassword()) && !(member.getPassword().isEmpty())) {tempLoginInfo.setPassword(bCryptPasswordEncoder.encode(member.getPassword()));}
             memberInfo.setMemberLoginInfo(tempLoginInfo);
 
             memberRepository.save(memberInfo);
@@ -358,5 +363,26 @@ public class MemberService {
 
     public boolean selectSignUpByIdAndNameAndEmail(String id, String name, String email) {
         return memberRepository.existsByMemberLoginInfoAccountAndNameAndEmail(id,name,email);
+    }
+
+    public List<HistoryDTO> selectHistory(Long logginedMemberNo) {
+        List<Object[]> results = memberRepository.selectHistory(logginedMemberNo);
+        List<HistoryDTO> historyList = new ArrayList<>();
+
+        for (Object[] result : results) {
+            HistoryDTO dto = new HistoryDTO(
+                    (String) result[0],  // restaurantName
+                    ((Number) result[1]).longValue(),  // restaurantNo
+                    (String) result[2],  // imgUrl
+                    (String) result[3],  // restaurantAddress
+                    (Timestamp) result[4],  // updateAt
+                    (String) result[5],  // serviceType
+                    ((Number) result[6]).longValue(),  // serviceNo
+                    (String) result[7]   // status
+            );
+            historyList.add(dto);
+        }
+
+        return historyList;
     }
 }

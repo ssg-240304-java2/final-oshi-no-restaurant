@@ -7,10 +7,12 @@ import kr.oshino.eataku.common.enums.HashTag;
 import kr.oshino.eataku.member.model.dto.CustomMemberDetails;
 import kr.oshino.eataku.reservation.user.model.dto.responseDto.*;
 import kr.oshino.eataku.reservation.user.service.ReservationUserService;
+import kr.oshino.eataku.restaurant.admin.entity.RestaurantInfo;
 import kr.oshino.eataku.restaurant.admin.model.dto.*;
 import kr.oshino.eataku.restaurant.admin.service.RestaurantAdminService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -19,6 +21,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.TemporalAdjusters;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -193,14 +198,49 @@ public class RestaurantAdminController {
 
     /***
      * 메인 페이지 조회
-     * @param request
      * @return
      */
     @GetMapping("/main")
-    public String main(HttpServletRequest request) {
+    public String main(@RequestParam(value = "startDay", defaultValue = "") LocalDate startDay,
+                       @RequestParam(value = "endDay", defaultValue = "") LocalDate endDay,
+                       Model model) {
+
+        CustomMemberDetails member = (CustomMemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long loginedRestaurantNo = member.getRestaurantNo();
+
+        if (startDay == null || endDay == null) {
+            startDay = LocalDate.now().with(TemporalAdjusters.firstDayOfMonth());
+            endDay = LocalDate.now().with(TemporalAdjusters.lastDayOfMonth());
+        }
+
+        List<SalesDTO> sales = restaurantAdminService.selectSalesStatistics(loginedRestaurantNo, startDay, endDay); // gpt가 작명해줌
+
+        model.addAttribute("sales", sales);
+        log.info("🍎sales: {}", sales);
+
         return "restaurant/main";
     }
 
+    @PostMapping("/main")
+    public ResponseEntity<List<SalesDTO>> mainReload(@RequestParam(value = "startDay", defaultValue = "") LocalDate startDay,
+                       @RequestParam(value = "endDay", defaultValue = "") LocalDate endDay) {
+
+        CustomMemberDetails member = (CustomMemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long loginedRestaurantNo = member.getRestaurantNo();
+
+        if (startDay == null ) {
+            startDay = LocalDate.now().with(TemporalAdjusters.firstDayOfMonth());
+        }
+        if (endDay == null) {
+            endDay = LocalDate.now().with(TemporalAdjusters.lastDayOfMonth());
+        }
+
+        List<SalesDTO> sales = restaurantAdminService.selectSalesStatistics(loginedRestaurantNo, startDay, endDay); // gpt가 작명해줌
+
+        log.info("🍎sales: {}", sales);
+
+        return ResponseEntity.ok(sales);
+    }
     /***
      * 날짜 클릭 시 등록된 웨이팅 세팅 조회
      * @param waitingDate
@@ -405,6 +445,58 @@ public class RestaurantAdminController {
         System.out.println("reviewImgDto = " + reviewImgDto);
 
         return "restaurant/preview";
+    }
+
+    /***
+     * 매출 조회
+     * @param model
+     * @param startDd
+     * @param endDd
+     * @return
+     */
+//    @GetMapping("/main")
+//    public String getSalesReport(Model model,
+//                                 @RequestParam(value = "startDate", required = false) String startDd,
+//                                 @RequestParam(value = "endDate", required = false) String endDd) {
+//
+//        CustomMemberDetails member = (CustomMemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        Long loginedRestaurantNo = member.getRestaurantNo();
+//
+//        LocalDateTime startDate;
+//        LocalDateTime endDate;
+//
+//        if(startDd == "" || startDd == null) {
+//            startDate = LocalDateTime.now().with(TemporalAdjusters.firstDayOfMonth());
+//        }else{
+//            startDate = LocalDateTime.parse(startDd);
+//        }
+//        if(endDd == "" || endDd == null) {
+//            endDate = LocalDateTime.now().with(TemporalAdjusters.lastDayOfMonth());
+//        }else {
+//            endDate = LocalDateTime.parse(endDd);
+//        }
+//
+//
+//        List<SalesDTO> sales = restaurantAdminService.selectSalesReport(startDate, endDate, loginedRestaurantNo);
+//
+//        model.addAttribute("loginedRestaurantNo", loginedRestaurantNo);
+//        model.addAttribute("sales", sales);
+//        model.addAttribute("startDate", startDate);
+//        model.addAttribute("endDate", endDate);
+//        log.info("\uD83C\uDF4E controller model: {}", model);
+//
+//        log.info("\uD83C\uDF4E startDate: {}, endDate: {}, restaurantNo: {}", startDate, endDate, loginedRestaurantNo);
+//
+//        return "restaurant/main";
+//    }
+
+    /***
+     * 채팅
+     * @return
+     */
+    @GetMapping("/chatting")
+    public String chattingView(){
+        return "restaurant/chatting";
     }
 
 }

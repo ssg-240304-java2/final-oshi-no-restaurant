@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -27,7 +28,6 @@ public interface WaitingRepository extends JpaRepository<Waiting, Long> {
     ReadWaitingResponseDto findWaitingByWaitingNo(@Param("waitingNo") Long waitingNo);
 
 
-
     // memberNo로 웨이팅 정보 조회
     @Query("SELECT new kr.oshino.eataku.waiting.model.dto.responseDto.ReadWaitingResponseDto(" +
             "w.waitingNo, w.partySize, w.waitingStatus, w.sequenceNumber, w.createdAt, w.updatedAt, " +
@@ -39,7 +39,6 @@ public interface WaitingRepository extends JpaRepository<Waiting, Long> {
     List<ReadWaitingResponseDto> findWaitingByMemberNo(@Param("memberNo") Long memberNo);
 
 
-
     // restaurantNo로 웨이팅 정보 조회
     @Query("SELECT new kr.oshino.eataku.waiting.model.dto.responseDto.ReadWaitingResponseDto(" +
             "w.waitingNo, w.partySize, w.waitingStatus, w.sequenceNumber, w.createdAt, w.updatedAt, " +
@@ -49,8 +48,6 @@ public interface WaitingRepository extends JpaRepository<Waiting, Long> {
             "JOIN w.restaurantInfo r " +
             "WHERE r.restaurantNo = :restaurantNo AND w.waitingStatus = kr.oshino.eataku.common.enums.StatusType.대기중")
     List<ReadWaitingResponseDto> findWaitingByRestaurantNo(@Param("restaurantNo") Long restaurantNo);
-
-
 
 
     Optional<Waiting> findByMemberAndRestaurantInfoAndWaitingStatus(
@@ -67,4 +64,9 @@ public interface WaitingRepository extends JpaRepository<Waiting, Long> {
 
 
     Optional<Waiting> findFirstByRestaurantInfoAndSequenceNumberAndWaitingStatus(RestaurantInfo restaurantInfo, int sequenceNumber, StatusType statusType);
+
+    List<Waiting> findByRestaurantInfo_RestaurantNoAndUpdatedAtBetween(Long restaurantNo,LocalDateTime startDate, LocalDateTime endDate);
 }
+
+
+

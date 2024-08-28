@@ -257,6 +257,21 @@ public class ReservationUserController {
         return "reservation/reservationDetail";
     }
 
+    // 쩝쩝채팅
+    @GetMapping("/user/chatting/{restaurantNo}")
+    public String chattingView(@PathVariable String restaurantNo, Model model){
+
+//        String userType = "user";
+
+//        model.addAttribute("userType", userType);
+        model.addAttribute("restaurantNo", restaurantNo);
+
+        log.info("🍎restaurantNo = " + restaurantNo);
+//        log.info("\uD83C\uDF4EuserType = " + userType);
+
+        return "restaurant/chatting";
+    }
+
 
 }
 

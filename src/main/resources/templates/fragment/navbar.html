@@ -27,49 +27,14 @@
                     <div class="d-flex align-items-right">
                         <button sec:authorize="!isAuthenticated()" class="btn btn-login" type="button" onclick="location.href='/login'">로그인</button>
                         <div sec:authorize="isAuthenticated() and  hasRole('ROLE_GENERAL')" class="dropdown ml-3">
-                            <button class="btn btn-notify" type="button">
+                            <button class="btn btn-notify" type="button" id="notificationBtn">
                                 <img th:src="@{/images/navbar/notiBell.png}" alt="알림종">
                             </button>
                             <div class="dropdown-wrapper">
                                 <div class="dropdown-arrow"></div>
                                 <div id="notificationsDropdown" class="dropdown-menu dropdown-menu-right">
-                                    <div class="notification-container">
-                                        <div class="notification">
-                                            <span class="icon">✔️</span> OOO 예약이 확정되었습니다.
-                                            <span class="close">&times;</span>
-                                        </div>
-                                        <div class="notification">
-                                            <span class="icon">👤</span> OOO 님이 당신을 팔로우 했습니다.
-                                            <span class="close">&times;</span>
-                                        </div>
-                                        <div class="notification">
-                                            <span class="icon">➕</span> OOO 님이 리스트에 새 식당을 추가 했습니다.
-                                            <span class="close">&times;</span>
-                                        </div>
-                                        <div class="notification">
-                                            <span class="icon">✔️</span> OOO 예약이 확정되었습니다.
-                                            <span class="close">&times;</span>
-                                        </div>
-                                        <div class="notification">
-                                            <span class="icon">👤</span> OOO 님이 당신을 팔로우 했습니다.
-                                            <span class="close">&times;</span>
-                                        </div>
-                                        <div class="notification">
-                                            <span class="icon">➕</span> OOO 님이 리스트에 새 식당을 추가 했습니다.
-                                            <span class="close">&times;</span>
-                                        </div>
-                                        <div class="notification">
-                                            <span class="icon">✔️</span> OOO 예약이 확정되었습니다.
-                                            <span class="close">&times;</span>
-                                        </div>
-                                        <div class="notification">
-                                            <span class="icon">👤</span> OOO 님이 당신을 팔로우 했습니다.
-                                            <span class="close">&times;</span>
-                                        </div>
-                                        <div class="notification">
-                                            <span class="icon">➕</span> OOO 님이 리스트에 새 식당을 추가 했습니다.
-                                            <span class="close">&times;</span>
-                                        </div>
+                                    <div class="notification-container" id="notificationContainer">
+
                                     </div>
                                 </div>
                             </div>

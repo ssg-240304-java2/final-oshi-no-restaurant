@@ -15,7 +15,10 @@ import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+
+import java.sql.Date;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
@@ -230,6 +233,6 @@ public interface ReservationRepository extends JpaRepository<Reservation,Integer
             LocalTime reservationTime,
             Member member);
 
-    List<Reservation> findByRestaurantInfo_RestaurantNoAndUpdatedTimeBetween(Long restaurantNo,LocalDate startDate, LocalDate endDate);
+    List<Reservation> findByRestaurantInfo_RestaurantNoAndUpdatedTimeBetween(Long restaurantNo,LocalDateTime startDate, LocalDateTime endDate);
 }
 

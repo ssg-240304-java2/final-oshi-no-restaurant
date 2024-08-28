@@ -16,4 +16,8 @@ public interface ReviewRepository extends JpaRepository<Review, Integer> {
     int countByMember(Member toMember);
 
     List<Review> findAllByMember_MemberNo(Long memberNo);
+
+    Review findByRestaurantInfo_RestaurantNoAndTypeAndReferenceNumber(Long restaurantNo, String serviceType, Long serviceNo);
+
+    Review findByReviewNo(int reviewNo);
 }
