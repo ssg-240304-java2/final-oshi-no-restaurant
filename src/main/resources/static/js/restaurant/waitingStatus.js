@@ -11,11 +11,11 @@ function fetchWaiting() {
             response.forEach(function(waiting) {
 
                 let createdAt = new Date(waiting.createdAt);
-                let now = new Date(); // --> 9시간 +
+                let now = new Date();
 
                 console.log(now);
 
-                let minutesElapsed = Math.floor((now - createdAt) / (1000 * 60));
+                let minutesElapsed = Math.floor((now - createdAt) / (1000 * 60)) + 1;
 
                 const waitingCard = `
                     <div class="waiting-card" data-waiting-no="${waiting.waitingNo}">

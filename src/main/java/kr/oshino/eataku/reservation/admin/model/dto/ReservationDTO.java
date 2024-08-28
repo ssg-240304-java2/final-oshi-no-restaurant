@@ -17,13 +17,12 @@ import java.util.Set;
 public class ReservationDTO {
 
 
-    private int reservationNo;
+    private Integer reservationNo;
     private Long memberNo;
+    private String name;
+    private String phone;
     private Long restaurantNo;
     private int partySize;
-    private Set<ReservationStatus> reservationStatus;
     private LocalDate reservationDate;
     private LocalTime reservationTime;
-    private LocalDateTime createdTime;
-    private LocalDateTime updatedTime;
 }

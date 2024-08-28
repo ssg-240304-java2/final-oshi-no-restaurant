@@ -233,7 +233,6 @@ public interface ReservationRepository extends JpaRepository<Reservation,Integer
             LocalTime reservationTime,
             Member member);
 
-
     List<Reservation> findByRestaurantInfo_RestaurantNoAndUpdatedTimeBetween(Long restaurantNo,LocalDateTime startDate, LocalDateTime endDate);
 }
 

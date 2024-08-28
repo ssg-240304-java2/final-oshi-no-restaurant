@@ -62,6 +62,9 @@ public interface WaitingRepository extends JpaRepository<Waiting, Long> {
     @Query("SELECT MAX(w.sequenceNumber) FROM Waiting w WHERE w.restaurantInfo = :restaurantInfo AND DATE(w.createdAt) = :date")
     Integer findMaxSequenceNumberByRestaurantAndDate(@Param("restaurantInfo") RestaurantInfo restaurantInfo, @Param("date") LocalDate date);
 
+
+    Optional<Waiting> findFirstByRestaurantInfoAndSequenceNumberAndWaitingStatus(RestaurantInfo restaurantInfo, int sequenceNumber, StatusType statusType);
+
     List<Waiting> findByRestaurantInfo_RestaurantNoAndUpdatedAtBetween(Long restaurantNo,LocalDateTime startDate, LocalDateTime endDate);
 }
 

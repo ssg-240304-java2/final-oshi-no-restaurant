@@ -2,6 +2,9 @@ package kr.oshino.eataku.reservation.user.entity;
 import jakarta.persistence.*;
 
 import kr.oshino.eataku.common.enums.ReservationStatus;
+import kr.oshino.eataku.common.enums.StatusType;
+import kr.oshino.eataku.common.exception.exception.WaitingException;
+import kr.oshino.eataku.common.exception.info.WaitingExceptionInfo;
 import kr.oshino.eataku.member.entity.Member;
 import kr.oshino.eataku.restaurant.admin.entity.RestaurantInfo;
 import lombok.*;
@@ -79,4 +82,19 @@ public class Reservation {
     @Column(name = "version")
     private Integer version;
 
+
+    public void cancel() {
+        if(reservationStatus != ReservationStatus.예약취소)
+            this.reservationStatus = ReservationStatus.예약취소;
+        else
+            throw new RuntimeException("");
+    }
+
+
+    public void enter() {
+        if(reservationStatus != ReservationStatus.방문완료)
+            this.reservationStatus = ReservationStatus.방문완료;
+        else
+            throw new RuntimeException("");
+    }
 }

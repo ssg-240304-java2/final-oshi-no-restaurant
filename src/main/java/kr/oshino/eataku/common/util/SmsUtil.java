@@ -2,7 +2,6 @@ package kr.oshino.eataku.common.util;
 
 import jakarta.annotation.PostConstruct;
 import kr.oshino.eataku.common.enums.SmsMessageType;
-import kr.oshino.eataku.waiting.model.dto.responseDto.ReadWaitingResponseDto;
 import lombok.extern.slf4j.Slf4j;
 import net.nurigo.sdk.NurigoApp;
 import net.nurigo.sdk.message.request.SingleMessageSendingRequest;
