@@ -29,6 +29,8 @@ import java.io.IOException;
 import java.security.SecureRandom;
 import java.sql.Date;
 import java.sql.Time;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -358,5 +360,26 @@ public class MemberService {
 
     public boolean selectSignUpByIdAndNameAndEmail(String id, String name, String email) {
         return memberRepository.existsByMemberLoginInfoAccountAndNameAndEmail(id,name,email);
+    }
+
+    public List<HistoryDTO> selectHistory(Long logginedMemberNo) {
+        List<Object[]> results = memberRepository.selectHistory(logginedMemberNo);
+        List<HistoryDTO> historyList = new ArrayList<>();
+
+        for (Object[] result : results) {
+            HistoryDTO dto = new HistoryDTO(
+                    (String) result[0],  // restaurantName
+                    ((Number) result[1]).longValue(),  // restaurantNo
+                    (String) result[2],  // imgUrl
+                    (String) result[3],  // restaurantAddress
+                    (Timestamp) result[4],  // updateAt
+                    (String) result[5],  // serviceType
+                    ((Number) result[6]).longValue(),  // serviceNo
+                    (String) result[7]   // status
+            );
+            historyList.add(dto);
+        }
+
+        return historyList;
     }
 }
