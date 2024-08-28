@@ -21,7 +21,7 @@
 
         <h2 th:text="${restaurant.restaurantName}">이름</h2>
         <div class="circle-buttons">
-            <button class="btn btn-outline-custom">쩝쩝채팅</button>
+            <a class="btn btn-outline-custom" th:href="|/user/chatting/${restaurant.restaurantNo}|">쩝쩝채팅</a>
             <button class="btn btn-outline-custom" th:onclick="|location.href='/users/waitingForm/' + ${restaurant.restaurantNo}|">쩝쩝웨이팅</button>
             <button class="btn btn-outline-custom" th:onclick="|location.href='/reservation/' + ${restaurant.restaurantNo}|">쩝쩝예약</button>
         </div>

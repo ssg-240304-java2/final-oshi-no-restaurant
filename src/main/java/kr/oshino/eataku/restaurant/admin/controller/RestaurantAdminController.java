@@ -447,41 +447,56 @@ public class RestaurantAdminController {
         return "restaurant/preview";
     }
 
-    // 매출 조회
-    @GetMapping("/main")
-    public String getSalesReport(Model model,
-                                 @RequestParam(value = "startDate", required = false) String startDd,
-                                 @RequestParam(value = "endDate", required = false) String endDd) {
+    /***
+     * 매출 조회
+     * @param model
+     * @param startDd
+     * @param endDd
+     * @return
+     */
+//    @GetMapping("/main")
+//    public String getSalesReport(Model model,
+//                                 @RequestParam(value = "startDate", required = false) String startDd,
+//                                 @RequestParam(value = "endDate", required = false) String endDd) {
+//
+//        CustomMemberDetails member = (CustomMemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        Long loginedRestaurantNo = member.getRestaurantNo();
+//
+//        LocalDateTime startDate;
+//        LocalDateTime endDate;
+//
+//        if(startDd == "" || startDd == null) {
+//            startDate = LocalDateTime.now().with(TemporalAdjusters.firstDayOfMonth());
+//        }else{
+//            startDate = LocalDateTime.parse(startDd);
+//        }
+//        if(endDd == "" || endDd == null) {
+//            endDate = LocalDateTime.now().with(TemporalAdjusters.lastDayOfMonth());
+//        }else {
+//            endDate = LocalDateTime.parse(endDd);
+//        }
+//
+//
+//        List<SalesDTO> sales = restaurantAdminService.selectSalesReport(startDate, endDate, loginedRestaurantNo);
+//
+//        model.addAttribute("loginedRestaurantNo", loginedRestaurantNo);
+//        model.addAttribute("sales", sales);
+//        model.addAttribute("startDate", startDate);
+//        model.addAttribute("endDate", endDate);
+//        log.info("\uD83C\uDF4E controller model: {}", model);
+//
+//        log.info("\uD83C\uDF4E startDate: {}, endDate: {}, restaurantNo: {}", startDate, endDate, loginedRestaurantNo);
+//
+//        return "restaurant/main";
+//    }
 
-        CustomMemberDetails member = (CustomMemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Long loginedRestaurantNo = member.getRestaurantNo();
-
-        LocalDateTime startDate;
-        LocalDateTime endDate;
-
-        if(startDd == "" || startDd == null) {
-            startDate = LocalDateTime.now().with(TemporalAdjusters.firstDayOfMonth());
-        }else{
-            startDate = LocalDateTime.parse(startDd);
-        }
-        if(endDd == "" || endDd == null) {
-            endDate = LocalDateTime.now().with(TemporalAdjusters.lastDayOfMonth());
-        }else {
-            endDate = LocalDateTime.parse(endDd);
-        }
-
-
-        List<SalesDTO> sales = restaurantAdminService.selectSalesReport(startDate, endDate, loginedRestaurantNo);
-
-        model.addAttribute("loginedRestaurantNo", loginedRestaurantNo);
-        model.addAttribute("sales", sales);
-        model.addAttribute("startDate", startDate);
-        model.addAttribute("endDate", endDate);
-        log.info("\uD83C\uDF4E controller model: {}", model);
-
-        log.info("\uD83C\uDF4E startDate: {}, endDate: {}, restaurantNo: {}", startDate, endDate, loginedRestaurantNo);
-
-        return "restaurant/main";
+    /***
+     * 채팅
+     * @return
+     */
+    @GetMapping("/chatting")
+    public String chattingView(){
+        return "restaurant/chatting";
     }
 
 }
