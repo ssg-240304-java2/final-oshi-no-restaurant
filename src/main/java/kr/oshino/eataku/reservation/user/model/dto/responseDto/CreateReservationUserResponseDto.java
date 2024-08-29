@@ -13,5 +13,5 @@ import lombok.NoArgsConstructor;
 public class CreateReservationUserResponseDto {
     public int httpCode;
     public String message;
-    public int memberNo;
+    public String restaurantName;
 }

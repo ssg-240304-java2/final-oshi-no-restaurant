@@ -32,4 +32,8 @@ public class ReservationSetting {
 
     @Column(name = "reservation_people")
     private int reservationPeople;
+
+    public void subtractPeople(int num) {
+        this.reservationPeople -= num;
+    }
 }
