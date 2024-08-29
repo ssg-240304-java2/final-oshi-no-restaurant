@@ -2,35 +2,38 @@
 
 // 페이지 로드 시 WebSocket 연결
 $(document).ready(function () {
-    var userType = $('#sender').data('sender');
+    var userType = $('#sender').val();
     var stompClient = null;
-    var roomId = $('#roomId').data('roomid'); // 실제 restaurantNo를 사용하여 동적으로 설정
+    var roomId = $('#roomId').val();
 
     connect(roomId);  // WebSocket 연결 시작
 
-
 });
+
 function updateCharCount() {
     var charCount = $('#messageInput').val().length;
     $('#charCount').text(charCount + "/1000");
 }
 function showMessage(message) {
     console.log("show")
-    var messageElement = $('<div class="message"></div>').text(message.sender + ": " + message.message);
+    var messageElement = $('<div class="message"></div>').text(message.email + ": " + message.message);
     $('#chatMessages').append(messageElement);
     $('#chatMessages').scrollTop($('#chatMessages')[0].scrollHeight);
 }
 function sendMessage(roomId) {
+    let sender = $('#sender').val();
+    let memberNo = $('#memberNo').val();
 
     var messageContent = $('#messageInput').val().trim();
     if (messageContent && stompClient) {
         var chatMessage = {
-            sender: 'userType',
+            sender: sender,
             message: messageContent,
             roomId: roomId,
-            type: 'TALK'
+            type: 'TALK',
+            memberNo: memberNo
         };
-        stompClient.send("/pub/chat/message", {}, JSON.stringify(chatMessage));
+        stompClient.send("/pub/chat.sendMessage", {}, JSON.stringify(chatMessage));
 
         $('#messageInput').val('');
     }
@@ -48,3 +51,4 @@ function connect(roomId) {
         });
     });
 }
+

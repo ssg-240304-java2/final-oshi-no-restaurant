@@ -2,9 +2,9 @@
 
 // 페이지 로드 시 WebSocket 연결
 $(document).ready(function () {
-    var userType = $('#sender').data('sender');
+    var userType = $('#sender').val();
     var stompClient = null;
-    var roomId = $('#roomId').data('roomid'); // 실제 restaurantNo를 사용하여 동적으로 설정
+    var roomId = $('#roomId').val(); // 실제 restaurantNo를 사용하여 동적으로 설정
 
     connect(roomId);  // WebSocket 연결 시작
 
@@ -20,17 +20,21 @@ function showMessage(message) {
     $('#chatMessages').append(messageElement);
     $('#chatMessages').scrollTop($('#chatMessages')[0].scrollHeight);  // 스크롤을 최신 메시지 위치로 이동
 }
-function sendMessage(roomId) {
+function sendMessage() {
+
+    let roomId = $('#roomId').val()
+    let sender = $('#sender').val()
+    let restaurantNo = $('#restaurantNo').val()
 
     var messageContent = $('#messageInput').val().trim();
     if (messageContent && stompClient) {
         var chatMessage = {
-            sender: 'userType',
+            sender: sender,
             message: messageContent,
             roomId: roomId,
             type: 'TALK'
         };
-        stompClient.send("/pub/chat/message", {}, JSON.stringify(chatMessage));  // 서버의 @MessageMapping에 대응
+        stompClient.send("/pub/chat.sendMessage", {}, JSON.stringify(chatMessage));  // 서버의 @MessageMapping에 대응
 
         $('#messageInput').val('');  // 입력란 초기화
     }
@@ -47,4 +51,28 @@ function connect(roomId) {
             showMessage(message);
         });
     });
+
+    const messageContainer = $('#chatMessages')
+    messageContainer.empty();
+
+    $.ajax({
+        url: '/chat/messages',
+        type: 'get',
+        data: {roomId: roomId},
+        success: function (data){
+            data.forEach(msg => {
+                let innerhtml = `
+                    <div class="message">
+                        ${msg.email}: ${msg.message}
+                    </div>
+                    `;
+
+                messageContainer.append(innerhtml);
+            })
+
+        }
+    });
+    $('#roomId').val(roomId);
+    $('#sender').val(restaurantNo);
+
 }

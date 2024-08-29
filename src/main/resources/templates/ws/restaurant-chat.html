@@ -16,7 +16,7 @@
                 <ul class="list-group" id="roomList">
                     <!-- 여기에 채팅방 목록이 동적으로 추가됩니다 -->
                     <li class="list-group-item" th:each="room : ${rooms}" th:text="${room.name}"
-                        th:onclick="|window.location.href='/chat/room/' + ${room.roomId}|">채팅방 1
+                        th:onclick="|connect(${room.roomId})|">채팅방 1
                     </li>
                 </ul>
             </div>
@@ -29,9 +29,10 @@
                     <input type="text" id="messageInput" placeholder="메세지를 입력해주세요." maxlength="1000"
                            oninput="updateCharCount()">
                     <span class="char-count" id="charCount">0/1000</span>
-                    <button th:onclick="sendMessage([[${roomId}]])">전송</button>
-                    <input type="hidden" id="roomId" th:data-roomId="${roomId}">
-                    <input type="hidden" id="sender" th:data-sender="${userType}">
+                    <button th:onclick="sendMessage()">전송</button>
+                    <input type="hidden" id="roomId" th:value="${roomId}">
+                    <input type="hidden" id="sender" th:value="${sender}">
+                    <input type="hidden" id="restaurantNo" th:value="${restaurantNo}">
                 </div>
             </div>
         </div>
