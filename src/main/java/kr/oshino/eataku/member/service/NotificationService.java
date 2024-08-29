@@ -34,7 +34,7 @@ public class NotificationService {
         String referenceMember = "";
         String referenceRestaurant = "";
 
-        if (type.equals("follow")) referenceMember = memberRepository.findNameByMemberNo(referenceNo);
+        if (type.equals("follow") || type.equals("copyList")) referenceMember = memberRepository.findNameByMemberNo(referenceNo);
         else referenceRestaurant = restaurantRepository.findRestaurantNameByRestaurantNo(referenceNo);
 
         switch (type) {
@@ -49,6 +49,9 @@ public class NotificationService {
                 break;
             case "review":
                 msg = referenceRestaurant + " 이용은 만족스러우셨나요? 리뷰를 남겨주세요.";
+                break;
+            case "copyList":
+                msg = referenceMember + "님이 리스트를 가져갔습니다.";
                 break;
         }
 
