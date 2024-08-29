@@ -1,232 +1,282 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Bootstrap Sidebar Layout</title>
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bootstrap Sidebar Layout</title>
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" th:href="@{/css/fragment/navbar.css}">
+        <link rel="stylesheet" th:href="@{/css/fragment/footer.css}">
+        <link rel="stylesheet" th:href="@{/css/list/list.css}">
+    </head>
+    <body>
+        <div th:replace="~{fragment/navbar.html :: navbar}" class="navbar"></div>
 
-    <link rel="stylesheet" th:href="@{/css/fragment/navbar.css}">
-    <link rel="stylesheet" th:href="@{/css/fragment/footer.css}">
-    <link rel="stylesheet" th:href="@{/css/list/list.css}">
-</head>
-<body>
-<div th:replace="~{fragment/navbar.html :: navbar}" class="navbar"></div>
-
-<div class="container-fluid">
-    <div class="map-container">
-        <div id="map" class="map"></div>
-    </div>
-    <nav class="sidebar">
-        <div class="header-row">
-            <div class="logo">
-                <img src="/images/oku.png" alt="Logo">
+        <div class="container-fluid">
+            <div class="map-container">
+                <div id="map" class="map"></div>
             </div>
-            <div class="menu-title" id="favorite-list" onclick="showFavoriteList()">내 쩝쩝 리스트</div>
-            <div class="separator"></div>
-            <div class="list-title" id="follow-list" onclick="customshowFollowingList()">팔로잉 리스트</div>
-        </div>
-        <div class="list-count custom-margin" id="total-list-count">전체 리스트 개수 3</div>
-        <div class="content-section active" id="favorite-content">
-            <div th:each="list : ${myLists}">
-                <div class="list-box">
-                    <!-- 리스트 이름을 버튼으로 표시 -->
-                    <button type="button" class="btn btn-custom"
-                            th:text="${list.listName}"
-                            th:onclick="'toggleRestaurants('+${list.listNo}+',this)'"></button>
-
-                    <!-- listNo를 서버로 전송하기 위해 hidden 필드 추가 -->
-                    <input type="hidden" name="listNo" th:value="${list.listNo}">
-
-                    <div class="delete-btn-container" style="text-align: right; margin: 10px 0;">
-                        <button type="button" class="delete-btn" onclick="toggleDeleteMode(this)">식당 삭제</button>
-                        <button type="submit" class="delete-btn confirm-delete" style="display:none;">삭제 확인</button>
+            <nav class="sidebar">
+                <div class="header-row">
+                    <div class="logo">
+                        <img src="/images/oku.png" alt="Logo">
                     </div>
+                    <div class="menu-title" id="favorite-list" onclick="showFavoriteList()">내 쩝쩝 리스트</div>
+                    <div class="separator"></div>
+                    <div class="list-title" id="follow-list" onclick="showFollowingList()">팔로잉 리스트</div>
+                </div>
+                <div class="list-count custom-margin" id="total-list-count">전체 리스트 개수 3</div>
+                <div class="content-section active" id="favorite-content">
+                    <div th:each="list : ${myLists}">
+                        <div class="list-box">
+                            <!-- 리스트 이름을 버튼으로 표시 -->
+                            <button type="button" class="btn btn-custom"
+                                    th:text="${list.listName}"
+                                    th:onclick="toggleRestaurants(`[[${list.listNo}]]`, this)"></button>
 
-                    <!-- 삭제 버튼 및 체크박스 -->
-                    <div class="restaurant-list" th:id="'restaurant-list-' + ${list.listNo}" style="display: none;">
-                        <form th:action="@{/tsktskLists/deleteRestaurants}" method="post">
+                            <!-- 식당 정보가 표시될 영역 -->
+                            <div class="restaurant-list" th:id="'restaurant-list-' + ${list.listNo}" style="display: none;">
+                                <!-- 삭제 버튼 -->
 
-                            <!-- 식당 삭제 체크 박스 -->
-                            <div th:each="restaurant : ${list.restaurantList}" class="restaurant-item">
-                                <input type="checkbox" name="restaurantNos" th:value="${restaurant.restaurantNo}"
-                                       class="delete-checkbox" style="display:none;">
-                                <div class="restaurant-info">
-                                    <h5 th:text="${restaurant.restaurantName}"></h5>
-                                    <p th:text="${restaurant.restaurantAddress}"></p>
-                                    <img th:src="${restaurant.imgUrl}" alt="${restaurant.restaurantName}" width="100">
-                                </div>
                             </div>
-                        </form>
+                            <!--                        식당 데이터는 여기에 생성ㅇㅇ-->
+                        </div>
                     </div>
                 </div>
-            </div>
+
+                <div class="content-section" id="following-list">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th scope="col">팔로워</th>
+                                    <th scope="col">리스트 수</th>
+                                    <th scope="col"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr onclick="showFollowerList('Andrew Bojangles', 3)">
+                                    <td><img src="avatar1.jpg" class="rounded-circle" width="30" alt="avatar"> Andrew Bojangles</td>
+                                    <td>3</td>
+                                    <td>⋮</td>
+                                </tr>
+                                <tr onclick="showFollowerList('Andrew Bojangles', 2)">
+                                    <td><img src="avatar2.jpg" class="rounded-circle" width="30" alt="avatar"> Andrew Bojangles</td>
+                                    <td>2</td>
+                                    <td>⋮</td>
+                                </tr>
+                                <tr onclick="showFollowerList('Andrew Bojangles', 7)">
+                                    <td><img src="avatar3.jpg" class="rounded-circle" width="30" alt="avatar"> Andrew Bojangles</td>
+                                    <td>7</td>
+                                    <td>⋮</td>
+                                </tr>
+                                <tr class="bg-danger text-white" onclick="showFollowerList('Andrew Bojangles', 5)">
+                                    <td><img src="avatar4.jpg" class="rounded-circle" width="30" alt="avatar"> Andrew Bojangles</td>
+                                    <td>5</td>
+                                    <td>⋮</td>
+                                </tr>
+                                <tr onclick="showFollowerList('Andrew Bojangles', 6)">
+                                    <td><img src="avatar5.jpg" class="rounded-circle" width="30" alt="avatar"> Andrew Bojangles</td>
+                                    <td>6</td>
+                                    <td>⋮</td>
+                                </tr>
+                                <tr onclick="showFollowerList('Andrew Bojangles', 3)">
+                                    <td><img src="avatar6.jpg" class="rounded-circle" width="30" alt="avatar"> Andrew Bojangles</td>
+                                    <td>3</td>
+                                    <td>⋮</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="restaurant-list content-section" id="restaurant-list"></div>
+                <div class="follower-restaurant-list content-section" id="follower-restaurant-list"></div>
+                <div class="follower-restaurant-items content-section" id="follower-restaurant-items"></div>
+            </nav>
+        </div>
+        <span class="toggle-btn" onclick="toggleSidebar()">&lt;</span>
+        <div id="restaurant-info-window" class="restaurant-info-window"></div>
         </div>
 
-
-        <div class="content-section" id="following-list">
-            <div class="table-responsive">
-                <table class="table table-hover">
-                    <thead>
-                    <tr>
-                        <th scope="col">팔로워</th>
-                        <th scope="col">리스트 이름</th>
-                        <th scope="col"></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <!-- 팔로우한 사람의 리스트를 반복하여 출력 -->
-                    <tr th:each="list : ${followingLists}" >
-                        <td>
-                            <!-- 팔로워의 프로필 이미지와 이름 -->
-                            <img th:src="${list.member.imgUrl}" class="rounded-circle" width="30" alt="avatar">
-                            <span th:text="${list.member.name}">Follower Name</span>
-                        </td>
-                        <td th:text="${list.listName}">List Name</td>
-                        <td>⋮</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <div class="restaurant-list content-section" id="restaurant-list"></div>
-        <div class="follower-restaurant-list content-section" id="follower-restaurant-list"></div>
-        <div class="follower-restaurant-items content-section" id="follower-restaurant-items"></div>
-    </nav>
-</div>
-<span class="toggle-btn" onclick="toggleSidebar()">&lt;</span>
-<div id="restaurant-info-window" class="restaurant-info-window"></div>
-</div>
-
-<div th:replace="~{fragment/footer.html :: footer}" class="footer"></div>
+        <div th:replace="~{fragment/footer.html :: footer}" class="footer"></div>
 
 
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script type="text/javascript" th:src="@{/js/fragment/navbar.js}"></script>
-<script type="text/javascript" th:src="@{/js/list/list.js}"></script>
-<script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=4iq0sfkqpd"></script>
-<script>
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script type="text/javascript" th:src="@{js/fragment/navbar.js}"></script>
+        <script type="text/javascript" th:src="@{js/list/list.js}"></script>
+        <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=4iq0sfkqpd"></script>
+        <script>
 
-    var map = new naver.maps.Map('map', {
-        center: new naver.maps.LatLng(37.3595704, 127.105399),
-        zoom: 15,
-    });
+            var map = new naver.maps.Map('map', {
+                center: new naver.maps.LatLng(37.3595704, 127.105399),
+                zoom: 15,
+            });
 
-    function toggleRestaurants(listNo, element) {
-        const restaurantListDiv = document.getElementById(`restaurant-list-${listNo}`);
-        const deleteBtnContainer = restaurantListDiv.querySelector('.delete-btn-container');
+            function toggleRestaurants(listNo, element) {
+                const restaurantListDiv = document.getElementById(`restaurant-list-${listNo}`);
 
-        // 요소가 존재하는지 확인
-        if (!restaurantListDiv) {
-            console.error(`ID 'restaurant-list-${listNo}'를 가진 요소를 찾을 수 없습니다.`);
-            return;
-        }
+                // 요소가 존재하는지 확인
+                if (!restaurantListDiv) {
+                    console.error(`ID restaurant-list-${listNo}를 가진 요소를 찾을 수 없습니다.`);
+                    return;
+                }
 
-        if (restaurantListDiv.style.display === "none") {
-            // AJAX 요청 보내기
-            $.ajax({
-                url: `/tsktskLists/${listNo}/restaurants`,
-                type: 'get',
-                success: function (data) {
-                    console.log('---->', data);
-                    restaurantListDiv.innerHTML = "";
+                if (restaurantListDiv.style.display === "none") {
+                    // AJAX 요청 보내기
+                    $.ajax({
+                        url: `/tsktskLists/${listNo}/restaurants`,
+                        type: 'get',
+                        success: function(data) {
+                            console.log('---->', data);
+                            restaurantListDiv.innerHTML = "";
 
-                    if (data && data.length > 0) {
-                        data.forEach(restaurant => {
-                            const restaurantDiv = document.createElement("div");
-                            restaurantDiv.className = "restaurant-item";
-                            restaurantDiv.innerHTML = `
+                            if (data && data.length > 0) {
+                                data.forEach(restaurant => {
+                                    const restaurantDiv = document.createElement("div");
+                                    restaurantDiv.className = "restaurant-item";
+                                    restaurantDiv.innerHTML = `
                             <div class="restaurant-card">
-                                <img src="${restaurant.imgUrl}" alt="식당 이미지" class="restaurant-img">
-                                <div class="restaurant-info">
+                            <input type="checkbox" class="delete-checkbox list${listNo}" style="display: none" data-restaurantno="${restaurant.restaurantNo}">
+                                <img src="${restaurant.imgUrl}" alt="식당 이미지" class="restaurant-img" onclick="detailLocation(${restaurant.restaurantNo})">
+                                <div class="restaurant-info" onclick="detailLocation(${restaurant.restaurantNo})">
                                     <h5>${restaurant.restaurantName}</h5>
                                     <p>${restaurant.restaurantAddress}</p>
-                                    <input type="checkbox" name="restaurantNos" value="${restaurant.restaurantNo}" class="delete-checkbox" style="display:none;">
                                 </div>
                             </div>
                         `;
-                            restaurantListDiv.appendChild(restaurantDiv);
+                                    restaurantListDiv.appendChild(restaurantDiv);
 
-                            // 위치 생성
-                            var position = new naver.maps.LatLng(restaurant.xcoordinate, restaurant.ycoordinate);
+                                    // 위치 생성
+                                    var position = new naver.maps.LatLng(restaurant.xcoordinate, restaurant.ycoordinate);
 
-                            // 마커 생성
-                            var marker = new naver.maps.Marker({
-                                map: map,
-                                position: position,
-                                icon: {
-                                    url: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png'
-                                }
-                            });
-                            // 정보 창 생성
-                            var infoWindow = new naver.maps.InfoWindow({
-                                content: `<div style="width:150px;text-align:center;padding:10px;">
+                                    // 마커 생성
+                                    var marker = new naver.maps.Marker({
+                                        map: map,
+                                        position: position,
+                                        icon: {
+                                            url: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png'
+                                        }
+                                    });
+                                    // 정보 창 생성
+                                    var infoWindow = new naver.maps.InfoWindow({
+                                        content: `<div style="width:150px;text-align:center;padding:10px;">
                                 <b>${restaurant.restaurantName}</b><br/>
                                 ${restaurant.restaurantAddress}
                               </div>`
-                            });
+                                    });
 
-                            // 마커 클릭 시 정보 창 표시 및 닫기 기능 추가
-                            naver.maps.Event.addListener(marker, 'click', function () {
-                                if (infoWindow.getMap()) {
-                                    // 정보 창이 이미 열려 있다면 닫음
-                                    infoWindow.close();
-                                } else {
-                                    // 정보 창이 열려 있지 않다면 열음
-                                    infoWindow.open(map, marker);
-                                }
-                                // 마커색 변경
-                                marker.setIcon({
-                                    url: infoWindow.getMap() ? 'https://maps.google.com/mapfiles/ms/icons/red-dot.png' : 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png'
+                                    // 마커 클릭 시 정보 창 표시 및 닫기 기능 추가
+                                    naver.maps.Event.addListener(marker, 'click', function() {
+                                        if (infoWindow.getMap()) {
+                                            // 정보 창이 이미 열려 있다면 닫음
+                                            infoWindow.close();
+                                        } else {
+                                            // 정보 창이 열려 있지 않다면 열음
+                                            infoWindow.open(map, marker);
+                                        }
+                                        // 마커색 변경
+                                        marker.setIcon({
+                                            url: infoWindow.getMap() ? 'https://maps.google.com/mapfiles/ms/icons/red-dot.png' : 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png'
+                                        });
+                                    });
                                 });
-                            });
-                        });
-                        restaurantListDiv.style.display = "block"; // 데이터를 로드한 후 보여줌
-                        deleteBtnContainer.style.display = "block"; // 삭제 버튼도 함께 보여줌
-                    } else {
-                        restaurantListDiv.innerHTML = "<p>식당 정보가 없습니다.</p>";
-                        restaurantListDiv.style.display = "block";
-                    }
-                },
-                error: function (error) {
-                    console.log(error);
+                                // 삭제 버튼 컨테이너 생성
+                                let deleteBtnContainer = document.createElement('div');
+                                deleteBtnContainer.className = 'delete-btn-container';
+                                deleteBtnContainer.style.textAlign = 'right';
+                                deleteBtnContainer.style.margin = '10px 0';
+
+// "식당 삭제" 버튼 생성
+                                let deleteBtn = document.createElement('button');
+                                deleteBtn.type = 'button';
+                                deleteBtn.className = 'delete-btn';
+                                deleteBtn.textContent = '식당 삭제';
+                                deleteBtn.addEventListener('click', toggleDeleteMode);  // 이벤트 리스너 추가
+
+// "삭제 확인" 버튼 생성
+                                let confirmDeleteBtn = document.createElement('button');
+                                confirmDeleteBtn.type = 'button';
+                                confirmDeleteBtn.className = 'delete-btn deleteConfirm-btn';
+                                confirmDeleteBtn.textContent = '삭제 확인';
+                                confirmDeleteBtn.style.display = 'none';  // 처음에는 숨김 처리
+
+// 버튼을 컨테이너에 추가
+                                deleteBtnContainer.appendChild(deleteBtn);
+                                deleteBtnContainer.appendChild(confirmDeleteBtn);
+
+// restaurantListDiv에 컨테이너 추가
+                                restaurantListDiv.appendChild(deleteBtnContainer);
+                                restaurantListDiv.style.display = "block"; // 데이터를 로드한 후 보여줌
+                            } else {
+                                restaurantListDiv.innerHTML = "<p>식당 정보가 없습니다.</p>";
+                                restaurantListDiv.style.display = "block";
+                            }
+                        },
+                        error: function(error) {
+                            console.log(error);
+                        }
+                    });
+                } else {
+                    restaurantListDiv.style.display = "none"; // 리스트가 이미 보이는 경우 숨김
                 }
-            });
-        } else {
-            restaurantListDiv.style.display = "none"; // 리스트가 이미 보이는 경우 숨김
-            deleteBtnContainer.style.display = "none"; // 삭제 버튼도 함께 숨김
-        }
-    }
 
-    // 삭제 버튼
-    function toggleDeleteMode(button) {
-        // 삭제 버튼과 삭제 확인 버튼을 찾습니다.
-        const deleteBtnContainer = button.closest('.delete-btn-container');
-        const confirmDeleteButton = deleteBtnContainer.querySelector('.confirm-delete');
 
-        // 삭제 확인 버튼을 표시하고, 삭제 버튼을 숨깁니다.
-        confirmDeleteButton.style.display = 'inline-block';
-        button.style.display = 'none';
+            }
 
-        // 해당 리스트 박스의 모든 체크박스를 표시합니다.
-        const restaurantListDiv = deleteBtnContainer.closest('.restaurant-list');
-        const checkboxes = restaurantListDiv.querySelectorAll('.delete-checkbox');
+            // 식당 정보 삭제
+            function toggleDeleteMode(element) {
+                const checkboxes = document.querySelectorAll('.delete-checkbox');
+                const deleteButton = document.querySelector('.delete-btn-container .delete-btn');
 
-        checkboxes.forEach(checkbox => {
-            checkbox.style.display = checkbox.style.display === "none" ? "block" : "none";
-        });
-    }
+                checkboxes.forEach(checkbox => {
+                    if (checkbox.style.display === "none") {
+                        checkbox.style.display = "inline-block";
+                    } else {
+                        checkbox.style.display = "none";
+                    }
+                });
 
-    // 팔로우 리스트 확인
-    function customshowFollowingList(name, listNo) {
-        console.log("name:", name);
-        console.log("List No:", listNo);
-    }
+                // 삭제 모드 전환
+                if (deleteButton.textContent === "식당 삭제") {
+                    deleteButton.textContent = "삭제 확인";
+                } else {
+                    console.log(element.srcElement.closest('.restaurant-list').id);
 
-</script>
-</body>
+                    let id = element.srcElement.closest('.restaurant-list').id
+                    let checkedCheckboxes = document.querySelectorAll(`#${id} input[type="checkbox"]:checked`)
+                    let restaurantNos = Array.from(checkedCheckboxes).map(checkbox => checkbox.dataset.restaurantno);
+                    let listNo = id.split('-')[id.split('-').length -1];
+
+                    $.ajax({
+                        url: '/myList/deleteRestaurant',
+                        type: 'post',
+                        // contentType: 'application/json',
+                        data: {
+                            listNo: Number(listNo),
+                            restaurantNo: restaurantNos
+                        },
+                        success: function (result){
+                            console.log("success !");
+                            window.location.herf = '/zzupList';
+                        },
+                        error: function (e){
+                            console.log(e);
+                        }
+                    })
+
+                    console.log(restaurantNos)
+
+                    deleteButton.textContent = "식당 삭제";
+                }
+            }
+
+            function detailLocation(restaurantNo) {
+                window.location.href = 'detail/'+restaurantNo+'/detailPage';
+            }
+
+        </script>
+    </body>
 </html>

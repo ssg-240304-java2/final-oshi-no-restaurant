@@ -1,7 +1,12 @@
 package kr.oshino.eataku.member.model.repository;
 
+import jakarta.persistence.ColumnResult;
+import jakarta.persistence.ConstructorResult;
+import jakarta.persistence.SqlResultSetMapping;
 import kr.oshino.eataku.member.entity.Member;
+import kr.oshino.eataku.member.model.dto.HeartDTO;
 import kr.oshino.eataku.member.model.dto.HistoryDTO;
+import kr.oshino.eataku.search.model.dto.SearchResultDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -167,4 +172,11 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
             "ORDER BY update_at DESC",
             nativeQuery = true)
     List<Object[]> selectHistory(@Param("memberNo") Long logginedMemberNo);
+
+    @Query(value = "SELECT ul.restaurant_no as restaurant_no, COUNT(*) as count " +
+            "FROM tbl_user_list ul " +
+            "WHERE ul.restaurant_no IN :restaurantNo " +
+            "AND ul.list_no IN ( SELECT list_no FROM tbl_my_list ml WHERE ml.member_no =:memberNo ) " +
+            "GROUP BY ul.restaurant_no ", nativeQuery = true)
+    List<Object[]> countByRestaurantAndMemberNo(@Param("restaurantNo")List<Long> restaurants, @Param("memberNo") Long memberNO);
 }

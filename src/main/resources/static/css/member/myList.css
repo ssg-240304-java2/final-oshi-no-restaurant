@@ -72,7 +72,8 @@ body {
 }
 
 .badge-public,
-.badge-private {
+.badge-private,
+.badge-onlyme {
     background-color: #FB3F4A;
     color: white;
     padding: 5px 10px;

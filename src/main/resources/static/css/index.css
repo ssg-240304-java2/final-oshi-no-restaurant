@@ -366,3 +366,56 @@ a:hover {
 .card-rating {
     text-align: right;
 }
+
+.modal-container-custom {
+    max-width: 500px;
+}
+.modal-card-custom {
+    border: 2px solid #FF5A5A;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+}
+.modal-card-custom h5 {
+    color: #FF5A5A;
+    margin-bottom: 20px;
+}
+.modal-list-group-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #FF5A5A;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+.modal-list-group-item span {
+    color: #FF5A5A;
+}
+.modal-btn-custom {
+    background-color: #FF5A5A;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 15px;
+    margin-bottom: 10px;
+}
+.modal-btn-add {
+    font-size: 24px;
+    border: 1px solid #FF5A5A;
+    border-radius: 5px;
+    padding:1px 10px;
+    background-color: white;
+    color: #FF5A5A;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+.modal-group-title {
+    color: #FF5A5A;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+/* 모달 내부에 맞춤 스타일을 적용하기 위한 CSS */
+.modal-custom .modal-dialog {
+    max-width: 600px;
+}

@@ -55,10 +55,9 @@
                      th:classappend="popular+${iterStat.index}" th:attr="no=${restaurant.restaurantNo}">
                     <img th:src="${restaurant.imgUrl}"
                          class="card-img-top" alt="음식 이미지" th:onclick="|location.href='/detail/' + ${restaurant.restaurantNo} + '/detailPage'|">
-                    <div class="heart-icon" onclick="toggleHeart(this)">
-                        <img th:src="@{/images/index/love-empty.png}" alt="빈 하트" class="empty-heart">
-                        <img th:src="@{/images/index/love-full.png}" alt="꽉 찬 하트" class="full-heart"
-                             style="display:none;">
+                    <div class="heart-icon" onclick="toggleHeart(this)" th:data-restaurant-no="${restaurant.restaurantNo}">
+                        <img th:src="@{/images/index/love-empty.png}" alt="빈 하트" class="empty-heart" th:style="'display:' + (!${restaurant.inList}? 'block' : 'none')">
+                        <img th:src="@{/images/index/love-full.png}" alt="꽉 찬 하트" class="full-heart" th:style="'display:' + (${restaurant.inList}? 'block' : 'none')">
                     </div>
                     <div class="card-body">
                         <h5 class="card-title"  th:onclick="|location.href='/detail/' + ${restaurant.restaurantNo} + '/detailPage'|">
@@ -93,10 +92,9 @@
                      th:classappend="busiest+${iterStat.index}">
                     <img th:src="${restaurant.imgUrl}"
                          class="card-img-top" alt="음식 이미지">
-                    <div class="heart-icon" onclick="toggleHeart(this)">
-                        <img th:src="@{/images/index/love-empty.png}" alt="빈 하트" class="empty-heart">
-                        <img th:src="@{/images/index/love-full.png}" alt="꽉 찬 하트" class="full-heart"
-                             style="display:none;">
+                    <div class="heart-icon" onclick="toggleHeart(this)" th:data-restaurant-no="${restaurant.restaurantNo}">
+                        <img th:src="@{/images/index/love-empty.png}" alt="빈 하트" class="empty-heart" th:style="'display:' + (!${restaurant.inList}? 'block' : 'none')">
+                        <img th:src="@{/images/index/love-full.png}" alt="꽉 찬 하트" class="full-heart" th:style="'display:' + (${restaurant.inList}? 'block' : 'none')">
                     </div>
                     <div class="card-body">
                         <h5 class="card-title" th:text="${restaurant.restaurantName}">밍글스<span class="rating"
@@ -136,10 +134,9 @@
                      th:classappend="direct+${iterStat.index}">
                     <img th:src="${restaurant.imgUrl}"
                          class="card-img-top" alt="음식 이미지">
-                    <div class="heart-icon" onclick="toggleHeart(this)">
-                        <img th:src="@{/images/index/love-empty.png}" alt="빈 하트" class="empty-heart">
-                        <img th:src="@{/images/index/love-full.png}" alt="꽉 찬 하트" class="full-heart"
-                             style="display:none;">
+                    <div class="heart-icon" onclick="toggleHeart(this)" th:data-restaurant-no="${restaurant.restaurantNo}">
+                        <img th:src="@{/images/index/love-empty.png}" alt="빈 하트" class="empty-heart" th:style="'display:' + (!${restaurant.inList}? 'block' : 'none')">
+                        <img th:src="@{/images/index/love-full.png}" alt="꽉 찬 하트" class="full-heart" th:style="'display:' + (${restaurant.inList}? 'block' : 'none')">
                     </div>
                     <div class="card-body">
                         <h5 class="card-title" th:text="${restaurant.restaurantName}">밍글스<span class="rating"
@@ -204,6 +201,35 @@
                 </div>
             </div>
 
+        </div>
+
+        <!-- 모달 구조 -->
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-custom" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="myModalLabel">내 리스트에 추가</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container modal-container-custom mt-5">
+                            <div class="modal-card-custom" id="modalAppendContainer">
+                                <h5><img src="../static/picture/bearImg.png"/> 내 리스트에 추가</h5>
+
+                                <!-- 리스트 박스를 표시하는 반복문 -->
+
+                                <!-- 리스트 추가 버튼 -->
+                                <button class="modal-btn-add">+</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- footer -->
