@@ -1,4 +1,4 @@
-package kr.oshino.eataku.ws.dto;
+package kr.oshino.eataku.ws.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
