@@ -35,6 +35,9 @@ public interface MyListRepository extends JpaRepository<MyList, Integer> {
     List<MyList> findByfollowMember(@Param("memberNo") Long loginedMemberNo);
 
 
+    List<MyList> findByMemberMemberNo(Long loginedMemberNo);
+
+    List<MyList> findAllByMemberMemberNo(Long memberNo);
 }
 
 

@@ -35,6 +35,8 @@ public class FollowController {
         List<MyList> queryResult = followService.findByListNameContainingAndListStatusOrderByListShareDesc(query, "Public");
         List<ZzupListDTO> memberLists = new ArrayList<>();
 
+        log.info("⭐⭐ [ FollowController ] Result query: {} ⭐⭐", queryResult);
+
         if (queryResult != null || !queryResult.isEmpty()) {
             memberLists = queryResult
                     .stream()
