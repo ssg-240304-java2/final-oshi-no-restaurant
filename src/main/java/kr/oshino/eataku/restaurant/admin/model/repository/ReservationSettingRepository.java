@@ -1,8 +1,10 @@
 package kr.oshino.eataku.restaurant.admin.model.repository;
 
+import jakarta.persistence.LockModeType;
 import kr.oshino.eataku.restaurant.admin.entity.ReservationSetting;
 import kr.oshino.eataku.restaurant.admin.entity.RestaurantInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Date;
@@ -18,6 +20,7 @@ public interface ReservationSettingRepository extends JpaRepository<ReservationS
 
     List<ReservationSetting> findByReservationDateAndRestaurantNo(Date reservationDate, RestaurantInfo restaurantInfo);
 
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
     ReservationSetting findByReservationDateAndReservationTimeAndRestaurantNo
             (LocalDate reservationDate, LocalTime reservationTime, RestaurantInfo restaurantInfo);
 }
