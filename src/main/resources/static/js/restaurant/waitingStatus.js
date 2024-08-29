@@ -87,7 +87,7 @@ $(document).ready(function() {
             url: '/admin/waiting/visit/' + waitingNo,
             method: 'PATCH',
             success: function(response) {
-                alert(response.message)
+                alert(response.message);
                 card.remove();
             },
             error: function(xhr, status, error) {
