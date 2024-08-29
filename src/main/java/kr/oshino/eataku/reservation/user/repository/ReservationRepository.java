@@ -56,18 +56,25 @@ public interface ReservationRepository extends JpaRepository<Reservation,Integer
     int findPeopleByRestaurantNo(@Param("restaurantNo") Long restaurantNo);
 
 
-    /**
-     * 해당 인원 수를 제거하는 메소드
-     * @param partySize
-     * @param
-     */
-    @Modifying
-    @Query("UPDATE ReservationSetting r SET r.reservationPeople = r.reservationPeople - :partySize " +
-            "WHERE r.reservationTime = :time AND  r.restaurantNo.restaurantNo = :restaurantNo AND r.reservationPeople > 0")
-    void subtractPartySizeFromReservationPeople(@Param("partySize") int partySize,
-                                                @Param("time") LocalTime time,
-                                                @Param("restaurantNo") Long restaurantNo);
 
+//    /**
+//     * 해당 인원 수를 제거하는 메소드
+//     * @param partySize
+//     * @param
+//     */
+//    @Modifying
+//    @Query("UPDATE ReservationSetting r SET r.reservationPeople = r.reservationPeople - :partySize " +
+//            "WHERE r.reservationTime = :time AND  r.restaurantNo.restaurantNo = :restaurantNo AND r.reservationPeople > 0")
+//    void subtractPartySizeFromReservationPeople(@Param("partySize") int partySize,
+//                                                @Param("time") LocalTime time,
+//                                                @Param("restaurantNo") Long restaurantNo);
+
+//    @Modifying
+//    @Query("UPDATE ReservationSetting r SET r.reservationPeople = r.reservationPeople - :partySize " +
+//            "WHERE r.reservationTime = :time AND  r.restaurantNo.restaurantNo = :restaurantNo AND r.reservationPeople > 0")
+//    void subtractPartySizeFromReservationPeople(@Param("partySize") int partySize,
+//                                                @Param("time") LocalTime time,
+//                                                @Param("restaurantNo") Long restaurantNo);
 
 
     @Query("SELECT r FROM ReservationSetting r WHERE r.reservationDate = :date AND r.restaurantNo.restaurantNo = :restaurantNo")

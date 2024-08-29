@@ -1,6 +1,5 @@
 package kr.oshino.eataku.waiting.controller;
 
-import kr.oshino.eataku.common.util.FileUploadUtil;
 import kr.oshino.eataku.member.model.dto.CustomMemberDetails;
 import kr.oshino.eataku.waiting.model.dto.requestDto.CreateWaitingRequestDto;
 import kr.oshino.eataku.waiting.model.dto.requestDto.ReadWaitingRequestDto;
@@ -121,8 +120,4 @@ public class WaitingUserController {
     public SingleMessageSentResponse sendRegisterMessage(@PathVariable Long waitingNo) {
         return waitingService.sendWaitingRegisterMessage(waitingNo);
     }
-
-
-
-    // 웨이팅 미루기
 }

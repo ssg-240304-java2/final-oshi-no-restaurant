@@ -1,6 +1,7 @@
 package kr.oshino.eataku.reservation.user.service;
-import jakarta.persistence.LockModeType;
 import kr.oshino.eataku.common.enums.ReservationStatus;
+import kr.oshino.eataku.common.exception.exception.ReservationException;
+import kr.oshino.eataku.common.exception.info.ReservationExceptionInfo;
 import kr.oshino.eataku.member.entity.Member;
 import kr.oshino.eataku.member.entity.Notification;
 import kr.oshino.eataku.member.model.repository.MemberRepository;
@@ -11,8 +12,8 @@ import kr.oshino.eataku.reservation.user.model.dto.responseDto.*;
 import kr.oshino.eataku.reservation.user.repository.ReservationRepository;
 import kr.oshino.eataku.restaurant.admin.entity.ReservationSetting;
 import kr.oshino.eataku.restaurant.admin.entity.RestaurantInfo;
+import kr.oshino.eataku.restaurant.admin.model.repository.ReservationSettingRepository;
 import kr.oshino.eataku.restaurant.admin.model.repository.RestaurantRepository;
-import kr.oshino.eataku.review.user.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
@@ -33,8 +34,8 @@ public class ReservationUserService {
     private final ReservationRepository reservationRepository;
     private final MemberRepository memberRepository;
     private final RestaurantRepository restaurantRepository;
-    private final ReviewRepository reviewRepository;
     private final NotificationService notificationService;
+    private final ReservationSettingRepository reservationSettingRepository;
 
 
     @Transactional
@@ -46,6 +47,14 @@ public class ReservationUserService {
         RestaurantInfo restaurantInfo = restaurantRepository.findById((long) createReservationUserRequestDto.getRestaurantNo())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid restaurantNo: " + createReservationUserRequestDto.getRestaurantNo()));
 
+        // 보류 매개변수 타입 확인 필요
+        ReservationSetting reservationSetting = reservationSettingRepository.findByReservationDateAndReservationTimeAndRestaurantNo(
+                createReservationUserRequestDto.getReservationDate(),
+                createReservationUserRequestDto.getReservationTime(),
+                restaurantInfo
+        );
+
+
         // 비관적 락을 사용하여 동일 시간대에 내가 이미 예약했는지 확인하는 방법
         Optional<Reservation> existingReservation = reservationRepository.findFirstByRestaurantInfoAndReservationDateAndReservationTimeAndMember(
                 restaurantInfo,
@@ -55,12 +64,17 @@ public class ReservationUserService {
         );
 
         System.out.println("existingReservation = " + existingReservation);
-        if (existingReservation.isPresent()) {
-            // 이미 예약이 존재하는 경우, 실패 메시지 반환
-            return new CreateReservationUserResponseDto(409, "이미 동일한 시간에 예약이 존재합니다.", -1);
-        }
 
-        try {  // 새로운 예약 생성
+        // 동일 시간대에 내가 이미 예약했는지 확인하는 조건문
+        if (existingReservation.isPresent()) {
+            throw new ReservationException(ReservationExceptionInfo.DUPLICATED_RESERVATION);
+        }
+        // 자리가 남았는지 판별
+        else if(reservationSetting.getReservationPeople() < createReservationUserRequestDto.getPartySize())
+            throw new ReservationException(ReservationExceptionInfo.NO_SEATS_AVAILABLE);
+
+
+        // 새로운 예약 생성
         Reservation reservation = Reservation.builder()
                 .member(member)
                 .restaurantInfo(restaurantInfo)
@@ -71,26 +85,33 @@ public class ReservationUserService {
                 .build();
 
         reservationRepository.save(reservation);
+        // 인원 수 빼기
+        reservationSetting.subtractPeople(createReservationUserRequestDto.getPartySize());
+        reservationSettingRepository.save(reservationSetting);
 
-            // 알림등록 (+)
-            Notification notification = Notification.builder()
-                    .toMember(reservation.getMember().getMemberNo())
-                    .type("reservation")
-                    .referenceNumber(reservation.getRestaurantInfo().getRestaurantNo())
-                    .message(notificationService.createNotificationMessage(
-                            reservation.getRestaurantInfo().getRestaurantNo(),
-                            "reservation"))
-                    .build();
 
-            notificationService.insertNotification(notification);
-            // 알림등록 (-)
+        // partySize, time, reservation
+//        reservationRepository.subtractPartySizeFromReservationPeople(
+//                createReservationUserRequestDto.getPartySize(),
+//                createReservationUserRequestDto.getReservationDate(),
+//                createReservationUserRequestDto.getReservationTime(),
+//                createReservationUserRequestDto.getRestaurantNo()
+//        );
 
-            return new CreateReservationUserResponseDto(200, "예약 완료", reservation.getReservationNo());
+        // 알림등록 (+)
+        Notification notification = Notification.builder()
+                .toMember(reservation.getMember().getMemberNo())
+                .type("reservation")
+                .referenceNumber(reservation.getRestaurantInfo().getRestaurantNo())
+                .message(notificationService.createNotificationMessage(
+                        reservation.getRestaurantInfo().getRestaurantNo(),
+                        "reservation"))
+                .build();
 
-    } catch (ObjectOptimisticLockingFailureException e) {
-        // 락 충돌이 발생했을 때 처리
-        return new CreateReservationUserResponseDto(409, "동시에 다른 사용자가 동일한 예약하려고 시도했습니다. 다시 시도해주세요.", -1);
-    }
+        notificationService.insertNotification(notification);
+
+            return new CreateReservationUserResponseDto(200, "예약 완료 되었습니다!",
+                    restaurantInfo.getRestaurantName());
 }
 
 
@@ -116,17 +137,18 @@ public class ReservationUserService {
     }
 
 
-    /**
-     * 인원수 차감 하는 메소드
-     *
-     * @param reservationNo
-     * @param partySize
-     * @param
-     */
-    @Transactional
-    public void subtractPartySize(Long reservationNo, int partySize, LocalTime time) {
-        reservationRepository.subtractPartySizeFromReservationPeople(partySize, time, reservationNo);
-    }
+//    /**
+//     * 인원수 차감 하는 메소드
+//     *
+//     * @param reservationNo
+//     * @param partySize
+//     * @param
+//     */
+//    @Transactional
+//    public void subtractPartySize(Long reservationNo, int partySize, LocalTime time) {
+//        reservationRepository.subtractPartySizeFromReservationPeople(partySize, time, reservationNo);
+//    }
+
 
     /***
      * 상세정보가져오기
