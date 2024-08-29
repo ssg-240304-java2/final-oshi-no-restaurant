@@ -16,7 +16,7 @@ public interface MyListRepository extends JpaRepository<MyList, Integer> {
     MyList findByListName(String listName);
     void deleteByListName(String ListName);
 
-    List<MyList> findByListNo(Integer listNo);
+    MyList findByListNo(Integer listNo);
 
     @Query("SELECT r FROM MyList m JOIN m.restaurantList r")
     List<RestaurantList> findAllRestaurantCoordinates();
@@ -38,6 +38,8 @@ public interface MyListRepository extends JpaRepository<MyList, Integer> {
     List<MyList> findByMemberMemberNo(Long loginedMemberNo);
 
     List<MyList> findAllByMemberMemberNo(Long memberNo);
+
+    MyList findByMemberMemberNoAndListNo(Long memberNo, Integer listNo);
 }
 
 

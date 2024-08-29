@@ -4,7 +4,9 @@ import kr.oshino.eataku.list.entity.MyList;
 import kr.oshino.eataku.list.model.repository.MyListRepository;
 import kr.oshino.eataku.list.model.vo.RestaurantList;
 import kr.oshino.eataku.member.entity.Member;
+import kr.oshino.eataku.member.entity.Notification;
 import kr.oshino.eataku.member.model.repository.MemberRepository;
+import kr.oshino.eataku.member.service.NotificationService;
 import kr.oshino.eataku.restaurant.admin.entity.RestaurantInfo;
 import kr.oshino.eataku.restaurant.admin.model.repository.RestaurantRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,6 +33,7 @@ public class MyListService {
     @Autowired
     private RestaurantRepository restaurantRepository;
     private final MemberRepository memberRepository;
+    private final NotificationService notificationService;
 
 //    private final FollowingRepository followRepository;
 
@@ -177,6 +181,63 @@ public class MyListService {
     }
 
 
+    public List<RestaurantList> selectUserListByMemberNoAndListNo(Long memberNo, Long listNo) {
+        MyList result = myListRepository.findByMemberMemberNoAndListNo(memberNo, Math.toIntExact(listNo));
+        return result.getRestaurantList();
+    }
+
+    public void copyListToMyList(Long listNo, List<Long> restaurantNos, Long fromListNo) {
+        MyList myList = myListRepository.findById(Math.toIntExact(listNo))
+                .orElseThrow(() -> new IllegalArgumentException("List not found with id: " + listNo));
+
+        List<RestaurantList> restaurantList = myList.getRestaurantList();
+
+        // 이미 추가된 레스토랑을 추적하기 위한 Set 생성
+        Set<Long> existingRestaurantNos = restaurantList.stream()
+                .map(RestaurantList::getRestaurantNo)
+                .collect(Collectors.toSet());
+
+        for (Long restaurantNo : restaurantNos) {
+            if (!existingRestaurantNos.contains(restaurantNo)) {
+                RestaurantInfo restaurantInfo = restaurantRepository.findByRestaurantNo(restaurantNo);
+
+                RestaurantList newRestaurant = new RestaurantList();
+                newRestaurant.setRestaurantNo(restaurantNo);
+                newRestaurant.setRestaurantName(restaurantInfo.getRestaurantName());
+                newRestaurant.setRestaurantAddress(restaurantInfo.getRestaurantAddress());
+                newRestaurant.setImgUrl(restaurantInfo.getImgUrl());
+                newRestaurant.setYCoordinate(restaurantInfo.getYCoordinate());
+                newRestaurant.setXCoordinate(restaurantInfo.getXCoordinate());
+
+                restaurantList.add(newRestaurant);
+            } else {
+//                throw new IllegalArgumentException("Restaurant with id " + restaurantNo + " is already in the list");
+            }
+        }
+
+        MyList fromList = myListRepository.findByListNo(Math.toIntExact(fromListNo));
+        fromList.addCount();
+
+        myListRepository.save(myList);
+        myListRepository.save(fromList);
+        sendCopyNotification(Math.toIntExact(listNo), Math.toIntExact(fromListNo));
+    }
+
+    public void sendCopyNotification(Integer toListNo, Integer fromListNo) {
+
+        MyList fromList = myListRepository.findByListNo(fromListNo);
+        MyList toList = myListRepository.findByListNo(toListNo);
+
+        // 알림등록
+        Notification notification = Notification.builder()
+                .toMember(fromList.getMember().getMemberNo())
+                .type("copyList")
+                .referenceNumber(toList.getMember().getMemberNo())
+                .message(notificationService.createNotificationMessage(toList.getMember().getMemberNo(), "copyList"))
+                .build();
+
+        notificationService.insertNotification(notification);
+    }
 }
 
 

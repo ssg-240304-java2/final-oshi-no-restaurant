@@ -47,4 +47,7 @@ public class MyList {
     )
     private List<RestaurantList> restaurantList;
 
+    public void addCount(){
+        this.listShare += 1;
+    }
 }
