@@ -18,7 +18,7 @@ function showMessage(message) {
     console.log("show")
     var messageElement = $('<div class="message"></div>').text(message.sender + ": " + message.message);
     $('#chatMessages').append(messageElement);
-    $('#chatMessages').scrollTop($('#chatMessages')[0].scrollHeight);  // 스크롤을 최신 메시지 위치로 이동
+    $('#chatMessages').scrollTop($('#chatMessages')[0].scrollHeight);
 }
 function sendMessage(roomId) {
 
@@ -30,14 +30,14 @@ function sendMessage(roomId) {
             roomId: roomId,
             type: 'TALK'
         };
-        stompClient.send("/pub/chat/message", {}, JSON.stringify(chatMessage));  // 서버의 @MessageMapping에 대응
+        stompClient.send("/pub/chat/message", {}, JSON.stringify(chatMessage));
 
-        $('#messageInput').val('');  // 입력란 초기화
+        $('#messageInput').val('');
     }
 }
 // WebSocket 및 STOMP 연결 설정
 function connect(roomId) {
-    var socket = new SockJS('/ws-stomp');  // Spring 서버에 정의된 WebSocket 엔드포인트와 일치해야 함
+    var socket = new SockJS('/ws-stomp');
     stompClient = Stomp.over(socket);
 
     stompClient.connect({}, function (frame) {

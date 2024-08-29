@@ -3,6 +3,7 @@ import kr.oshino.eataku.member.model.dto.CustomMemberDetails;
 import kr.oshino.eataku.reservation.user.model.dto.requestDto.CreateReservationUserRequestDto;
 import kr.oshino.eataku.reservation.user.model.dto.responseDto.*;
 import kr.oshino.eataku.reservation.user.service.ReservationUserService;
+import kr.oshino.eataku.ws.service.ChatRoomService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ public class ReservationUserController {
 
     private final ReservationUserService reservationUserService;
 
-
+    private final ChatRoomService chatRoomService;
 
     /***
      * 예약 등록 페이지 이동 메서드
@@ -266,6 +267,30 @@ public class ReservationUserController {
         log.info("🍎restaurantNo = " + restaurantNo);
         return "ws/user-chat";
     }
+
+//     //채팅방 생성
+//    @GetMapping("/room/{restaurantNo}")
+//    public String startChat(@PathVariable String restaurantNo, Model model) {
+//        // 현재 로그인된 손님의 정보를 가져옵니다.
+//        CustomMemberDetails member = (CustomMemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        Long memberNo = member.getMemberNo();
+//
+//        // 식당과 고객의 고유한 채팅방 ID를 생성합니다.
+//        String roomId = restaurantNo + "_" + memberNo;
+//
+//        // 기존에 해당 roomId로 생성된 채팅방이 있는지 확인합니다.
+//        ChatRoomDTO chatRoom = chatRoomService.findRoomById(roomId);
+//        if (chatRoom == null) {
+//            // 없다면 채팅방을 새로 생성합니다.
+//            chatRoom = chatRoomRepository.createChatRoom(restaurantNo, memberNo.toString());
+//        }
+//
+//        model.addAttribute("roomId", chatRoom.getRoomId());
+//        model.addAttribute("userType", "customer");
+//        return "ws/user-chat"; // 실제 채팅 화면으로 이동합니다.
+//    }
+
+
 
 }
 

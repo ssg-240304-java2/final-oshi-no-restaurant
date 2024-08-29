@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="UTF-8">
         <title>식당 채팅</title>
@@ -9,17 +9,30 @@
         <link rel="stylesheet" href="/css/restaurant/chatting.css">
     </head>
     <body>
-        <div class="chat-container">
-            <div class="chat-messages" id="chatMessages">
-                <!-- 여기에 채팅 메시지가 표시됩니다 -->
+        <div class="chat-container d-flex">
+            <div class="chat-room-list p-3" style="width: 25%; border-right: 1px solid #ccc;">
+                <button class="btn btn-secondary mb-3" onclick="window.history.back();">메인으로 돌아가기</button>
+                <h5>채팅방 목록</h5>
+                <ul class="list-group" id="roomList">
+                    <!-- 여기에 채팅방 목록이 동적으로 추가됩니다 -->
+                    <li class="list-group-item" th:each="room : ${rooms}" th:text="${room.name}"
+                        th:onclick="|window.location.href='/chat/room/' + ${room.roomId}|">채팅방 1
+                    </li>
+                </ul>
             </div>
-            <div class="chat-input">
-                <img src="/images/logo.png" alt="icon">
-                <input type="text" id="messageInput" placeholder="메세지를 입력해주세요." maxlength="1000" oninput="updateCharCount()">
-                <span class="char-count" id="charCount">0/1000</span>
-                <button th:onclick="sendMessage([[${roomId}]])">전송</button>
-                <input type="hidden" id="roomId" th:data-roomId="${roomId}">
-                <input type="hidden" id="sender" th:data-sender="${userType}">
+            <div class="chat-container">
+                <div class="chat-messages mb-3" id="chatMessages" style="height: 400px; overflow-y: scroll;">
+                    <!-- 여기에 채팅 메시지가 표시됩니다 -->
+                </div>
+                <div class="chat-input">
+                    <img src="/images/logo.png" alt="icon">
+                    <input type="text" id="messageInput" placeholder="메세지를 입력해주세요." maxlength="1000"
+                           oninput="updateCharCount()">
+                    <span class="char-count" id="charCount">0/1000</span>
+                    <button th:onclick="sendMessage([[${roomId}]])">전송</button>
+                    <input type="hidden" id="roomId" th:data-roomId="${roomId}">
+                    <input type="hidden" id="sender" th:data-sender="${userType}">
+                </div>
             </div>
         </div>
 
