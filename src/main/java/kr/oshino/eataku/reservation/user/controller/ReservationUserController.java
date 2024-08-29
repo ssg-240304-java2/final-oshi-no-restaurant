@@ -185,7 +185,7 @@ public class ReservationUserController {
         if (isCancelled) {
             return ResponseEntity.ok().body(Map.of("success", true, "message", "예약이 성공적으로 취소되었습니다."));
         } else {
-            return ResponseEntity.status(400).body(Map.of("success", false, "message", "예약 취소에 실패하였습니다."));
+            return ResponseEntity.status(200).body(Map.of("success", true, "message", "예약 취소는 24시간 전에만 가능합니다!"));
         }
     }
 
