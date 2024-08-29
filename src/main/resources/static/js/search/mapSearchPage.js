@@ -196,3 +196,8 @@ $(document).ready(function() {
     });
 });
 
+$(document).ready(function(){
+    $('.categoryBtn').on('click', function(){
+        $(this).toggleClass('active'); // 클릭한 버튼에 active 클래스 추가/제거
+    });
+});

@@ -2,25 +2,52 @@ body {
     margin-top: 120px;
 }
 
-/* 추가 스타일 */
 .content {
+    overflow-y: auto;
+    position: relative;
+    z-index: 1;
     height: 75vh;
     overflow: hidden;
     display: flex;
-    position: relative;
+    padding-left: 10px; /* Space for the map toggle */
+    transition: all 0.3s ease; /* Smooth toggle effect */
 }
+
+#mapArea {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 60%; /* Adjust width as needed */
+    height: 100%;
+    z-index: 0; /* Ensure it stays behind other content */
+
+}
+
+.category-buttons {
+    /*position: fixed;*/
+    z-index: 2; /* Buttons should be above the map */
+    padding: 10px;
+    background-color: rgba(255, 255, 255, 0.7); /* Semi-transparent background for readability */
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 10px;
+}
+
+/*여기까지 새로 추가*/
 
 .restaurant-info {
     width: 50%;
     overflow-y: auto;
-    border-right: 1px solid #ccc;
+    /*border-right: 1px solid #ccc;*/
     transition: width 0.3s;
     position: relative;
-    z-index: 1; /* 버튼이 사라지는 문제 해결을 위해 z-index 조정 */
+    z-index: 3; /* 버튼이 사라지는 문제 해결을 위해 z-index 조정 */
+    margin-right: 60%;
 }
 
 .map {
-    width: 50%;
+    width: 60%;
     transition: width 0.3s;
     position: relative;
     z-index: 1;
@@ -36,11 +63,11 @@ body {
     top: 50%;
     left: 0px; /* 지도의 왼쪽 경계에 버튼을 표시 */
     transform: translate(0, -50%);
-    z-index: 2; /* 버튼이 다른 요소 위에 표시되도록 */
+    z-index: 10; /* 버튼이 다른 요소 위에 표시되도록 */
     padding: 5px 10px;
     height: 50px;
-    width: 40px;
-    /*cursor: pointer;*/
+    width: 30px;
+    cursor: pointer;
     background-color: #FA4A54;
     color: #ffffff;
     border: 1px solid #FA4A54;
@@ -59,7 +86,7 @@ body {
     color: white;
     cursor: pointer;
     z-index: 3; /* 지도의 다른 요소보다 앞에 표시되도록 */
-    border-radius: 10%;
+    border-radius: 10px;
 }
 
 .selected {
@@ -73,4 +100,102 @@ body {
     background-color: #FA4A54;
     color: #ffffff;
     border-color: #FA4A54;
+    /*z-index: 3;*/
+}
+#searchInput{
+    width: 400px;
+    margin-left: 30px;
+}
+.categoryBtn {
+    border: 1px solid #666666; /* 테두리 색상 */
+    color: #666666; /* 글자 색상 */
+    background-color: #fff; /* 배경색 */
+    border-radius: 10%;
+    padding: 5px;
+
+}
+
+.categoryBtn:hover {
+    background-color: #666666; /* 호버 시 배경색 변경 */
+    color: #fff; /* 호버 시 글자 색상 변경 */
+}
+
+.categoryBtn.active {
+    background-color: #FA4A54; /* 클릭 후 배경색 */
+    color: white; /* 클릭 후 글자색 */
+    border-color: #FA4A54; /* 클릭 후 테두리 색상 */
+}
+
+.restaurant-card {
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+    text-align: center; /* 가운데 정렬 */
+    max-width: 400px; /* 카드 최대 너비 */
+    margin: 0 auto 20px; /* 가운데 정렬 */
+}
+
+.restaurant-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.restaurant-card img {
+    max-width: 100%; /* 이미지가 카드 너비를 초과하지 않도록 */
+    border-radius: 8px; /* 이미지 모서리 둥글게 */
+    margin-bottom: 15px; /* 이미지 아래 여백 */
+}
+
+.restaurant-card h3 {
+    font-size: 1.75rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #333333;
+}
+
+.restaurant-card p {
+    font-size: 1rem;
+    color: #555555;
+    margin: 5px 0;
+}
+
+.restaurant-card p.category {
+    font-weight: 500;
+    color: #fb3f4a;
+    font-size: 1.1rem;
+}
+
+.restaurant-card p.rating {
+    font-weight: 500;
+    color: #ffa500;
+    font-size: 1.1rem;
+}
+
+.favorite-button {
+    border-color: #fb3f4a;
+    color: #fb3f4a;
+    background-color: #ffffff;
+    transition: background-color 0.3s, color 0.3s;
+    margin-top: 15px;
+}
+
+.favorite-button:hover {
+    background-color: #fb3f4a;
+    color: #ffffff;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+    color: white;
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.btn-primary:active {
+    transform: scale(0.95);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
