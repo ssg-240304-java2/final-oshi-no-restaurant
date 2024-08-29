@@ -1,6 +1,7 @@
 package kr.oshino.eataku.list.controller;
 
 import kr.oshino.eataku.list.entity.MyList;
+import kr.oshino.eataku.list.model.dto.CopyListDTO;
 import kr.oshino.eataku.list.model.dto.FollowListDto;
 import kr.oshino.eataku.list.model.service.MyListService;
 import kr.oshino.eataku.list.model.vo.RestaurantList;
@@ -198,6 +199,28 @@ public class MyListController {
         log.info("⭐⭐ [ 값 주나? ] Request followingLists: {} ⭐⭐", followingLists);
 
         return "list/tsktskList";
+    }
+
+    @GetMapping("/member/{memberNo}/list")
+    public String copyMemberList(@PathVariable("memberNo") Long memberNo,
+                                  @RequestParam("listNo") Long listNo,
+                                  Model model) {
+
+        List<RestaurantList> lists = myListService.selectUserListByMemberNoAndListNo(memberNo,listNo);
+
+        model.addAttribute("lists", lists);
+
+        return "list/listCopy";
+    }
+
+    @PostMapping("/myList/addRestaurantList")
+    public ResponseEntity<String> addRestaurantList(@RequestBody CopyListDTO req) {
+
+        log.info("⭐⭐ [ MyListController ] req {} ⭐⭐", req);
+
+        myListService.copyListToMyList(req.getListNo(), req.getRestaurantNo(), req.getFromListNo());
+
+        return ResponseEntity.ok("good");
     }
 
 
