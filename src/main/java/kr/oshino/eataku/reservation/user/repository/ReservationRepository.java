@@ -1,10 +1,7 @@
 package kr.oshino.eataku.reservation.user.repository;
-
 import jakarta.persistence.LockModeType;
 import jakarta.transaction.Transactional;
-
 import kr.oshino.eataku.common.enums.ReservationStatus;
-
 import kr.oshino.eataku.member.entity.Member;
 import kr.oshino.eataku.reservation.user.entity.Reservation;
 import kr.oshino.eataku.reservation.user.model.dto.responseDto.*;
@@ -15,8 +12,6 @@ import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-
-import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -26,57 +21,12 @@ import java.util.Optional;
 public interface ReservationRepository extends JpaRepository<Reservation,Integer> {
 
 
-    /***
-     * 예약 등록하는 메소드
-     * @param restaurantNo
-     * @return
-     */
-    /* 예약 */
-    @Query("SELECT r FROM Reservation r WHERE r.restaurantInfo.restaurantNo = :restaurantNo")
-    List<Reservation> findReservationsByRestaurantNo(@Param("restaurantNo") Long restaurantNo);
-
-
-    /***
-     * 해당 하는 식당의 시간을 가져오는 메소드
-     * @param restaurantNo
-     * @return
-     */
-    @Query(value = "SELECT r.reservationTime FROM ReservationSetting r WHERE r.restaurantNo.restaurantNo = :restaurantNo")
-    List<java.sql.Time> findAllTimesByRestaurantNo(@Param("restaurantNo") Long restaurantNo);
-
-
-
-
-    /***
+    /**
      * 해당 하는 식당의 인원수를 가져오는 메소드
+     * @param date
      * @param restaurantNo
      * @return
      */
-    @Query("SELECT r.reservationPeople FROM ReservationSetting r WHERE r.restaurantNo.restaurantNo  = :restaurantNo")
-    int findPeopleByRestaurantNo(@Param("restaurantNo") Long restaurantNo);
-
-
-
-//    /**
-//     * 해당 인원 수를 제거하는 메소드
-//     * @param partySize
-//     * @param
-//     */
-//    @Modifying
-//    @Query("UPDATE ReservationSetting r SET r.reservationPeople = r.reservationPeople - :partySize " +
-//            "WHERE r.reservationTime = :time AND  r.restaurantNo.restaurantNo = :restaurantNo AND r.reservationPeople > 0")
-//    void subtractPartySizeFromReservationPeople(@Param("partySize") int partySize,
-//                                                @Param("time") LocalTime time,
-//                                                @Param("restaurantNo") Long restaurantNo);
-
-//    @Modifying
-//    @Query("UPDATE ReservationSetting r SET r.reservationPeople = r.reservationPeople - :partySize " +
-//            "WHERE r.reservationTime = :time AND  r.restaurantNo.restaurantNo = :restaurantNo AND r.reservationPeople > 0")
-//    void subtractPartySizeFromReservationPeople(@Param("partySize") int partySize,
-//                                                @Param("time") LocalTime time,
-//                                                @Param("restaurantNo") Long restaurantNo);
-
-
     @Query("SELECT r FROM ReservationSetting r WHERE r.reservationDate = :date AND r.restaurantNo.restaurantNo = :restaurantNo")
     List<ReservationSetting> findAllByDateAndRestaurant(@Param("date") LocalDate date, @Param("restaurantNo") Long restaurantNo);
 
@@ -182,8 +132,6 @@ public interface ReservationRepository extends JpaRepository<Reservation,Integer
      * @param restaurantNo
      * @return
      */
-
-
     @Query("SELECT new kr.oshino.eataku.reservation.user.model.dto.responseDto.MapDto(a.xCoordinate ,a.yCoordinate)"+
             "FROM RestaurantInfo a " +
             "WHERE a.restaurantNo = :restaurantNo")
@@ -199,19 +147,6 @@ public interface ReservationRepository extends JpaRepository<Reservation,Integer
             "FROM Menu m WHERE m.restaurantNo.restaurantNo = :restaurantNo")
     List<MenuDto> getMenu(@Param("restaurantNo") Long restaurantNo);
 
-    /**
-     * 예약가능한지 여부 확인하기
-     * @param
-     * @param reservationDate
-     * @param reservationTime
-     * @return
-     */
-    boolean existsByMember_MemberNoAndRestaurantInfo_RestaurantNoAndReservationDateAndReservationTime(
-            Long memberNo,
-            Long restaurantNo,
-            LocalDate reservationDate,
-            LocalTime reservationTime
-    );
 
     /***
      * 식당 리뷰 사진

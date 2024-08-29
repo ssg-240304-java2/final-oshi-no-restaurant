@@ -16,7 +16,6 @@ import kr.oshino.eataku.restaurant.admin.model.repository.ReservationSettingRepo
 import kr.oshino.eataku.restaurant.admin.model.repository.RestaurantRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
@@ -63,7 +62,6 @@ public class ReservationUserService {
                 member
         );
 
-        System.out.println("existingReservation = " + existingReservation);
 
         // 동일 시간대에 내가 이미 예약했는지 확인하는 조건문
         if (existingReservation.isPresent()) {
@@ -89,14 +87,6 @@ public class ReservationUserService {
         reservationSetting.subtractPeople(createReservationUserRequestDto.getPartySize());
         reservationSettingRepository.save(reservationSetting);
 
-
-        // partySize, time, reservation
-//        reservationRepository.subtractPartySizeFromReservationPeople(
-//                createReservationUserRequestDto.getPartySize(),
-//                createReservationUserRequestDto.getReservationDate(),
-//                createReservationUserRequestDto.getReservationTime(),
-//                createReservationUserRequestDto.getRestaurantNo()
-//        );
 
         // 알림등록 (+)
         Notification notification = Notification.builder()
@@ -137,17 +127,6 @@ public class ReservationUserService {
     }
 
 
-//    /**
-//     * 인원수 차감 하는 메소드
-//     *
-//     * @param reservationNo
-//     * @param partySize
-//     * @param
-//     */
-//    @Transactional
-//    public void subtractPartySize(Long reservationNo, int partySize, LocalTime time) {
-//        reservationRepository.subtractPartySizeFromReservationPeople(partySize, time, reservationNo);
-//    }
 
 
     /***
@@ -164,7 +143,6 @@ public class ReservationUserService {
         }
 
         Reservation reservation = reservations.get();
-        System.out.println("reservation = " + reservation);
 
         return new modalDto(
                 reservation.getRestaurantInfo().getRestaurantName(),
@@ -197,7 +175,7 @@ public class ReservationUserService {
     public List<ReadReservationResponseDto> getReservationListByMemberNo(ReadReservationResponseDto readReservationResponseDto) {
         
         List<ReadReservationResponseDto> reservationList = reservationRepository.findReservationByMemberNo(readReservationResponseDto.getMemberNo());
-        System.out.println("reservationList = " + reservationList);
+
 
         if (readReservationResponseDto.getReservationStatus() != null) {
             reservationList = reservationList.stream()
@@ -316,7 +294,6 @@ public class ReservationUserService {
      * @param restaurantNo
      * @return
      */
-
 
     @Transactional
     public List<MenuDto> getMenu(Long restaurantNo) {
