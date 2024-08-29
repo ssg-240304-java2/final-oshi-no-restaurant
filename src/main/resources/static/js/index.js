@@ -2,6 +2,7 @@ $(document).ready(function(){
 
     // 모든 div 요소를 가져오기
     const allDivs = document.querySelectorAll('div');
+    var heartNo = 0;
 
     // popular로 시작하는 클래스명을 찾기
     const popularClasses = Array.from(allDivs).filter(div => {
@@ -168,6 +169,34 @@ $(document).ready(function(){
         }
     });
 
+    $('.heart-icon img').on('click', function (){
+
+        heartNo = $(this).parent().data('restaurant-no');
+        console.log(heartNo);
+    })
+
+    $('#modalAppendContainer').on('click','.modal-btn-custom',function (){
+        const listNo = $(this).data('id');
+        console.log('modal listNo : ' + listNo);
+
+        $.ajax({
+            url: '/myList/addRestaurant',
+            type: 'post',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                "restaurantNo": heartNo,
+                "listNo": listNo
+            }),
+            success: function (result){
+                alert('식당 즐겨찾기 등록완료 !')
+                window.location.href = '/';
+            },
+            error: function (e){
+                console.log(e)
+            }
+        })
+    });
+
 });
 
 function toggleHeart(element) {
@@ -175,10 +204,46 @@ function toggleHeart(element) {
     var fullHeart = element.querySelector('.full-heart');
 
     if (fullHeart.style.display === 'none') {
+
+        $.ajax({
+            url: '/myInfo/list',
+            type: 'post',
+            contentType: 'application/json',
+            success: function (data){
+                console.log("success")
+                console.log(data);
+                appendList(data);
+            },
+            error: function (e){
+                console.log("failed")
+                console.log(e);
+            }
+
+        })
+
+        $('#myModal').modal('show');
+
         fullHeart.style.display = 'block';
         emptyHeart.style.display = 'none';
     } else {
         fullHeart.style.display = 'none';
         emptyHeart.style.display = 'block';
+    }
+
+    function appendList(data){
+        console.log("appendList")
+        const listContainer = $('#modalAppendContainer')
+        listContainer.empty();
+        data.forEach(list => {
+            console.log(listContainer);
+            let innerHTML = `
+            <div class="list-box">
+                <!-- 리스트 이름을 버튼으로 표시 -->
+                <button type="button" class="btn modal-btn-custom" data-id="${list.listNo}" ">${list.listName}</button>
+            </div>
+            `;
+
+            listContainer.append(innerHTML);
+        })
     }
 }

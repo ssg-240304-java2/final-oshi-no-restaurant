@@ -19,6 +19,7 @@ public class SearchResultDTO {
     private String foodType;
     private String hashTag;
     private Double rating;
+    private Long inList;
 
     public SearchResultDTO(Long restaurantNo, String restaurantName, String restaurantAddress, Double xCoordinate, Double yCoordinate, String imgUrl, Double rating) {
         this.restaurantNo = restaurantNo;

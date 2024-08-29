@@ -166,11 +166,12 @@
     }
 
     function updateListStatus(listNo, status) {
+        console.log('listNo : ' + listNo, 'status : '+ status)
         $.ajax({
             url: '/myLists/updateStatus', // 서버의 엔드포인트
-            method: 'POST', // HTTP 메소드 (GET, POST 등)
+            method: 'post', // HTTP 메소드 (GET, POST 등)
             contentType: 'application/json', // 전송할 데이터의 형식
-            data: JSON.stringify({ listNo: listNo, listStatus: status }), // 전송할 데이터
+            data: JSON.stringify({ "listNo": listNo, "listStatus": status }), // 전송할 데이터
             success: function(response) {
                 console.log('Status updated successfully:', response);
             },
