@@ -52,7 +52,7 @@
 
     <div class="reservation" th:each="waitingInfo : ${member.waitingInfo}" th:unless="${#lists.isEmpty(member.waitingInfo)}">
         <div>
-            <h5 class="d-inline">현재 예약 정보</h5>
+            <h5 class="d-inline">현재 웨이팅 정보</h5>
             <span class="badge-reservation mx-2">웨이팅</span>
             <span th:text="${waitingInfo.waitingNumber} + '번째 순번'" class="card-time">N명 N번째 순번</span>
         </div>
@@ -63,7 +63,7 @@
                 <span th:text="${waitingInfo.restaurantNo}">양식</span> <span>•</span> <span th:text="${waitingInfo.restaurantAddress}">강남구</span>
             </div>
         </div>
-        <button class="btn btn-cancel">웨이팅 취소</button>
+        <button class="btn btn-cancel waiting-cancel-btn" th:data-waiting-no="${waitingInfo.waitingNo}">웨이팅 취소</button>
     </div>
 
     <!-- 예약 정보 섹션 -->
@@ -185,9 +185,25 @@
                 }
             });
         });
+
+        // 웨이팅 취소 처리
+        $('.waiting-cancel-btn').click(function() {
+            const waitingNo = $(this).data('waiting-no')
+
+            $.ajax({
+                url: '/users/waiting/' + waitingNo,
+                type: 'PATCH',
+                success: function(response) {
+                    alert(response.message);
+                    window.location.href = '/myPage';
+                },
+                error: function(xhr, status, error) {
+                    let response = JSON.parse(xhr.responseText);
+                    alert(response.message);
+                }
+            });
+        });
     });
 </script>
-
-
 </body>
 </html>
