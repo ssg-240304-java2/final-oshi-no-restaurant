@@ -26,9 +26,8 @@
 - **API** : Naver map , coolsms
 - **Database** : MySQL , JPA ,MIRO
 - **Design** : Figma
-- 커밋 컨벤션
-- 코드 컨벤션
-- 스프라이트
+- [커밋 컨벤션](https://github.com/ssg-240304-java2/final-oshi-no-restaurant/wiki/%EC%BB%A4%EB%B0%8B-%EC%BB%A8%EB%B2%A4%EC%85%98-&-%EA%B9%83-%ED%94%8C%EB%A1%9C%EC%9A%B0)
+
 
 # 2. 채택한 개발 기술과 브랜치 전략
 
@@ -96,26 +95,37 @@
 - 전체 개발 기간 : 2024-07-19 ~ 2024-09-02
 - UI 개발 : 2024-07-29 ~ 2024-08-05
 - Backend 개발 : 2024-08-06 ~ 2024-08-30
+- ERD 개발 : 2024-07-30 ~ 2024-08-02
 
-## 작업 관리
 
-- Notion , Github Projects 와 Issues를 사용하여 진행 사항을 공유 했습니다.
+## 6. ERD
+
+
+
+
+## 7.작업 관리
+
+- [Notion](https://coffit23.notion.site/3-oshi_no_restaurant-4deeb7b1685547cc96e80c2256969737) , Github Projects 와 Issues를 사용하여 진행 사항을 공유 했습니다.
 - 주간회의를 진행하며 작업 순서와 방향성에 대한 고민을 나누고 Notion 캘린더에 회의 내용을 기록했습니다.
 
 
 # 6. 주요 기능
-## 회원,매장,소셜 로그인
-![회원-매장-소셜-로그인-완료](readmeImages/회원-매장-소셜-로그인-완료.gif)
 
 
 
-# 7. 페이지별 기능
+## 회원, 매장 , 소셜 로그인
+<img src="readmeImages/회원-매장-소셜-로그인-완료.gif" alt="회원-매장-소셜-로그인-완료" width="300"/>
 
+## 웨이팅 등록과 리뷰 등록
+<img src="readmeImages/웨이팅 등록과 리뷰 등록.gif" alt="웨이팅 등록과 리뷰 등록" width="300"/>
 
-이걸 위키로뺴서 gif 로 만들어서 작성하기 링크를 wiki 로
+## 예약 등록 및 예약 취소
+<img src="readmeImages/예약 등록 및 예약 취소.gif" alt="예약 등록 및 예약 취소" width="300"/>
 
+## 리뷰 작성
+<img src="readmeImages/리뷰작성.gif" alt="리뷰작성" width="300"/>
 
-# 8. 트러블 슈팅
+# 7. 트러블 슈팅
 
 - [예약 이슈](https://github.com/ssg-240304-java2/final-oshi-no-restaurant/wiki/%EC%98%88%EC%95%BD-%EC%9D%B4%EC%8A%88) 
 - [웨이팅 이슈](https://github.com/ssg-240304-java2/final-oshi-no-restaurant/wiki/%EC%9B%A8%EC%9D%B4%ED%8C%85-%EC%9D%B4%EC%8A%88)
@@ -124,9 +134,12 @@
 - [멤버 이슈](https://github.com/ssg-240304-java2/final-oshi-no-restaurant/wiki/%EB%A9%A4%EB%B2%84-%EC%9D%B4%EC%8A%88)
 
 
-# 9. 개선목표
+# 8. 개선목표
 
-# 10.프로젝트 후기
+
+
+
+# 9.프로젝트 후기
 
 ## 고경호
 
@@ -139,7 +152,7 @@
 
 ## 서윤정
 
-    여러모로 많은 것들을 배울 수 있었던 한 달이었던 같습니다. 
+시나리오대로 구현한 점은 좋았지만 아쉬운 점은 시나리오 외적인 상황에 대해 충분히 고려하지 못했다는 것입니다. 이로 인해 예기치 않은 상황에 대비하거나 즉각적으로 대응하는 데 어려움이 있었습니다. 앞으로는 시나리오 내의 계획을 철저히 준비하는 것뿐만 아니라, 다양한 가능성을 염두에 두고 예상치 못한 상황에서도 유연하게 대처할 수 있는 능력을 기르는 것이 중요하다는 것을 느꼈습니다. 
 
 
 
