@@ -53,6 +53,9 @@ public class NotificationService {
             case "copyList":
                 msg = referenceMember + "님이 리스트를 가져갔습니다.";
                 break;
+            case "reservationCancel":
+                msg = referenceRestaurant + " 예약이 취소되었습니다.";
+                break;
         }
 
         return msg;
