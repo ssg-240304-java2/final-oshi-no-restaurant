@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.UUID;
 
 @NoArgsConstructor
@@ -13,12 +14,14 @@ import java.util.UUID;
 @Builder
 public class ChatRoomDTO {
 
-    private String roomId;
+    private Long roomId;
     private String name;
+    private List<ChatRoomMemberDTO> chatRoomMembers;
+    private List<ChatMessageDTO> chatMessages;
 
-    public static ChatRoomDTO create(String name) {
-        ChatRoomDTO chatRoom = new ChatRoomDTO();
-        chatRoom.roomId = UUID.randomUUID().toString();
-        return chatRoom;
-    }
+//    public static ChatRoomDTO create(String name) {
+//        ChatRoomDTO chatRoom = new ChatRoomDTO();
+//        chatRoom.roomId = UUID.randomUUID().toString();
+//        return chatRoom;
+//    }
 }

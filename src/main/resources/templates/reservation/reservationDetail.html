@@ -21,7 +21,11 @@
 
         <h2 th:text="${restaurant.restaurantName}">이름</h2>
         <div class="circle-buttons">
-            <a class="btn btn-outline-custom" th:href="|/user/chatting/${restaurant.restaurantNo}|">쩝쩝채팅</a>
+<!--            <a class="btn btn-outline-custom" th:href="|/user/chatting/${restaurant.restaurantNo}|">쩝쩝채팅</a>-->
+            <form action="/chat/start" method="post">
+                <input type="hidden" name="restaurantNo" th:value="${restaurant.restaurantNo}">
+                <button class="btn btn-outline-custom" type="submit">쩝쩝채팅</button>
+            </form>
             <button class="btn btn-outline-custom" th:onclick="|location.href='/users/waitingForm/' + ${restaurant.restaurantNo}|">쩝쩝웨이팅</button>
             <button class="btn btn-outline-custom" th:onclick="|location.href='/reservation/' + ${restaurant.restaurantNo}|">쩝쩝예약</button>
         </div>
