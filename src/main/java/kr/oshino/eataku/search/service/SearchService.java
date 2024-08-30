@@ -1,5 +1,6 @@
 package kr.oshino.eataku.search.service;
 
+import kr.oshino.eataku.common.enums.FoodType;
 import kr.oshino.eataku.member.model.dto.CustomMemberDetails;
 import kr.oshino.eataku.member.model.dto.HeartDTO;
 import kr.oshino.eataku.member.model.repository.MemberRepository;
@@ -29,9 +30,23 @@ public class SearchService {
     private final RestaurantRepository restaurantRepository;
     private final MemberRepository memberRepository;
 
-    public List<SearchResultDTO> selectQueryByKeyword(String keyword, int page, int size ) {
+    public List<SearchResultDTO> selectQueryByKeyword(String keyword,
+                                                      List<String> categories,
+                                                      String reservation,
+                                                      String waiting,
+                                                      int page,
+                                                      int size ) {
         Pageable pageable = PageRequest.of(page, size);
-        List<Object[]> results = restaurantRepository.findAllByKeyword(keyword, pageable);
+
+        if (categories == null) {
+            categories = new ArrayList<>();
+            FoodType[] allCategories = FoodType.values();
+            for (FoodType enums : allCategories){
+                categories.add(enums.name());
+            }
+        }
+
+        List<Object[]> results = restaurantRepository.findAllByKeywordAndCategories(keyword, categories,reservation,waiting, pageable);
 
         return results.stream().map(this::mapToSearchResultDTO).collect(Collectors.toList());
     }

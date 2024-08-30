@@ -36,13 +36,22 @@ public interface RestaurantRepository extends JpaRepository<RestaurantInfo, Long
             "LEFT JOIN tbl_menu m ON m.restaurant_no = r.restaurant_no " +
             "LEFT JOIN tbl_hash_tag ht ON ht.restaurant_no = r.restaurant_no " +
             "LEFT JOIN tbl_average_rating ar ON ar.restaurant_no = r.restaurant_no " +
-            "WHERE ( r.restaurant_name LIKE CONCAT('%',:keyword,'%') " +
-            "OR r.restaurant_address LIKE CONCAT('%',:keyword,'%') " +
-            "OR r.description LIKE CONCAT('%',:keyword,'%') " +
-            "OR ft.food_type LIKE CONCAT('%',:keyword,'%') " +
-            "OR m.menu_name LIKE CONCAT('%',:keyword,'%') " +
-            "OR m.description LIKE CONCAT('%',:keyword,'%') " +
-            "OR ht.hash_tag LIKE CONCAT('%',:keyword,'%') ) " +
+            "WHERE (:reservation IS NULL " +
+            "OR r.restaurant_no IN ( SELECT rs.restaurant_no " +
+            "                           FROM tbl_reservation_setting rs " +
+            "                           JOIN tbl_reservation rv " +
+            "                            ON rs.restaurant_no = rv.restaurant_no AND rs.reservation_date = rv.reservation_date" +
+            "                         GROUP BY rs.restaurant_no, rs.reservation_date, rs.reservation_people" +
+            "                          HAVING rs.reservation_people > SUM(rv.party_size) ) ) " +
+            "AND (:waiting IS NULL " +
+            "OR r.restaurant_no IN ( SELECT ws.restaurant_no FROM tbl_waiting_setting ws WHERE ws.waiting_date = CURDATE()) ) " +
+            "AND (r.restaurant_name LIKE CONCAT('%', :keyword, '%') " +
+            "OR r.restaurant_address LIKE CONCAT('%', :keyword, '%') " +
+            "OR r.description LIKE CONCAT('%', :keyword, '%') " +
+            "OR m.menu_name LIKE CONCAT('%', :keyword, '%') " +
+            "OR m.description LIKE CONCAT('%', :keyword, '%') " +
+            "OR ht.hash_tag LIKE CONCAT('%', :keyword, '%')) " +
+            "AND (ft.food_type IN (:categories) ) " +
             "GROUP BY r.restaurant_no, r.restaurant_name, r.restaurant_address, " +
             "r.x_coordinate, r.y_coordinate, r.img_url",
             countQuery = "SELECT COUNT(*) " +
@@ -51,15 +60,32 @@ public interface RestaurantRepository extends JpaRepository<RestaurantInfo, Long
                     "LEFT JOIN tbl_menu m ON m.restaurant_no = r.restaurant_no " +
                     "LEFT JOIN tbl_hash_tag ht ON ht.restaurant_no = r.restaurant_no " +
                     "LEFT JOIN tbl_average_rating ar ON ar.restaurant_no = r.restaurant_no " +
-                    "WHERE ( r.restaurant_name LIKE CONCAT('%',:keyword,'%') " +
-                    "OR r.restaurant_address LIKE CONCAT('%',:keyword,'%') " +
-                    "OR r.description LIKE CONCAT('%',:keyword,'%') " +
-                    "OR ft.food_type LIKE CONCAT('%',:keyword,'%') " +
-                    "OR m.menu_name LIKE CONCAT('%',:keyword,'%') " +
-                    "OR m.description LIKE CONCAT('%',:keyword,'%') " +
-                    "OR ht.hash_tag LIKE CONCAT('%',:keyword,'%') ) ",
+                    "WHERE (:reservation IS NULL " +
+                    "OR r.restaurant_no IN ( SELECT rs.restaurant_no " +
+                    "                           FROM tbl_reservation_setting rs " +
+                    "                           LEFT JOIN tbl_reservation rv " +
+                    "                            ON rs.restaurant_no = rv.restaurant_no AND rs.reservation_date = rv.reservation_date" +
+                    "                         GROUP BY rs.restaurant_no, rs.reservation_date, rs.reservation_people" +
+                    "                          HAVING rs.reservation_people > SUM(rv.party_size) ) ) " +
+                    "AND (:waiting IS NULL " +
+                    "OR r.restaurant_no IN ( SELECT ws.restaurant_no FROM tbl_waiting_setting ws WHERE ws.waiting_date = CURDATE()) ) " +
+                    "AND (r.restaurant_name LIKE CONCAT('%', :keyword, '%') " +
+                    "OR r.restaurant_address LIKE CONCAT('%', :keyword, '%') " +
+                    "OR r.description LIKE CONCAT('%', :keyword, '%') " +
+                    "OR m.menu_name LIKE CONCAT('%', :keyword, '%') " +
+                    "OR m.description LIKE CONCAT('%', :keyword, '%') " +
+                    "OR ht.hash_tag LIKE CONCAT('%', :keyword, '%')) " +
+                    "AND (ft.food_type IN (:categories) ) ",
             nativeQuery = true)
-    List<Object[]> findAllByKeyword(@Param("keyword") String keyword, Pageable pageable);
+    List<Object[]> findAllByKeywordAndCategories(@Param("keyword") String keyword,
+                                                 @Param("categories") List<String> categories,
+                                                 @Param("reservation") String reservation,
+                                                 @Param("waiting") String waiting,
+                                                 Pageable pageable);
+
+
+
+
 
     @Query(value = "SELECT result.restaurant_no, " +
             "result.restaurant_name, " +
