@@ -15,9 +15,15 @@ public class ChatMessageResDTO {
 
     public static ChatMessageResDTO fromEntity(ChatMessage chatMessage) {
         ChatMessageResDTO dto = new ChatMessageResDTO();
-        dto.memberNo = chatMessage.getMember().getMemberNo();
+        if(chatMessage.getMember() != null) {
+            dto.memberNo = chatMessage.getMember().getMemberNo();
+            dto.email = chatMessage.getMember().getEmail();
+
+        }else{
+            dto.memberNo = chatMessage.getRestaurantInfo().getRestaurantNo();
+            dto.email = chatMessage.getRestaurantInfo().getRestaurantName();
+        }
         dto.message = chatMessage.getMessage();
-        dto.email = chatMessage.getMember().getEmail();
         dto.sentAt = chatMessage.getSendAt();
         return dto;
     }

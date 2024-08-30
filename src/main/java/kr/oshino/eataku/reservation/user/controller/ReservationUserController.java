@@ -275,19 +275,26 @@ public class ReservationUserController {
     }
 
     // 유저 채팅
-    @GetMapping("/user/chatting/{restaurantNo}")
-    public String chattingView(@PathVariable String restaurantNo, Model model) {
+    @GetMapping("/user/chatting/{roomId}")
+    public String chattingView(@PathVariable Long roomId, Model model) {
 
         CustomMemberDetails member = (CustomMemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long currentUser = member.getMemberNo();
 
         Member currentMember = memberRepository.findById(currentUser).orElseThrow();
 
-        model.addAttribute("roomId", restaurantNo);
+        List<ChatMessageResDTO> messages = chatRoomService.findMessagesByRoomId(roomId)
+                .stream()
+                .map(ChatMessageResDTO::fromEntity)
+                .collect(Collectors.toList());
+
+        model.addAttribute("roomId", roomId);
         model.addAttribute("userType", "user");
         model.addAttribute("memberNo", currentMember.getMemberNo());
         model.addAttribute("sender", currentMember.getName());
-        log.info("🍎restaurantNo = " + restaurantNo);
+        model.addAttribute("messages", messages);
+
+        log.info("🍎roomId = " + roomId);
         return "ws/user-chat";
     }
 
@@ -334,16 +341,15 @@ public class ReservationUserController {
         CustomMemberDetails member = (CustomMemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long currentUser = member.getMemberNo();
 
-        chatRoomService.createAndSaveChatMessage(chatMessageDTO, currentUser);
+        chatRoomService.createAndSaveChatMessage(chatMessageDTO);
         return ResponseEntity.ok("메시지가 성공적으로 전송되었습니다.");
     }
 
     @MessageMapping("/chat.sendMessage")
     public ChatMessageResDTO handleMessage(@Payload ChatMessageDTO chatMessageDTO) {
         log.info(" [ ChatSendController ] chatMessageDTO : {} ",chatMessageDTO);
-        Long memberNo = chatMessageDTO.getMemberNo();
 
-        ChatMessage chatMessage = chatRoomService.createAndSaveChatMessage(chatMessageDTO, memberNo);
+        ChatMessage chatMessage = chatRoomService.createAndSaveChatMessage(chatMessageDTO);
         ChatMessageResDTO responseDTO = ChatMessageResDTO.fromEntity(chatMessage);
 
         messagingTemplate.convertAndSend("/sub/chat/room/" + chatMessage.getChatRoom().getRoomId(), responseDTO);

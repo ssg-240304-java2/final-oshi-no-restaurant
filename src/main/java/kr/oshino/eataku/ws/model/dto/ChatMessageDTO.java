@@ -24,4 +24,7 @@ public class ChatMessageDTO {
     private String imageUrl;
     private LocalDateTime sentAt;
 
+    // 관리자 전용
+    private Long restaurantNo;
+
 }

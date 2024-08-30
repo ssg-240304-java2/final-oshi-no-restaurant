@@ -51,7 +51,7 @@ public class ChatController {
 
         List<ChatRoom> chatRoom = chatRoomService.findByRestaurantNo(restaurantNo);
         model.addAttribute("rooms", chatRoom);
-        model.addAttribute("restaurantNo", restaurantNo);
+        model.addAttribute("sender", restaurantNo);
 
         log.info("🍎 [ ChatController ]  chatRoom = {}", chatRoom);
 

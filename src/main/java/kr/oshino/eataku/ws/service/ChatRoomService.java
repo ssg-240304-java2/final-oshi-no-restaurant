@@ -90,17 +90,18 @@ public class ChatRoomService {
     }
 
 
-    public ChatMessage createAndSaveChatMessage(ChatMessageDTO chatMessageDTO, Long currentUser) {
+    public ChatMessage createAndSaveChatMessage(ChatMessageDTO chatMessageDTO) {
         Long chatRoomNo = chatMessageDTO.getRoomId();
 
         // 채팅방 번호로 채팅방 조회
         ChatRoom chatRoom = chatRoomRepository.findById(chatRoomNo)
                 .orElseThrow(() -> new IllegalArgumentException("해당 채팅방을 찾을 수 없습니다."));
 
-        Member member = memberRepository.findById(currentUser).orElseThrow();
+        Member member = memberRepository.findByMemberNo(chatMessageDTO.getMemberNo());
+        RestaurantInfo restaurantInfo = restaurantRepository.findByRestaurantNo(chatMessageDTO.getRestaurantNo());
 
         // ChatMessage 객체 생성
-        ChatMessage chatMessage = ChatMessage.createChatMessage(chatMessageDTO, chatRoom, member);
+        ChatMessage chatMessage = ChatMessage.createChatMessage(chatMessageDTO, chatRoom, member, restaurantInfo);
 
         // 채팅방에 메시지 추가
         chatRoom.addMessage(chatMessage);

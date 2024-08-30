@@ -16,7 +16,7 @@ function updateCharCount() {
 }
 function showMessage(message) {
     console.log("show")
-    var messageElement = $('<div class="message"></div>').text(message.sender + ": " + message.message);
+    var messageElement = $('<div class="message"></div>').text(message.email + ": " + message.message);
     $('#chatMessages').append(messageElement);
     $('#chatMessages').scrollTop($('#chatMessages')[0].scrollHeight);  // 스크롤을 최신 메시지 위치로 이동
 }
@@ -24,12 +24,11 @@ function sendMessage() {
 
     let roomId = $('#roomId').val()
     let sender = $('#sender').val()
-    let restaurantNo = $('#restaurantNo').val()
 
     var messageContent = $('#messageInput').val().trim();
     if (messageContent && stompClient) {
         var chatMessage = {
-            sender: sender,
+            restaurantNo: sender,
             message: messageContent,
             roomId: roomId,
             type: 'TALK'

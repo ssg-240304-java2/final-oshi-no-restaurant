@@ -12,6 +12,7 @@
         <div class="chat-container">
             <div class="chat-messages" id="chatMessages">
                 <!-- 여기에 채팅 메시지가 표시됩니다 -->
+                <div class="message" th:each="msg : ${messages}" th:text="|${msg.email}: ${msg.message}|"></div>
             </div>
             <div class="chat-input">
                 <img src="/images/logo.png" alt="icon">
