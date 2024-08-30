@@ -1,6 +1,8 @@
 package kr.oshino.eataku.list.model.service;
 
 import kr.oshino.eataku.list.entity.MyList;
+import kr.oshino.eataku.list.model.dto.FollowerDTO;
+import kr.oshino.eataku.list.model.dto.RestaurantWithRatingDTO;
 import kr.oshino.eataku.list.model.repository.MyListRepository;
 import kr.oshino.eataku.list.model.vo.RestaurantList;
 import kr.oshino.eataku.member.entity.Member;
@@ -237,6 +239,25 @@ public class MyListService {
                 .build();
 
         notificationService.insertNotification(notification);
+    }
+
+    public List<FollowerDTO> getFollowerList(Long loginedMemberNo) {
+
+        return myListRepository.getFollowerList(loginedMemberNo);
+    }
+
+    public List<RestaurantWithRatingDTO> getListRestaurants(Long listNo) {
+        return myListRepository.getListRestaurants(listNo).stream().map(objects -> {
+            Long restaurantNo = (Long) objects[0];
+            String restaurantName = (String) objects[1];
+            String address = (String) objects[2];
+            String imgUrl = (String) objects[3];
+            Double xCoordinate = (Double) objects[4];
+            Double yCoordinate = (Double) objects[5];
+            Double rating = (Double) objects[6];
+
+            return new RestaurantWithRatingDTO(restaurantNo, restaurantName, address, imgUrl, xCoordinate, yCoordinate, rating);
+        }).collect(Collectors.toList());
     }
 }
 

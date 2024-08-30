@@ -3,9 +3,13 @@ package kr.oshino.eataku.list.controller;
 import kr.oshino.eataku.list.entity.MyList;
 import kr.oshino.eataku.list.model.dto.CopyListDTO;
 import kr.oshino.eataku.list.model.dto.FollowListDto;
+import kr.oshino.eataku.list.model.dto.FollowerDTO;
+import kr.oshino.eataku.list.model.dto.RestaurantWithRatingDTO;
 import kr.oshino.eataku.list.model.service.MyListService;
 import kr.oshino.eataku.list.model.vo.RestaurantList;
 import kr.oshino.eataku.member.model.dto.CustomMemberDetails;
+import kr.oshino.eataku.reservation.user.model.dto.responseDto.RestaurantDetailsResponseDto;
+import kr.oshino.eataku.restaurant.admin.model.dto.RestaurantInfoDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -193,12 +197,21 @@ public class MyListController {
         model.addAttribute("myLists", myLists);
 
         // 팔로잉 리스트 추가
-        List<MyList> followingLists = myListService.getFollowingLists(loginedMemberNo);
-        model.addAttribute("followingLists", followingLists);
+        List<FollowerDTO> followerList = myListService.getFollowerList(loginedMemberNo);
 
-        log.info("⭐⭐ [ 값 주나? ] Request followingLists: {} ⭐⭐", followingLists);
+        model.addAttribute("followerList", followerList);
+
+        log.info("⭐⭐ [ 값 주나? ] Request followingLists: {} ⭐⭐", followerList);
 
         return "list/tsktskList";
+    }
+
+    @PostMapping("/list/member")
+    @ResponseBody
+    public List<MyList> getFolowerList(@RequestParam("memberNo") Long memberNo){
+
+//        log.info("kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk memberNo : {} ",memberNo);
+        return myListService.getLists(memberNo);
     }
 
     @GetMapping("/member/{memberNo}/list")
@@ -223,6 +236,17 @@ public class MyListController {
         return ResponseEntity.ok("good");
     }
 
+    @GetMapping("/zzupList/list")
+    @ResponseBody
+    public List<RestaurantWithRatingDTO> getRestaurantsZzupList(@RequestParam("listNo") Long listNo){
+        log.info(" [ ZzupListController ] load restaurants req listNo : {}", listNo);
+
+        List<RestaurantWithRatingDTO> result = myListService.getListRestaurants(listNo);
+//        log.info("🍰🍰 [ ZzupListController ]  result : {} 🍰🍰", result);
+
+        return result;
+
+    }
 
 
 }

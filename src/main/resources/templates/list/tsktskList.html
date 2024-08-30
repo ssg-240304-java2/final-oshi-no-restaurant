@@ -56,35 +56,9 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr onclick="showFollowerList('Andrew Bojangles', 3)">
-                                    <td><img src="avatar1.jpg" class="rounded-circle" width="30" alt="avatar"> Andrew Bojangles</td>
-                                    <td>3</td>
-                                    <td>⋮</td>
-                                </tr>
-                                <tr onclick="showFollowerList('Andrew Bojangles', 2)">
-                                    <td><img src="avatar2.jpg" class="rounded-circle" width="30" alt="avatar"> Andrew Bojangles</td>
-                                    <td>2</td>
-                                    <td>⋮</td>
-                                </tr>
-                                <tr onclick="showFollowerList('Andrew Bojangles', 7)">
-                                    <td><img src="avatar3.jpg" class="rounded-circle" width="30" alt="avatar"> Andrew Bojangles</td>
-                                    <td>7</td>
-                                    <td>⋮</td>
-                                </tr>
-                                <tr class="bg-danger text-white" onclick="showFollowerList('Andrew Bojangles', 5)">
-                                    <td><img src="avatar4.jpg" class="rounded-circle" width="30" alt="avatar"> Andrew Bojangles</td>
-                                    <td>5</td>
-                                    <td>⋮</td>
-                                </tr>
-                                <tr onclick="showFollowerList('Andrew Bojangles', 6)">
-                                    <td><img src="avatar5.jpg" class="rounded-circle" width="30" alt="avatar"> Andrew Bojangles</td>
-                                    <td>6</td>
-                                    <td>⋮</td>
-                                </tr>
-                                <tr onclick="showFollowerList('Andrew Bojangles', 3)">
-                                    <td><img src="avatar6.jpg" class="rounded-circle" width="30" alt="avatar"> Andrew Bojangles</td>
-                                    <td>3</td>
-                                    <td>⋮</td>
+                                <tr th:each="follower : ${followerList}" th:onclick="|showFollowerList(${follower.followerNo})|">
+                                    <td><img th:src="${follower.imgUrl}" class="rounded-circle" width="30" alt="avatar"> <span th:text="${follower.nickname}"></span></td>
+                                    <td th:text="${follower.listCount}"></td>
                                 </tr>
                             </tbody>
                         </table>
