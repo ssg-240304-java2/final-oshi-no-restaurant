@@ -78,3 +78,7 @@ body {
 .custom-checkbox{
     accent-color: #fb3f4a;
 }
+
+.dropdown {
+    margin-right: 8px;
+}

@@ -23,20 +23,20 @@
                 <img th:src="@{/images/index/magnifier.png}" alt="돋보기">
             </div>
             <div class="icons">
-                <a th:href="@{/search/card}"><img th:src="@{/images/index/reservIcon.png}" alt="예약"></a>
-                <a th:href="@{/search/card}"><img th:src="@{/images/index/waitingIcon.png}" alt="줄서기"></a>
+                <a th:href="@{/search/card?reservation=true}"><img th:src="@{/images/index/reservIcon.png}" alt="예약"></a>
+                <a th:href="@{/search/card?waiting=true}"><img th:src="@{/images/index/waitingIcon.png}" alt="줄서기"></a>
                 <a th:href="@{/search/map}"><img th:src="@{/images/index/aroundIcon.png}" alt="내 주변"></a>
                 <a th:href="@{/zzupFriend}"><img th:src="@{/images/index/zzupFriendIcon.png}" alt="쩝쩝친구"></a>
                 <a th:href="@{/zzupList}"><img th:src="@{/images/index/zzupListIcon.png}" alt="쩝쩝 리스트"></a>
             </div>
             <div class="icon-texts">
-                <a th:href="@{/search/card}">
+                <a th:href="@{/search/card?reservation=true}">
                     <div class="text">예약</div>
                 </a>
-                <a th:href="@{/search/map}">
+                <a th:href="@{/search/card?waiting=true}">
                     <div class="text">줄서기</div>
                 </a>
-                <a th:href="@{/around}">
+                <a th:href="@{/search/map}">
                     <div class="text">내 주변</div>
                 </a>
                 <a th:href="@{/zzupFriend}">
@@ -91,13 +91,14 @@
                 <div class="card" th:each="restaurant, iterStat : ${busiestLists}"
                      th:classappend="busiest+${iterStat.index}">
                     <img th:src="${restaurant.imgUrl}"
-                         class="card-img-top" alt="음식 이미지">
+                         class="card-img-top" alt="음식 이미지" th:onclick="|location.href='/detail/' + ${restaurant.restaurantNo} + '/detailPage'|">
                     <div class="heart-icon" onclick="toggleHeart(this)" th:data-restaurant-no="${restaurant.restaurantNo}">
                         <img th:src="@{/images/index/love-empty.png}" alt="빈 하트" class="empty-heart" th:style="'display:' + (!${restaurant.inList}? 'block' : 'none')">
                         <img th:src="@{/images/index/love-full.png}" alt="꽉 찬 하트" class="full-heart" th:style="'display:' + (${restaurant.inList}? 'block' : 'none')">
                     </div>
                     <div class="card-body">
-                        <h5 class="card-title" th:text="${restaurant.restaurantName}">밍글스<span class="rating"
+                        <h5 class="card-title" th:onclick="|location.href='/detail/' + ${restaurant.restaurantNo} + '/detailPage'|"
+                            th:text="${restaurant.restaurantName}">밍글스<span class="rating"
                                                                                                th:text="${restaurant.rating}">4.5 <span
                                 class="star">★</span></span></h5>
                         <p class="address" th:text="${restaurant.restaurantAddress}">서울특별시 강남구 논현동 논현동 강남대로122길
@@ -133,13 +134,14 @@
                 <div class="card" th:each="restaurant, iterStat : ${directLists}"
                      th:classappend="direct+${iterStat.index}">
                     <img th:src="${restaurant.imgUrl}"
-                         class="card-img-top" alt="음식 이미지">
+                         class="card-img-top" alt="음식 이미지" th:onclick="|location.href='/detail/' + ${restaurant.restaurantNo} + '/detailPage'|">
                     <div class="heart-icon" onclick="toggleHeart(this)" th:data-restaurant-no="${restaurant.restaurantNo}">
                         <img th:src="@{/images/index/love-empty.png}" alt="빈 하트" class="empty-heart" th:style="'display:' + (!${restaurant.inList}? 'block' : 'none')">
                         <img th:src="@{/images/index/love-full.png}" alt="꽉 찬 하트" class="full-heart" th:style="'display:' + (${restaurant.inList}? 'block' : 'none')">
                     </div>
                     <div class="card-body">
-                        <h5 class="card-title" th:text="${restaurant.restaurantName}">밍글스<span class="rating"
+                        <h5 class="card-title" th:onclick="|location.href='/detail/' + ${restaurant.restaurantNo} + '/detailPage'|"
+                            th:text="${restaurant.restaurantName}">밍글스<span class="rating"
                                                                                                th:text="${restaurant.rating}">4.5 <span
                                 class="star">★</span></span></h5>
                         <p class="address" th:text="${restaurant.restaurantAddress}">서울특별시 강남구 논현동 논현동 강남대로122길
