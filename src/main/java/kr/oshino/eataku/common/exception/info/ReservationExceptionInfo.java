@@ -7,7 +7,8 @@ import org.springframework.http.HttpStatus;
 public enum ReservationExceptionInfo {
 
     DUPLICATED_RESERVATION(HttpStatus.BAD_REQUEST, 1200, "이미 예약 중인 매장입니다!"),
-    NO_SEATS_AVAILABLE(HttpStatus.BAD_REQUEST,1201 , "요청하신 인원 수에 맞는 자리가 부족합니다!");
+    NO_SEATS_AVAILABLE(HttpStatus.BAD_REQUEST,1201 , "요청하신 인원 수에 맞는 자리가 부족합니다!"),
+    OWNER_CANCEL(HttpStatus.BAD_REQUEST,1202 , "식당측에서 취소한 예약입니다.");
 
     private final HttpStatus httpStatus;
     private final Integer code;
