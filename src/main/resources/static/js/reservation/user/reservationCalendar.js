@@ -100,10 +100,19 @@ $(document).ready(function() {
                     var timesContainer = $('.times');
                     timesContainer.empty();
 
-                    timeSlots.forEach(function(slot) {
-                        var button = $('<button class="btn">').text(slot.time);
+                    // 현재 시간을 가져옵니다.
+                    var now = new Date();
 
-                        if (!slot.isAvailable) {
+                    timeSlots.forEach(function(slot) {
+                        var formattedTime = formatTime(slot.time); // 시간을 포맷팅
+
+                        // reservationDate와 time을 사용하여 시간 비교를 위해 전체 datetime 객체를 만듭니다.
+                        var reservationDateTime = new Date(reservationDate + 'T' + slot.time);
+
+                        var button = $('<button class="btn">').text(formattedTime); // 포맷된 시간을 사용
+
+                        // 시간을 현재 시간과 비교하여 비활성화합니다.
+                        if (reservationDateTime < now || !slot.isAvailable) {
                             button.addClass('disabled').css('color', 'gray');
                         } else {
                             button.on('click', function() {
@@ -126,11 +135,14 @@ $(document).ready(function() {
         }
     }
 
-    // 인원 선택 버튼 처리
-    $(document).on('click', '.people .btn', function(){
-        $('.people .btn').removeClass('selected');
-        $(this).addClass('selected');
-        partySize = parseInt($(this).text());
+
+    function formatTime(reservationTime) {
+        return reservationTime.slice(0, 5);  // "15:00:00" => "15:00"
+    }
+
+    // 인원 선택 input 처리
+    $(document).on('change', '.people input[name="personCount"]', function(){
+        partySize = parseInt($(this).val());
         console.log("선택된 인원수:", partySize);
 
         // 인원수 선택 후 시간대 업데이트

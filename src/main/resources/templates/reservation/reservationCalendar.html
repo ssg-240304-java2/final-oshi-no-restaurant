@@ -16,21 +16,13 @@
 
 <div class="text-center section">
     <h4 class="section-title">
-        <img th:src="@{/images/reservation/Person.png}" alt="Clock Icon"/> 인원을 선택해 주세요
+        <img src="/images/reservation/Person.png" alt="Clock Icon" style="vertical-align: middle;"/> 인원을 입력해 주세요
     </h4>
-    <div class="people btn-group-toggle mb-4">
-        <button type="button" class="btn btn-custom" data-value="3명">1명</button>
-        <button type="button" class="btn btn-custom" data-value="3명">2명</button>
-        <button type="button" class="btn btn-custom" data-value="3명">3명</button>
-        <button type="button" class="btn btn-custom" data-value="4명">4명</button>
-        <button type="button" class="btn btn-custom" data-value="5명">5명</button>
-        <button type="button" class="btn btn-custom" data-value="6명">6명</button>
-        <button type="button" class="btn btn-custom" data-value="7명">7명</button>
-        <button type="button" class="btn btn-custom" data-value="8명">8명</button>
-        <button type="button" class="btn btn-custom" data-value="9명">9명</button>
-        <button type="button" class="btn btn-custom" data-value="10명">10명</button>
+    <div class="people btn-group-toggle mb-4" style="display: inline-block; max-width: 500px;">
+        <input type="number" class="btn btn-custom" name="personCount" min="1" max="500" value="1">
     </div>
 </div>
+
 
 <div class="calendar section">
     <div id="datepicker-container"></div>
@@ -92,7 +84,7 @@
                     <div class="footer mt-4">
                         예약 취소는 예약 24시간 전까지 가능합니다.<br>
                         예약 취소는 홈페이지를 통해 예약조회를 하시면 됩니다.<br>
-                        5초 후,메인 페이지로 돌아갑니다.
+                        3초 후,메인 페이지로 돌아갑니다.
                     </div>
                 </div>
             </div>

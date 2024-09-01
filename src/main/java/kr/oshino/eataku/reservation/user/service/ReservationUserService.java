@@ -63,13 +63,24 @@ public class ReservationUserService {
         );
 
 
-        // 동일 시간대에 내가 이미 예약했는지 확인하는 조건문
+        // 동일 시간대에 예약이 있는지 확인
         if (existingReservation.isPresent()) {
+            Reservation reservation = existingReservation.get();
+
+            // 예약이 이미 취소된 경우
+            if (reservation.getReservationStatus() == ReservationStatus.예약취소) {
+                throw new ReservationException(ReservationExceptionInfo.OWNER_CANCEL);
+            }
+
+            // 중복 예약 시도인 경우
             throw new ReservationException(ReservationExceptionInfo.DUPLICATED_RESERVATION);
         }
-        // 자리가 남았는지 판별
-        else if(reservationSetting.getReservationPeople() < createReservationUserRequestDto.getPartySize())
+
+        // 자리가 남아있는지 판별
+        if (reservationSetting.getReservationPeople() < createReservationUserRequestDto.getPartySize()) {
             throw new ReservationException(ReservationExceptionInfo.NO_SEATS_AVAILABLE);
+        }
+
 
 
         // 새로운 예약 생성
@@ -103,6 +114,8 @@ public class ReservationUserService {
             return new CreateReservationUserResponseDto(200, "예약 완료 되었습니다!",
                     restaurantInfo.getRestaurantName());
 }
+
+
 
 
 

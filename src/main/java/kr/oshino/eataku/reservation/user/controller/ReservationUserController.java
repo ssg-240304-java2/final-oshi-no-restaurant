@@ -1,5 +1,4 @@
 package kr.oshino.eataku.reservation.user.controller;
-
 import jakarta.servlet.http.HttpServletRequest;
 import kr.oshino.eataku.member.entity.Member;
 import kr.oshino.eataku.member.model.dto.CustomMemberDetails;
@@ -27,7 +26,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.LinkedHashMap;
@@ -103,32 +101,9 @@ public class ReservationUserController {
     }
 
 
-//    /***
-//     * 예약한 인원수 만큼 예약세팅 베이블에서 빼기
-//     */
-//    @PutMapping("/reservation/{reservationNo}/subtract")
-//    public ResponseEntity<Void> subtractPartySize(@PathVariable Long reservationNo,
-//                                                  @RequestParam int partySize,
-//                                                  @RequestParam String time) {
-//        try {
-//            LocalTime parsedTime = LocalTime.parse(time);
-//            reservationUserService.subtractPartySize(reservationNo, partySize, parsedTime);
-//            return ResponseEntity.ok().build();
-//        } catch (Exception e) {
-//            log.error("인원수 제거 에러남", e);
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-//        }
-//    }
 
-//    /***
-//     * 모달창에 상세정보
-//     */
-//    @GetMapping("/reservation/{restaurantNo}/modal")
-//    public String modal(@PathVariable String restaurantNo, Model model) {
-//        // 모델에 필요한 데이터를 추가
-//        model.addAttribute("restaurantNo", restaurantNo);
-//        return "reservation/reservationComplete";  // 이 뷰 페이지가 실제로 모달을 포함하고 있어야 함
-//    }
+
+
 
     /***
      * 모달에 대한 상세정보 반환
@@ -169,18 +144,18 @@ public class ReservationUserController {
                 .body(reservationUserService.getReservationListByMemberNo(readReservationResponseDto));
     }
 
-    /***
-     * 예약 취소
-     */
-    @GetMapping("/reservation/cancel")
-
-    public String cancelReservations() {
-
-//        model.addAttribute("reservationNo",reservationNo);
-
-
-        return "reservation/updateReservation";
-    }
+//    /***
+//     * 예약 취소
+//     */
+//    @GetMapping("/reservation/cancel")
+//
+//    public String cancelReservations() {
+//
+////        model.addAttribute("reservationNo",reservationNo);
+//
+//
+//        return "reservation/updateReservation";
+//    }
 
     /***
      * 예약취소
@@ -262,13 +237,6 @@ public class ReservationUserController {
 
         model.addAttribute("tagCountMap", tagCountMap);
         model.addAttribute("position", position);
-
-        System.out.println("reviewDetails = " + reviewDetails);
-        System.out.println("restaurant = " + restaurant);
-        System.out.println("tagCountMap = " + tagCountMap);
-        System.out.println("tagCountMap = " + tagCountMap);
-        System.out.println("position = " + position);
-        System.out.println("reviewImgDto = " + reviewImgDto);
 
 
         return "reservation/reservationDetail";
