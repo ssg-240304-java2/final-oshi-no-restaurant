@@ -84,7 +84,7 @@ public class WaitingService {
             throw new WaitingException(WaitingExceptionInfo.WAITING_CLOSED);
         else if (!waitingSetting.getWaitingStatus().equals("Y"))
             throw new WaitingException(WaitingExceptionInfo.WAITING_CLOSED);
-        else if(!basicUtil.isCurrentTimeWithinSchedule(waitingSetting.getStartTime(), waitingSetting.getEndTime()))
+        else if(basicUtil.isCurrentTimeWithinSchedule(waitingSetting.getStartTime(), waitingSetting.getEndTime()))
             throw new WaitingException(WaitingExceptionInfo.RESTAURANT_CLOSED);
 
 
