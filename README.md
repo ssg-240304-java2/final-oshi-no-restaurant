@@ -42,6 +42,10 @@
 
 
 # 3. 프로젝트 구조
+<img src="readmeImages/system_architecture.png" width="900/">
+
+
+
 
 # 4.역할 분담
 
