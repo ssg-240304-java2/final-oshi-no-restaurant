@@ -44,8 +44,211 @@
 
 # 3. 프로젝트 구조
 
-
-최종 완료되면   인텔리제이에서 뽑기
+└── kr
+    └── oshino
+        └── eataku
+            ├── EatakuApplication.java
+            ├── MainController.java
+            ├── common
+            │   ├── config
+            │   │   ├── CustomAuthenticationSuccessHandler.java
+            │   │   ├── S3Config.java
+            │   │   ├── SchedulingConfig.java
+            │   │   ├── WebConfig.java
+            │   │   ├── WebSecurityConfig.java
+            │   │   └── WebSocketConfig.java
+            │   ├── enums
+            │   │   ├── AccountAuth.java
+            │   │   ├── FoodType.java
+            │   │   ├── HashTag.java
+            │   │   ├── ReservationStatus.java
+            │   │   ├── ReviewTag.java
+            │   │   ├── Scope.java
+            │   │   ├── SmsMessageType.java
+            │   │   └── StatusType.java
+            │   ├── exception
+            │   │   ├── GlobalExceptionHandler.java
+            │   │   ├── exception
+            │   │   │   ├── ReservationException.java
+            │   │   │   └── WaitingException.java
+            │   │   └── info
+            │   │       ├── ReservationExceptionInfo.java
+            │   │       └── WaitingExceptionInfo.java
+            │   ├── response
+            │   │   └── BasicResponse.java
+            │   └── util
+            │       ├── BasicUtil.java
+            │       ├── FileUploadUtil.java
+            │       └── SmsUtil.java
+            ├── list
+            │   ├── controller
+            │   │   └── MyListController.java
+            │   ├── entity
+            │   │   └── MyList.java
+            │   └── model
+            │       ├── dto
+            │       │   ├── CopyListDTO.java
+            │       │   ├── FollowListDto.java
+            │       │   ├── FollowerDTO.java
+            │       │   ├── MyListDto.java
+            │       │   └── RestaurantWithRatingDTO.java
+            │       ├── repository
+            │       │   └── MyListRepository.java
+            │       ├── service
+            │       │   └── MyListService.java
+            │       └── vo
+            │           ├── RestaurantList.java
+            │           └── UserList.java
+            ├── member
+            │   ├── controller
+            │   │   ├── FollowController.java
+            │   │   ├── KakaoController.java
+            │   │   ├── MemberController.java
+            │   │   └── NotificationController.java
+            │   ├── entity
+            │   │   ├── EmailVerifCode.java
+            │   │   ├── Follow.java
+            │   │   ├── Member.java
+            │   │   ├── MemberLoginInfo.java
+            │   │   └── Notification.java
+            │   ├── model
+            │   │   ├── dto
+            │   │   │   ├── CustomMemberDetails.java
+            │   │   │   ├── HeartDTO.java
+            │   │   │   ├── HistoryDTO.java
+            │   │   │   ├── KakaoTokenResponseDTO.java
+            │   │   │   ├── KakaoUserInfoResponseDTO.java
+            │   │   │   ├── MemberDTO.java
+            │   │   │   ├── MemberProfileDTO.java
+            │   │   │   ├── MyInfoDTO.java
+            │   │   │   ├── NotificationDTO.java
+            │   │   │   ├── ReservationInfoDTO.java
+            │   │   │   ├── WaitingInfoDTO.java
+            │   │   │   └── ZzupListDTO.java
+            │   │   └── repository
+            │   │       ├── EmailVerifCodeRepository.java
+            │   │       ├── FollowRepository.java
+            │   │       ├── MemberLoginInfoRepository.java
+            │   │       ├── MemberRepository.java
+            │   │       └── NotificationRepository.java
+            │   └── service
+            │       ├── CustomMemberDetailsService.java
+            │       ├── FollowService.java
+            │       ├── KakaoService.java
+            │       ├── MailService.java
+            │       ├── MemberService.java
+            │       └── NotificationService.java
+            ├── reservation
+            │   ├── admin
+            │   │   ├── controller
+            │   │   │   └── ReservationAdminController.java
+            │   │   ├── model
+            │   │   │   └── dto
+            │   │   ├── repository
+            │   │   │   └── ReservationAdminRepository.java
+            │   │   └── service
+            │   │       └── ReservationAdminService.java
+            │   └── user
+            │       ├── controller
+            │       │   └── ReservationUserController.java
+            │       ├── entity
+            │       │   └── Reservation.java
+            │       ├── model
+            │       │   └── dto
+            │       ├── repository
+            │       │   └── ReservationRepository.java
+            │       └── service
+            │           └── ReservationUserService.java
+            ├── restaurant
+            │   ├── admin
+            │   │   ├── controller
+            │   │   │   └── RestaurantAdminController.java
+            │   │   ├── entity
+            │   │   │   ├── AccountInfo.java
+            │   │   │   ├── Certification.java
+            │   │   │   ├── Menu.java
+            │   │   │   ├── ReservationSetting.java
+            │   │   │   ├── RestaurantInfo.java
+            │   │   │   ├── TemporarySave.java
+            │   │   │   └── WaitingSetting.java
+            │   │   ├── model
+            │   │   │   ├── dto
+            │   │   │   └── repository
+            │   │   └── service
+            │   │       └── RestaurantAdminService.java
+            │   └── user
+            │       └── RestaurantUserController.java
+            ├── review
+            │   ├── admin
+            │   │   ├── controller
+            │   │   │   └── ReviewAdminController.java
+            │   │   ├── entity
+            │   │   │   └── AverageRating.java
+            │   │   └── model
+            │   │       ├── dto
+            │   │       └── repository
+            │   ├── service
+            │   │   └── ReviewAdminService.java
+            │   └── user
+            │       ├── controller
+            │       │   └── ReviewUserController.java
+            │       ├── entity
+            │       │   └── Review.java
+            │       ├── model
+            │       │   └── vo
+            │       ├── repository
+            │       │   └── ReviewRepository.java
+            │       └── service
+            │           └── ReviewUserService.java
+            ├── search
+            │   ├── controller
+            │   │   └── SearchController.java
+            │   ├── elastic
+            │   │   └── documents
+            │   │       └── RestaurantDocument.java
+            │   ├── model
+            │   │   └── dto
+            │   │       └── SearchResultDTO.java
+            │   └── service
+            │       └── SearchService.java
+            ├── sse
+            │   ├── controller
+            │   │   └── SseController.java
+            │   └── service
+            │       └── SseService.java
+            ├── waiting
+            │   ├── controller
+            │   │   ├── WaitingAdminController.java
+            │   │   └── WaitingUserController.java
+            │   ├── entity
+            │   │   └── Waiting.java
+            │   ├── model
+            │   │   └── dto
+            │   │       ├── requestDto
+            │   │       └── responseDto
+            │   ├── repository
+            │   │   └── WaitingRepository.java
+            │   └── service
+            │       └── WaitingService.java
+            └── ws
+                ├── controller
+                │   └── ChatController.java
+                ├── entity
+                │   ├── ChatMessage.java
+                │   ├── ChatRoom.java
+                │   └── ChatRoomMember.java
+                ├── model
+                │   └── dto
+                │       ├── ChatMessageDTO.java
+                │       ├── ChatMessageResDTO.java
+                │       ├── ChatRoomDTO.java
+                │       └── ChatRoomMemberDTO.java
+                ├── repository
+                │   ├── ChatMessageRepository.java
+                │   ├── ChatRoomMemberRepository.java
+                │   └── ChatRoomRepository.java
+                └── service
+                    └── ChatRoomService.java
 
 
 # 4.역할 분담
