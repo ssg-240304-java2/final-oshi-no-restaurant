@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>마이페이지</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" th:href="@{/css/fragment/navbar.css}">
+    <link rel="stylesheet" th:href="@{/css/fragment/footer.css}">
+  <style>
+    body {
+      background-color: #F9F9F9;
+      margin: 0;
+    }
+
+    .sidebar {
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 250px;
+    }
+
+    .sidebar h2 {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    .sidebar a {
+      display: block;
+      color: #333;
+      text-decoration: none;
+      margin: 10px 0;
+      font-size: 18px;
+    }
+
+    .sidebar a:hover {
+      color: #FF5258;
+    }
+
+    .sidebar-content {
+      top: 50%;
+      margin-top: 100px;
+    }
+    .content {
+      margin-left: 280px; /* 사이드바 너비 + 여백 */
+      padding: 20px;
+      margin-top: 100px;
+    }
+
+    .review-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .review-card {
+      background-color: white;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      border: 1px solid #FA4A54;
+      position: relative;
+      display: flex;
+      align-items: center;
+      flex-basis: calc(50% - 20px); /* 50% 너비에서 gap의 절반을 빼줌 */
+      box-sizing: border-box; /* padding과 border 포함한 크기 */
+    }
+
+    .review-card img {
+      width: 80px;
+      height: 80px;
+      border-radius: 10px;
+      object-fit: cover;
+    }
+
+    .review-card .info {
+      margin-left: 20px;
+      flex-grow: 1;
+    }
+
+    .review-card h5 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    .review-card p {
+      margin: 0;
+      font-size: 14px;
+      color: #666;
+    }
+
+    .review-card .rating {
+      color: #FFD700;
+      font-size: 18px;
+      margin-right: 10px;
+    }
+
+    .review-card .edit-btn, .review-card .delete-btn {
+      background-color: transparent;
+      border: none;
+      color: #FF5258;
+      font-size: 18px;
+      cursor: pointer;
+    }
+
+    .review-card .edit-btn:hover, .review-card .delete-btn:hover {
+      color: #FA4A54;
+    }
+
+    .review-card .delete-btn {
+      margin-left: 10px;
+    }
+
+    @media (max-width: 768px) {
+      .review-card {
+        flex-basis: 100%; /* 화면이 작아지면 한 줄에 하나씩 */
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div th:replace="~{fragment/navbar.html :: navbar}" class="navbar"></div>
+<a href="/reviewPage?restaurantNo=123">리뷰 페이지로 이동</a>
+
+<div class="sidebar">
+  <div class="sidebar-content">
+    <h2>마이페이지</h2>
+    <a href="/myInfo">개인정보수정</a>
+    <a href="#badge">내 뱃지 보기</a>
+    <a href="/myInfo/review">내 리뷰 보기</a>
+    <a href="/myInfo/history">이용내역조회</a>
+    <a href="/myInfo/list">내 리스트 관리</a>
+  </div>
+</div>
+<div class="content">
+  <div class="review-container">
+    <!-- 추가적인 리뷰 카드가 이와 같은 형식으로 추가될 수 있음 -->
+    <div th:each="review : ${myReview}" class="review-card">
+      <img th:src="${review.imgUrl}" alt="이미지">
+      <div class="info">
+        <div class="d-flex align-items-center">
+          <!--          식당명 넣기-->
+          <h3 th:text="${review.restaurantName ?: '식당 이름 없음'}">식당 이름</h3>
+            <span class="rating" th:text="${review.scope.stars}">★★★★★</span>
+          <p th:text="${review.reviewContent ?: '리뷰 내용이 없습니다.'}">리뷰 내용</p>
+          <label for="tags" class="mr-3 mb-0" style="font-size: 1.5rem;"></label>
+          <div id="tags">
+            <div th:each="tag : ${review.reviewTags}">
+              <button type="button" class="btn btn-outline-danger tag-btn" th:text="${tag}"></button>
+            </div>
+              <div class="review-date">
+                <small th:text="${#temporals.format(review.reviewDate, 'yyyy-MM-dd')}">리뷰 날짜</small>
+              </div>
+          </div>
+        </div>
+      </div>
+<!--      <button class="edit-btn" th:onclick="'modifyReview(' + ${review.reviewNo} + ')'">✏️</button>-->
+      <button class="edit-btn"
+      th:data-restaurant-No="${review.restaurantNo}"
+      th:data-service-No="${review.serviceNo}"
+      th:data-service-Type="${review.type}"
+      >✏️ 수정</button>
+      <button class="delete-btn" th:onclick="'deleteReview(' + ${review.reviewNo} + ')'">❌</button>
+    </div>
+  </div>
+</div>
+
+<div th:replace="~{fragment/footer.html :: footer}" class="footer"></div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    $('.edit-btn').on('click', function (){
+      const restaurantNo = $(this).data('restaurant-no');
+      const serviceNo = $(this).data('service-no');
+      const serviceType = $(this).data('service-type');
+
+      window.location.href = '/reviewPage?restaurantNo='+restaurantNo+'&serviceType='+serviceType+'&serviceNo='+serviceNo;
+    });
+
+  function deleteReview(reviewNo) {
+    if (confirm("정말 이 리뷰를 삭제하시겠습니까?")) {
+      $.ajax({
+        url: '/deleteReview',
+        type: 'POST',
+        data: {
+          reviewNo: reviewNo
+        },
+        success: function (response) {
+          alert("리뷰 삭제에 성공했습니다");
+          location.reload();
+        },
+        error: function (error) {
+          alert("리뷰 삭제에 실패했습니다.");
+          console.error(error);
+        }
+      });
+    }
+  }
+  //   function modifyReview(reviewNo) {
+  //   // 새로운 리뷰 내용을 사용자에게 입력받습니다.
+  //   var newReviewContent = prompt("새로운 리뷰 내용을 입력하세요:");
+  //   var newScope = prompt("새로운 별점을 입력하세요 (예: STAR1, STAR2, ... STAR5):"); // 별점 수정
+  //   var newReviewTags = prompt("새로운  태그를 입력하세요 (맛있어요, 친절해요, 쾌적해요, 다시갈래요, 분위기가_좋아요):"); // 태그 수정
+  //
+  //   if (newReviewContent != null && newScope != null && newReviewTags != null) {
+  //   // AJAX 요청을 통해 리뷰 내용을 서버로 전송합니다.
+  //   $.ajax({
+  //   url: '/modifyReview',
+  //   type: 'POST',
+  //   data: {
+  //       reviewNo: reviewNo,
+  //       newReviewContent: newReviewContent,
+  //       newScope: newScope,
+  //       newReviewTags: newReviewTags
+  // },
+  //   success: function(response) {
+  //   alert('리뷰 내용이 성공적으로 수정되었습니다.');
+  //   location.reload(); // 페이지를 새로고침하여 수정된 내용을 반영합니다.
+  // },
+  //   error: function(error) {
+  //   alert('리뷰 내용 수정에 실패했습니다.');
+  //   console.error(error);
+  // }
+  // });
+  // }
+  // }
+  // $(document).ready(function() {
+  //   $('.btn-register').click(function(e) {
+  //     e.preventDefault(); // 폼의 기본 제출 동작을 방지
+  //
+  //     var reviewNo = /*[[${reviewNo}]]*/ 0;
+  //     var newReviewContent = $('#review-content').val();
+  //     var newScope = $('input[name="rating"]:checked').val(); // 선택된 별점 값
+  //     var newReviewTags = $('#selectedTags').val(); // 선택된 태그들
+  //
+  //     var formData = new FormData();
+  //     formData.append('reviewNo', reviewNo);
+  //     formData.append('newReviewContent', newReviewContent);
+  //     formData.append('newScope', newScope);
+  //     formData.append('newReviewTags', newReviewTags);
+  //     formData.append('file', $('#file')[0].files[0]); // 파일도 같이 전송
+  //
+  //     $.ajax({
+  //       url: '/reviewModify',
+  //       type: 'POST',
+  //       data: formData,
+  //       processData: false,
+  //       contentType: false,
+  //       success: function(response) {
+  //         alert('리뷰가 성공적으로 수정되었습니다.');
+  //         window.location.href = '/myInfo/review'; // 수정 후 리뷰 목록 페이지로 이동
+  //       },
+  //       error: function(error) {
+  //         alert('리뷰 수정에 실패했습니다.');
+  //         console.error(error);
+  //       }
+  //     });
+  //   });
+  // });
+</script>
+
+</body>
+</html>

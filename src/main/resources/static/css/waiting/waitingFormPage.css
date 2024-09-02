@@ -1,0 +1,47 @@
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 100vh;
+    background-color: #f8f9fa;
+}
+.main-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+}
+.counter {
+    display: flex;
+    align-items: center;
+}
+.counter button {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 1px solid #ddd;
+    background-color: #fff;
+    font-size: 1.5em;
+    outline: none;
+    cursor: pointer;
+}
+.counter span {
+    width: 80px;
+    text-align: center;
+    font-size: 2em;
+    margin: 0 20px;
+}
+.register-button {
+    margin-top: 30px;
+    width: 220px;
+    font-size: 1.2em;
+    background-color: #FB3F4A;
+    border-color: #FB3F4A;
+    color: white;
+    cursor: pointer;
+}
+.register-button:disabled {
+    background-color: #ccc;
+    border-color: #ccc;
+    cursor: not-allowed;
+}

@@ -32,6 +32,17 @@ body {
     background-color: #c93541;
     border-color: #c93541;
 }
+.btn-info, .btn-warning{
+    border: 1px solid #fb3f4a; /* 테두리 색상 */
+    color: #fb3f4a;            /* 글자 색상 */
+    background-color: #fff;    /* 배경색 */
+}
+.btn-info:hover,
+.btn-warning:hover
+{
+    background-color: #fb3f4a; /* 호버 시 배경색 변경 */
+    color: #fff;               /* 호버 시 글자 색상 변경 */
+}
 .form-check-inline {
     width: 150px; /* 각 체크박스가 차지하는 폭을 조절 */
     margin-bottom: 5px;
@@ -62,4 +73,12 @@ body {
     padding: 10px 0;
     text-align: center;
     flex-shrink: 0; /* footer가 수축하지 않도록 설정 */
+}
+
+.custom-checkbox{
+    accent-color: #fb3f4a;
+}
+
+.dropdown {
+    margin-right: 8px;
 }

@@ -1,6 +1,5 @@
 package kr.oshino.eataku.restaurant.admin.model.dto;
 
-import kr.oshino.eataku.restaurant.admin.entity.RestaurantInfo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

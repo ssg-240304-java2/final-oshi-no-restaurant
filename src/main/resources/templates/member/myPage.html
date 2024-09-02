@@ -1,84 +1,209 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>마이페이지</title>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-        <link rel="stylesheet" th:href="@{/css/fragment/navbar.css}">
-        <link rel="stylesheet" th:href="@{/css/member/myPage.css}">
-        <style>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>마이페이지</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" th:href="@{/css/fragment/navbar.css}">
+    <link rel="stylesheet" th:href="@{/css/member/myPage.css}">
+    <style>
 
-        </style>
-    </head>
-    <body>
-        <div th:replace="~{fragment/navbar.html :: navbar}" class="navbar"></div>
-        <div class="sidebar">
-            <div class="sidebar-content">
-            <h2>마이페이지</h2>
-            <a href="/myInfo">개인정보수정</a>
-            <a href="#badge">내 뱃지 보기</a>
-            <a href="/myInfo/review">내 리뷰 보기</a>
-            <a href="/myInfo/history">이용내역조회</a>
-            <a href="/myInfo/list">내 리스트 관리</a>
-        </div>
-        </div>
-        <div class="content">
-            <div class="profile">
-                <div class="row">
-                    <div class="col-md-4 text-center">
-                        <h3>팔로잉</h3>
-                        <p th:text="${member.followingCnt}">100</p>
-                    </div>
-                    <div class="col-md-4 text-center">
-                        <h3>팔로우</h3>
-                        <p th:text="${member.followerCnt}">5K</p>
-                    </div>
-                    <div class="col-md-4 text-center">
-                        <h3>등급</h3>
-                        <img th:src="${member.animalUrl}" alt="등급 이미지" width="50">
-                    </div>
-                </div>
-                <p th:text="${member.nickname}+'님은 '+${member.weight}+'kg입니다.'" class="col-md-8">OOO님은 150,000kg입니다.</p>
+    </style>
+</head>
+<body>
+<div th:replace="~{fragment/navbar.html :: navbar}" class="navbar"></div>
+<div class="sidebar">
+    <div class="sidebar-content">
+        <h2>마이페이지</h2>
+        <a href="/myInfo">개인정보수정</a>
+        <a href="#badge" id="showBadge">내 뱃지 보기</a>
+        <a href="/myInfo/review">내 리뷰 보기</a>
+        <a href="/myInfo/history">이용내역조회</a>
+        <a href="/myInfo/list">내 리스트 관리</a>
+    </div>
+</div>
+<div class="content">
+    <div class="profile">
+        <div class="row">
+            <div class="col-md-4 text-center">
+                <h3>팔로잉</h3>
+                <p th:text="${member.followingCnt}">100</p>
             </div>
-            <div class="reservation" th:each="waitingInfo : ${member.waitingInfo}">
-                <div>
-                    <h5 class="d-inline">현재 예약 정보</h5>
-                    <span class="badge-reservation mx-2">웨이팅</span>
-                    <span th:text="${waitingInfo.waitingNumber} + '번째 순번'" class="card-time">N명 N번째 순번</span>
-                </div>
-                <div class="d-flex mt-3">
-                    <img th:src="${waitingInfo.restaurantImgUrl}" alt="음식점 사진" class="mr-3">
-                    <div class="info">
-                        <h5 th:text="${waitingInfo.restaurantName}">음식점 이름</h5>
-                        <span th:text="${waitingInfo.restaurantNo}">양식</span> <span>•</span> <span th:text="${waitingInfo.restaurantAddress}">강남구</span>
-                    </div>
-                </div>
-                <button class="btn btn-cancel">웨이팅 취소</button>
+            <div class="col-md-4 text-center">
+                <h3>팔로우</h3>
+                <p th:text="${member.followerCnt}">5K</p>
             </div>
-            <div class="reservation" th:each="reservationInfo : ${member.reservationInfo}">
-                <div>
-                    <h5 class="d-inline">현재 예약 정보</h5>
-                    <span class="badge-reservation mx-2">예약</span>
-                    <span th:text="${reservationInfo.reservationDate} + ' ' + ${reservationInfo.reservationTime} + ' 예약'" class="card-time">YYYY/MM/DD HH:mm 예약</span>
-                </div>
-                <div class="d-flex mt-3">
-                    <img th:src="${reservationInfo.restaurantImgUrl}" alt="음식점 사진" class="mr-3">
-                    <div class="info">
-                        <h5 th:text="${reservationInfo.restaurantName}">음식점 이름</h5>
-                        <span th:text="${reservationInfo.restaurantNo}">양식</span> <span>•</span> <span th:text="${reservationInfo.restaurantAddress}">강남구</span>
-                    </div>
-                </div>
-                <button class="btn btn-cancel">예약 취소</button>
-            </div>
-            <div class="rank">
-                <h4>내 등급은 <span th:text="${member.badge}" class="badge-rank">쩝쩝박사</span> 입니다.</h4>
+            <div class="col-md-4 text-center">
+                <h3>등급</h3>
+                <img th:src="${member.animalUrl}" alt="등급 이미지" width="50">
             </div>
         </div>
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-        <script type="text/javascript" th:src="@{/js/fragment/navbar.js}"></script>
-        <script type="text/javascript" th:src="@{/js/reservation/reservationCalendar.js}"></script>
-    </body>
+        <p th:text="${member.nickname}+'님은 '+${member.weight}+'kg입니다.'" class="col-md-8">OOO님은 150,000kg입니다.</p>
+    </div>
+    <div class="rank">
+        <h4>내 등급은 <span th:text="${member.badge}" class="badge-rank">쩝쩝박사</span> 입니다.</h4>
+    </div>
+
+    <!-- "이용하신 내역이 없습니다." 메시지를 표시할 위치 -->
+    <div th:if="${#lists.isEmpty(member.waitingInfo)} and ${#lists.isEmpty(member.reservationInfo)}">
+        <p class="no-data">현재 예약된 정보가 없습니다.</p>
+    </div>
+
+    <div class="reservation" th:each="waitingInfo : ${member.waitingInfo}" th:unless="${#lists.isEmpty(member.waitingInfo)}">
+        <div>
+            <h5 class="d-inline">현재 웨이팅 정보</h5>
+            <span class="badge-reservation mx-2">웨이팅</span>
+            <span th:text="${waitingInfo.waitingNumber} + '번째 순번'" class="card-time">N명 N번째 순번</span>
+        </div>
+        <div class="d-flex mt-3">
+            <img th:src="${waitingInfo.restaurantImgUrl}" alt="음식점 사진" class="mr-3">
+            <div class="info">
+                <h5 th:text="${waitingInfo.restaurantName}">음식점 이름</h5>
+                <span th:text="${waitingInfo.restaurantNo}">양식</span> <span>•</span> <span th:text="${waitingInfo.restaurantAddress}">강남구</span>
+            </div>
+        </div>
+        <button class="btn btn-cancel waiting-cancel-btn" th:data-waiting-no="${waitingInfo.waitingNo}">웨이팅 취소</button>
+    </div>
+
+    <!-- 예약 정보 섹션 -->
+    <div class="reservation" th:each="reservationInfo : ${member.reservationInfo}" th:unless="${#lists.isEmpty(member.reservationInfo)}">
+        <div>
+            <h5 class="d-inline">현재 예약 정보</h5>
+            <span class="badge-reservation mx-2">예약</span>
+            <span th:text="${reservationInfo.reservationDate} + ' ' + ${reservationInfo.reservationTime} + ' 예약'" class="card-time">YYYY/MM/DD HH:mm 예약</span>
+        </div>
+        <div class="d-flex mt-3">
+            <img th:src="${reservationInfo.restaurantImgUrl}" alt="음식점 사진" class="mr-3">
+            <div class="info">
+                <h5 th:text="${reservationInfo.restaurantName}">음식점 이름</h5>
+                <span th:text="${reservationInfo.restaurantNo}">양식</span> <span>•</span> <span th:text="${reservationInfo.restaurantAddress}">강남구</span>
+            </div>
+        </div>
+        <button type="button" class="btn btn-cancel" th:data-reservation-no="${reservationInfo.reservationNo}" data-toggle="modal" data-target="#cancelModal">예약 취소</button>
+
+
+    </div>
+
+    <!-- 뱃지 팝업 -->
+    <div id="badgePopup" class="popup">
+        <div class="badge-container">
+            <div th:if="${member.badge} eq '쩝쩝학생'" class="badge" id="student">
+                <img src="/images/badge/none.png" alt="학생">
+                <p>쩝쩝학생</p>
+            </div>
+            <div th:unless="${member.badge eq '쩝쩝학생'}" class="badge" id="bachelor">
+                <img src="/images/badge/bronze.png" alt="학사">
+                <p>쩝쩝학사</p>
+            </div>
+            <div th:unless="${member.badge eq '쩝쩝학생' or member.badge eq '쩝쩝학사'}" class="badge" id="master">
+                <img src="/images/badge/silver.png" alt="석사">
+                <p>쩝쩝석사</p>
+            </div>
+            <div th:unless="${member.badge eq '쩝쩝학생' or member.badge eq '쩝쩝학사' or member.badge eq '쩝쩝석사'}" class="badge" id="doctor">
+                <img src="/images/badge/gold.png" alt="박사">
+                <p>쩝쩝박사</p>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script type="text/javascript" th:src="@{/js/fragment/navbar.js}"></script>
+<script type="text/javascript" th:src="@{/js/reservation/reservationCalendar.js}"></script>
+<script type="text/javascript" th:src="@{/js/member/myPage.js}"></script>
+<script type="text/javascript" th:src="@{/js/reservation/user/reservationCalendar.js}"></script>
+
+
+
+
+
+<!-- 모달 구조 -->
+<div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cancelModalLabel">예약취소</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- 예약 취소 내용 -->
+                <div class="reservation-cancel text-center">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#ff6f61" width="80" height="80">
+                            <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm-1 17.93l-5-5 1.41-1.41L11 14.93l7.59-7.59L20 8.34l-9 9z"/>
+                        </svg>
+                    </div>
+                    <h3>예약을 취소하시겠습니까?</h3>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+                <button type="button" class="btn btn-danger" id="confirmCancel">취소하기</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<!-- 예약 취소 처리를 위한 스크립트 -->
+<script>
+    $(document).ready(function() {
+        var reservationNo;
+
+        $('#cancelModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget); // 모달을 트리거한 버튼
+            reservationNo = button.data('reservation-no'); // data-reservation-no 속성에서 reservationNo 가져오기
+            console.log("Reservation No: ", reservationNo); // 예약 번호를 콘솔에 출력하여 확인
+        });
+
+
+        $('#confirmCancel').click(function() {
+            $.ajax({
+                url: '/reservation/' + reservationNo + '/cancel',
+                type: 'POST',
+                contentType: 'application/json',
+                success: function(response) {
+                    if (response.success) {
+                        alert(response.message);
+                        $('#cancelModal').modal('hide'); // 모달을 닫습니다.
+                        window.location.href = '/myPage';
+                        // 예약 목록을 새로 고침하거나 업데이트하는 로직을 추가할 수 있습니다.
+                    } else {
+                        alert(response.message);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', error);
+                    alert('예약 취소 중 오류가 발생하였습니다.');
+                }
+            });
+        });
+
+        // 웨이팅 취소 처리
+        $('.waiting-cancel-btn').click(function() {
+            const waitingNo = $(this).data('waiting-no')
+
+            $.ajax({
+                url: '/users/waiting/' + waitingNo,
+                type: 'PATCH',
+                success: function(response) {
+                    alert(response.message);
+                    window.location.href = '/myPage';
+                },
+                error: function(xhr, status, error) {
+                    let response = JSON.parse(xhr.responseText);
+                    alert(response.message);
+                }
+            });
+        });
+    });
+</script>
+</body>
 </html>

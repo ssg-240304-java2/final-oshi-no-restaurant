@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -13,20 +13,20 @@
     <div th:replace="~{fragment/navbar.html :: navbar}" class="navbar"></div>
         <div class="container content">
             <div class="nav-buttons">
-                <button type="button" class="btn btn-danger" onclick="window.location.href='/main.html'">판매 내역</button>
-                <button type="button" class="btn btn-danger" onclick="window.location.href='reservationCheck.html'">예약 확인</button>
-                <button type="button" class="btn btn-danger" onclick="window.location.href='reservationStatus.html'">예약 상태</button>
-                <button type="button" class="btn btn-danger" onclick="window.location.href='waitingStatus.html'">웨이팅 상태</button>
-                <button type="button" class="btn btn-danger" onclick="window.location.href='reviewList.html'">매장 리뷰</button>
+                <button type="button" class="btn btn-danger" onclick="window.location.href='/restaurant/main'">판매 내역</button>
+                <button type="button" class="btn btn-danger" onclick="window.location.href='/restaurant/reservationCheck'">예약 확인</button>
+                <button type="button" class="btn btn-danger" onclick="window.location.href='/restaurant/reservationUpdate'">예약 상태</button>
+                <button type="button" class="btn btn-danger" onclick="window.location.href='/admin/waitingList'">웨이팅 상태</button>
+                <button type="button" class="btn btn-danger" onclick="window.location.href='/restaurant/review'">매장 리뷰</button>
+                <button type="button" class="btn btn-danger" onclick="window.location.href='/restaurant/chatting'">채팅</button>
                 <div class="btn-group float-right">
                     <button type="button" class="btn-setting btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <img th:src="@{/images/setting.png}" alt="설정" class="glyphicon glyphicon-cog" aria-hidden="true">
                     </button>
                     <div class="dropdown-menu dropdown-menu-right">
-<!--                        <button class="dropdown-item" type="button" onclick="window.location.href='/restaurant/infoUpdate'">매장 정보 수정</button>-->
                         <a class="dropdown-item" href="/restaurant/infoUpdate">매장 정보 수정</a>
-                        <button class="dropdown-item" type="button">메뉴 수정</button>
-                        <button class="dropdown-item" type="button">화면 보기</button>
+                        <a class="dropdown-item" href="/restaurant/menu">메뉴 수정</a>
+                        <a class="dropdown-item" href="/restaurant/preview">화면 보기</a>
                     </div>
                 </div>
             </div>
@@ -56,24 +56,26 @@
                                         <tr>
                                             <th>판매일</th>
                                             <th>인원수</th>
-                                            <th>예약 시간</th>
+                                            <th>이용 시간</th>
                                             <th>이용 방식</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>2024-06-01</td>
-                                            <td>4</td>
-                                            <td>18:00</td>
-                                            <td>웨이팅</td>
+
+                                    <tbody id="tableBody">
+                                        <tr class="tableRow"
+                                            th:each="sale : ${sales}"
+                                            th:data-name="${sale.name}"
+                                            th:data-contact="${sale.contact}"
+                                            th:data-service="${sale.serviceType}"
+                                            th:data-size="${sale.partySize}"
+                                            th:data-count="${sale.count}"
+                                        >
+                                            <td th:text="${sale.date}">2024-06-01</td>
+                                            <td th:text="${sale.partySize}">4</td>
+                                            <td th:text="${sale.time}">18:00</td>
+                                            <td th:text="${sale.serviceType}">웨이팅</td>
                                         </tr>
-                                        <tr>
-                                            <td>2024-06-01</td>
-                                            <td>2</td>
-                                            <td>18:00</td>
-                                            <td>예약</td>
-                                        </tr>
-                                        <!-- Add more rows as needed -->
+
                                     </tbody>
                                 </table>
                             </div>
@@ -81,14 +83,14 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="customer-info">
+                    <div class="customer-info" id="customerInfo">
                         <div class="card">
                             <h5 class="card-title">고객 정보</h5>
-                            <p>고객명: 홍길동</p>
-                            <p>연락처: 010-0000-0000</p>
-                            <p>이용방식: 웨이팅</p>
-                            <p>인원수: 4</p>
-                            <p>이용횟수: 1</p>
+                            <p id="customerName">고객명: </p>
+                            <p id="customerContact">연락처: </p>
+                            <p id="usageType">이용방식: </p>
+                            <p id="numberOfPeople">인원수: </p>
+                            <p id="usageCount">이용횟수: </p>
                         </div>
                     </div>
                 </div>
@@ -97,9 +99,74 @@
         <div th:replace="~{fragment/footer.html :: footer}" class="footer"></div>
 
 
-        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-        <script type="text/javascript" th:src="@{js/fragment/navbar.js}"></script>
+        <script type="text/javascript" th:src="@{/js/fragment/navbar.js}"></script>
+        <script>
+            $('#tableBody').on('click', '.tableRow', function () {
+                $('#clientName').text($(this).data('name'))
+                $('#clientContact').text($(this).data('contact'))
+                $('#clientServiceType').text($(this).data('service'))
+                $('#clientPartySize').text($(this).data('size'))
+                $('#clientCount').text($(this).data('count'))
+
+                $('.tableRow').each(function (){
+                    $(this).css({
+                        backgroundColor: "#FFF"
+                    })
+                })
+
+                $(this).css({
+                    backgroundColor: "#999999"
+                })
+            });
+
+            $('#startDate').on('change', reloadSales);
+            $('#endDate').on('change', reloadSales);
+
+            function reloadSales() {
+                const startDate = $('#startDate').val()
+                const endDate = $('#endDate').val()
+
+                $.ajax({
+                    url: '/restaurant/main',
+                    type: 'post',
+                    data: {
+                        startDay: startDate,
+                        endDay: endDate
+                    },
+                    success: function (result){
+                        reloadSalesHTML(result);
+                    },
+                    error: function (e){
+                        console.log(e);
+                    }
+                });
+            }
+
+            function reloadSalesHTML(sales) {
+                const container = $('#tableBody')
+                container.empty();
+                sales.forEach(function (data) {
+                    let inner = `
+                        <tr class="tableRow"
+                            data-name="${data.name}"
+                            data-contact="${data.contact}"
+                            data-service="${data.serviceType}"
+                            data-size="${data.partySize}"
+                            data-count="${data.count}"
+                        >
+                            <td>${data.date}</td>
+                            <td>${data.partySize}</td>
+                            <td>${data.time}</td>
+                            <td>${data.serviceType}</td>
+                        </tr>
+                        `;
+                    container.append(inner);
+                });
+            };
+
+        </script>
     </body>
 </html>

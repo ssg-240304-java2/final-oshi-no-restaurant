@@ -21,16 +21,33 @@
 
         <h2 th:text="${restaurant.restaurantName}">이름</h2>
         <div class="circle-buttons">
-            <button class="btn btn-outline-custom">쩝쩝채팅</button>
-            <button class="btn btn-outline-custom">쩝쩝웨이팅</button>
-            <button class="btn btn-outline-custom">쩝쩝예약</button>
+<!--            <a class="btn btn-outline-custom" th:href="|/user/chatting/${restaurant.restaurantNo}|">쩝쩝채팅</a>-->
+            <form action="/chat/start" method="post">
+                <input type="hidden" name="restaurantNo" th:value="${restaurant.restaurantNo}">
+                <button class="btn btn-outline-custom" type="submit">쩝쩝채팅</button>
+            </form>
+            <button class="btn btn-outline-custom" th:onclick="|location.href='/users/waitingForm/' + ${restaurant.restaurantNo}|">쩝쩝웨이팅</button>
+            <button class="btn btn-outline-custom" th:onclick="|location.href='/reservation/' + ${restaurant.restaurantNo}|">쩝쩝예약</button>
         </div>
     </div>
 
     <div class="info-section text-center">
-        <div>
-            <img th:src="@{/images/reservation/Map pin.png}"/>
-            <span th:text="${restaurant.restaurantAddress}"></span>
+        <img th:src="@{/images/reservation/Map pin.png}" class="spaced-image"/>
+        <span th:text="${restaurant.restaurantAddress}"></span><br><br><br>
+        <img th:src="@{/images/reservation/Phone.png}" class="spaced-image"/><br><br><br>
+        <span th:text="${restaurant.contact}"/></span>
+        <img th:src="@{/images/reservation/Info.png}"/><br>
+    </div>
+
+
+
+<!--&lt;!&ndash;    여기에 식당 메뉴&ndash;&gt;-->
+
+    <div class="menu-container">
+        <div class="menu-item" th:each="menu : ${menu}">
+            <img th:src="${menu.photoUrl}" alt="Menu Image">
+            <p class="menu-name" th:text="${menu.menuName}">메뉴 이름</p>
+            <p class="menu-description" th:text="${menu.description}">메뉴 설명</p>
         </div>
     </div>
 
@@ -39,21 +56,49 @@
             <div class="img-placeholder" style="background-color: #ddd; width: 100%; height: 400px; margin: auto;"></div>
         </div>
     </div>
-</div>
 
-
-<div class="rating-section">
-    <h2>이용내역 ★</h2>
-    <div class="rating-details">
-        <div th:each="entry : ${tagCountMap}" class="detail">
-            <p th:text="${entry.key}"></p>
-            <div class="line" th:style="'width:' + (${entry.value} * 2) + 'px'"></div>
-            <span class="count" th:text="${entry.value}"></span>
+    <div class="rating-section">
+        <h2>이용내역 ★</h2>
+        <div class="rating-details">
+            <div th:each="entry : ${tagCountMap}" class="detail">
+                <p th:text="${entry.key}"></p>
+                <div class="line" th:style="'width:' + (${entry.value} * 2) + 'px'"></div>
+                <span class="count" th:text="${entry.value}"></span>
+            </div>
         </div>
     </div>
-</div>
+
+    <!-- 리뷰 사진 -->
+    <div class="card-container" id="card-container">
+        <div th:each="review, iterStat : ${reviewImgDto}" class="card" th:id="'card-' + ${iterStat.index}">
+            <div class="img-placeholder" style=" width: 150px; height: 150px;">
+                <img th:if="${review.imgUrl != null}" th:src="${review.imgUrl}" alt="Review Image" style="width: 100%; height: 100%; object-fit: cover;" />
+            </div>
+            <div class="card-body">
+                <!-- 여기에는 리뷰 텍스트나 기타 정보를 넣을 수 있습니다 -->
+            </div>
+        </div>
+        <div>
+<!--            <div class="arrow-button" id="arrow-button">-->
+<!--                <button class="custom-arrow-button">-->
+<!--                    <img th:src="@{/images/reservation/next arrow.png}" alt="Next Arrow" />-->
+<!--                </button>-->
+<!--            </div>-->
+        </div>
+    </div>
+
+
 
     <div class="review-section">
+        <!--     리뷰가 없을 때       -->
+        <div th:if="${#lists.isEmpty(ReviewDetails)}">
+            <div class="no-data-page text-center">
+                <p class="text-muted">등록 된 리뷰가 없습니다.</p>
+            </div>
+        </div>
+
+
+
         <!-- 리뷰 리스트를 반복문을 통해 출력 -->
         <div th:each="review : ${ReviewDetails}" class="review">
 
@@ -62,9 +107,9 @@
 
             <!-- 리뷰어 이름 -->
             <p>
-                <strong th:text="${review.name}">Reviewer Name</strong>
+                <strong th:text="${review.name}">이름</strong>
                 <!-- 날짜는 기본값이나 임시값으로 설정 (예: '2024.07.31') -->
-                <span>2024.07.31</span>
+                <span th:text="${#temporals.format(review.reviewDate,'yyyy-MM-dd')}"></span>
             </p>
 
             <!-- 별점  -->
@@ -72,21 +117,54 @@
                 <span class="text-warning" th:text="${review.scope.getStars()}"></span>
             </p>
 
-
-
-
-
             <!-- 리뷰 내용 -->
             <p th:text="${review.reviewContent}">Review content goes here</p>
         </div>
     </div>
 
-    <div th:replace="~{fragment/footer.html :: footer}" class="footer"></div>
+    <div class="more-button-container">
+        <button class="more-button" id="more-button">더 보기</button>
+    </div>
+
+</div> <!-- Closing the main container div -->
+
+<div th:replace="~{fragment/footer.html :: footer}" class="footer"></div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://kit.fontawesome.com/a076d05399.js"></script>
+<script th:src="@{/js/fragment/navbar.js}"></script>
+<script th:src="@{/js/reservation/user/reservationDetail.js}"></script>
+
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
     <script  th:src="@{/js/fragment/navbar.js}"></script>
-    <script  th:src="@{/js/reservation/reservationDetail.js}"></script>
+    <script  th:src="@{/js/reservation/user/reservationDetail.js}"></script>
+</body>
+<script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=4iq0sfkqpd"></script>
+<script>
+    var mapContainer = document.getElementById("map");
+    var x_coordinate = [[${position[0].x_coordinate}]];
+    var y_coordinate = [[${position[0].y_coordinate}]];
+    console.log(x_coordinate + " " + y_coordinate)
+
+    // 위치 생성
+    var position = new naver.maps.LatLng(x_coordinate, y_coordinate);
+
+    // 지도 초기화
+    var map = new naver.maps.Map(mapContainer, {
+        center: position, // LatLng 객체 사용
+        zoom: 20
+    });
+
+    // 마커 추가
+    var marker = new naver.maps.Marker({
+        position: position,
+        map: map,
+        fillColor: '#FA4A54'
+    });
+</script>
 </body>
 </html>

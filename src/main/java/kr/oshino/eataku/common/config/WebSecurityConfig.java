@@ -1,14 +1,17 @@
 package kr.oshino.eataku.common.config;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.session.HttpSessionEventPublisher;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
@@ -34,6 +37,13 @@ public class WebSecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(auth -> auth.disable())
+                // 세션 관리 설정
+                .sessionManagement(sessionManagement ->
+                                           sessionManagement
+                                                   .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                                                   .maximumSessions(1)
+                                                   .sessionRegistry(sessionRegistry())
+                )
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
 
                         // 인덱스 페이지 및 정적 파일
@@ -45,7 +55,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/sse/waiting/**").permitAll()
 
                         // 비로그인 사용자만 접근 가능한 URL
-                        .requestMatchers("/login/**", "/signUp/**", "/managerLogin/**", "/managerLogin").anonymous()
+                        .requestMatchers("/login/**", "/signUp/**", "/managerLogin/**", "/managerLogin", "/find/**","/callback/**").anonymous()
 
                         // 일반사용자(User)만 접근 가능한 URL
                         .requestMatchers("/test/user").hasRole("general")
@@ -81,6 +91,16 @@ public class WebSecurityConfig {
                 );
 
         return http.build();
+    }
+
+    @Bean
+    public SessionRegistry sessionRegistry() {
+        return new SessionRegistryImpl();
+    }
+
+    @Bean
+    public HttpSessionEventPublisher httpSessionEventPublisher() {
+        return new HttpSessionEventPublisher();
     }
 
     @Bean

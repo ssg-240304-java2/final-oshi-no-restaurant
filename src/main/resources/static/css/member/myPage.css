@@ -85,6 +85,7 @@ body {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     text-align: center;
     border: #FA4A54 1px solid;
+    margin-bottom: 20px;
 }
 .badge-reservation {
     color: white;
@@ -100,4 +101,43 @@ body {
 
 .card-time {
     color: #FA4A54;
+}
+
+/* 뱃지 팝업 */
+.popup {
+    display: none;
+    position: fixed;
+    top: 30%;
+    left: 20%;
+    transform: translateY(-50%);
+    background-color: white;
+    border: 2px solid #FF5A5A;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+}
+
+.popup.show {
+    display: block;
+}
+
+.badge-container {
+    display: flex;
+    justify-content: space-around;
+}
+
+.badge {
+    text-align: center;
+}
+
+.badge img {
+    width: 100px;
+    height: 100px;
+}
+.no-data {
+    text-align: center;
+    color: #555;
+    font-size: 30px;
+    padding: 20px;
+    font-weight: bold;
 }

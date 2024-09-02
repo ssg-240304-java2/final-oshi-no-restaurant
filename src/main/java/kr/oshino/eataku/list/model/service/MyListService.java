@@ -1,8 +1,16 @@
 package kr.oshino.eataku.list.model.service;
 
 import kr.oshino.eataku.list.entity.MyList;
+import kr.oshino.eataku.list.model.dto.FollowerDTO;
+import kr.oshino.eataku.list.model.dto.RestaurantWithRatingDTO;
 import kr.oshino.eataku.list.model.repository.MyListRepository;
 import kr.oshino.eataku.list.model.vo.RestaurantList;
+import kr.oshino.eataku.member.entity.Member;
+import kr.oshino.eataku.member.entity.Notification;
+import kr.oshino.eataku.member.model.repository.MemberRepository;
+import kr.oshino.eataku.member.service.NotificationService;
+import kr.oshino.eataku.restaurant.admin.entity.RestaurantInfo;
+import kr.oshino.eataku.restaurant.admin.model.repository.RestaurantRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,22 +32,28 @@ public class MyListService {
     private MyListRepository myListRepository;
     private String listStatus;
     private String restaurantList;
+    @Autowired
+    private RestaurantRepository restaurantRepository;
+    private final MemberRepository memberRepository;
+    private final NotificationService notificationService;
 
 //    private final FollowingRepository followRepository;
 
     // 리스트 생성 메소드
-    public void createList(String listName) {
+    public void createList(String listName, Long loginedMemberNo) {
+        Member member = memberRepository.findByMemberNo(loginedMemberNo);
         MyList myList = MyList.builder()
                 .listName(listName)
                 .listStatus("Public")
                 .listShare(0L)
+                .member(member)
                 .build();
         myListRepository.save(myList);
     }
 
     // 생성한 리스트 담기 MyList
-    public List<MyList> getLists() {
-        return myListRepository.findAll();
+    public List<MyList> getLists(Long loginedMemberNo) {
+        return myListRepository.findByMemberMemberNo(loginedMemberNo);
     }
 
 //    // 생성한 리스트 담기 RestaurantList
@@ -59,11 +74,11 @@ public class MyListService {
         // 로그 출력으로 기존 상태 확인
         System.out.println("Old Status: " + list.getListStatus());
 
-        list.setListStatus(listStatus); // 상태 변경
+        list.setListName(newListName);
         myListRepository.save(list); // 변경 사항 저장
 
         // 로그 출력으로 변경된 상태 확인
-        System.out.println("New Status: " + list.getListStatus());
+        System.out.println("New Name: " + list.getListName());
     }
 
 
@@ -88,13 +103,22 @@ public class MyListService {
 
     // 식당을 리스트에 추가하는 메소드 -------------------나중에 수정
     @Transactional
-    public void addRestaurantToList(Integer listNo, RestaurantList restaurant) {
+    public void addRestaurantToList(Integer listNo, Long restaurantNo) {
         MyList myList = myListRepository.findById(listNo)
                 .orElseThrow(() -> new IllegalArgumentException("List not found with id: " + listNo));
 
         List<RestaurantList> restaurantList = myList.getRestaurantList();
-        if (!restaurantList.contains(restaurant)) {
-            restaurantList.add(restaurant);
+        if (!restaurantList.contains(restaurantNo)) {
+            RestaurantInfo restaurantInfo = restaurantRepository.findByRestaurantNo(restaurantNo);
+            RestaurantList newRestaurant = new RestaurantList();
+            newRestaurant.setRestaurantNo(restaurantNo);
+            newRestaurant.setRestaurantName(restaurantInfo.getRestaurantName());
+            newRestaurant.setRestaurantAddress(restaurantInfo.getRestaurantAddress());
+            newRestaurant.setImgUrl(restaurantInfo.getImgUrl());
+            newRestaurant.setYCoordinate(restaurantInfo.getYCoordinate());
+            newRestaurant.setXCoordinate(restaurantInfo.getXCoordinate());
+
+            restaurantList.add(newRestaurant);
             myListRepository.save(myList);
         } else {
             throw new IllegalArgumentException("Restaurant is already in the list");
@@ -103,8 +127,8 @@ public class MyListService {
 
 
     // 마이페이지에서 만든 모든 리스트를 가져오는 메소드
-    public List<MyList> getAllMyLists() {
-        return myListRepository.findAll();
+    public List<MyList> getAllMyLists(Long memberNo) {
+        return myListRepository.findAllByMemberMemberNo(memberNo);
     }
 
     // 특정 리스트에 포함된 RestaurantList를 반환하는 메소드
@@ -159,6 +183,82 @@ public class MyListService {
     }
 
 
+    public List<RestaurantList> selectUserListByMemberNoAndListNo(Long memberNo, Long listNo) {
+        MyList result = myListRepository.findByMemberMemberNoAndListNo(memberNo, Math.toIntExact(listNo));
+        return result.getRestaurantList();
+    }
+
+    public void copyListToMyList(Long listNo, List<Long> restaurantNos, Long fromListNo) {
+        MyList myList = myListRepository.findById(Math.toIntExact(listNo))
+                .orElseThrow(() -> new IllegalArgumentException("List not found with id: " + listNo));
+
+        List<RestaurantList> restaurantList = myList.getRestaurantList();
+
+        // 이미 추가된 레스토랑을 추적하기 위한 Set 생성
+        Set<Long> existingRestaurantNos = restaurantList.stream()
+                .map(RestaurantList::getRestaurantNo)
+                .collect(Collectors.toSet());
+
+        for (Long restaurantNo : restaurantNos) {
+            if (!existingRestaurantNos.contains(restaurantNo)) {
+                RestaurantInfo restaurantInfo = restaurantRepository.findByRestaurantNo(restaurantNo);
+
+                RestaurantList newRestaurant = new RestaurantList();
+                newRestaurant.setRestaurantNo(restaurantNo);
+                newRestaurant.setRestaurantName(restaurantInfo.getRestaurantName());
+                newRestaurant.setRestaurantAddress(restaurantInfo.getRestaurantAddress());
+                newRestaurant.setImgUrl(restaurantInfo.getImgUrl());
+                newRestaurant.setYCoordinate(restaurantInfo.getYCoordinate());
+                newRestaurant.setXCoordinate(restaurantInfo.getXCoordinate());
+
+                restaurantList.add(newRestaurant);
+            } else {
+//                throw new IllegalArgumentException("Restaurant with id " + restaurantNo + " is already in the list");
+            }
+        }
+
+        MyList fromList = myListRepository.findByListNo(Math.toIntExact(fromListNo));
+        fromList.addCount();
+
+        myListRepository.save(myList);
+        myListRepository.save(fromList);
+        sendCopyNotification(Math.toIntExact(listNo), Math.toIntExact(fromListNo));
+    }
+
+    public void sendCopyNotification(Integer toListNo, Integer fromListNo) {
+
+        MyList fromList = myListRepository.findByListNo(fromListNo);
+        MyList toList = myListRepository.findByListNo(toListNo);
+
+        // 알림등록
+        Notification notification = Notification.builder()
+                .toMember(fromList.getMember().getMemberNo())
+                .type("copyList")
+                .referenceNumber(toList.getMember().getMemberNo())
+                .message(notificationService.createNotificationMessage(toList.getMember().getMemberNo(), "copyList"))
+                .build();
+
+        notificationService.insertNotification(notification);
+    }
+
+    public List<FollowerDTO> getFollowerList(Long loginedMemberNo) {
+
+        return myListRepository.getFollowerList(loginedMemberNo);
+    }
+
+    public List<RestaurantWithRatingDTO> getListRestaurants(Long listNo) {
+        return myListRepository.getListRestaurants(listNo).stream().map(objects -> {
+            Long restaurantNo = (Long) objects[0];
+            String restaurantName = (String) objects[1];
+            String address = (String) objects[2];
+            String imgUrl = (String) objects[3];
+            Double xCoordinate = (Double) objects[4];
+            Double yCoordinate = (Double) objects[5];
+            Double rating = (Double) objects[6];
+
+            return new RestaurantWithRatingDTO(restaurantNo, restaurantName, address, imgUrl, xCoordinate, yCoordinate, rating);
+        }).collect(Collectors.toList());
+    }
 }
 
 

@@ -53,3 +53,7 @@ logging:
     org:
       springframework:
         security: DEBUG
+
+kakao:
+  client_id: ${id}
+  redirect_uri: ${uri}

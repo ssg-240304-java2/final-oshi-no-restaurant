@@ -147,50 +147,84 @@ function hideRestaurantInfo() {
     $('#restaurant-info-window').hide();
 }
 
-function showFollowerList(follower, count) {
+function showFollowerList(follower) {
     $('.content-section').removeClass('active');
     $('#follower-restaurant-items').addClass('active');
 
     $('#follower-restaurant-items').empty(); // 기존 리스트 제거
 
-    for (var i = 1; i <= count; i++) {
-        $('#follower-restaurant-items').append(
-            '<button type="button" class="btn btn-custom" onclick="showFollowerRestaurantList(\'' + follower + ' 맛집 ' + i + '\')">' + follower + ' 맛집 ' + i + '</button>'
-        );
-    }
+    $.ajax({
+        url: '/list/member',
+        type: 'post',
+        data: {memberNo: follower},
+        success: function (result) {
+            appendLists(result);
+        },
+        error: function (e) {
+            console.log(e);
+        }
+    })
 }
 
-function showFollowerRestaurantList(area) {
+function appendLists(data) {
+    const listContainer = $('#follower-restaurant-items');
+    listContainer.empty();
+
+    data.forEach(list => {
+        let innerHTML = `
+        <button type="button" class="btn btn-custom" onclick="showFollowerRestaurantList(${list.listNo})">${list.listName}</button>
+        `
+        listContainer.append(innerHTML);
+    });
+}
+
+function showFollowerRestaurantList(listNo) {
     $('.content-section').removeClass('active');
     $('#follower-restaurant-list').addClass('active');
 
     clearMarkers();
 
     // 예제 맛집 리스트
-    var restaurantList = [
-        {name: '밍글스', address: '서울특별시 강남구 논현동 논현로122길 102호', image: 'restaurant1.jpg', lat: 37.5665, lng: 126.9780},
-        {name: '정식당', address: '서울특별시 강남구 삼성동 113-23', image: 'restaurant2.jpg', lat: 37.5655, lng: 126.9770},
-        {name: '백반집', address: '서울특별시 종로구 종로3가 34-6', image: 'restaurant3.jpg', lat: 37.5645, lng: 126.9760}
-    ];
+    // var restaurantList = [
+    //     {name: '밍글스', address: '서울특별시 강남구 논현동 논현로122길 102호', image: 'restaurant1.jpg', lat: 37.5665, lng: 126.9780},
+    //     {name: '정식당', address: '서울특별시 강남구 삼성동 113-23', image: 'restaurant2.jpg', lat: 37.5655, lng: 126.9770},
+    //     {name: '백반집', address: '서울특별시 종로구 종로3가 34-6', image: 'restaurant3.jpg', lat: 37.5645, lng: 126.9760}
+    // ];
+    $.ajax({
+        url: '/zzupList/list',
+        type: 'get',
+        data: {listNo: listNo},
+        success: function (result) {
+            console.log(result);
+            appendRestaurants(result);
+        },
+        error: function (e) {
+            console.log(e);
+        }
+    })
 
-    $('#follower-restaurant-list').empty(); // 기존 리스트 제거
+}
 
-    restaurantList.forEach(function (restaurant) {
+function appendRestaurants(data) {
+    const appendContainer = $('#follower-restaurant-list');
+    appendContainer.empty();
+
+    data.forEach(function (restaurant) {
         $('#follower-restaurant-list').append(
-            '<div class="restaurant-item" onclick="showFollowerRestaurantInfo(this, \'' + restaurant.name + '\', \'' + restaurant.address + '\', \'' + restaurant.image + '\', ' + restaurant.lat + ', ' + restaurant.lng + ')">' +
-            '<input type="checkbox" class="delete-checkbox">' +
-            '<img src="' + restaurant.image + '" alt="Restaurant">' +
-            '<div class="restaurant-info">' +
-            '<h5>' + restaurant.name + '</h5>' +
-            '<p>' + restaurant.address + '</p>' +
-            '<p class="rating">4.5 ★</p>' +
-            '</div>' +
-            '</div>'
+            `<div class="restaurant-item" onclick="showFollowerRestaurantInfo(this,'${restaurant.restaurantName}','${restaurant.address}','${restaurant.imgUrl}','${restaurant.xcoordinate}','${restaurant.ycoordinate}')">
+            <input type="checkbox" class="delete-checkbox">
+            <img src="${restaurant.imgUrl}" alt="Restaurant">
+            <div class="restaurant-info">
+            <h5>${restaurant.restaurantName}</h5>
+            <p>${restaurant.address}</p>
+            <p class="rating">${restaurant.rating} ★</p>
+            </div>
+            </div>`
         );
 
         // 마커 추가
         var marker = new naver.maps.Marker({
-            position: new naver.maps.LatLng(restaurant.lat, restaurant.lng),
+            position: new naver.maps.LatLng(restaurant.xcoordinate, restaurant.ycoordinate),
             map: map,
             icon: {
                 url: 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png'
@@ -198,13 +232,29 @@ function showFollowerRestaurantList(area) {
         });
         markers.push(marker);
 
-        // 마커 클릭 시 인포윈도우 표시
-        marker.restaurantInfo = restaurant; // 마커에 식당 정보 저장
+        // 마커의 infoWindow 생성 및 마커에 연관지음
+        // var infoWindow = new naver.maps.InfoWindow({
+        //     content: `<div style="width:150px;text-align:center;padding:10px;">
+        //                     <b>${restaurant.restaurantName}</b><br/>
+        //                     ${restaurant.address}
+        //                   </div>`
+        // });
+        // infoWindows.push(infoWindow);
 
+        // 마커에 infoWindow를 연결하여 클릭 시 열리도록 설정
         naver.maps.Event.addListener(marker, 'click', function () {
-            showRestaurantInfoWindow(marker.restaurantInfo.name, marker.restaurantInfo.address, marker.restaurantInfo.image, marker.restaurantInfo.lat, marker.restaurantInfo.lng);
-            changeMarkerColor(marker);
+            infoWindows.forEach(iw => iw.close()); // 다른 정보 창 닫기
+            if (infoWindow.getMap()) {
+                infoWindow.close();
+                marker.setIcon({url: 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png'})
+            } else {
+                infoWindow.open(map, marker);
+                marker.setIcon({url: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png'})
+            }
         });
+
+        // 마커 객체에 infoWindow 속성을 추가
+        marker.infoWindow = infoWindow;
     });
 }
 
@@ -220,11 +270,20 @@ function showFollowerRestaurantInfo(element, name, address, image, lat, lng) {
 
     showRestaurantInfoWindow(name, address, image, lat, lng);
 
+    // 해당 위치의 마커 찾기
     var marker = markers.find(m => m.getPosition().lat() === lat && m.getPosition().lng() === lng);
+
     if (marker) {
         changeMarkerColor(marker);
+
+        // 기존 열려있는 모든 infoWindow 닫기
+        infoWindows.forEach(iw => iw.close());
+
+        // 마커의 infoWindow 열기
+        marker.infoWindow.open(map, marker);
     }
 }
+
 
 function changeMarkerColor(marker) {
     markers.forEach(function (m) {
@@ -240,9 +299,9 @@ function changeMarkerColor(marker) {
 function toggleSidebar() {
     $('.container-fluid').toggleClass('collapsed');
     if ($('.toggle-btn').text() === '<') {
-        $('.toggle-btn').text('>');
+        $('.toggle-btn').text('>').css({left: '0px'});
     } else {
-        $('.toggle-btn').text('<');
+        $('.toggle-btn').text('<').css({left: '50%'});
     }
 }
 

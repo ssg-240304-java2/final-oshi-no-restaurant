@@ -48,22 +48,48 @@
                 <div class="form-group row">
                     <label for="name" class="col-sm-3 col-form-label">이름(실명)</label>
                     <div class="col-sm-9">
-                        <input type="text" class="form-control" id="name" placeholder="이름(실명)">
+                        <input type="text" class="form-control" id="name" placeholder="이름(실명)" name="name">
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="email" class="col-sm-3 col-form-label">이메일</label>
                     <div class="col-sm-9">
-                        <input type="email" class="form-control" id="email" placeholder="이메일">
+                        <input type="email" class="form-control" id="email" placeholder="이메일" name="email">
                     </div>
                 </div>
                 <div class="text-center">
-                    <button type="submit" class="btn btn-primary mt-3">아이디 찾기</button>
+                    <button type="button" id="submitBtn" class="btn btn-primary mt-3">아이디 찾기</button>
                 </div>
             </form>
         </div>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script>
+            $('#submitBtn').on('click', function () {
+
+                const name = $('#name').val();
+                const email = $('#email').val();
+
+                $.ajax({
+                    url: '/find/id',
+                    type: 'post',
+                    data: {
+                        name: name,
+                        email: email
+                    },
+                    success: function (result) {
+                        alert('이메일로 id 정보가 발송되었습니다.');
+
+                        window.location.href = '/login';
+                    },
+                    error: function (e) {
+                        console.log(e);
+
+                        alert('입력하신 정보를 다시 확인해주세요.');
+                    }
+                })
+            });
+        </script>
     </body>
 </html>

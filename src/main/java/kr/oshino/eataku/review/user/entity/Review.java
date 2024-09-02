@@ -6,19 +6,16 @@ import kr.oshino.eataku.member.entity.Member;
 import kr.oshino.eataku.restaurant.admin.entity.RestaurantInfo;
 import lombok.*;
 
+
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
 @Table(name = "tbl_review")
 @Data
-@Setter(AccessLevel.PRIVATE)
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@SecondaryTables({
-        @SecondaryTable(name= "tbl_restaurant_info", pkJoinColumns = @PrimaryKeyJoinColumn(name = "restaurant_no")),
-        @SecondaryTable(name= "tbl_member", pkJoinColumns = @PrimaryKeyJoinColumn(name = "member_no"))
-})
 public class Review {
 
     /* 리뷰 번호 */
@@ -39,6 +36,26 @@ public class Review {
     @Column(name = "scope")
     @Enumerated(EnumType.STRING)
     private Scope scope;
+
+    public int getScopeValue(){
+        return scope.getValue();
+    }
+
+    /* 사진 */
+    @Column(name = "img_url")
+    private String imgUrl;
+
+    /* 작성 일자 */
+    @Column(name = "review_date")
+    private LocalDateTime reviewDate;
+
+    /* 예약 타입 */
+    @Column
+    private String type;
+
+    /* 예약 번호 */
+    @Column(name = "reference_number")
+    private Long referenceNumber;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(

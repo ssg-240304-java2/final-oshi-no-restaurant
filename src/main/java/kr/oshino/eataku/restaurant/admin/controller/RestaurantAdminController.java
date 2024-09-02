@@ -1,18 +1,12 @@
 package kr.oshino.eataku.restaurant.admin.controller;
 
-import jakarta.persistence.EntityNotFoundException;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import kr.oshino.eataku.common.enums.FoodType;
 import kr.oshino.eataku.common.enums.HashTag;
 import kr.oshino.eataku.member.model.dto.CustomMemberDetails;
-import kr.oshino.eataku.restaurant.admin.entity.ReservationSetting;
-import kr.oshino.eataku.restaurant.admin.entity.RestaurantInfo;
-import kr.oshino.eataku.restaurant.admin.model.dto.ReservSettingDTO;
-import kr.oshino.eataku.restaurant.admin.model.dto.RestaurantInfoDTO;
-import kr.oshino.eataku.restaurant.admin.model.dto.TemporarySaveDTO;
-import kr.oshino.eataku.restaurant.admin.model.dto.WaitingSettingDTO;
-import kr.oshino.eataku.restaurant.admin.model.repository.RestaurantRepository;
+import kr.oshino.eataku.reservation.user.model.dto.responseDto.*;
+import kr.oshino.eataku.reservation.user.service.ReservationUserService;
+import kr.oshino.eataku.restaurant.admin.model.dto.*;
 import kr.oshino.eataku.restaurant.admin.service.RestaurantAdminService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,13 +17,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.sql.Date;
+import java.time.LocalDate;
+import java.time.temporal.TemporalAdjusters;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @Controller
@@ -39,49 +32,64 @@ import java.util.Set;
 public class RestaurantAdminController {
 
     private final RestaurantAdminService restaurantAdminService;
-    private final RestaurantRepository restaurantRepository;
+    private final ReservationUserService reservationUserService;
 
     /***
-     * 사업자 등록증 등록
+     * 사업자 등록증 페이지 조회
      */
     @GetMapping("/certification")
     public void businessView() {
     }
 
+    /***
+     * 사업자 등록증 등록
+     * @param jsonData
+     * @param session
+     * @return
+     */
     @PostMapping("/certification")
-    public ResponseEntity<String> businessRegister(@RequestBody TemporarySaveDTO newRestaurant, HttpSession session) {
+    public ResponseEntity<String> businessRegister(@RequestPart(value = "file", required = false) MultipartFile file,
+                                                   @RequestPart("jsonData") TemporarySaveDTO jsonData,
+                                                   HttpSession session) {
 
-        newRestaurant.setAccount((String) session.getAttribute("id"));
+        jsonData.setAccount((String) session.getAttribute("id"));
 
-        log.info("\uD83C\uDF4E\uD83C\uDF4E\uD83C\uDF4E newRestaurant : {} ", newRestaurant);
+        log.info("\uD83C\uDF4E\uD83C\uDF4E\uD83C\uDF4E file : {} and newRestaurant : {} ", file.isEmpty(), jsonData);
 
-        restaurantAdminService.insertNewCertification(newRestaurant);
+        restaurantAdminService.insertNewCertification(jsonData, file);
 
         return ResponseEntity.ok("/restaurant/infoRegister");
     }
 
     /***
-     * 회원가입 시 식당 정보 등록
-     * @return
+     * 식당 정보 등록 페이지 조회
      */
     @GetMapping("/infoRegister")
     public void info() {
     }
 
+    /***
+     * 회원가입 시 식당 정보 등록
+     * @param newRestaurant
+     * @param session
+     * @return
+     */
     @PostMapping("/infoRegister")
-    public ResponseEntity<String> infoRegister(@RequestBody RestaurantInfoDTO newInfo, HttpSession session) {
+    public ResponseEntity<String> infoRegister(@RequestPart("newRestaurant") RestaurantInfoDTO newRestaurant,
+                                               @RequestPart(value = "file", required = false) MultipartFile file,
+                                               HttpSession session) {
 
         String account = (String) session.getAttribute("id");
-        log.info("\uD83C\uDF4E\uD83C\uDF4E\uD83C\uDF4E newInfo : {}, account : {}", newInfo, account);
+        log.info("\uD83C\uDF4E\uD83C\uDF4E\uD83C\uDF4E newInfo : {}, account : {}, file: {}", newRestaurant, account, file);
 
-        restaurantAdminService.insertNewInfo(newInfo, session);
+        restaurantAdminService.insertNewInfo(newRestaurant, session, file);
 
         return ResponseEntity.ok("/restaurant/main");
 
     }
 
     /***
-     * 식당 정보 조회
+     * 등록된 식당 정보 페이지 조회
      * @param model
      * @return
      */
@@ -91,9 +99,9 @@ public class RestaurantAdminController {
         CustomMemberDetails member = (CustomMemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long loginedRestaurantNo = member.getRestaurantNo();
 
-        RestaurantInfoDTO restaurant = restaurantAdminService.selectMyRestaurant(loginedRestaurantNo);
-        List<ReservSettingDTO> reservSettings = restaurantAdminService.selectReservSetting(loginedRestaurantNo);
-        WaitingSettingDTO waitingSettings = restaurantAdminService.selectWaitingSetting(loginedRestaurantNo);
+        RestaurantInfoDTO restaurant = restaurantAdminService.selectMyRestaurant(loginedRestaurantNo);      // 식당 정보 조회
+        List<ReservSettingDTO> reservSettings = restaurantAdminService.selectReservSetting(loginedRestaurantNo);            // 예약 페이지 조회
+        WaitingSettingDTO waitingSettings = restaurantAdminService.selectWaitingSetting(loginedRestaurantNo);       // 웨이팅 페이지 조회
 
         Set<FoodType> foodTypes = restaurant.getFoodTypes();
         Set<HashTag> hashTags = restaurant.getHashTags();
@@ -120,35 +128,16 @@ public class RestaurantAdminController {
      * @return
      */
     @PostMapping("/infoUpdate")
-    public String infoUpdate(@RequestBody RestaurantInfoDTO updateInfo
-//                             @RequestParam("storeImage")MultipartFile imageFile
-    ) {
+    public String infoUpdate(@RequestPart("updateInfo") RestaurantInfoDTO updateInfo,
+                             @RequestPart(value = "file", required = false) MultipartFile file) {
 
         CustomMemberDetails member = (CustomMemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long loginedRestaurantNo = member.getRestaurantNo();
 
-        log.info("\uD83C\uDF4E\uD83C\uDF4E\uD83C\uDF4E updateInfo : {}", updateInfo);
-
-//        if(!imageFile.isEmpty()){
-//            try{
-//                String uploadDir = "/uploads/images/";
-//                String fileName = imageFile.getOriginalFilename();
-//                Path filePath = Paths.get(uploadDir + fileName);
-//
-//                Files.copy(imageFile.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-//
-//                String imgUrl = uploadDir + fileName;
-//                updateInfo.setImgUrl(imgUrl);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//                log.error("이미지 업로드 실패 : {}", e.getMessage());
-//
-//                return "redirect:/restaurant/infoUpdate/" + updateInfo.getRestaurantNo() + "?error";
-//            }
-//        }
+        log.info("\uD83C\uDF4E\uD83C\uDF4E\uD83C\uDF4E updateInfo : {}, file: {}", updateInfo, file);
 
         updateInfo.setRestaurantNo(loginedRestaurantNo);
-        restaurantAdminService.updateRestaurant(updateInfo);
+        restaurantAdminService.updateRestaurant(updateInfo, file);
 
         return "redirect:/restaurant/infoUpdate";
     }
@@ -205,28 +194,79 @@ public class RestaurantAdminController {
 
     /***
      * 메인 페이지 조회
-     * @param request
      * @return
      */
     @GetMapping("/main")
-    public String main(HttpServletRequest request) {
-        String method = request.getMethod();
-        log.info("\uD83C\uDF4E main Request method : {} ", method);
-        return "restaurant/main";
-    }
-
-    @GetMapping("/waitingSetting")
-    public ResponseEntity<WaitingSettingDTO> selectWaitingByDate(@PathVariable Date waitingDate){
+    public String main(@RequestParam(value = "startDay", defaultValue = "") LocalDate startDay,
+                       @RequestParam(value = "endDay", defaultValue = "") LocalDate endDay,
+                       Model model) {
 
         CustomMemberDetails member = (CustomMemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long loginedRestaurantNo = member.getRestaurantNo();
 
-        WaitingSettingDTO waitings = restaurantAdminService.findWaitingSettingByDate(waitingDate, loginedRestaurantNo);
+        if (startDay == null || endDay == null) {
+            startDay = LocalDate.now().with(TemporalAdjusters.firstDayOfMonth());
+            endDay = LocalDate.now().with(TemporalAdjusters.lastDayOfMonth());
+        }
 
-        return ResponseEntity.ok(waitings);
+        List<SalesDTO> sales = restaurantAdminService.selectSalesStatistics(loginedRestaurantNo, startDay, endDay); // gpt가 작명해줌
+
+        model.addAttribute("sales", sales);
+        log.info("🍎sales: {}", sales);
+
+        return "restaurant/main";
     }
 
+    @PostMapping("/main")
+    public ResponseEntity<List<SalesDTO>> mainReload(@RequestParam(value = "startDay", defaultValue = "") LocalDate startDay,
+                       @RequestParam(value = "endDay", defaultValue = "") LocalDate endDay) {
+
+        CustomMemberDetails member = (CustomMemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long loginedRestaurantNo = member.getRestaurantNo();
+
+        if (startDay == null ) {
+            startDay = LocalDate.now().with(TemporalAdjusters.firstDayOfMonth());
+        }
+        if (endDay == null) {
+            endDay = LocalDate.now().with(TemporalAdjusters.lastDayOfMonth());
+        }
+
+        List<SalesDTO> sales = restaurantAdminService.selectSalesStatistics(loginedRestaurantNo, startDay, endDay); // gpt가 작명해줌
+
+        log.info("🍎sales: {}", sales);
+
+        return ResponseEntity.ok(sales);
+    }
+    /***
+     * 날짜 클릭 시 등록된 웨이팅 세팅 조회
+     * @param waitingDate
+     * @return
+     */
+    @GetMapping("/waitingSetting/{waitingDate}")
+    public ResponseEntity<WaitingSettingDTO> selectWaitingByDate(@PathVariable String waitingDate){
+        log.info("🍎waitingDate: {}", waitingDate);
+
+        CustomMemberDetails member = (CustomMemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long loginedRestaurantNo = member.getRestaurantNo();
+
+        WaitingSettingDTO waitingSettings = restaurantAdminService.findWaitingSettingByDate(Date.valueOf(waitingDate), loginedRestaurantNo);
+
+        log.info("🍎waitingSettings : {}", waitingSettings);
+
+        if(waitingSettings != null) {
+            return ResponseEntity.ok(waitingSettings);
+        } else {
+            return ResponseEntity.noContent().build();
+        }
+    }
+
+    /***
+     *  웨이팅 세팅 등록
+     * @param newSetting
+     * @return
+     */
     @PostMapping("/waitingSetting")
+    @ResponseBody
     public WaitingSettingDTO waitingRegister(@RequestBody WaitingSettingDTO newSetting){
 
         CustomMemberDetails member = (CustomMemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -234,7 +274,175 @@ public class RestaurantAdminController {
 
         log.info("\uD83C\uDF4E newSetting : {}", newSetting);
 
+        newSetting.setRestaurantNo(loginedRestaurantNo);
+        newSetting = restaurantAdminService.insertNewWaiting(newSetting, loginedRestaurantNo);
+
         return newSetting;
     }
+
+    /***
+     * 웨이팅 세팅 수정
+     * @param updateSetting
+     * @return
+     */
+    @PostMapping("/waitingUpdate")
+    public String waitingUpdate(@RequestBody WaitingSettingDTO updateSetting) {
+
+        CustomMemberDetails member = (CustomMemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long loginedRestaurantNo = member.getRestaurantNo();
+
+        log.info("\uD83C\uDF4E updateSetting: {}", updateSetting);
+
+        updateSetting.setRestaurantNo(loginedRestaurantNo);
+
+        if("N".equals(updateSetting.getWaitingStatus())){
+            restaurantAdminService.deleteWaitingByDateAndRestaurantNo(updateSetting.getWaitingDate(), loginedRestaurantNo);
+        } else {
+            restaurantAdminService.updateWaiting(updateSetting, loginedRestaurantNo);
+        }
+
+        return "redirect:/restaurant/infoUpdate";
+    }
+
+    /***
+     * 웨이팅 데이터 삭제
+     * @param waitingDate
+     * @return
+     */
+    @DeleteMapping("/deleteWaitingSetting/{waitingDate}")
+    public ResponseEntity<String> deleteWaitingSetting(@PathVariable String waitingDate) {
+
+        CustomMemberDetails member = (CustomMemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long loginedRestaurantNo = member.getRestaurantNo();
+
+        log.info("delete for date : {}", waitingDate);
+
+        restaurantAdminService.deleteWaitingSetting(Date.valueOf(waitingDate), loginedRestaurantNo);
+
+        return ResponseEntity.ok("삭제되었습니다.");
+    }
+
+    /***
+     * 메뉴 등록
+     * @param newMenu
+     * @param file
+     * @return
+     */
+    @PostMapping("/menuRegister")
+    @ResponseBody
+    public ResponseEntity<String> menuRegister(@RequestPart("newMenu") MenuDTO newMenu,
+                                @RequestPart(value = "file", required = false) MultipartFile file){
+
+        CustomMemberDetails member = (CustomMemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long loginedRestaurantNo = member.getRestaurantNo();
+
+        log.info("\uD83C\uDF4E newMenu: {} and file: {}", newMenu, file);
+
+        newMenu.setRestaurantNo(loginedRestaurantNo);
+        restaurantAdminService.insertNewMenu(newMenu, file, loginedRestaurantNo);
+
+        return ResponseEntity.ok("/restaurant/menu");
+    }
+
+    /***
+     * 메뉴 조회
+     * @param model
+     * @return
+     */
+    @GetMapping("/menu")
+    public String selectMenu(Model model) {
+
+        CustomMemberDetails member = (CustomMemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long loginedRestaurantNo = member.getRestaurantNo();
+
+        List<MenuDTO> registeredMenu = restaurantAdminService.selectAllMenus(loginedRestaurantNo);
+
+        model.addAttribute("registeredMenu", registeredMenu);
+
+        log.info("\uD83C\uDF4E cont menu: {}", registeredMenu);
+
+        return "restaurant/menu";
+    }
+
+    /***
+     * 메뉴 수정
+     * @param updatedMenu
+     * @param file
+     * @return
+     */
+    @PostMapping("/updateMenu")
+    public ResponseEntity<String> updateMenu(
+            @RequestPart("updatedMenu") MenuDTO updatedMenu,
+            @RequestPart(value = "file", required = false) MultipartFile file) {
+
+        restaurantAdminService.updateMenu(updatedMenu, file);
+
+        return ResponseEntity.ok("메뉴가 성공적으로 수정되었습니다.");
+    }
+
+    // ToDo : 메뉴 수정, 삭제 해야 함 (수정은 컨트롤러만 개발됨)
+
+    /***
+     * 식당 프리뷰
+     * @param model
+     * @return
+     */
+    @GetMapping("/preview")
+    public String preview(Model model){
+
+        CustomMemberDetails member = (CustomMemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long loginedRestaurantNo = member.getRestaurantNo();
+
+        // 식당 상세 정보
+        RestaurantInfoDetails restaurant = reservationUserService.getRestaurantDetailsByReservation(loginedRestaurantNo);
+        model.addAttribute("restaurant", restaurant);
+
+        // 식당 메뉴 정보
+        List<MenuDto> menu = reservationUserService.getMenu(loginedRestaurantNo);
+        model.addAttribute("menu", menu);
+
+        // 리뷰 상세 정보
+        List<ReviewDetails> reviewDetails = reservationUserService.getReviewDetails(loginedRestaurantNo);
+        model.addAttribute("ReviewDetails", reviewDetails);
+
+        // 태그 횟수 정보
+        List<String> tagCount = reservationUserService.getCountTags(loginedRestaurantNo);
+        Map<String, Integer> tagCountMap = new LinkedHashMap<>();
+        System.out.println("tagCountMap = " + tagCountMap);
+
+        // 식당 지도 위치 정보
+        List<MapDto> position = reservationUserService.getMapLocation(loginedRestaurantNo);
+
+        // 식당 리뷰 사진
+        List<ReviewImgDto> reviewImgDto = reservationUserService.getImg(loginedRestaurantNo);
+        model.addAttribute("reviewImgDto", reviewImgDto);
+
+        for (String tagCounts : tagCount) {
+            String[] parts = tagCounts.split(",");
+            if (parts.length == 2) {
+                String tag = parts[0].trim();  // 태그 부분
+                Integer count = Integer.parseInt(parts[1].trim());  // 횟수 부분
+                tagCountMap.put(tag, count);
+            } else {
+                // 태그나 횟수가 올바른 형식이 아닐 경우를 처리
+                System.err.println(" 올바른 형식이이 아님 " + tagCount);
+            }
+        }
+        System.out.println("menu = " + menu);
+
+        model.addAttribute("tagCountMap", tagCountMap);
+        model.addAttribute("position",  position);
+
+        System.out.println("reviewDetails = " + reviewDetails);
+        System.out.println("restaurant = " + restaurant);
+        System.out.println("tagCountMap = " + tagCountMap);
+        System.out.println("tagCountMap = " + tagCountMap);
+        System.out.println("position = " + position);
+        System.out.println("reviewImgDto = " + reviewImgDto);
+
+        return "restaurant/preview";
+    }
+
+
 
 }

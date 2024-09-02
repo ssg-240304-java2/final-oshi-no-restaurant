@@ -16,26 +16,28 @@
 <div class="main-container">
     <div class="container waiting-container">
         <div class="nav-buttons">
-<!--            이 부분에서 요청 url 변경해야 한다.       -->
-            <a th:href="@{waitingList}">
-                <button type="button" class="btn">판매 내역</button>
-            </a>
-            <a th:href="@{waitingList}">
-                <button type="button" class="btn">예약 확인</button>
-            </a>
-            <a th:href="@{waitingList}">
-                <button type="button" class="btn">예약 상태</button>
-            </a>
-            <a th:href="@{waitingList}">
-                <button type="button" class="btn">웨이팅 상태</button>
-            </a>
-            <a th:href="@{waitingList}">
-                <button type="button" class="btn">매장 리뷰</button>
-            </a>
 
-            <button type="button" class="btn-setting btn-secondary float-right">
-                <img src="img/setting.png" alt="설정" aria-hidden="true">
-            </button>
+            <button type="button" class="btn btn-danger" onclick="window.location.href='/restaurant/main'">판매 내역</button>
+            <button type="button" class="btn btn-danger" onclick="window.location.href='/restaurant/reservationCheck'">예약 확인</button>
+            <button type="button" class="btn btn-danger" onclick="window.location.href='/restaurant/status'">예약 상태</button>
+            <button type="button" class="btn btn-danger" onclick="window.location.href='/admin/waitingList'">웨이팅 상태</button>
+            <button type="button" class="btn btn-danger" onclick="window.location.href='/restaurant/review'">매장 리뷰</button>
+
+<!--            <button type="button" class="btn-setting btn-secondary float-right">-->
+<!--                <img th:src="@{images/setting.png}" alt="설정" class="glyphicon glyphicon-cog" aria-hidden="true">-->
+<!--            </button>-->
+
+            <div class="btn-group float-right">
+                <button type="button" class="btn-setting btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <img th:src="@{/images/setting.png}" alt="설정" class="glyphicon glyphicon-cog" aria-hidden="true">
+                </button>
+                <div class="dropdown-menu dropdown-menu-right">
+                    <!--                        <button class="dropdown-item" type="button" onclick="window.location.href='/restaurant/infoUpdate'">매장 정보 수정</button>-->
+                    <a class="dropdown-item" href="/restaurant/infoUpdate">매장 정보 수정</a>
+                    <button class="dropdown-item" type="button">메뉴 수정</button>
+                    <button class="dropdown-item" type="button">화면 보기</button>
+                </div>
+            </div>
         </div>
 
         <h3>웨이팅 내역</h3>
@@ -52,145 +54,151 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script type="text/javascript" th:src="@{/js/fragment/navbar.js}"></script>
 
-<script>
-    // 여기에 세션 값
+<script type="text/javascript">
     let restaurantNo = [[${restaurantNo}]];
-
-    // 화면에 웨이팅 정보 표시
-    function fetchWaiting() {
-        $.ajax({
-            url: '/admin/waiting/' + restaurantNo,
-            method: 'GET',
-            success: function(response) {
-
-                let container = $('#waiting-card-container');
-                container.empty();
-
-                response.forEach(function(waiting) {
-
-                    let createdAt = new Date(waiting.createdAt);
-                    let now = new Date(); // --> 9시간 +
-                    let minutesElapsed = Math.floor((now - createdAt) / (1000 * 60));
-
-                    const waitingCard = `
-                    <div class="waiting-card" data-waiting-no="${waiting.waitingNo}">
-                        <div class="row align-items-center">
-                            <div class="col-sm-2-no col-data waiting-no">
-                                <p>#${waiting.sequenceNumber}</p>
-                            </div>
-                            <div class="col-sm-2-name col-data">
-                                <p>${waiting.name}</p>
-                            </div>
-                            <div class="col-sm-2-people col-data">
-                                <p>${waiting.partySize}명</p>
-                            </div>
-                            <div class="col-sm-3-phone col-data">
-                                <p>${waiting.phone}</p>
-                            </div>
-                            <div class="col-sm-3-time col-data">
-                                <p>${minutesElapsed}분째 웨이팅 중</p>
-                            </div>
-                        </div>
-                        <div class="row actions">
-                            <div class="col text-right">
-                                <button class="btn btn-primary call-button">호출하기</button>
-                                <button class="btn btn-secondary complete-button">입장 완료</button>
-                                <button class="btn btn-outline-secondary cancel-button">웨이팅 취소</button>
-                            </div>
-                        </div>
-                    </div>
-                    `
-                    container.append(waitingCard);
-                });
-            },
-            error: function(error) {
-                console.error('웨이팅 리스트를 기져오는 중 오류가 발생했습니다!', error);
-            }
-        });
-    }
-
-    $(document).ready(function() {
-
-        fetchWaiting();
-
-        // 카카오톡 알림 전송 로직 필요
-        $(document).on('click', '.call-button', function() {
-            let card = $(this).closest('.waiting-card')
-            let waitingNo = card.data('waiting-no');
-
-            $.ajax({
-                url: '/admin/waiting/sendOne/' + waitingNo,
-                method: 'POST',
-                success: function(response) {
-                    alert("호출 완료!");
-                },
-                error: function(error) {
-                    alert("메세지 전송에 실패했습니다.");
-                }
-            });
-        });
-
-
-
-
-        // 입장 처리 비동기 요청
-        $(document).on('click', '.complete-button', function() {
-            let card = $(this).closest('.waiting-card')
-            let waitingNo = card.data('waiting-no');
-
-            $.ajax({
-                url: '/admin/waiting/visit/' + waitingNo,
-                method: 'PATCH',
-                success: function(response) {
-                    alert(response.message)
-                    card.remove();
-                },
-                error: function(xhr, status, error) {
-                    let response = JSON.parse(xhr.responseText);
-                    alert(response.message);
-                    card.remove();
-                }
-            });
-        });
-
-
-
-        // 취소 처리 비동기 요청
-        $(document).on('click', '.cancel-button', function() {
-            let card = $(this).closest('.waiting-card')
-            let waitingNo = card.data('waiting-no');
-
-            $.ajax({
-                url: '/admin/waiting/cancel/' + waitingNo,
-                method: 'PATCH',
-                success: function(response) {
-                    alert(response.message)
-                    card.remove();
-                },
-                error: function(xhr, status, error) {
-                    let response = JSON.parse(xhr.responseText);
-                    alert(response.message);
-                    card.remove();
-                }
-            });
-        });
-
-        // SSE 연결을 설정하여 서버에서 전송하는 실시간 이벤트를 수신
-        const eventSource = new EventSource(`/sse/waiting/${restaurantNo}`);
-
-        eventSource.onopen = function() {
-            console.log('sse connection open');
-        }
-        eventSource.onerror = function(event) {
-            console.error('SSE connection error:', event);
-        };
-
-        eventSource.addEventListener('newWaiting', function(event) {
-            console.log('New Waiting event received');
-            fetchWaiting();
-        });
-    });
-
 </script>
+
+<script type="text/javascript" th:src="@{/js/restaurant/waitingStatus.js}"></script>
+
+<!--<script>-->
+<!--    // 여기에 세션 값-->
+<!--    let restaurantNo = [[${restaurantNo}]];-->
+
+<!--    // 화면에 웨이팅 정보 표시-->
+<!--    function fetchWaiting() {-->
+<!--        $.ajax({-->
+<!--            url: '/admin/waiting/' + restaurantNo,-->
+<!--            method: 'GET',-->
+<!--            success: function(response) {-->
+
+<!--                let container = $('#waiting-card-container');-->
+<!--                container.empty();-->
+
+<!--                response.forEach(function(waiting) {-->
+
+<!--                    let createdAt = new Date(waiting.createdAt);-->
+<!--                    let now = new Date(); // &ndash;&gt; 9시간 +-->
+<!--                    let minutesElapsed = Math.floor((now - createdAt) / (1000 * 60));-->
+
+<!--                    const waitingCard = `-->
+<!--                    <div class="waiting-card" data-waiting-no="${waiting.waitingNo}">-->
+<!--                        <div class="row align-items-center">-->
+<!--                            <div class="col-sm-2-no col-data waiting-no">-->
+<!--                                <p>#${waiting.sequenceNumber}</p>-->
+<!--                            </div>-->
+<!--                            <div class="col-sm-2-name col-data">-->
+<!--                                <p>${waiting.name}</p>-->
+<!--                            </div>-->
+<!--                            <div class="col-sm-2-people col-data">-->
+<!--                                <p>${waiting.partySize}명</p>-->
+<!--                            </div>-->
+<!--                            <div class="col-sm-3-phone col-data">-->
+<!--                                <p>${waiting.phone}</p>-->
+<!--                            </div>-->
+<!--                            <div class="col-sm-3-time col-data">-->
+<!--                                <p>${minutesElapsed}분째 웨이팅 중</p>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="row actions">-->
+<!--                            <div class="col text-right">-->
+<!--                                <button class="btn btn-primary call-button">호출하기</button>-->
+<!--                                <button class="btn btn-secondary complete-button">입장 완료</button>-->
+<!--                                <button class="btn btn-outline-secondary cancel-button">웨이팅 취소</button>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    `-->
+<!--                    container.append(waitingCard);-->
+<!--                });-->
+<!--            },-->
+<!--            error: function(error) {-->
+<!--                console.error('웨이팅 리스트를 기져오는 중 오류가 발생했습니다!', error);-->
+<!--            }-->
+<!--        });-->
+<!--    }-->
+
+<!--    $(document).ready(function() {-->
+
+<!--        fetchWaiting();-->
+
+<!--        // 카카오톡 알림 전송 로직 필요-->
+<!--        $(document).on('click', '.call-button', function() {-->
+<!--            let card = $(this).closest('.waiting-card')-->
+<!--            let waitingNo = card.data('waiting-no');-->
+
+<!--            $.ajax({-->
+<!--                url: '/admin/waiting/sendOne/' + waitingNo,-->
+<!--                method: 'POST',-->
+<!--                success: function(response) {-->
+<!--                    alert("호출 완료!");-->
+<!--                },-->
+<!--                error: function(error) {-->
+<!--                    alert("메세지 전송에 실패했습니다.");-->
+<!--                }-->
+<!--            });-->
+<!--        });-->
+
+
+
+
+<!--        // 입장 처리 비동기 요청-->
+<!--        $(document).on('click', '.complete-button', function() {-->
+<!--            let card = $(this).closest('.waiting-card')-->
+<!--            let waitingNo = card.data('waiting-no');-->
+
+<!--            $.ajax({-->
+<!--                url: '/admin/waiting/visit/' + waitingNo,-->
+<!--                method: 'PATCH',-->
+<!--                success: function(response) {-->
+<!--                    alert(response.message)-->
+<!--                    card.remove();-->
+<!--                },-->
+<!--                error: function(xhr, status, error) {-->
+<!--                    let response = JSON.parse(xhr.responseText);-->
+<!--                    alert(response.message);-->
+<!--                    card.remove();-->
+<!--                }-->
+<!--            });-->
+<!--        });-->
+
+
+
+<!--        // 취소 처리 비동기 요청-->
+<!--        $(document).on('click', '.cancel-button', function() {-->
+<!--            let card = $(this).closest('.waiting-card')-->
+<!--            let waitingNo = card.data('waiting-no');-->
+
+<!--            $.ajax({-->
+<!--                url: '/admin/waiting/cancel/' + waitingNo,-->
+<!--                method: 'PATCH',-->
+<!--                success: function(response) {-->
+<!--                    alert(response.message)-->
+<!--                    card.remove();-->
+<!--                },-->
+<!--                error: function(xhr, status, error) {-->
+<!--                    let response = JSON.parse(xhr.responseText);-->
+<!--                    alert(response.message);-->
+<!--                    card.remove();-->
+<!--                }-->
+<!--            });-->
+<!--        });-->
+
+<!--        // SSE 연결을 설정하여 서버에서 전송하는 실시간 이벤트를 수신-->
+<!--        const eventSource = new EventSource(`/sse/waiting/${restaurantNo}`);-->
+
+<!--        eventSource.onopen = function() {-->
+<!--            console.log('sse connection open');-->
+<!--        }-->
+<!--        eventSource.onerror = function(event) {-->
+<!--            console.error('SSE connection error:', event);-->
+<!--        };-->
+
+<!--        eventSource.addEventListener('newWaiting', function(event) {-->
+<!--            console.log('New Waiting event received');-->
+<!--            fetchWaiting();-->
+<!--        });-->
+<!--    });-->
+
+<!--</script>-->
 </body>
 </html>

@@ -7,6 +7,8 @@ import jakarta.persistence.*;
 import kr.oshino.eataku.common.enums.FoodType;
 import kr.oshino.eataku.common.enums.HashTag;
 import kr.oshino.eataku.restaurant.admin.service.RestaurantAdminService;
+import kr.oshino.eataku.review.admin.entity.AverageRating;
+import kr.oshino.eataku.review.user.entity.Review;
 import lombok.*;
 
 import java.sql.Time;
@@ -19,6 +21,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Data
 @Builder
+@ToString(exclude = {"certification","accountInfo"})
 public class RestaurantInfo {
 
     @Id
@@ -58,9 +61,6 @@ public class RestaurantInfo {
     @Column(name = "contact")
     private String contact;         // 연락처
 
-    @Column(name = "post_number")
-    private String postNumber;      // 우편번호
-
     @Column(name = "img_url")
     private String imgUrl;      // 식당 메인 사진
 
@@ -95,7 +95,7 @@ public class RestaurantInfo {
     @OneToOne(mappedBy = "restaurantNo", cascade = CascadeType.ALL)
     private AccountInfo accountInfo;        // 계정 정보
 
-    public RestaurantInfo(Long restaurantNo, String restaurantName, String description, String restaurantAddress, String postCode, String address, String detailAddress, String extraAddress, Time openingTime, Time closingTime, String contact, String postNumber, String imgUrl, Double xCoordinate, Double yCoordinate, Set<FoodType> foodTypes, Set<HashTag> hashTags) {
+    public RestaurantInfo(Long restaurantNo, String restaurantName, String description, String restaurantAddress, String postCode, String address, String detailAddress, String extraAddress, Time openingTime, Time closingTime, String contact, String imgUrl, Double xCoordinate, Double yCoordinate, Set<FoodType> foodTypes, Set<HashTag> hashTags) {
         this.restaurantNo = restaurantNo;
         this.restaurantName = restaurantName;
         this.description = description;
@@ -107,12 +107,13 @@ public class RestaurantInfo {
         this.openingTime = openingTime;
         this.closingTime = closingTime;
         this.contact = contact;
-        this.postNumber = postNumber;
         this.imgUrl = imgUrl;
         this.xCoordinate = xCoordinate;
         this.yCoordinate = yCoordinate;
         this.foodTypes = foodTypes;
         this.hashTags = hashTags;
     }
+
+
 }
 

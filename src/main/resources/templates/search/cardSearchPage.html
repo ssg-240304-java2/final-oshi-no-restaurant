@@ -19,6 +19,14 @@
     <!-- Search Form -->
     <form action="/search/card" method="GET" class="search-container">
         <div class="d-flex justify-content-center align-items-center mb-3">
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">전체</button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="#" data-value="">전체</a>
+                    <a class="dropdown-item" href="#" data-value="reservation">예약</a>
+                    <a class="dropdown-item" href="#" data-value="waiting">웨이팅</a>
+                </div>
+            </div>
             <input type="text" name="query" class="form-control d-inline-block" placeholder="검색어를 입력하세요" style="width: 300px;">
             <button type="submit" class="btn btn-custom ms-2">검색</button>
         </div>
@@ -88,8 +96,8 @@
                     <p class="card-text" th:text="'주소: ' + ${restaurant.restaurantAddress}">주소: 서울시 강남구</p>
                     <button class="btn btn-custom btn-sm toggle-actions">+</button>
                     <div class="action-buttons">
-                        <button class="btn btn-info btn-sm">예약</button>
-                        <button class="btn btn-warning btn-sm">웨이팅</button>
+                        <button class="btn btn-info btn-sm" th:onclick="|location.href='/reservation/' + ${restaurant.restaurantNo}|">예약</button>
+                        <button class="btn btn-warning btn-sm" th:onclick="|location.href='/users/waitingForm/' + ${restaurant.restaurantNo}|">웨이팅</button>
                     </div>
                 </div>
             </div>

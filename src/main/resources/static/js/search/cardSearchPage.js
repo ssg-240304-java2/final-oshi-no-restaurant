@@ -1,11 +1,14 @@
 $(document).ready(function () {
     // Toggle action buttons on clicking the plus button
-    $('.toggle-actions').click(function () {
+    $(document).on('click', '.toggle-actions', function () {
         $(this).closest('.card').toggleClass('show-actions');
     });
 
     let currentPage = 1;
     let isRequestInProgress = false;
+    let searchService = '전체'
+
+    setSearchService();
 
     window.onscroll = function () {
         if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
@@ -20,6 +23,20 @@ $(document).ready(function () {
         if(isRequestInProgress){
             return;
         }
+        let waitingSearch ;
+        let reservationSearch ;
+        if (searchService != null){
+
+            if (searchService === 'waiting'){
+                waitingSearch = 'true';
+            }
+
+            if (searchService === 'reservation'){
+                reservationSearch = 'true';
+            }
+        }
+
+        let categories = new URLSearchParams(window.location.search).getAll('categories');
 
         isRequestInProgress = true;
         $.ajax({
@@ -28,7 +45,10 @@ $(document).ready(function () {
             dataType: 'json',
             data: {
                 keyword: keyword,
-                page: currentPage
+                page: currentPage,
+                categories: categories,
+                waiting: waitingSearch,
+                reservation: reservationSearch,
             },
             success: function(data) {
                 console.log(data);
@@ -58,13 +78,37 @@ $(document).ready(function () {
                         <p class="card-text">주소: ${restaurant.restaurantAddress}</p>
                         <button class="btn btn-custom btn-sm toggle-actions">+</button>
                         <div class="action-buttons">
-                            <button class="btn btn-info btn-sm">예약</button>
-                            <button class="btn btn-warning btn-sm">웨이팅</button>
+                            <button class="btn btn-info btn-sm" onclick="location.href='/reservation/' + ${restaurant.restaurantNo}">예약</button>
+                        <button class="btn btn-warning btn-sm" onclick="location.href='/users/waitingForm/' + ${restaurant.restaurantNo}">웨이팅</button>
                         </div>
                     </div>
                 </div>
             </div>`;
             container.append(restaurantHtml);
         });
+    }
+
+    // 드롭다운 항목을 클릭했을 때 버튼 텍스트를 변경
+    document.querySelectorAll('.dropdown-item').forEach(function(item) {
+        item.addEventListener('click', function(event) {
+            event.preventDefault();
+            searchService = this.getAttribute('data-value');
+            document.getElementById('dropdownMenuButton').textContent = this.innerText;
+        });
+    });
+
+    function setSearchService() {
+        const waiting = new URLSearchParams(window.location.search).get('waiting');
+        const reservation = new URLSearchParams(window.location.search).get('reservation');
+
+        if(waiting != null){
+            searchService = 'waiting';
+            document.getElementById('dropdownMenuButton').textContent = '웨이팅';
+        }
+
+        if(reservation != null){
+            searchService = 'reservation';
+            document.getElementById('dropdownMenuButton').textContent = '예약';
+        }
     }
 });

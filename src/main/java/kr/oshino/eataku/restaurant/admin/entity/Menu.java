@@ -1,10 +1,14 @@
 package kr.oshino.eataku.restaurant.admin.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Data
 @Entity
 @Table(name = "tbl_menu")
@@ -17,7 +21,7 @@ public class Menu {
 
     @ManyToOne()
     @JoinColumn(name = "restaurant_no")
-    private RestaurantInfo restaurantInfoNo;
+    private RestaurantInfo restaurantNo;
 
     @Column(name = "menu_name")
     private String menuName;
@@ -26,5 +30,5 @@ public class Menu {
     private String description;
 
     @Column(name = "photo_url")
-    private String photoUrl;
+    private String imgUrl;
 }

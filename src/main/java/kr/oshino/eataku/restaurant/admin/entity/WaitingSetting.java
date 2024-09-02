@@ -1,16 +1,18 @@
 package kr.oshino.eataku.restaurant.admin.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.sql.Date;
 import java.sql.Time;
 
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Data
 @Entity
 @Table(name = "tbl_waiting_setting")
+@ToString(exclude = {"restaurantNo"})
 public class WaitingSetting {       // 웨이팅 설정
 
     @Id

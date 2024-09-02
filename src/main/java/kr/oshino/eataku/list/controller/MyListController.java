@@ -1,10 +1,15 @@
 package kr.oshino.eataku.list.controller;
 
 import kr.oshino.eataku.list.entity.MyList;
+import kr.oshino.eataku.list.model.dto.CopyListDTO;
 import kr.oshino.eataku.list.model.dto.FollowListDto;
+import kr.oshino.eataku.list.model.dto.FollowerDTO;
+import kr.oshino.eataku.list.model.dto.RestaurantWithRatingDTO;
 import kr.oshino.eataku.list.model.service.MyListService;
 import kr.oshino.eataku.list.model.vo.RestaurantList;
 import kr.oshino.eataku.member.model.dto.CustomMemberDetails;
+import kr.oshino.eataku.reservation.user.model.dto.responseDto.RestaurantDetailsResponseDto;
+import kr.oshino.eataku.restaurant.admin.model.dto.RestaurantInfoDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -19,7 +24,6 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-@RequestMapping
 @RequiredArgsConstructor
 @Slf4j
 public class MyListController {
@@ -29,8 +33,26 @@ public class MyListController {
     // 리스트 관리 페이지 이동
     @GetMapping("/myInfo/list")
     public String showLists(Model model) {
-        model.addAttribute("myLists", myListService.getLists());
+        CustomMemberDetails member = (CustomMemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long loginedMemberNo = member.getMemberNo();
+
+        List<MyList> myLists = myListService.getLists(loginedMemberNo);
+
+        // 로그인 정보 넣기
+        model.addAttribute("myLists", myLists);
         return "member/myList";
+    }
+
+    @PostMapping("/myInfo/list")
+    @ResponseBody
+    public ResponseEntity<List<MyList>> getLists() {
+        CustomMemberDetails member = (CustomMemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long loginedMemberNo = member.getMemberNo();
+
+        List<MyList> myLists = myListService.getLists(loginedMemberNo);
+        myLists.forEach(myList -> { myList.setMember(null);});
+
+        return ResponseEntity.ok(myLists);
     }
 
     // 리스트 생성
@@ -41,7 +63,11 @@ public class MyListController {
 
     @PostMapping("/myLists/createLists")
     public String createList(@RequestParam("listName") String listName) {
-        myListService.createList(listName);
+
+        CustomMemberDetails member = (CustomMemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long loginedMemberNo = member.getMemberNo();
+
+        myListService.createList(listName, loginedMemberNo);
         return "redirect:/myInfo/list";
     }
 
@@ -66,26 +92,27 @@ public class MyListController {
 
     // 리스트 공개 상태 변경
     @PostMapping("/myLists/updateStatus")
-    @ResponseBody
-    public ResponseEntity<String> updateListStatus(@RequestBody Map<String, String> payload) {
+    public ResponseEntity<String> updateListStatus(@RequestBody Map<String, Object> payload) {
         try {
-            // 요청에서 listNo와 listStatus 추출
-            String listNoStr = payload.get("listNo");
-            String listStatus = payload.get("listStatus");
+
+            Long listNo = ((Number) payload.get("listNo")).longValue(); // JSON에서 숫자 데이터를 올바르게 가져오기 위해 캐스팅
+            String listStatus = (String) payload.get("listStatus");
 
             // 수신된 데이터 로그로 출력
-            System.out.println("Received listNo: " + listNoStr);
+            System.out.println("Received listNo: " + listNo);
             System.out.println("Received listStatus: " + listStatus);
 
+            // 실제 로직 처리 (예: 데이터베이스 업데이트 등)
+
             // listNo의 유효성 검사
-            if (listNoStr == null || listNoStr.isEmpty()) {
+            if (listNo == null || listNo == 0) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("listNo is missing or empty");
             }
 
             // listNo를 Integer로 변환 및 유효성 검사
-            Integer listNo;
+            Integer intListNo;
             try {
-                listNo = Integer.valueOf(listNoStr);
+                intListNo = Math.toIntExact(listNo);
             } catch (NumberFormatException e) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("listNo is not a valid integer");
             }
@@ -96,7 +123,7 @@ public class MyListController {
             }
 
             // 서비스 호출하여 상태 업데이트
-            myListService.updateStatus(listNo, listStatus);
+            myListService.updateStatus(intListNo, listStatus);
 
             return ResponseEntity.ok("Status updated successfully");
         } catch (Exception e) {
@@ -107,12 +134,16 @@ public class MyListController {
     }
 
     // 식당을 리스트에 추가 (좋아요 클릭 시)--- 나중에 수정
-    @PostMapping("/{listNo}/addRestaurant")
+    @PostMapping("/myList/addRestaurant")
     @ResponseBody
-    public ResponseEntity<String> addRestaurantToList(@PathVariable("listNo") Integer listNo,
-                                                      @RequestBody RestaurantList restaurant) {
+    public ResponseEntity<String> addRestaurantToList( @RequestBody Map<String, Long> req) {
+
+        Long restaurantNo = req.get("restaurantNo");
+        Long listNo = req.get("listNo");
+        log.info("🔥🔥 [ MyListController ] 리스트에 식당 추가 restaurantNo: {}, listNo: {} 🔥🔥", restaurantNo, listNo);
+
         try {
-            myListService.addRestaurantToList(listNo, restaurant);
+            myListService.addRestaurantToList(Math.toIntExact(listNo), restaurantNo);
             return ResponseEntity.ok("Restaurant added to the list successfully");
         } catch (Exception e) {
             e.printStackTrace();
@@ -138,44 +169,84 @@ public class MyListController {
 //    }
 
     // 식당 삭제 메소드
-    @PostMapping("/tsktskLists/deleteRestaurants")
-    public String deleteRestaurants(@RequestParam(value = "restaurantNos", required = false) List<Long> restaurantNos,
-                                    @RequestParam("listNo") Integer listNo,
-                                    RedirectAttributes redirectAttributes) {
+    @PostMapping("/myList/deleteRestaurant")
+    public ResponseEntity<String> deleteRestaurants(@RequestParam(value = "restaurantNo", required = false) List<Long> restaurantNos,
+                                    @RequestParam("listNo") Integer listNo) {
         try {
             if (restaurantNos != null && !restaurantNos.isEmpty()) {
                 myListService.deleteRestaurants(listNo, restaurantNos);
-                redirectAttributes.addFlashAttribute("message", "식당 정보가 삭제되었습니다.");
+                return ResponseEntity.ok("식당 정보가 삭제되었습니다.");
             } else {
-                redirectAttributes.addFlashAttribute("error", "삭제할 식당을 선택하지 않았습니다.");
+                return ResponseEntity.badRequest().body("식당 정보가 삭제되었습니다.");
             }
-            return "redirect:/tsktskLists";
         } catch (Exception e) {
             e.printStackTrace();
-            redirectAttributes.addFlashAttribute("error", "삭제 중 오류가 발생했습니다.");
-            return "redirect:/tsktskLists";
+            return ResponseEntity.badRequest().body("삭제 중 오류가 발생했습니다.");
         }
+
     }
 
 
     // 내 쩝쩝 리스트 페이지를 띄우는 메소드 + 팔로우 리스트
-    @GetMapping("/tsktskLists")
+    @GetMapping("/zzupList")
     public String showMyLists(Model model) {
         CustomMemberDetails member = (CustomMemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long loginedMemberNo = member.getMemberNo();
 
-        List<MyList> myLists = myListService.getAllMyLists();
+        List<MyList> myLists = myListService.getAllMyLists(loginedMemberNo);
         model.addAttribute("myLists", myLists);
 
         // 팔로잉 리스트 추가
-        List<MyList> followingLists = myListService.getFollowingLists(loginedMemberNo);
-        model.addAttribute("followingLists", followingLists);
+        List<FollowerDTO> followerList = myListService.getFollowerList(loginedMemberNo);
 
-        log.info("⭐⭐ [ 값 주나? ] Request followingLists: {} ⭐⭐", followingLists);
+        model.addAttribute("followerList", followerList);
+
+        log.info("⭐⭐ [ 값 주나? ] Request followingLists: {} ⭐⭐", followerList);
 
         return "list/tsktskList";
     }
 
+    @PostMapping("/list/member")
+    @ResponseBody
+    public List<MyList> getFolowerList(@RequestParam("memberNo") Long memberNo){
+
+//        log.info("kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk memberNo : {} ",memberNo);
+        return myListService.getLists(memberNo);
+    }
+
+    @GetMapping("/member/{memberNo}/list")
+    public String copyMemberList(@PathVariable("memberNo") Long memberNo,
+                                  @RequestParam("listNo") Long listNo,
+                                  Model model) {
+
+        List<RestaurantList> lists = myListService.selectUserListByMemberNoAndListNo(memberNo,listNo);
+
+        model.addAttribute("lists", lists);
+
+        return "list/listCopy";
+    }
+
+    @PostMapping("/myList/addRestaurantList")
+    public ResponseEntity<String> addRestaurantList(@RequestBody CopyListDTO req) {
+
+        log.info("⭐⭐ [ MyListController ] req {} ⭐⭐", req);
+
+        myListService.copyListToMyList(req.getListNo(), req.getRestaurantNo(), req.getFromListNo());
+
+        return ResponseEntity.ok("good");
+    }
+
+    @GetMapping("/zzupList/list")
+    @ResponseBody
+    public List<RestaurantWithRatingDTO> getRestaurantsZzupList(@RequestParam("listNo") Long listNo){
+        log.info(" [ ZzupListController ] load restaurants req listNo : {}", listNo);
+
+        List<RestaurantWithRatingDTO> result = myListService.getListRestaurants(listNo);
+//        log.info("🍰🍰 [ ZzupListController ]  result : {} 🍰🍰", result);
+
+        return result;
+
+    }
 
 
 }

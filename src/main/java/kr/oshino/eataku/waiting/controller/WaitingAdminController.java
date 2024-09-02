@@ -1,5 +1,6 @@
 package kr.oshino.eataku.waiting.controller;
 
+import kr.oshino.eataku.member.model.dto.CustomMemberDetails;
 import kr.oshino.eataku.waiting.model.dto.requestDto.ReadWaitingRequestDto;
 import kr.oshino.eataku.waiting.model.dto.requestDto.UpdateWaitingRequestDto;
 import kr.oshino.eataku.waiting.model.dto.responseDto.ReadWaitingResponseDto;
@@ -11,6 +12,7 @@ import net.nurigo.sdk.message.response.SingleMessageSentResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -38,7 +40,8 @@ public class WaitingAdminController {
     public String waitingManagementPage(Model model) {
 
         // 나중에 세션으로 변경해야 함
-        Long restaurantNo = 1L;
+        CustomMemberDetails member = (CustomMemberDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long restaurantNo = member.getRestaurantNo();
         model.addAttribute("restaurantNo", restaurantNo);
 
         return "restaurant/waitingStatus";
@@ -120,7 +123,4 @@ public class WaitingAdminController {
     public SingleMessageSentResponse sendEntryMessage(@PathVariable Long waitingNo) {
         return waitingService.sendWaitingEntryMessage(waitingNo);
     }
-
-
-
 }

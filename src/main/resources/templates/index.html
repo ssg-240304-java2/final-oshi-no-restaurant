@@ -15,6 +15,7 @@
 
         <!-- 본문 -->
         <div class="container">
+
             <img th:src="@{/images/oku.png}" alt="Logo" class="logo">
             <h3>안녕하세요, 식덕후 입니다.<br>당신의 맛집을 공유해 주세요!</h3>
             <div class="search-bar">
@@ -22,314 +23,225 @@
                 <img th:src="@{/images/index/magnifier.png}" alt="돋보기">
             </div>
             <div class="icons">
-                <a th:href="@{/search/card}"><img th:src="@{/images/index/reservIcon.png}" alt="예약"></a>
-                <a th:href="@{/search/card}"><img th:src="@{/images/index/waitingIcon.png}" alt="줄서기"></a>
+                <a th:href="@{/search/card?reservation=true}"><img th:src="@{/images/index/reservIcon.png}" alt="예약"></a>
+                <a th:href="@{/search/card?waiting=true}"><img th:src="@{/images/index/waitingIcon.png}" alt="줄서기"></a>
                 <a th:href="@{/search/map}"><img th:src="@{/images/index/aroundIcon.png}" alt="내 주변"></a>
                 <a th:href="@{/zzupFriend}"><img th:src="@{/images/index/zzupFriendIcon.png}" alt="쩝쩝친구"></a>
                 <a th:href="@{/zzupList}"><img th:src="@{/images/index/zzupListIcon.png}" alt="쩝쩝 리스트"></a>
             </div>
             <div class="icon-texts">
-                <a th:href="@{/search?type=reservation}"><div class="text">예약</div></a>
-                <a th:href="@{/search?type=waiting}"><div class="text">줄서기</div></a>
-                <a th:href="@{/around}"><div class="text">내 주변</div></a>
-                <a th:href="@{/zzupFriend}"><div class="text">쩝쩝친구</div></a>
-                <a th:href="@{/zzupList}"><div class="text">쩝쩝 리스트</div></a>
+                <a th:href="@{/search/card?reservation=true}">
+                    <div class="text">예약</div>
+                </a>
+                <a th:href="@{/search/card?waiting=true}">
+                    <div class="text">줄서기</div>
+                </a>
+                <a th:href="@{/search/map}">
+                    <div class="text">내 주변</div>
+                </a>
+                <a th:href="@{/zzupFriend}">
+                    <div class="text">쩝쩝친구</div>
+                </a>
+                <a th:href="@{/zzupList}">
+                    <div class="text">쩝쩝 리스트</div>
+                </a>
             </div>
 
             <!-- 추천 박사들이 인정한 식당 섹션 -->
             <h5>추천 박사들이 인정한 식당</h5>
-            <div id="carouselExampleIndicators1" class="carousel slide" data-ride="carousel">
-                <div class="carousel-inner">
-                    <div class="carousel-item">
-                        <div class="card">
-                            <img src="https://kr.object.ncloudstorage.com/oshino-file/37c1d0fd-fef0-4851-b784-df7344d439cc.png"
-                                 class="card-img-top" alt="음식 이미지">
-                            <div class="heart-icon" onclick="toggleHeart(this)">
-                                <img th:src="@{/images/index/love-empty.png}" alt="빈 하트" class="empty-heart">
-                                <img th:src="@{/images/index/love-full.png}" alt="꽉 찬 하트" class="full-heart" style="display:none;">
-                            </div>
-                            <div class="card-body">
-                                <h5 class="card-title">밍글스<span class="rating">4.5 <span class="star">★</span></span></h5>
-                                <p class="address">서울특별시 강남구 논현동 논현동 강남대로122길 102호 광명빌딩 지상층 101호 메르밀진미집 논현직영점</p>
-                                <div class="tags">
-                                    <span>#한식</span>
-                                    <span>#미쉐린2스타</span>
-                                    <span>#데이트</span>
-                                    <span>#발렛파킹</span>
-                                    <span>#고급스러운</span>
-                                </div>
-                                <div class="plus-button">
-                                    <img th:src="@{/images/index/plus-gray.png}" alt="plus">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <img src="https://kr.object.ncloudstorage.com/oshino-file/37c1d0fd-fef0-4851-b784-df7344d439cc.png"
-                                 class="card-img-top" alt="음식 이미지">
-                            <div class="heart-icon" onclick="toggleHeart(this)">
-                                <img th:src="@{/images/index/love-empty.png}" alt="빈 하트" class="empty-heart">
-                                <img th:src="@{/images/index/love-full.png}" alt="꽉 찬 하트" class="full-heart" style="display:none;">
-                            </div>
-                            <div class="card-body">
-                                <h5 class="card-title">밍글스<span class="rating">4.5 <span class="star">★</span></span></h5>
-                                <p class="address">서울특별시 강남구 논현동 논현동 강남대로122길 102호 광명빌딩 지상층 101호 메르밀진미집 논현직영점</p>
-                                <div class="tags">
-                                    <span>#한식</span>
-                                    <span>#미쉐린2스타</span>
-                                    <span>#데이트</span>
-                                    <span>#발렛파킹</span>
-                                    <span>#고급스러운</span>
-                                </div>
-                                <div class="plus-button">
-                                    <img th:src="@{/images/index/plus-gray.png}" alt="plus">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <img src="https://kr.object.ncloudstorage.com/oshino-file/37c1d0fd-fef0-4851-b784-df7344d439cc.png"
-                                 class="card-img-top" alt="음식 이미지">
-                            <div class="heart-icon" onclick="toggleHeart(this)">
-                                <img th:src="@{/images/index/love-empty.png}" alt="빈 하트" class="empty-heart">
-                                <img th:src="@{/images/index/love-full.png}" alt="꽉 찬 하트" class="full-heart" style="display:none;">
-                            </div>
-                            <div class="card-body">
-                                <h5 class="card-title">밍글스<span class="rating">4.5 <span class="star">★</span></span></h5>
-                                <p class="address">서울특별시 강남구 논현동 논현동 강남대로122길 102호 광명빌딩 지상층 101호 메르밀진미집 논현직영점</p>
-                                <div class="tags">
-                                    <span>#한식</span>
-                                    <span>#미쉐린2스타</span>
-                                    <span>#데이트</span>
-                                    <span>#발렛파킹</span>
-                                    <span>#고급스러운</span>
-                                </div>
-                                <div class="plus-button">
-                                    <img th:src="@{/images/index/plus-gray.png}" alt="plus">
-                                </div>
-                            </div>
+            <div class="carousel-popular row">
+                <div class="none-data" th:if="${#lists.isEmpty(popularLists)}">데이터가 없습니다.</div>
+                <div class="card" th:each="restaurant, iterStat : ${popularLists}"
+                     th:classappend="popular+${iterStat.index}" th:attr="no=${restaurant.restaurantNo}">
+                    <img th:src="${restaurant.imgUrl}"
+                         class="card-img-top" alt="음식 이미지" th:onclick="|location.href='/detail/' + ${restaurant.restaurantNo} + '/detailPage'|">
+                    <div class="heart-icon" onclick="toggleHeart(this)" th:data-restaurant-no="${restaurant.restaurantNo}">
+                        <img th:src="@{/images/index/love-empty.png}" alt="빈 하트" class="empty-heart" th:style="'display:' + (!${restaurant.inList}? 'block' : 'none')">
+                        <img th:src="@{/images/index/love-full.png}" alt="꽉 찬 하트" class="full-heart" th:style="'display:' + (${restaurant.inList}? 'block' : 'none')">
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title"  th:onclick="|location.href='/detail/' + ${restaurant.restaurantNo} + '/detailPage'|">
+                            <span th:text="${restaurant.restaurantName}">밍글스</span>
+                        </h5>
+                        <h5 class="card-rating">
+                            <span class="rating" th:text="${restaurant.rating}">0.0</span>
+                            <span class="star">★</span>
+                        </h5>
+                        <p class="address" th:text="${restaurant.restaurantAddress}">주소</p>
+                        <div class="tags">
+                            <span th:text="${restaurant.hashTag}"></span>
                         </div>
                     </div>
-
-                    <!-- 추가 슬라이드 아이템들 -->
+                    <div class="plus-button">
+                        <img th:src="@{/images/index/plus-gray.png}" alt="plus">
+                    </div>
                 </div>
-<!--                <a class="carousel-control-prev" href="#carouselExampleIndicators1" role="button" data-slide="prev">-->
-<!--                    <span class="carousel-control-prev-icon" aria-hidden="true"><</span>-->
-<!--                    <span class="sr-only">Previous</span>-->
-<!--                </a>-->
-<!--                <a class="carousel-control-next" href="#carouselExampleIndicators1" role="button" data-slide="next">-->
-<!--                    <span class="carousel-control-next-icon" aria-hidden="true">></span>-->
-<!--                    <span class="sr-only">Next</span>-->
-<!--                </a>-->
+                <div class="next" id="next-popular" th:if="${!#lists.isEmpty(popularLists)}">
+                    <img th:src="@{/images/index/arrow.png}" alt="오른쪽">
+                </div>
+                <div class="prev" id="prev-popular" th:if="${!#lists.isEmpty(popularLists)}">
+                    <img th:src="@{/images/index/arrow.png}" alt="왼쪽">
+                </div>
             </div>
 
             <!-- 실시간 인기 식당 섹션 -->
             <h5>실시간 인기 식당</h5>
-            <div id="carouselExampleIndicators2" class="carousel slide" data-ride="carousel">
-                <div class="carousel-inner">
-                    <div class="carousel-item">
-                        <div class="card">
-                            <img src="https://kr.object.ncloudstorage.com/oshino-file/37c1d0fd-fef0-4851-b784-df7344d439cc.png"
-                                 class="card-img-top" alt="음식 이미지">
-                            <div class="heart-icon" onclick="toggleHeart(this)">
-                                <img th:src="@{/images/index/love-empty.png}" alt="빈 하트" class="empty-heart">
-                                <img th:src="@{/images/index/love-full.png}" alt="꽉 찬 하트" class="full-heart" style="display:none;">
-                            </div>
-                            <div class="card-body">
-                                <h5 class="card-title">밍글스<span class="rating">4.5 <span class="star">★</span></span></h5>
-                                <p class="address">서울특별시 강남구 논현동 논현동 강남대로122길 102호 광명빌딩 지상층 101호 메르밀진미집 논현직영점</p>
-                                <div class="tags">
-                                    <span>#한식</span>
-                                    <span>#미쉐린2스타</span>
-                                    <span>#데이트</span>
-                                    <span>#발렛파킹</span>
-                                    <span>#고급스러운</span>
-                                </div>
-                                <div class="plus-button">
-                                    <img th:src="@{/images/index/plus-gray.png}" alt="plus">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <img src="https://kr.object.ncloudstorage.com/oshino-file/37c1d0fd-fef0-4851-b784-df7344d439cc.png"
-                                 class="card-img-top" alt="음식 이미지">
-                            <div class="heart-icon" onclick="toggleHeart(this)">
-                                <img th:src="@{/images/index/love-empty.png}" alt="빈 하트" class="empty-heart">
-                                <img th:src="@{/images/index/love-full.png}" alt="꽉 찬 하트" class="full-heart" style="display:none;">
-                            </div>
-                            <div class="card-body">
-                                <h5 class="card-title">밍글스<span class="rating">4.5 <span class="star">★</span></span></h5>
-                                <p class="address">서울특별시 강남구 논현동 논현동 강남대로122길 102호 광명빌딩 지상층 101호 메르밀진미집 논현직영점</p>
-                                <div class="tags">
-                                    <span>#한식</span>
-                                    <span>#미쉐린2스타</span>
-                                    <span>#데이트</span>
-                                    <span>#발렛파킹</span>
-                                    <span>#고급스러운</span>
-                                </div>
-                                <div class="plus-button">
-                                    <img th:src="@{/images/index/plus-gray.png}" alt="plus">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <img src="https://kr.object.ncloudstorage.com/oshino-file/37c1d0fd-fef0-4851-b784-df7344d439cc.png"
-                                 class="card-img-top" alt="음식 이미지">
-                            <div class="heart-icon" onclick="toggleHeart(this)">
-                                <img th:src="@{/images/index/love-empty.png}" alt="빈 하트" class="empty-heart">
-                                <img th:src="@{/images/index/love-full.png}" alt="꽉 찬 하트" class="full-heart" style="display:none;">
-                            </div>
-                            <div class="card-body">
-                                <h5 class="card-title">밍글스<span class="rating">4.5 <span class="star">★</span></span></h5>
-                                <p class="address">서울특별시 강남구 논현동 논현동 강남대로122길 102호 광명빌딩 지상층 101호 메르밀진미집 논현직영점</p>
-                                <div class="tags">
-                                    <span>#한식</span>
-                                    <span>#미쉐린2스타</span>
-                                    <span>#데이트</span>
-                                    <span>#발렛파킹</span>
-                                    <span>#고급스러운</span>
-                                </div>
-                                <div class="plus-button">
-                                    <img th:src="@{/images/index/plus-gray.png}" alt="plus">
-                                </div>
-                            </div>
-                        </div>
+            <div class="carousel-busiest row">
+                <div class="none-data" th:if="${#lists.isEmpty(busiestLists)}">데이터가 없습니다.</div>
+                <div class="card" th:each="restaurant, iterStat : ${busiestLists}"
+                     th:classappend="busiest+${iterStat.index}">
+                    <img th:src="${restaurant.imgUrl}"
+                         class="card-img-top" alt="음식 이미지" th:onclick="|location.href='/detail/' + ${restaurant.restaurantNo} + '/detailPage'|">
+                    <div class="heart-icon" onclick="toggleHeart(this)" th:data-restaurant-no="${restaurant.restaurantNo}">
+                        <img th:src="@{/images/index/love-empty.png}" alt="빈 하트" class="empty-heart" th:style="'display:' + (!${restaurant.inList}? 'block' : 'none')">
+                        <img th:src="@{/images/index/love-full.png}" alt="꽉 찬 하트" class="full-heart" th:style="'display:' + (${restaurant.inList}? 'block' : 'none')">
                     </div>
-                    <!-- 추가 슬라이드 아이템들 -->
+                    <div class="card-body">
+                        <h5 class="card-title" th:onclick="|location.href='/detail/' + ${restaurant.restaurantNo} + '/detailPage'|"
+                            th:text="${restaurant.restaurantName}">밍글스<span class="rating"
+                                                                                               th:text="${restaurant.rating}">4.5 <span
+                                class="star">★</span></span></h5>
+                        <p class="address" th:text="${restaurant.restaurantAddress}">서울특별시 강남구 논현동 논현동 강남대로122길
+                            102호 광명빌딩 지상층 101호 메르밀진미집 논현직영점</p>
+                        <div class="tags">
+                            <span th:text="${restaurant.hashTag}"></span>
+                            <!--                                    <span>#한식</span>-->
+                            <!--                                    <span>#미쉐린2스타</span>-->
+                            <!--                                    <span>#데이트</span>-->
+                            <!--                                    <span>#발렛파킹</span>-->
+                            <!--                                    <span>#고급스러운</span>-->
+                        </div>
+                        <!--                                <div class="plus-button">-->
+                        <!--                                    <img th:src="@{/images/index/plus-gray.png}" alt="plus">-->
+                        <!--                                </div>-->
+                    </div>
+                    <div class="plus-button">
+                        <img th:src="@{/images/index/plus-gray.png}" alt="plus">
+                    </div>
                 </div>
-<!--                <a class="carousel-control-prev" href="#carouselExampleIndicators2" role="button" data-slide="prev">-->
-<!--                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>-->
-<!--                    <span class="sr-only">Previous</span>-->
-<!--                </a>-->
-<!--                <a class="carousel-control-next" href="#carouselExampleIndicators2" role="button" data-slide="next">-->
-<!--                    <span class="carousel-control-next-icon" aria-hidden="true"></span>-->
-<!--                    <span class="sr-only">Next</span>-->
-<!--                </a>-->
+                <div class="next" id="next-busiest" th:if="${!#lists.isEmpty(busiestLists)}">
+                    <img th:src="@{/images/index/arrow.png}" alt="오른쪽">
+                </div>
+                <div class="prev" id="prev-busiest" th:if="${!#lists.isEmpty(busiestLists)}">
+                    <img th:src="@{/images/index/arrow.png}" alt="왼쪽">
+                </div>
             </div>
 
-            <!-- 바로 예약 가능한 식당 섹션 -->
-            <h5>바로 예약 가능한 식당</h5>
-            <div id="carouselExampleIndicators3" class="carousel slide" data-ride="carousel">
-                <div class="carousel-inner">
-                    <div class="carousel-item">
-                        <div class="card">
-                            <img src="https://kr.object.ncloudstorage.com/oshino-file/37c1d0fd-fef0-4851-b784-df7344d439cc.png"
-                                 class="card-img-top" alt="음식 이미지">
-                            <div class="heart-icon" onclick="toggleHeart(this)">
-                                <img th:src="@{/images/index/love-empty.png}" alt="빈 하트" class="empty-heart">
-                                <img th:src="@{/images/index/love-full.png}" alt="꽉 찬 하트" class="full-heart" style="display:none;">
-                            </div>
-                            <div class="card-body">
-                                <h5 class="card-title">밍글스<span class="rating">4.5 <span class="star">★</span></span></h5>
-                                <p class="address">서울특별시 강남구 논현동 논현동 강남대로122길 102호 광명빌딩 지상층 101호 메르밀진미집 논현직영점</p>
-                                <div class="tags">
-                                    <span>#한식</span>
-                                    <span>#미쉐린2스타</span>
-                                    <span>#데이트</span>
-                                    <span>#발렛파킹</span>
-                                    <span>#고급스러운</span>
-                                </div>
-                                <div class="plus-button">
-                                    <img th:src="@{/images/index/plus-gray.png}" alt="plus">
-                                </div>
-                            </div>
+            <!-- 바로 입장 가능한 식당 섹션 -->
+            <h5>바로 입장 가능한 식당</h5>
+            <div class="carousel-direct row">
+                <div class="none-data" th:if="${#lists.isEmpty(directLists)}">데이터가 없습니다.</div>
+                <div class="card" th:each="restaurant, iterStat : ${directLists}"
+                     th:classappend="direct+${iterStat.index}">
+                    <img th:src="${restaurant.imgUrl}"
+                         class="card-img-top" alt="음식 이미지" th:onclick="|location.href='/detail/' + ${restaurant.restaurantNo} + '/detailPage'|">
+                    <div class="heart-icon" onclick="toggleHeart(this)" th:data-restaurant-no="${restaurant.restaurantNo}">
+                        <img th:src="@{/images/index/love-empty.png}" alt="빈 하트" class="empty-heart" th:style="'display:' + (!${restaurant.inList}? 'block' : 'none')">
+                        <img th:src="@{/images/index/love-full.png}" alt="꽉 찬 하트" class="full-heart" th:style="'display:' + (${restaurant.inList}? 'block' : 'none')">
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title" th:onclick="|location.href='/detail/' + ${restaurant.restaurantNo} + '/detailPage'|"
+                            th:text="${restaurant.restaurantName}">밍글스<span class="rating"
+                                                                                               th:text="${restaurant.rating}">4.5 <span
+                                class="star">★</span></span></h5>
+                        <p class="address" th:text="${restaurant.restaurantAddress}">서울특별시 강남구 논현동 논현동 강남대로122길
+                            102호 광명빌딩 지상층 101호 메르밀진미집 논현직영점</p>
+                        <div class="tags">
+                            <span th:text="${restaurant.hashTag}"></span>
+                            <!--                                    <span>#한식</span>-->
+                            <!--                                    <span>#미쉐린2스타</span>-->
+                            <!--                                    <span>#데이트</span>-->
+                            <!--                                    <span>#발렛파킹</span>-->
+                            <!--                                    <span>#고급스러운</span>-->
                         </div>
-                        <div class="card">
-                            <img src="https://kr.object.ncloudstorage.com/oshino-file/37c1d0fd-fef0-4851-b784-df7344d439cc.png"
-                                 class="card-img-top" alt="음식 이미지">
-                            <div class="heart-icon" onclick="toggleHeart(this)">
-                                <img th:src="@{/images/index/love-empty.png}" alt="빈 하트" class="empty-heart">
-                                <img th:src="@{/images/index/love-full.png}" alt="꽉 찬 하트" class="full-heart" style="display:none;">
-                            </div>
-                            <div class="card-body">
-                                <h5 class="card-title">밍글스<span class="rating">4.5 <span class="star">★</span></span></h5>
-                                <p class="address">서울특별시 강남구 논현동 논현동 강남대로122길 102호 광명빌딩 지상층 101호 메르밀진미집 논현직영점</p>
-                                <div class="tags">
-                                    <span>#한식</span>
-                                    <span>#미쉐린2스타</span>
-                                    <span>#데이트</span>
-                                    <span>#발렛파킹</span>
-                                    <span>#고급스러운</span>
-                                </div>
-                                <div class="plus-button">
-                                    <img th:src="@{/images/index/plus-gray.png}" alt="plus">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <img src="https://kr.object.ncloudstorage.com/oshino-file/37c1d0fd-fef0-4851-b784-df7344d439cc.png"
-                                 class="card-img-top" alt="음식 이미지">
-                            <div class="heart-icon" onclick="toggleHeart(this)">
-                                <img th:src="@{/images/index/love-empty.png}" alt="빈 하트" class="empty-heart">
-                                <img th:src="@{/images/index/love-full.png}" alt="꽉 찬 하트" class="full-heart" style="display:none;">
-                            </div>
-                            <div class="card-body">
-                                <h5 class="card-title">밍글스<span class="rating">4.5 <span class="star">★</span></span></h5>
-                                <p class="address">서울특별시 강남구 논현동 논현동 강남대로122길 102호 광명빌딩 지상층 101호 메르밀진미집 논현직영점</p>
-                                <div class="tags">
-                                    <span>#한식</span>
-                                    <span>#미쉐린2스타</span>
-                                    <span>#데이트</span>
-                                    <span>#발렛파킹</span>
-                                    <span>#고급스러운</span>
-                                </div>
-                                <div class="plus-button">
-                                    <img th:src="@{/images/index/plus-gray.png}" alt="plus">
-                                </div>
-                            </div>
+                        <!--                                <div class="plus-button">-->
+                        <!--                                    <img th:src="@{/images/index/plus-gray.png}" alt="plus">-->
+                        <!--                                </div>-->
+                    </div>
+                    <div class="plus-button">
+                        <img th:src="@{/images/index/plus-gray.png}" alt="plus">
+                    </div>
+                </div>
+                <div class="next" id="next-direct" th:if="${!#lists.isEmpty(directLists)}">
+                    <img th:src="@{/images/index/arrow.png}" alt="오른쪽">
+                </div>
+                <div class="prev" id="prev-direct" th:if="${!#lists.isEmpty(directLists)}">
+                    <img th:src="@{/images/index/arrow.png}" alt="왼쪽">
+                </div>
+            </div>
+
+
+            <div class="bubble-menu hidden">
+                <div class="bubble-option">웨이팅</div>
+                <div class="bubble-option">예약</div>
+            </div>
+
+            <!-- 플로팅 액션 버튼 -->
+            <div class="fab-container">
+                <div class="fab-menu">
+                    <div class="fab-menu-item-container" id="review">
+                        <span>내가 쓴 리뷰</span>
+                        <div class="fab-menu-item">
+                            <img th:src="@{images/index/wg-review.png}">
                         </div>
                     </div>
-                    <!-- 추가 슬라이드 아이템들 -->
+                    <div class="fab-menu-item-container" id="list">
+                        <span>내 리스트</span>
+                        <div class="fab-menu-item">
+                            <img th:src="@{images/index/wg-list.png}">
+                        </div>
+                    </div>
+                    <div class="fab-menu-item-container" id="history">
+                        <span>이용 내역</span>
+                        <div class="fab-menu-item">
+                            <img th:src="@{images/index/wg-clock.png}">
+                        </div>
+                    </div>
                 </div>
-<!--                <a class="carousel-control-prev" href="#carouselExampleIndicators3" role="button" data-slide="prev">-->
-<!--                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>-->
-<!--                    <span class="sr-only">Previous</span>-->
-<!--                </a>-->
-<!--                <a class="carousel-control-next" href="#carouselExampleIndicators3" role="button" data-slide="next">-->
-<!--                    <span class="carousel-control-next-icon" aria-hidden="true"></span>-->
-<!--                    <span class="sr-only">Next</span>-->
-<!--                </a>-->
+                <div class="fab-button">
+                    <img class="fas fa-plus" th:src="@{/images/index/wg-plus.png}">
+                </div>
             </div>
+
         </div>
 
-        <!-- 플로팅 액션 버튼 -->
-        <div class="fab-container">
-            <div class="fab-menu">
-                <div class="fab-menu-item-container" id="review">
-                    <span>내가 쓴 리뷰</span>
-                    <div class="fab-menu-item">
-                        <img th:src="@{images/index/wg-review.png}">
+        <!-- 모달 구조 -->
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-custom" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="myModalLabel">내 리스트에 추가</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
-                </div>
-                <div class="fab-menu-item-container" id="list">
-                    <span>내 리스트</span>
-                    <div class="fab-menu-item">
-                        <img th:src="@{images/index/wg-list.png}">
-                    </div>
-                </div>
-                <div class="fab-menu-item-container" id="history">
-                    <span>이용 내역</span>
-                    <div class="fab-menu-item">
-                        <img th:src="@{images/index/wg-clock.png}">
-                    </div>
-                </div>
-            </div>
-            <div class="fab-button">
-                <img class="fas fa-plus" th:src="@{/images/index/wg-plus.png}">
-            </div>
-        </div>
+                    <div class="modal-body">
+                        <div class="container modal-container-custom mt-5">
+                            <div class="modal-card-custom" id="modalAppendContainer">
+                                <h5><img src="../static/picture/bearImg.png"/> 내 리스트에 추가</h5>
 
-        <div class="bubble-menu hidden">
-            <div class="bubble-option">웨이팅</div>
-            <div class="bubble-option">예약</div>
+                                <!-- 리스트 박스를 표시하는 반복문 -->
+
+                                <!-- 리스트 추가 버튼 -->
+                                <button class="modal-btn-add">+</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- footer -->
         <div th:replace="~{fragment/footer.html :: footer}" class="footer"></div>
 
-        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
         <script src="https://kit.fontawesome.com/a076d05399.js"></script>
-        <script type="text/javascript" th:src="@{js/fragment/navbar.js}"></script>
-        <script type="text/javascript" th:src="@{js/index.js}"></script>
+        <script type="text/javascript" th:src="@{/js/fragment/navbar.js}"></script>
+        <script type="text/javascript" th:src="@{/js/index.js}"></script>
     </body>
 </html>

@@ -1,6 +1,5 @@
 package kr.oshino.eataku.waiting.controller;
 
-import kr.oshino.eataku.common.util.FileUploadUtil;
 import kr.oshino.eataku.member.model.dto.CustomMemberDetails;
 import kr.oshino.eataku.waiting.model.dto.requestDto.CreateWaitingRequestDto;
 import kr.oshino.eataku.waiting.model.dto.requestDto.ReadWaitingRequestDto;
@@ -73,12 +72,15 @@ public class WaitingUserController {
 
     /**
      * 웨이팅 조회
-     * @param readWaitingRequestDto
+     * @param memberNo
      */
-    @GetMapping("/waiting")
+    @GetMapping("/waiting/{memberNo}")
     @ResponseBody
     public ResponseEntity<List<ReadWaitingResponseDto>> getMyWaitingList(
-            ReadWaitingRequestDto readWaitingRequestDto) {
+            @PathVariable Long memberNo) {
+
+        ReadWaitingRequestDto readWaitingRequestDto = ReadWaitingRequestDto.builder()
+                .memberNo(memberNo).build();
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(waitingService.getWaitingListByMemberNo(readWaitingRequestDto));
@@ -105,6 +107,9 @@ public class WaitingUserController {
     }
 
 
+
+
+
     /**
      * 웨이팅 등록 메세지 전송
      * @param waitingNo
@@ -115,8 +120,4 @@ public class WaitingUserController {
     public SingleMessageSentResponse sendRegisterMessage(@PathVariable Long waitingNo) {
         return waitingService.sendWaitingRegisterMessage(waitingNo);
     }
-
-
-
-    // 웨이팅 미루기
 }

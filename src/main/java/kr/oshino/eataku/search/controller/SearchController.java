@@ -20,17 +20,20 @@ public class SearchController {
     private final SearchService searchService;
 
     @GetMapping("/card")
-    public String card(@RequestParam(value = "query", defaultValue = "") String keyword,@RequestParam(defaultValue = "0")int page, Model model) {
+    public String card(@RequestParam(value = "query", defaultValue = "") String keyword,
+                       @RequestParam(value = "categories", required = false) List<String> categories,
+                       @RequestParam(defaultValue = "0")int page,
+                       @RequestParam(required = false) String reservation,
+                       @RequestParam(required = false) String waiting,
+                       Model model) {
 
-        log.info("🚀🚀 [ SearchController ] keyword : {} 🚀🚀", keyword);
+        log.info("🚀🚀 [ SearchController ] keyword : {}, categories : {}, reservation : {}, waiting : {}  🚀🚀", keyword, categories, reservation, waiting);
 
         List<SearchResultDTO> restaurantLists = new ArrayList<>();
 
         int size = 30;
-        if (keyword != null && !keyword.isEmpty()) {
-            restaurantLists = searchService.selectQueryByKeyword(keyword, page, size);
-            log.info("🚀🚀 [ SearchController ] restaurantLists[0] : {} 🚀🚀", restaurantLists.get(0));
-        }
+            restaurantLists = searchService.selectQueryByKeyword(keyword, categories, reservation, waiting, page, size);
+            log.info("🚀🚀 [ SearchController ] restaurantLists : {} 🚀🚀", restaurantLists);
 
         model.addAttribute("restaurantLists", restaurantLists);
 
@@ -39,15 +42,19 @@ public class SearchController {
 
     @PostMapping("/card")
     @ResponseBody
-    public List<SearchResultDTO> cardPage(@RequestParam(defaultValue = "") String keyword,@RequestParam(defaultValue = "0")int page) {
+    public List<SearchResultDTO> cardPage(@RequestParam(defaultValue = "") String keyword,
+                                          @RequestParam(defaultValue = "0")int page,
+                                          @RequestParam(required = false) String reservation,
+                                          @RequestParam(required = false) String waiting,
+                                          @RequestParam(required = false) List<String> categories) {
 
-        log.info("🚀🚀 [ SearchController ] keyword : {} page : {} 🚀🚀", keyword, page);
+        log.info("🚀🚀 [ SearchController ] keyword : {} categories : {} page : {} 🚀🚀", keyword, categories, page);
 
         List<SearchResultDTO> restaurantLists = new ArrayList<>();
 
         int size = 30;
         if (keyword != null && !keyword.isEmpty()) {
-            restaurantLists = searchService.selectQueryByKeyword(keyword, page, size);
+            restaurantLists = searchService.selectQueryByKeyword(keyword, categories, reservation, waiting, page, size);
             if (!restaurantLists.isEmpty()) {
                 log.info("🚀🚀 [ SearchController ] restaurantLists[0] : {} 🚀🚀", restaurantLists.get(0));
             }

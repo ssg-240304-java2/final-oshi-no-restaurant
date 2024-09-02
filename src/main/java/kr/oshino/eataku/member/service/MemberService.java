@@ -26,11 +26,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.security.SecureRandom;
 import java.sql.Date;
 import java.sql.Time;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Service
 @RequiredArgsConstructor
@@ -46,6 +51,9 @@ public class MemberService {
     private final MyListRepository myListRepository;
     private final ReservationRepository reservationRepository;
     private final WaitingRepository waitingRepository;
+
+    // 메일 전송을 위한 메일서비스
+    private final MailService mailService;
 
     @Autowired
     FileUploadUtil fileUploadUtil;
@@ -170,7 +178,6 @@ public class MemberService {
         // (+) 뱃지 조회
         String badge = memberRepository.findBadgeByMemberNo(member.getMemberNo());
         member.setBadge(badge);
-        // (-) 뱃지 조회
 
         return member;
     }
@@ -273,20 +280,20 @@ public class MemberService {
         // 바뀐 정보만 바꾸기
         if( memberInfo != null && memberInfo.getMemberNo().equals(logginedMemberNo) ) {
 
+            log.info("👀👀 [ MemberService ] modify to member : {} 👀👀", memberInfo);
+            log.info("👀👀 [ MemberService ] modify from member : {} 👀👀", member);
             // 기본 회원정보
-            if( !uploadImgUrl.isEmpty()) {memberInfo.setImgUrl(uploadImgUrl);}
+            if( !uploadImgUrl.isEmpty() ) {memberInfo.setImgUrl(uploadImgUrl);}
             if( !memberInfo.getName().equals(member.getName()) ) {memberInfo.setName(member.getName());}
-            if( !memberInfo.getNickname().equals(member.getNickname()) ) {memberInfo.setName(member.getNickname());}
-            if( !memberInfo.getBirthday().equals(member.getBirthday()) ) {memberInfo.setBirthday(member.getBirthday());}
-            if( !memberInfo.getGender().equals(member.getGender()) ) {memberInfo.setGender(member.getGender());}
-            if( !memberInfo.getEmail().equals(member.getEmail()) ) {memberInfo.setEmail(member.getEmail());}
-            if( !memberInfo.getPhone().equals(member.getPhone()) ) {memberInfo.setPhone(member.getPhone());}
-            if( !memberInfo.getIntroduction().equals(member.getIntroduction()) ) {memberInfo.setIntroduction(member.getIntroduction());}
+            if( !memberInfo.getNickname().equals(member.getNickname()) ) {memberInfo.setNickname(member.getNickname());}
+            if( !Objects.equals(memberInfo.getBirthday(),member.getBirthday()) ) {memberInfo.setBirthday(member.getBirthday());}
+            if( !Objects.equals(memberInfo.getGender(),member.getGender()) ) {memberInfo.setGender(member.getGender());}
+            if( !Objects.equals(memberInfo.getPhone(),member.getPhone()) ) {memberInfo.setPhone(member.getPhone());}
+            if( !Objects.equals(memberInfo.getIntroduction(),member.getIntroduction()) ) {memberInfo.setIntroduction(member.getIntroduction());}
 
             // 계정정보
             MemberLoginInfo tempLoginInfo = memberInfo.getMemberLoginInfo();
-            if( !memberInfo.getMemberLoginInfo().getAccount().equals(member.getAccount()) ) {tempLoginInfo.setAccount(member.getAccount());}
-            if( !bCryptPasswordEncoder.matches(member.getPassword(), tempLoginInfo.getPassword()) && !member.getPassword().isEmpty() ) {tempLoginInfo.setPassword(bCryptPasswordEncoder.encode(member.getPassword()));}
+            if( !bCryptPasswordEncoder.matches(member.getPassword(), tempLoginInfo.getPassword()) && !(member.getPassword().isEmpty())) {tempLoginInfo.setPassword(bCryptPasswordEncoder.encode(member.getPassword()));}
             memberInfo.setMemberLoginInfo(tempLoginInfo);
 
             memberRepository.save(memberInfo);
@@ -294,5 +301,88 @@ public class MemberService {
         }
 
         return isSuccess;
+    }
+
+    public boolean findAccountByNameAndEmail(String name, String email) {
+
+        Member member = memberRepository.findByNameAndEmail(name, email);
+
+        if( member != null && member.getMemberLoginInfo() != null && member.getMemberLoginInfo().getAccount() != null) {
+
+            return mailService.sendEmailFindId(email, member.getMemberLoginInfo().getAccount() );
+        }
+
+        return false;
+    }
+
+    public boolean findPasswordByIdAndNameAndEmail(String id, String name, String email) {
+
+        Member member = memberRepository.findByMemberLoginInfoAccountAndNameAndEmail(id,name,email);
+
+        if( member != null && member.getMemberLoginInfo() != null) {
+
+            String tempPassword = generateRandomMixAll(8);
+
+            MemberLoginInfo changePasswordInfo = member.getMemberLoginInfo();
+            changePasswordInfo.setPassword(bCryptPasswordEncoder.encode(tempPassword));
+            member.setMemberLoginInfo(changePasswordInfo);
+
+            memberRepository.save(member);
+
+            return mailService.sendEmailFindPw(email, tempPassword );
+        }
+
+        return false;
+    }
+
+    public String generateRandomMixAll(int length) {
+        SecureRandom secureRandom = new SecureRandom();
+        /*
+         * 1. 특수문자의 범위 33 ~ 47, 58 ~ 64, 91 ~ 96
+         * 2. 숫자의 범위 : 48 ~ 57
+         * 3. 대문자의 범위: 65 ~ 90
+         * 4. 소문자의 범위: 97 ~ 122
+         */
+        String charNSpecialChar =
+                IntStream.concat(
+                                IntStream.concat(
+                                        IntStream.rangeClosed(48, 57),
+                                        IntStream.rangeClosed(65,90)),
+                                IntStream.concat(
+                                        IntStream.rangeClosed(97, 122),
+                                        "!@#$%^&*=+".chars()))
+                        .mapToObj(i -> String.valueOf((char) i))
+                        .collect(Collectors.joining());
+
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < length; i++) {
+            builder.append(charNSpecialChar.charAt(secureRandom.nextInt(charNSpecialChar.length())));
+        }
+        return builder.toString();
+    }
+
+    public boolean selectSignUpByIdAndNameAndEmail(String id, String name, String email) {
+        return memberRepository.existsByMemberLoginInfoAccountAndNameAndEmail(id,name,email);
+    }
+
+    public List<HistoryDTO> selectHistory(Long logginedMemberNo) {
+        List<Object[]> results = memberRepository.selectHistory(logginedMemberNo);
+        List<HistoryDTO> historyList = new ArrayList<>();
+
+        for (Object[] result : results) {
+            HistoryDTO dto = new HistoryDTO(
+                    (String) result[0],  // restaurantName
+                    ((Number) result[1]).longValue(),  // restaurantNo
+                    (String) result[2],  // imgUrl
+                    (String) result[3],  // restaurantAddress
+                    (Timestamp) result[4],  // updateAt
+                    (String) result[5],  // serviceType
+                    ((Number) result[6]).longValue(),  // serviceNo
+                    (String) result[7]   // status
+            );
+            historyList.add(dto);
+        }
+
+        return historyList;
     }
 }

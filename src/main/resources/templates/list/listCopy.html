@@ -1,0 +1,283 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport"
+              content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Document</title>
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" th:href="@{/css/fragment/navbar.css}">
+        <link rel="stylesheet" th:href="@{/css/fragment/footer.css}">
+        <style>
+            .text-gray{color: #aaa}
+            .media img{height: 170px;width: 140px}
+            .media {
+                align-content: center;
+            }
+            .display-4 {
+                color: rgba(0,0,0,80%);
+            }
+            .btn-custom {
+                background-color: #FA4A54;
+                color: #fff;
+                border: 1px #FA4A54 solid;
+            }
+            .btn-custom:hover {
+                background-color: #fff;
+                color: #FA4A54;
+                border: 1px #FA4A54 solid;
+            }
+            .btn-top {
+                margin-bottom: 10px;
+            }
+
+            .logo {
+                width: 50px;
+            }
+            .title{
+                justify-content: center;
+                align-content: center;
+            }
+            .py-5 {
+                margin-top: 60px;
+            }
+            .ul-header {
+                justify-content: space-between;
+            }
+            .peekBtn {
+                justify-content: center;
+            }
+            .modal-container-custom {
+                max-width: 500px;
+            }
+            .modal-card-custom {
+                border: 2px solid #FF5A5A;
+                padding: 20px;
+                border-radius: 10px;
+                text-align: center;
+            }
+            .modal-card-custom h5 {
+                color: #FF5A5A;
+                margin-bottom: 20px;
+            }
+            .modal-list-group-item {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                border: 1px solid #FF5A5A;
+                border-radius: 5px;
+                padding: 10px;
+                margin-bottom: 10px;
+            }
+            .modal-list-group-item span {
+                color: #FF5A5A;
+            }
+            .modal-btn-custom {
+                background-color: #FF5A5A;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                padding: 5px 15px;
+                margin-bottom: 10px;
+            }
+            .modal-btn-add {
+                font-size: 24px;
+                border: 1px solid #FF5A5A;
+                border-radius: 5px;
+                padding:1px 10px;
+                background-color: white;
+                color: #FF5A5A;
+                cursor: pointer;
+                margin-bottom: 10px;
+            }
+            .modal-group-title {
+                color: #FF5A5A;
+                margin-top: 20px;
+                margin-bottom: 10px;
+            }
+            /* 모달 내부에 맞춤 스타일을 적용하기 위한 CSS */
+            .modal-custom .modal-dialog {
+                max-width: 600px;
+            }
+        </style>
+    </head>
+    <body>
+        <!-- 네비게이션 바 -->
+        <div th:replace="~{fragment/navbar.html :: navbar}" class="navbar"></div>
+
+        <div class="container py-5">
+            <div class="row text-center text-white mb-5">
+                <div class="col-lg-7 mx-auto align-items-center row title">
+                    <img src="/images/oku.png" alt="oku" class="logo"><h1 class="display-4">Product List</h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <!-- List group-->
+                    <div class="media p-3 ul-header row">
+                        <div>
+                            <input type="checkbox" class="mx-lg-2" id="checkAll"/><label>전체선택</label>
+                        </div>
+                        <button class="btn btn-custom btn-top">가져오기 </button>
+                    </div>
+                    <ul class="list-group shadow">
+                        <!-- list group item-->
+                        <li class="list-group-item" th:each="list : ${lists}">
+                            <!-- Custom content-->
+                            <div class="media align-items-lg-center flex-column flex-lg-row p-3">
+                                <input type="checkbox" class="mr-2 data-checkbox" th:data-restaurant-no="${list.restaurantNo}">
+                                <img  th:src="${list.imgUrl}" alt="Generic placeholder image" width="200" class="order-1 order-lg-1">
+                                <div class="media-body ml-lg-5 order-2 order-lg-2">
+                                    <h5 class="mt-0 font-weight-bold mb-2" th:text="${list.restaurantName}">Apple iPhone XR (Red, 128 GB)</h5>
+                                    <p class="font-italic text-muted mb-0 small" th:text="${list.restaurantAddress}">128 GB ROM | 15.49 cm (6.1 inch) Display 12MP Rear Camera | 7MP Front Camera A12 Bionic Chip Processor</p>
+                                    <div class="d-flex align-items-center justify-content-between mt-1">
+                                        <h6 class="font-weight-bold my-2">₹64,999</h6>
+                                        <ul class="list-inline small">
+                                            <li class="list-inline-item m-0"><i class="fa fa-star text-success"></i></li>
+                                            <li class="list-inline-item m-0"><i class="fa fa-star text-success"></i></li>
+                                            <li class="list-inline-item m-0"><i class="fa fa-star text-success"></i></li>
+                                            <li class="list-inline-item m-0"><i class="fa fa-star text-success"></i></li>
+                                            <li class="list-inline-item m-0"><i class="fa fa-star-o text-gray"></i></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div> <!-- End -->
+                        </li> <!-- End -->
+                        <li class="list-group-item">
+                            <div class="media align-items-center flex-column flex-lg-row p-3 peekBtn">
+                                <button class="btn btn-custom">가져오기 </button>
+                            </div>
+                        </li>
+                    </ul> <!-- End -->
+                </div>
+            </div>
+        </div>
+
+        <!-- 모달 구조 -->
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-custom" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="myModalLabel">내 리스트에 추가</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container modal-container-custom mt-5">
+                            <div class="modal-card-custom" id="modalAppendContainer">
+                                <h5><img src="../static/picture/bearImg.png"/> 내 리스트에 추가</h5>
+
+                                <!-- 리스트 박스를 표시하는 반복문 -->
+
+                                <!-- 리스트 추가 버튼 -->
+                                <button class="modal-btn-add">+</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 푸터 -->
+        <div th:replace="~{fragment/footer.html :: footer}" class="footer"></div>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script type="text/javascript" th:src="@{/js/fragment/navbar.js}"></script>
+        <script>
+            $('#checkAll').on('click', function () {
+                console.log($(this).is(':checked')); // checkAll 체크 여부 확인
+
+                if($(this).is(':checked')){
+                    $('.data-checkbox').each(function () {
+                        $(this).prop('checked',true);
+                    });
+                } else {
+                    $('.data-checkbox').each(function () {
+                        $(this).prop('checked',false);
+                    });
+                }
+            });
+
+            $('.btn-custom').on('click',function (){
+
+                $.ajax({
+                    url: '/myInfo/list',
+                    type: 'post',
+                    contentType: 'application/json',
+                    success: function (data){
+                        console.log("success")
+                        console.log(data);
+                        appendList(data);
+                    },
+                    error: function (e){
+                        console.log("failed")
+                        console.log(e);
+                    }
+
+                })
+
+                $('#myModal').modal('show');
+
+            });
+
+            function getRestaurantNo() {
+                let restaurantNos = [];
+
+                $('.data-checkbox').each(function (){
+
+                    if($(this).is(':checked')){
+                        restaurantNos.push($(this).data('restaurant-no'));
+                    }
+                });
+
+                return restaurantNos;
+            }
+
+            function appendList(data){
+                console.log("appendList")
+                const listContainer = $('#modalAppendContainer')
+                listContainer.empty();
+                data.forEach(list => {
+                    console.log(listContainer);
+                    let innerHTML = `
+            <div class="list-box">
+                <!-- 리스트 이름을 버튼으로 표시 -->
+                <button type="button" class="btn modal-btn-custom" data-id="${list.listNo}" ">${list.listName}</button>
+            </div>
+            `;
+
+                    listContainer.append(innerHTML);
+                })
+            }
+
+            $('#modalAppendContainer').on('click','.modal-btn-custom',function (){
+                const listNo = $(this).data('id');
+                const restaurants = getRestaurantNo();
+                const fromListNo = new URLSearchParams(window.location.search).get('listNo')
+
+                $.ajax({
+                    url: '/myList/addRestaurantList',
+                    type: 'post',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        "restaurantNo": restaurants,
+                        "listNo": listNo,
+                        "fromListNo": fromListNo
+                    }),
+                    success: function (result){
+                        alert('식당 즐겨찾기 등록완료 !')
+                        window.location.href = '/';
+                    },
+                    error: function (e){
+                        console.log(e)
+                    }
+                })
+            });
+        </script>
+    </body>
+</html>

@@ -1,5 +1,7 @@
 package kr.oshino.eataku.list.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import kr.oshino.eataku.list.model.vo.RestaurantList;
 import kr.oshino.eataku.list.model.vo.UserList;
@@ -15,6 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @ToString(exclude = "member")
+@JsonIgnoreProperties({"member"})
 public class MyList {
 
     /* 리스트 번호 */
@@ -47,4 +50,7 @@ public class MyList {
     )
     private List<RestaurantList> restaurantList;
 
+    public void addCount(){
+        this.listShare += 1;
+    }
 }

@@ -88,30 +88,52 @@
 
 .dropdown-menu .notification {
     background-color: white;
-    color: #FA4A54;
+    color: #333; /* 텍스트 색상 */
     border-radius: 10px;
     margin-bottom: 2px;
     padding: 15px;
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    flex-direction: column; /* 세로 방향으로 정렬 */
     font-size: 14px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     position: relative;
-    border: 2px solid #FA4A54;
+    border: 1px solid #ddd; /* 경계선을 부드럽게 */
 }
 
-.dropdown-menu .notification .icon {
-    margin-right: 10px;
-    font-size: 20px;
+.notification-header {
+    display: flex;
+    align-items: center; /* 이미지와 텍스트가 세로로 정렬 */
+    margin-bottom: 8px; /* 헤더와 텍스트 사이 간격 */
 }
 
-.dropdown-menu .notification .close {
-    color: #FA4A54;
-    cursor: pointer;
-    font-size: 20px;
-    right: 0;
+.notification img {
+    width: 40px; /* 이미지 크기 설정 */
+    height: 40px;
+    /*border-radius: 50%; !* 이미지가 원형이 되도록 설정 *!*/
+    margin-right: 10px; /* 이미지와 텍스트 사이의 간격 */
 }
+
+.notification-title-date {
+    display: flex;
+    flex-direction: column;
+}
+
+.notification-title {
+    font-weight: bold;
+    color: #333;
+}
+
+.notification-date {
+    font-size: 12px;
+    color: #888;
+}
+
+.notification-text {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.5; /* 텍스트 가독성 향상 */
+}
+
 
 .dropdown-menu .user-menu {
     background-color: white;

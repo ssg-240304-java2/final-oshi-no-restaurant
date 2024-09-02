@@ -26,6 +26,8 @@ jobs:
       with:
         files: ./src/main/resources/application.yml 
       env:
+        spring.elasticsearch.uris: http://localhost:9200
+        spring data.elasticsearch.repositories.enabled: true
         spring.datasource.url: ${{ secrets.DB_URL }} 
         spring.datasource.username: ${{ secrets.DB_USERNAME }} 
         spring.datasource.password: ${{ secrets.DB_PASSWORD }} 
@@ -50,6 +52,14 @@ jobs:
         coolsms.api.key: ${{ secrets.COOLSMS_API_KEY }}
         coolsms.api.secret: ${{ secrets.COOLSMS_API_SECRET }}
         coolsms.api.number: ${{ secrets.COOLSMS_API_NUMBER }}
+        kakao.client_id: ${{ secrets.KAKAO_CLIENT_ID }}
+        kakao.redirect_uri: ${{ secrets.KAKAO_REDIRECT_URI }}
+
+    - name: Set up KAKAO ID
+      run: echo "KAKAO_CLIENT_ID=${{ secrets.KAKAO_CLIENT_ID }}" >> $GITHUB_ENV
+
+    - name : Set up KAKAO URI
+      run: echo "KAKAO_REDIRECT_URI=${{ secrets.KAKAO_REDIRECT_URI }}" >> $GITHUB_ENV
 
     - name: Grant execute permission for gradlew
       run: chmod +x ./gradlew
@@ -90,5 +100,5 @@ jobs:
             whoami
             sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/eataku:latest
             sudo docker stop $(sudo docker ps -q) 2>/dev/null || true
-            sudo docker run --name eataku --rm -d -p 8080:8080 ${{ secrets.DOCKERHUB_USERNAME }}/eataku:latest
+            sudo docker run -e TZ=Asia/Seoul -it --name eataku --rm -d -p 8080:8080 kokyungho/eataku:latest
             sudo docker system prune -f
