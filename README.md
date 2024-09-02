@@ -45,6 +45,7 @@
 <img src="readmeImages/system_architecture.png" width="900/">
 
 
+
 # 4.역할 분담
 
 ## 고경호
