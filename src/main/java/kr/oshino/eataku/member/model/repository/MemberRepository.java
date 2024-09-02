@@ -109,7 +109,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
             "         SELECT ws.restaurant_no, " +
             "                COUNT(w.member_no) cnt " +
             "           FROM tbl_waiting_setting ws " +
-            "                    LEFT JOIN tbl_waiting w ON w.restaurant_no = ws.restaurant_no " +
+            "                    LEFT JOIN tbl_waiting w ON w.restaurant_no = ws.restaurant_no AND ws.waiting_date = w.created_at " +
             "          WHERE ws.waiting_date = CURDATE() " +
             "          GROUP BY ws.restaurant_no " +
             "          HAVING cnt <= 0 " +
