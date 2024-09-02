@@ -11,10 +11,9 @@
 
 # 팀원 구성
 
-| 고경호                        | 김의진                        | 서윤정                       | 좌상현                                                            | 최지수                       |
-|----------------------------|----------------------------|---------------------------|----------------------------------------------------------------|---------------------------|
-| ![사진](https://file.notion.so/f/f/6565ce97-1b64-4478-9758-8bdfc0b92620/6167c965-ad6c-4a44-9f56-d5f2cefab01e/image.png?table=block&id=6d19f1f0-4602-42ef-91f0-113560b9f9d2&spaceId=6565ce97-1b64-4478-9758-8bdfc0b92620&expirationTimestamp=1725098400000&signature=TgZTTXUN6XOWUvNXrewXwihG8wTtoz4VDAp8nyiK4F4&downloadName=image.png) <br/><br/> [@yoaruku](https://github.com/yoaruku) | ![사진](https://file.notion.so/f/f/6565ce97-1b64-4478-9758-8bdfc0b92620/06d024fe-d25c-493d-b6a0-0ccb8a3fde94/image.png?table=block&id=35b518b3-7c77-4742-b4e6-d860ae6338e9&spaceId=6565ce97-1b64-4478-9758-8bdfc0b92620&expirationTimestamp=1725098400000&signature=1xhhUnBw5kO-I-y2KcJoBM0vj2EUUuUcozRC_9TJiko&downloadName=image.png)<br/><br/> [@dmlwls12](https://github.com/dmlwls12) | ![사진](https://media.canva.com/v2/image-resize/format:JPG/height:200/quality:75/uri:s3%3A%2F%2Fmedia-private.canva.com%2FlDnqo%2FMAGPT2lDnqo%2F1%2Fp.jpg/watermark:F/width:200?csig=AAAAAAAAAAAAAAAAAAAAAD3rziTedPs5sMEOsOMYkefF0oBXMcda0u_WYerAftX_&exp=1725019498&osig=AAAAAAAAAAAAAAAAAAAAAGpSN9Dka9p7HHqki5hN6d-cnTCl6iaqf45yCRlWNRfw&signer=media-rpc&x-canva-quality=thumbnail)  <br/><br/>[@yj0318](https://github.com/yj0318) | ![사진](https://file.notion.so/f/f/6565ce97-1b64-4478-9758-8bdfc0b92620/e5e18078-d62a-461b-8141-f15adf2f92c0/image.png?table=block&id=aee3fc03-9a71-428c-b6e8-e15cc1bf621f&spaceId=6565ce97-1b64-4478-9758-8bdfc0b92620&expirationTimestamp=1725098400000&signature=o0wYWpq1rUuLJLAdOdnxVa1dIJdKM5BaEQj2gvmNSEE&downloadName=image.png) <br/><br/> [@sanghyeonJwa](https://github.com/sanghyeonJwa) | ![사진](https://file.notion.so/f/f/6565ce97-1b64-4478-9758-8bdfc0b92620/091a66c5-7afa-45eb-807b-0c693cdb11cf/image.png?table=block&id=a226f370-e657-475e-9129-57e369030170&spaceId=6565ce97-1b64-4478-9758-8bdfc0b92620&expirationTimestamp=1725098400000&signature=Yq0vwUZUqJnbyXvlxDAtdWGjvHIeSV1phtyJSay0SuE&downloadName=image.png)<br/><br/> [@jisoo78](https://github.com/jisoo78) |
-
+| 고경호                                                                                       | 김의진                                                                                                              | 서윤정                                                                                             | 좌상현                                                                                                          | 최지수                                                                                                |
+|-------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------|
+| <img src="readmeImages/고경호 사진.png" alt="고경호 사진" width="300"/>  <br/><br/> [@yoaruku](https://github.com/yoaruku) | <img src="readmeImages/김의진 사진.png" alt="김의진 사진" width="300"/><br/><br/> [@dmlwls12](https://github.com/dmlwls12) | <img src="readmeImages/마스코트 사진.png" width="300/"><br/><br/>[@yj0318](https://github.com/yj0318) | <img src="readmeImages/좌상현 사진.png" width="300/"> <br/><br/> [@sanghyeonJwa](https://github.com/sanghyeonJwa) | <img src="readmeImages/최지수 사진.png" width="300/"> <br/><br/> [@jisoo78](https://github.com/jisoo78) |
 
 
 
@@ -44,8 +43,6 @@
 
 # 3. 프로젝트 구조
 
-
-최종 완료되면   인텔리제이에서 뽑기
 
 
 # 4.역할 분담
@@ -80,6 +77,7 @@
   - 회원 웨이팅 , 관리자 웨이팅
 
 
+
 ## 최지수
 
 - **UI**
@@ -100,7 +98,7 @@
 
 ## 6. ERD
 
-![사진](https://file.notion.so/f/f/6565ce97-1b64-4478-9758-8bdfc0b92620/a5a1ef45-9129-46f0-a34f-848ea5b1ccb3/image.png?table=block&id=594349ad-e20c-411b-9f49-776085156d23&spaceId=6565ce97-1b64-4478-9758-8bdfc0b92620&expirationTimestamp=1725098400000&signature=5HcZjEZ5mNGdgY_ODIOGnEs1wOeo2TdcpLzkELr7ejY&downloadName=image.png)
+![erd_diagram.png](readmeImages/erd_diagram.png)
 
 
 ## 7.작업 관리
@@ -114,16 +112,21 @@
 
 
 ## 회원, 매장 , 소셜 로그인
-<img src="readmeImages/회원-매장-소셜-로그인-완료.gif" alt="회원-매장-소셜-로그인-완료" width="300"/>
+<img src="readmeImages/회원-매장-소셜-로그인-완료.gif" alt="회원-매장-소셜-로그인-완료" width="900"/>
 
 ## 웨이팅 등록과 리뷰 등록
-<img src="readmeImages/웨이팅 등록과 리뷰 등록.gif" alt="웨이팅 등록과 리뷰 등록" width="300"/>
+<img src="readmeImages/웨이팅 등록과 리뷰 등록.gif" alt="웨이팅 등록과 리뷰 등록" width="900"/>
 
 ## 예약 등록 및 예약 취소
-<img src="readmeImages/예약 등록 및 예약 취소.gif" alt="예약 등록 및 예약 취소" width="300"/>
+<img src="readmeImages/예약 등록 및 예약 취소.gif" alt="예약 등록 및 예약 취소" width="900"/>
 
 ## 리뷰 작성
-<img src="readmeImages/리뷰작성.gif" alt="리뷰작성" width="300"/>
+<img src="readmeImages/리뷰작성.gif" alt="리뷰작성" width="900"/>
+
+
+## 리스트 작성
+<img src="readmeImages/리스트.gif" alt="리스트" width="900"/>
+
 
 # 9. 트러블 슈팅
 
